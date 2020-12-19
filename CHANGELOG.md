@@ -1,3 +1,8 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1]- 11 Dec 2020
 
-* TODO: Describe initial release.
+* Initial Release.
+## [0.2.0]- 19 Dec 2020
+* support to change the height of each suggestionItem.
+*  Can now define max number of suggestions visible in the viewport.
+* Customizable Search Input Decoration like the built in textfield.
+* decorate the Suggestions List with color or gradient.
