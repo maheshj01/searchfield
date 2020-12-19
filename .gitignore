@@ -14,7 +14,6 @@
 *.ipr
 *.iws
 .idea/
-
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -25,10 +24,12 @@
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
+.metadata
 .packages
 .pub-cache/
 .pub/
 build/
+pubspec.lock
 
 # Android related
 **/android/**/gradle-wrapper.jar

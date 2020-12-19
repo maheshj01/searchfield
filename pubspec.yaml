@@ -1,8 +1,7 @@
 name: searchfield
 description: A new Flutter package project.
 version: 0.0.1
-author: Mahesh Jamdade
-# homepage:
+homepage: https://github.com/maheshmnj/searchfield
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

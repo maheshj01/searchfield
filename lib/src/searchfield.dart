@@ -16,11 +16,45 @@ class SearchField extends StatefulWidget {
   /// when its rendered, if not specified it will be empty
   final String initialValue;
 
+  /// textStyle for the search Input
+  final TextStyle searchStyle;
+
+  /// textStyle for the SuggestionItem
+  final TextStyle suggestionStyle;
+
+  /// decoration for the search Input
+  final InputDecoration searchInputDecoration;
+
+  /// decoration for suggestions List
+  final BoxDecoration suggestionsDecoration;
+
+  /// decoration for suggestionItem
+  final BoxDecoration suggestionItemDecoration;
+
+  /// Suggestion Item height
+  /// defaults to 35.0
+  final double itemHeight;
+
+  /// Color for the margin between the suggestions
+  final Color marginColor;
+
+  /// The max number of suggestions that
+  /// can be shown in a viewport
+  final double maxSuggestionsInViewPort;
+
   SearchField(
       {Key key,
       @required this.suggestions,
       this.initialValue,
       this.hint,
+      this.searchStyle,
+      this.marginColor,
+      this.itemHeight = 35.0,
+      this.suggestionsDecoration,
+      this.suggestionStyle,
+      this.searchInputDecoration,
+      this.suggestionItemDecoration,
+      this.maxSuggestionsInViewPort = 5,
       this.onTap})
       : assert(suggestions != null, 'Suggestions cannot be Empty'),
         assert(
@@ -70,11 +104,10 @@ class _SearchFieldState extends State<SearchField> {
   Widget build(BuildContext context) {
     // TODO: implement build
     double height;
-    double heightFactor = 35.0;
-    if (widget.suggestions.length > 5) {
-      height = heightFactor * 5;
+    if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
+      height = widget.itemHeight * widget.maxSuggestionsInViewPort;
     } else {
-      height = widget.suggestions.length * heightFactor;
+      height = widget.suggestions.length * widget.itemHeight;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,6 +115,10 @@ class _SearchFieldState extends State<SearchField> {
         TextField(
           controller: sourceController,
           focusNode: _focus,
+          style: widget.searchStyle,
+          decoration:
+              widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
+                  InputDecoration(hintText: widget.hint),
           onChanged: (item) {
             List<String> searchResult = [];
             if (item.isEmpty) {
@@ -109,30 +146,31 @@ class _SearchFieldState extends State<SearchField> {
                   !sourceFocused) {
                 return Container();
               } else {
-                if (snapshot.data.length > 5) {
-                  height = heightFactor * 5;
+                if (snapshot.data.length > widget.maxSuggestionsInViewPort) {
+                  height = widget.itemHeight * widget.maxSuggestionsInViewPort;
                 } else if (snapshot.data.length == 1) {
-                  height = 45;
+                  height = widget.itemHeight;
                 } else {
-                  height = snapshot.data.length * heightFactor;
+                  height = snapshot.data.length * widget.itemHeight;
                 }
                 return Container(
                     height: height,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 8.0, // soften the shadow
-                          spreadRadius: 2.0, //extend the shadow
-                          offset: Offset(
-                            2.0,
-                            5.0,
-                          ),
+                    decoration: widget.suggestionsDecoration ??
+                        BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 8.0, // soften the shadow
+                              spreadRadius: 2.0, //extend the shadow
+                              offset: Offset(
+                                2.0,
+                                5.0,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
                     child: ListView(
                       physics: snapshot.data.length == 1
                           ? NeverScrollableScrollPhysics()
@@ -153,18 +191,35 @@ class _SearchFieldState extends State<SearchField> {
                                   }
                                 },
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 16) +
+                                  height: widget.itemHeight,
+                                  padding: EdgeInsets.symmetric(horizontal: 5) +
                                       EdgeInsets.only(left: 8),
                                   width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      border: index == snapshot.data.length - 1
-                                          ? null
-                                          : Border(
-                                              bottom: BorderSide(
-                                                  color: Colors.black
-                                                      .withOpacity(0.1)))),
-                                  child: Text(snapshot.data[index]),
+                                  alignment: Alignment.centerLeft,
+                                  decoration: widget.suggestionItemDecoration
+                                          ?.copyWith(
+                                              border: Border(
+                                                  bottom: BorderSide(
+                                                      color: widget
+                                                              .marginColor ??
+                                                          Colors.black
+                                                              .withOpacity(
+                                                                  0.1)))) ??
+                                      BoxDecoration(
+                                          border: index ==
+                                                  snapshot.data.length - 1
+                                              ? null
+                                              : Border(
+                                                  bottom: BorderSide(
+                                                      color:
+                                                          widget.marginColor ??
+                                                              Colors.black
+                                                                  .withOpacity(
+                                                                      0.1)))),
+                                  child: Text(
+                                    snapshot.data[index],
+                                    style: widget.suggestionStyle,
+                                  ),
                                 ),
                               )),
                     ));
