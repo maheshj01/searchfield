@@ -1,4 +1,4 @@
-#  [SearchField: ^0.2.0](https://pub.dev/packages/searchfield) 
+#  [SearchField: ^0.2.1](https://pub.dev/packages/searchfield) 
 
 
 
@@ -20,7 +20,7 @@ list of all the properties mentioned below
 - Add the dependency
 ```
 dependencies:
-  searchfield: ^0.2.0
+  searchfield: ^0.2.1
 ```
 - Import the package
 ```
