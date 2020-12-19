@@ -5,8 +5,7 @@ class SearchField extends StatefulWidget {
   /// data source to search from
   final List<String> suggestions;
 
-  /// callback when a sugestion is tapped
-  /// it also returned the tapped value
+  /// callback when a sugestion is tapped it also returns the tapped value.
   final Function(String) onTap;
 
   /// hint for the search field
@@ -22,13 +21,14 @@ class SearchField extends StatefulWidget {
   /// textStyle for the SuggestionItem
   final TextStyle suggestionStyle;
 
-  /// decoration for the search Input
+  /// decoration for the search Input similar to built in textfield widget.
   final InputDecoration searchInputDecoration;
 
-  /// decoration for suggestions List
+  /// decoration for suggestions List with ability to add box shadow background color and much more.
   final BoxDecoration suggestionsDecoration;
 
-  /// decoration for suggestionItem
+  /// decoration for suggestionItem with ability to add color and gradient in the background.
+
   final BoxDecoration suggestionItemDecoration;
 
   /// Suggestion Item height
