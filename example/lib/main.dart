@@ -41,6 +41,15 @@ class _MyHomePageState extends State<MyHomePage> {
     'Lorem Ipsum',
   ];
 
+  final _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -59,11 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.all(8.0),
               child: SearchField(
                 suggestions: _suggestions,
+                controller: _searchController,
                 hint: 'SearchField Sample 1',
+                initialValue: _suggestions[2],
                 maxSuggestionsInViewPort: 3,
                 itemHeight: 45,
                 onTap: (x) {
-                  print(x);
+                  print('selected =$x ' + _searchController.text);
                 },
               ),
             ),
