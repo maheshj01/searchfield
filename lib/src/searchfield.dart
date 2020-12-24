@@ -42,6 +42,7 @@ class SearchField extends StatefulWidget {
   /// can be shown in a viewport
   final double maxSuggestionsInViewPort;
 
+  /// controller for the searchfield
   final TextEditingController controller;
 
   SearchField(
