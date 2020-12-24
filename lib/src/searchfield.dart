@@ -42,6 +42,8 @@ class SearchField extends StatefulWidget {
   /// can be shown in a viewport
   final double maxSuggestionsInViewPort;
 
+  final TextEditingController controller;
+
   SearchField(
       {Key key,
       @required this.suggestions,
@@ -49,6 +51,7 @@ class SearchField extends StatefulWidget {
       this.hint,
       this.searchStyle,
       this.marginColor,
+      this.controller,
       this.itemHeight = 35.0,
       this.suggestionsDecoration,
       this.suggestionStyle,
@@ -84,7 +87,7 @@ class _SearchFieldState extends State<SearchField> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    sourceController = TextEditingController();
+    sourceController = widget.controller ?? TextEditingController();
     _focus.addListener(() {
       setState(() {
         sourceFocused = _focus.hasFocus;
@@ -101,6 +104,15 @@ class _SearchFieldState extends State<SearchField> {
   }
 
   @override
+  void didUpdateWidget(covariant SearchField oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      sourceController = widget.controller ?? TextEditingController();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // TODO: implement build
     double height;
@@ -113,7 +125,7 @@ class _SearchFieldState extends State<SearchField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
-          controller: sourceController,
+          controller: widget.controller ?? sourceController,
           focusNode: _focus,
           style: widget.searchStyle,
           decoration:
@@ -127,7 +139,6 @@ class _SearchFieldState extends State<SearchField> {
             }
             widget.suggestions.forEach((suggestion) {
               if (suggestion.toLowerCase().contains(item.toLowerCase())) {
-                print('$suggestion  <=> query=$item');
                 searchResult.add(suggestion);
               }
             });
