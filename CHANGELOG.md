@@ -8,3 +8,6 @@
 * decorate the Suggestions List with color or gradient.
 ## [0.2.1]- 19 Dec 2020
 * update Docs
+## [0.3.0]- 24 Dec 2020
+* Support for controller to interact with the SearchField
+

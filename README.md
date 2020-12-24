@@ -1,4 +1,4 @@
-#  [SearchField: ^0.2.1](https://pub.dev/packages/searchfield) 
+#  [SearchField: ^0.3.0](https://pub.dev/packages/searchfield) 
 
 
 
@@ -13,6 +13,10 @@ Think of this widget like a dropdownButton field with an ability
 
 list of all the properties mentioned below
 
+## Supported Platforms
+- Android
+- Ios
+- Web
 ## Getting Started
 
 ### Installation
@@ -74,6 +78,7 @@ SearchField(
 </p>
 
 ### Properties
+- ```controller```: TextEditing Controller to interact with the searchfield.
 - ```suggestions``` : list of Strings to search from.**(Mandatory)**
 - ```initialValue``` :  The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - ```onTap``` : callback when a sugestion is tapped it also returns the tapped value.
