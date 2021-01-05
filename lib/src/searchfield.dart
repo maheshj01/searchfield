@@ -2,65 +2,106 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
-  /// data source to search from
+  /// Data source to perform search.
   final List<String> suggestions;
 
-  /// callback when a sugestion is tapped it also returns the tapped value.
+  /// Callback to return the selected suggestion.
   final Function(String) onTap;
 
-  /// hint for the search field
+  /// Hint for the [SearchField].
   final String hint;
 
-  /// The initial value to be set in searchfield
-  /// when its rendered, if not specified it will be empty
+  /// The initial value to be selected for [SearchField]. The value
+  /// must be present in [suggestions].
+  ///
+  /// When not specified, [hint] is shown instead of `initialValue`.
   final String initialValue;
 
-  /// textStyle for the search Input
+  /// Specifies [TextStyle] for search input.
   final TextStyle searchStyle;
 
-  /// textStyle for the SuggestionItem
+  /// Specifies [TextStyle] for suggestions.
   final TextStyle suggestionStyle;
 
-  /// decoration for the search Input similar to built in textfield widget.
+  /// Specifies [InputDecoration] for search input [TextField].
+  ///
+  /// When not specified, the default value is [InputDecoration] initialized
+  /// with [hint].
   final InputDecoration searchInputDecoration;
 
-  /// decoration for suggestions List with ability to add box shadow background color and much more.
+  /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
+  /// and much more. For more information, checkout [BoxDecoration].
+  ///
+  /// Default value,
+  ///
+  /// ```dart
+  /// BoxDecoration(
+  ///   color: Theme.of(context).colorScheme.surface,
+  ///   boxShadow: [
+  ///     BoxShadow(
+  ///       color: onSurfaceColor.withOpacity(0.1),
+  ///       blurRadius: 8.0, // soften the shadow
+  ///       spreadRadius: 2.0, //extend the shadow
+  ///       offset: Offset(
+  ///         2.0,
+  ///         5.0,
+  ///       ),
+  ///     ),
+  ///   ],
+  /// )
+  /// ```
   final BoxDecoration suggestionsDecoration;
 
-  /// decoration for suggestionItem with ability to add color and gradient in the background.
-
+  /// Specifies [BoxDecoration] for items in suggestion list. The property can be used to add [BoxShadow],
+  /// and much more. For more information, checkout [BoxDecoration].
+  ///
+  /// Default value,
+  ///
+  /// ```dart
+  /// BoxDecoration(
+  ///   border: Border(
+  ///     bottom: BorderSide(
+  ///       color: widget.marginColor ??
+  ///         onSurfaceColor.withOpacity(0.1),
+  ///     ),
+  ///   ),
+  /// )
   final BoxDecoration suggestionItemDecoration;
 
-  /// Suggestion Item height
-  /// defaults to 35.0
+  /// Specifies height for item suggestion.
+  ///
+  /// When not specified, the default value is `35.0`.
   final double itemHeight;
 
-  /// Color for the margin between the suggestions
+  /// Specifies the color of margin between items in suggestions list.
+  ///
+  /// When not specified, the default value is `Theme.of(context).colorScheme.onSurface.withOpacity(0.1)`.
   final Color marginColor;
 
-  /// The max number of suggestions that
-  /// can be shown in a viewport
+  /// Specifies the number of suggestions that can be shown in viewport.
+  ///
+  /// When not specified, the default value is `5.0`.
   final double maxSuggestionsInViewPort;
 
-  /// controller for the searchfield
+  /// Specifies the `TextEditingController` for [SearchField].
   final TextEditingController controller;
 
-  SearchField(
-      {Key key,
-      @required this.suggestions,
-      this.initialValue,
-      this.hint,
-      this.searchStyle,
-      this.marginColor,
-      this.controller,
-      this.itemHeight = 35.0,
-      this.suggestionsDecoration,
-      this.suggestionStyle,
-      this.searchInputDecoration,
-      this.suggestionItemDecoration,
-      this.maxSuggestionsInViewPort = 5,
-      this.onTap})
-      : assert(suggestions != null, 'Suggestions cannot be Empty'),
+  SearchField({
+    Key key,
+    @required this.suggestions,
+    this.initialValue,
+    this.hint,
+    this.searchStyle,
+    this.marginColor,
+    this.controller,
+    this.itemHeight = 35.0,
+    this.suggestionsDecoration,
+    this.suggestionStyle,
+    this.searchInputDecoration,
+    this.suggestionItemDecoration,
+    this.maxSuggestionsInViewPort = 5,
+    this.onTap,
+  })  : assert(suggestions != null, 'Suggestions cannot be Empty'),
         assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
@@ -73,12 +114,12 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   final sourceStream = StreamController<List<String>>.broadcast();
-  FocusNode _focus = FocusNode();
+  final FocusNode _focus = FocusNode();
   bool sourceFocused = false;
   TextEditingController sourceController;
+
   @override
   void dispose() {
-    // TODO: implement dispose
     _focus.dispose();
     sourceStream.close();
     super.dispose();
@@ -86,7 +127,6 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     sourceController = widget.controller ?? TextEditingController();
     _focus.addListener(() {
@@ -106,7 +146,6 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void didUpdateWidget(covariant SearchField oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       sourceController = widget.controller ?? TextEditingController();
@@ -115,13 +154,15 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     double height;
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
       height = widget.itemHeight * widget.maxSuggestionsInViewPort;
     } else {
       height = widget.suggestions.length * widget.itemHeight;
     }
+
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -133,16 +174,16 @@ class _SearchFieldState extends State<SearchField> {
               widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                   InputDecoration(hintText: widget.hint),
           onChanged: (item) {
-            List<String> searchResult = [];
+            final searchResult = <String>[];
             if (item.isEmpty) {
               sourceStream.sink.add(widget.suggestions);
               return;
             }
-            widget.suggestions.forEach((suggestion) {
+            for (final suggestion in widget.suggestions) {
               if (suggestion.toLowerCase().contains(item.toLowerCase())) {
                 searchResult.add(suggestion);
               }
-            });
+            }
             sourceStream.sink.add(searchResult);
           },
         ),
@@ -150,93 +191,95 @@ class _SearchFieldState extends State<SearchField> {
           height: 2,
         ),
         StreamBuilder<List<String>>(
-            stream: sourceStream.stream,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-              if (snapshot.data == null ||
-                  snapshot.data.isEmpty ||
-                  !sourceFocused) {
-                return Container();
+          stream: sourceStream.stream,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            if (snapshot.data == null ||
+                snapshot.data.isEmpty ||
+                !sourceFocused) {
+              return Container();
+            } else {
+              if (snapshot.data.length > widget.maxSuggestionsInViewPort) {
+                height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+              } else if (snapshot.data.length == 1) {
+                height = widget.itemHeight;
               } else {
-                if (snapshot.data.length > widget.maxSuggestionsInViewPort) {
-                  height = widget.itemHeight * widget.maxSuggestionsInViewPort;
-                } else if (snapshot.data.length == 1) {
-                  height = widget.itemHeight;
-                } else {
-                  height = snapshot.data.length * widget.itemHeight;
-                }
-                return Container(
-                    height: height,
-                    alignment: Alignment.centerLeft,
-                    decoration: widget.suggestionsDecoration ??
-                        BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 8.0, // soften the shadow
-                              spreadRadius: 2.0, //extend the shadow
-                              offset: Offset(
-                                2.0,
-                                5.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                    child: ListView(
-                      physics: snapshot.data.length == 1
-                          ? NeverScrollableScrollPhysics()
-                          : ScrollPhysics(),
-                      children: List.generate(
-                          snapshot.data.length,
-                          (index) => GestureDetector(
-                                onTap: () {
-                                  sourceController.text = snapshot.data[index];
-                                  sourceController.selection =
-                                      TextSelection.fromPosition(TextPosition(
-                                          offset:
-                                              sourceController.text.length));
-                                  // hide the suggestions
-                                  sourceStream.sink.add(null);
-                                  if (widget.onTap != null) {
-                                    widget.onTap(snapshot.data[index]);
-                                  }
-                                },
-                                child: Container(
-                                  height: widget.itemHeight,
-                                  padding: EdgeInsets.symmetric(horizontal: 5) +
-                                      EdgeInsets.only(left: 8),
-                                  width: double.infinity,
-                                  alignment: Alignment.centerLeft,
-                                  decoration: widget.suggestionItemDecoration
-                                          ?.copyWith(
-                                              border: Border(
-                                                  bottom: BorderSide(
-                                                      color: widget
-                                                              .marginColor ??
-                                                          Colors.black
-                                                              .withOpacity(
-                                                                  0.1)))) ??
-                                      BoxDecoration(
-                                          border: index ==
-                                                  snapshot.data.length - 1
-                                              ? null
-                                              : Border(
-                                                  bottom: BorderSide(
-                                                      color:
-                                                          widget.marginColor ??
-                                                              Colors.black
-                                                                  .withOpacity(
-                                                                      0.1)))),
-                                  child: Text(
-                                    snapshot.data[index],
-                                    style: widget.suggestionStyle,
-                                  ),
-                                ),
-                              )),
-                    ));
+                height = snapshot.data.length * widget.itemHeight;
               }
-            })
+              return Container(
+                height: height,
+                alignment: Alignment.centerLeft,
+                decoration: widget.suggestionsDecoration ??
+                    BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      boxShadow: [
+                        BoxShadow(
+                          color: onSurfaceColor.withOpacity(0.1),
+                          blurRadius: 8.0, // soften the shadow
+                          spreadRadius: 2.0, // extend the shadow
+                          offset: Offset(
+                            2.0,
+                            5.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                child: ListView(
+                  physics: snapshot.data.length == 1
+                      ? NeverScrollableScrollPhysics()
+                      : ScrollPhysics(),
+                  children: List.generate(
+                    snapshot.data.length,
+                    (index) => GestureDetector(
+                      onTap: () {
+                        sourceController.text = snapshot.data[index];
+                        sourceController.selection = TextSelection.fromPosition(
+                          TextPosition(
+                            offset: sourceController.text.length,
+                          ),
+                        );
+                        // hide the suggestions
+                        sourceStream.sink.add(null);
+                        if (widget.onTap != null) {
+                          widget.onTap(snapshot.data[index]);
+                        }
+                      },
+                      child: Container(
+                        height: widget.itemHeight,
+                        padding: EdgeInsets.symmetric(horizontal: 5) +
+                            EdgeInsets.only(left: 8),
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        decoration: widget.suggestionItemDecoration?.copyWith(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: widget.marginColor ??
+                                      onSurfaceColor.withOpacity(0.1),
+                                ),
+                              ),
+                            ) ??
+                            BoxDecoration(
+                              border: index == snapshot.data.length - 1
+                                  ? null
+                                  : Border(
+                                      bottom: BorderSide(
+                                        color: widget.marginColor ??
+                                            onSurfaceColor.withOpacity(0.1),
+                                      ),
+                                    ),
+                            ),
+                        child: Text(
+                          snapshot.data[index],
+                          style: widget.suggestionStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }
+          },
+        )
       ],
     );
   }
