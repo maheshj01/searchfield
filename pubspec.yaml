@@ -1,10 +1,10 @@
 name: searchfield
 description: A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
-version: 0.3.0
+version: 0.4.0-nullsafety.0
 homepage: https://github.com/maheshmnj/searchfield
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0-0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:

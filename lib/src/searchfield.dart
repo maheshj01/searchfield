@@ -6,28 +6,28 @@ class SearchField extends StatefulWidget {
   final List<String> suggestions;
 
   /// Callback to return the selected suggestion.
-  final Function(String) onTap;
+  final Function(String?)? onTap;
 
   /// Hint for the [SearchField].
-  final String hint;
+  final String? hint;
 
   /// The initial value to be selected for [SearchField]. The value
   /// must be present in [suggestions].
   ///
   /// When not specified, [hint] is shown instead of `initialValue`.
-  final String initialValue;
+  final String? initialValue;
 
   /// Specifies [TextStyle] for search input.
-  final TextStyle searchStyle;
+  final TextStyle? searchStyle;
 
   /// Specifies [TextStyle] for suggestions.
-  final TextStyle suggestionStyle;
+  final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
   ///
   /// When not specified, the default value is [InputDecoration] initialized
   /// with [hint].
-  final InputDecoration searchInputDecoration;
+  final InputDecoration? searchInputDecoration;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -50,7 +50,7 @@ class SearchField extends StatefulWidget {
   ///   ],
   /// )
   /// ```
-  final BoxDecoration suggestionsDecoration;
+  final BoxDecoration? suggestionsDecoration;
 
   /// Specifies [BoxDecoration] for items in suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -66,7 +66,7 @@ class SearchField extends StatefulWidget {
   ///     ),
   ///   ),
   /// )
-  final BoxDecoration suggestionItemDecoration;
+  final BoxDecoration? suggestionItemDecoration;
 
   /// Specifies height for item suggestion.
   ///
@@ -76,7 +76,7 @@ class SearchField extends StatefulWidget {
   /// Specifies the color of margin between items in suggestions list.
   ///
   /// When not specified, the default value is `Theme.of(context).colorScheme.onSurface.withOpacity(0.1)`.
-  final Color marginColor;
+  final Color? marginColor;
 
   /// Specifies the number of suggestions that can be shown in viewport.
   ///
@@ -84,11 +84,11 @@ class SearchField extends StatefulWidget {
   final double maxSuggestionsInViewPort;
 
   /// Specifies the `TextEditingController` for [SearchField].
-  final TextEditingController controller;
+  final TextEditingController? controller;
 
   SearchField({
-    Key key,
-    @required this.suggestions,
+    Key? key,
+    required this.suggestions,
     this.initialValue,
     this.hint,
     this.searchStyle,
@@ -101,8 +101,7 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
-  })  : assert(suggestions != null, 'Suggestions cannot be Empty'),
-        assert(
+  })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
             'Initial Value should either be null or should be present in suggestions list.'),
@@ -113,10 +112,11 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final sourceStream = StreamController<List<String>>.broadcast();
+  final StreamController<List<String?>?> sourceStream =
+      StreamController<List<String>?>.broadcast();
   final FocusNode _focus = FocusNode();
   bool sourceFocused = false;
-  TextEditingController sourceController;
+  TextEditingController? sourceController;
 
   @override
   void dispose() {
@@ -134,11 +134,11 @@ class _SearchFieldState extends State<SearchField> {
         sourceFocused = _focus.hasFocus;
       });
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (widget.initialValue == null || widget.initialValue.isEmpty) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (widget.initialValue == null || widget.initialValue!.isEmpty) {
         sourceStream.sink.add(widget.suggestions);
       } else {
-        sourceController.text = widget.initialValue;
+        sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
       }
     });
@@ -190,21 +190,21 @@ class _SearchFieldState extends State<SearchField> {
         SizedBox(
           height: 2,
         ),
-        StreamBuilder<List<String>>(
+        StreamBuilder<List<String?>?>(
           stream: sourceStream.stream,
           builder:
-              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+              (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
             if (snapshot.data == null ||
-                snapshot.data.isEmpty ||
+                snapshot.data!.isEmpty ||
                 !sourceFocused) {
               return Container();
             } else {
-              if (snapshot.data.length > widget.maxSuggestionsInViewPort) {
+              if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
                 height = widget.itemHeight * widget.maxSuggestionsInViewPort;
-              } else if (snapshot.data.length == 1) {
+              } else if (snapshot.data!.length == 1) {
                 height = widget.itemHeight;
               } else {
-                height = snapshot.data.length * widget.itemHeight;
+                height = snapshot.data!.length * widget.itemHeight;
               }
               return Container(
                 height: height,
@@ -225,23 +225,24 @@ class _SearchFieldState extends State<SearchField> {
                       ],
                     ),
                 child: ListView(
-                  physics: snapshot.data.length == 1
+                  physics: snapshot.data!.length == 1
                       ? NeverScrollableScrollPhysics()
                       : ScrollPhysics(),
                   children: List.generate(
-                    snapshot.data.length,
+                    snapshot.data!.length,
                     (index) => GestureDetector(
                       onTap: () {
-                        sourceController.text = snapshot.data[index];
-                        sourceController.selection = TextSelection.fromPosition(
+                        sourceController!.text = snapshot.data![index]!;
+                        sourceController!.selection =
+                            TextSelection.fromPosition(
                           TextPosition(
-                            offset: sourceController.text.length,
+                            offset: sourceController!.text.length,
                           ),
                         );
                         // hide the suggestions
                         sourceStream.sink.add(null);
                         if (widget.onTap != null) {
-                          widget.onTap(snapshot.data[index]);
+                          widget.onTap!(snapshot.data![index]);
                         }
                       },
                       child: Container(
@@ -259,7 +260,7 @@ class _SearchFieldState extends State<SearchField> {
                               ),
                             ) ??
                             BoxDecoration(
-                              border: index == snapshot.data.length - 1
+                              border: index == snapshot.data!.length - 1
                                   ? null
                                   : Border(
                                       bottom: BorderSide(
@@ -269,7 +270,7 @@ class _SearchFieldState extends State<SearchField> {
                                     ),
                             ),
                         child: Text(
-                          snapshot.data[index],
+                          snapshot.data![index]!,
                           style: widget.suggestionStyle,
                         ),
                       ),

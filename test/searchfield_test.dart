@@ -4,6 +4,6 @@ import 'package:searchfield/searchfield.dart';
 
 void main() {
   test('adds one to input values', () {
-    final search = SearchField();
+    // final search = SearchField();
   });
 }
