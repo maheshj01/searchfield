@@ -40,6 +40,36 @@ class _MyHomePageState extends State<MyHomePage> {
     'Czech Republic',
     'Lorem Ipsum',
   ];
+  final List<String> _statesOfIndia = [
+    'Andhra Pradesh',
+    'Assam',
+    'Arunachal Pradesh',
+    'Bihar',
+    'Goa',
+    'Gujarat',
+    'Jammu and Kashmir',
+    'Jharkhand',
+    'West Bengal',
+    'Karnataka',
+    'Kerala',
+    'Madhya Pradesh',
+    'Maharashtra',
+    'Manipur',
+    'Meghalaya',
+    'Mizoram',
+    'Nagaland',
+    'Orissa',
+    'Punjab',
+    'Rajasthan',
+    'Sikkim',
+    'Tamil Nadu',
+    'Tripura',
+    'Uttaranchal',
+    'Uttar Pradesh',
+    'Haryana',
+    'Himachal Pradesh',
+    'Chhattisgarh'
+  ];
 
   final _searchController = TextEditingController();
 
@@ -49,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -82,28 +113,37 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SearchField(
-                suggestions: _suggestions,
-                hint: 'SearchField Sample 2',
-                searchStyle: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black.withOpacity(0.8),
-                ),
-                searchInputDecoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.black.withOpacity(0.8),
+              child: Form(
+                key: _formKey,
+                child: SearchField(
+                  suggestions: _statesOfIndia,
+                  hint: 'SearchField Sample 2',
+                  searchStyle: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.8),
+                  ),
+                  validator: (x) {
+                    if (!_statesOfIndia.contains(x) || x.isEmpty) {
+                      return 'Please Enter a valid State';
+                    }
+                    return null;
+                  },
+                  searchInputDecoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black.withOpacity(0.8),
+                      ),
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
                     ),
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
+                  maxSuggestionsInViewPort: 6,
+                  itemHeight: 50,
+                  onTap: (x) {
+                    print(x);
+                  },
                 ),
-                maxSuggestionsInViewPort: 6,
-                itemHeight: 50,
-                onTap: (x) {
-                  print(x);
-                },
               ),
             ),
             SizedBox(
@@ -178,6 +218,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
+            Container(
+              margin: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.3,
+                  vertical: 10),
+              child: RaisedButton(
+                  color: Colors.green,
+                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
+                  hoverColor: Colors.greenAccent,
+                  onPressed: () {
+                    _formKey.currentState.validate();
+                  },
+                  child: Text('Validate Field 2')),
+            )
           ],
         ),
       ),
