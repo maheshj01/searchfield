@@ -17,6 +17,7 @@ list of all the properties mentioned below
 - Android
 - Ios
 - Web
+- Macos
 
 ## Getting Started
 
@@ -54,30 +55,48 @@ Use the Widget
 ),
 ```
 
- <img src="https://user-images.githubusercontent.com/31410839/101930194-d74f5f80-3bfd-11eb-8f08-ca8f593cdb01.gif" width="210" />
+ <img src="https://user-images.githubusercontent.com/31410839/101930194-d74f5f80-3bfd-11eb-8f08-ca8f593cdb01.gif" width="210"/>
 
-#### Example2
+#### Example2 (Validation)
 
 ```
-SearchField(
-   suggestions: _suggestions,
+Form(
+   key: _formKey,
+   child: SearchField(
+   suggestions: _statesOfIndia,
    hint: 'SearchField Sample 2',
-   searchStyle:
-          TextStyle(
-             fontSize: 18, color: Colors.black.withOpacity(0.8)),
+   searchStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black.withOpacity(0.8),
+               ),
+   validator: (x) {
+      if (!_statesOfIndia.contains(x) || x.isEmpty) {
+            return 'Please Enter a valid State';
+      }
+      return null;
+      },
    searchInputDecoration:
-          InputDecoration(
-             focusedBorder: OutlineInputBorder(
-             borderSide: BorderSide(color: Colors.black.withOpacity(0.8)),
-          ),
-             border: OutlineInputBorder(
-             borderSide: BorderSide(color: Colors.red),
-         )),
+         InputDecoration(
+            focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+            color: Colors.black.withOpacity(0.8),
+         ),
+   ),
+   border: OutlineInputBorder(
+   borderSide: BorderSide(color: Colors.red),
+   ),
+   ),
    maxSuggestionsInViewPort: 6,
    itemHeight: 50,
-   onTap: (x) {print(x);},
-   )
+   onTap: (x) {
+      print(x);
+   },
+ ),
+),
+
 ```
+
+<img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif"/>
 
 <p float="left;padding=10px">
   <img src ="https://user-images.githubusercontent.com/31410839/102691041-a55a8080-422f-11eb-939f-6d2d43715e23.gif" width="210"/>
