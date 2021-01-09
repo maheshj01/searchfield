@@ -86,6 +86,35 @@ class SearchField extends StatefulWidget {
   /// Specifies the `TextEditingController` for [SearchField].
   final TextEditingController? controller;
 
+  /// `validator` for the [SearchField]
+  /// to make use of this validator, The
+  /// SearchField widget needs to be wrapped in a Form
+  /// and pass it a Global key
+  /// and write your validation logic in the validator
+  /// you can define a gloabl key
+  ///
+  ///  ```
+  ///  Form(
+  ///   key: _formKey,
+  ///   child: SearchField(
+  ///     suggestions: _statesOfIndia,
+  ///     validator: (state) {
+  ///       if (!_statesOfIndia.contains(state) || state.isEmpty) {
+  ///         return 'Please Enter a valid State';
+  ///       }
+  ///       return null;
+  ///     },
+  ///   )
+  /// ```
+  /// You can then validate the form by calling
+  /// the validate function of the form
+  ///
+  /// `_formKey.currentState.validate();`
+  ///
+  ///
+  ///
+  final String? Function(String?)? validator;
+
   SearchField({
     Key? key,
     required this.suggestions,
@@ -94,6 +123,7 @@ class SearchField extends StatefulWidget {
     this.searchStyle,
     this.marginColor,
     this.controller,
+    this.validator,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
     this.suggestionStyle,
@@ -166,9 +196,10 @@ class _SearchFieldState extends State<SearchField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextField(
+        TextFormField(
           controller: widget.controller ?? sourceController,
           focusNode: _focus,
+          validator: widget.validator,
           style: widget.searchStyle,
           decoration:
               widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
