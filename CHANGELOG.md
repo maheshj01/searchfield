@@ -17,7 +17,6 @@
 
 - Support for controller to interact with the SearchField
 
-## [0.4.0-nullsafety.0] - 07 Jan 2021
+## [0.3.1] - 10 Jan 2021
 
-- supports sound null safety
-- docs: minor documentation fixes and improvements
+- Adds support for validator to add custom validations
