@@ -271,9 +271,7 @@ class _SearchFieldState extends State<SearchField> {
                         );
                         // hide the suggestions
                         sourceStream.sink.add(null);
-                        if (widget.onTap == null) {
-                          widget.onTap(snapshot.data[index]);
-                        }
+                        widget.onTap?.call(snapshot.data[index]);
                       },
                       child: Container(
                         height: widget.itemHeight,

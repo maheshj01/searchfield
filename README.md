@@ -115,7 +115,7 @@ Form(
 - `suggestionStyle` : textStyle for the SuggestionItem.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
-- ``suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
+- `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
