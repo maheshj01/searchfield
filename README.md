@@ -106,7 +106,7 @@ Form(
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
 
-[![Demo CountPages alpha](https://user-images.githubusercontent.com/31410839/114523702-27990580-9c62-11eb-8343-4f8c9fb5cc0d.png)](https://user-images.githubusercontent.com/31410839/114538577-291dfa00-9c71-11eb-8495-7d1071e95c7e.mov)
+![](https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif)
 
 ### Properties
 
