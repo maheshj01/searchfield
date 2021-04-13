@@ -1,9 +1,12 @@
+## [0.5.1] - 13 April 2021
+
+- Updates the docs
 
 ## [0.5.0] - 13 April 2021
 
 - Adds support for overlays
 - suggestions are lazily loaded on demand
-- Added animation to suggestions
+- Adds animation to suggestions
 
 ## [0.3.2] - 10 Jan 2021
 
@@ -33,4 +36,3 @@
 - Initial Release.
 - supports sound null safety
 - docs: minor documentation fixes and improvements
-

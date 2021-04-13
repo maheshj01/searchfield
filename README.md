@@ -1,4 +1,4 @@
-# [searchfield: ^0.5.0](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.1](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```
 dependencies:
-  searchfield: ^0.5.0
+  searchfield: ^0.5.1
 ```
 
 - Import the package
@@ -106,6 +106,7 @@ Form(
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
 <img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
+
 ### Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
