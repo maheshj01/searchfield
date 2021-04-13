@@ -117,7 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SearchField(
                   suggestions: _statesOfIndia,
                   hint: 'SearchField Sample 2',
-                  hasOverlay: false,
                   searchStyle: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withOpacity(0.8),
@@ -193,6 +192,9 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 20,
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SearchField(
@@ -210,6 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   labelText: 'SearchField',
                   border: OutlineInputBorder(),
                 ),
+                // hasOverlay: false,
                 hint: 'SearchField Sample 4',
                 maxSuggestionsInViewPort: 4,
                 itemHeight: 45,

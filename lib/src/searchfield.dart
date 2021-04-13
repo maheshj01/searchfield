@@ -80,8 +80,10 @@ class SearchField extends StatefulWidget {
 
   /// Specifies the number of suggestions that can be shown in viewport.
   ///
-  /// When not specified, the default value is `5.0`.
-  final double maxSuggestionsInViewPort;
+  /// When not specified, the default value is `5`.
+  /// if the number of suggestions is less than 5, then [maxSuggestionsInViewPort]
+  /// will be the length of [suggestions]
+  final int maxSuggestionsInViewPort;
 
   /// Specifies the `TextEditingController` for [SearchField].
   final TextEditingController? controller;
@@ -163,11 +165,7 @@ class _SearchFieldState extends State<SearchField> {
     super.dispose();
   }
 
-  late OverlayEntry _overlayEntry;
-  @override
-  void initState() {
-    super.initState();
-    sourceController = widget.controller ?? TextEditingController();
+  void initialize() {
     _focus.addListener(() {
       setState(() {
         sourceFocused = _focus.hasFocus;
@@ -181,9 +179,17 @@ class _SearchFieldState extends State<SearchField> {
         }
       }
     });
+  }
+
+  late OverlayEntry _overlayEntry;
+  @override
+  void initState() {
+    super.initState();
+    sourceController = widget.controller ?? TextEditingController();
+    initialize();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (widget.initialValue == null || widget.initialValue!.isEmpty) {
-        sourceStream.sink.add(widget.suggestions);
+        sourceStream.sink.add(null);
       } else {
         sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
@@ -199,11 +205,13 @@ class _SearchFieldState extends State<SearchField> {
     }
     if (oldWidget.hasOverlay != widget.hasOverlay) {
       if (widget.hasOverlay) {
-        setState(() {});
+        initialize();
       } else {
-        _overlayEntry.remove();
-        setState(() {});
+        if (_overlayEntry.mounted) {
+          _overlayEntry.remove();
+        }
       }
+      setState(() {});
     }
   }
 
@@ -222,7 +230,8 @@ class _SearchFieldState extends State<SearchField> {
           } else {
             height = snapshot.data!.length * widget.itemHeight;
           }
-          return Container(
+          return AnimatedContainer(
+            duration: isUp ? Duration.zero : Duration(milliseconds: 300),
             height: height,
             alignment: Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
@@ -233,61 +242,62 @@ class _SearchFieldState extends State<SearchField> {
                       color: onSurfaceColor.withOpacity(0.1),
                       blurRadius: 8.0, // soften the shadow
                       spreadRadius: 2.0, // extend the shadow
-                      offset: Offset(
-                        2.0,
-                        5.0,
-                      ),
+                      offset: widget.hasOverlay
+                          ? Offset(
+                              2.0,
+                              5.0,
+                            )
+                          : Offset(1.0, 0.5),
                     ),
                   ],
                 ),
-            child: ListView(
+            child: ListView.builder(
+              reverse: isUp,
+              itemCount: snapshot.data!.length,
               physics: snapshot.data!.length == 1
                   ? NeverScrollableScrollPhysics()
                   : ScrollPhysics(),
-              children: List.generate(
-                snapshot.data!.length,
-                (index) => GestureDetector(
-                  onTap: () {
-                    sourceController!.text = snapshot.data![index]!;
-                    sourceController!.selection = TextSelection.fromPosition(
-                      TextPosition(
-                        offset: sourceController!.text.length,
-                      ),
-                    );
-                    // hide the suggestions
-                    sourceStream.sink.add(null);
-                    if (widget.onTap != null) {
-                      widget.onTap!(snapshot.data![index]);
-                    }
-                  },
-                  child: Container(
-                    height: widget.itemHeight,
-                    padding: EdgeInsets.symmetric(horizontal: 5) +
-                        EdgeInsets.only(left: 8),
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    decoration: widget.suggestionItemDecoration?.copyWith(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: widget.marginColor ??
-                                  onSurfaceColor.withOpacity(0.1),
-                            ),
-                          ),
-                        ) ??
-                        BoxDecoration(
-                          border: index == snapshot.data!.length - 1
-                              ? null
-                              : Border(
-                                  bottom: BorderSide(
-                                    color: widget.marginColor ??
-                                        onSurfaceColor.withOpacity(0.1),
-                                  ),
-                                ),
-                        ),
-                    child: Text(
-                      snapshot.data![index]!,
-                      style: widget.suggestionStyle,
+              itemBuilder: (_focus, index) => GestureDetector(
+                onTap: () {
+                  sourceController!.text = snapshot.data![index]!;
+                  sourceController!.selection = TextSelection.fromPosition(
+                    TextPosition(
+                      offset: sourceController!.text.length,
                     ),
+                  );
+                  // hide the suggestions
+                  sourceStream.sink.add(null);
+                  if (widget.onTap != null) {
+                    widget.onTap!(snapshot.data![index]);
+                  }
+                },
+                child: Container(
+                  height: widget.itemHeight,
+                  padding: EdgeInsets.symmetric(horizontal: 5) +
+                      EdgeInsets.only(left: 8),
+                  width: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionItemDecoration?.copyWith(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: widget.marginColor ??
+                                onSurfaceColor.withOpacity(0.1),
+                          ),
+                        ),
+                      ) ??
+                      BoxDecoration(
+                        border: index == snapshot.data!.length - 1
+                            ? null
+                            : Border(
+                                bottom: BorderSide(
+                                  color: widget.marginColor ??
+                                      onSurfaceColor.withOpacity(0.1),
+                                ),
+                              ),
+                      ),
+                  child: Text(
+                    snapshot.data![index]!,
+                    style: widget.suggestionStyle,
                   ),
                 ),
               ),
@@ -298,24 +308,50 @@ class _SearchFieldState extends State<SearchField> {
     );
   }
 
+  Offset getYOffset(Offset widgetOffset, int resultCount) {
+    final size = MediaQuery.of(context).size;
+    double position = widgetOffset.dy;
+    if ((position + height) < (size.height - widget.itemHeight * 2)) {
+      return Offset(0, widget.itemHeight + 10.0);
+    } else {
+      if (resultCount > widget.maxSuggestionsInViewPort) {
+        isUp = false;
+        return Offset(
+            0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+      } else {
+        isUp = true;
+        return Offset(0, -(widget.itemHeight * resultCount));
+      }
+    }
+  }
+
   OverlayEntry _createOverlay() {
     final renderBox = context.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
-        builder: (context) => Positioned(
-              left: offset.dx,
-              width: size.width,
-              child: CompositedTransformFollower(
-                  offset: Offset(0, widget.itemHeight),
-                  link: _layerLink,
-                  child: Material(child: _suggestionsBuilder())),
-            ));
+        builder: (context) => StreamBuilder<List<String?>?>(
+            stream: sourceStream.stream,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
+              late int count = widget.maxSuggestionsInViewPort;
+              if (snapshot.data != null) {
+                count = snapshot.data!.length;
+              }
+              return Positioned(
+                left: offset.dx,
+                width: size.width,
+                child: CompositedTransformFollower(
+                    offset: getYOffset(offset, count),
+                    link: _layerLink,
+                    child: Material(child: _suggestionsBuilder())),
+              );
+            }));
   }
 
   final LayerLink _layerLink = LayerLink();
   late double height;
+  bool isUp = false;
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
