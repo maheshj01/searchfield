@@ -1,4 +1,4 @@
-# [SearchField: ^0.3.0](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.0-nullsafety.beta](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -27,7 +27,7 @@ list of all the properties mentioned below
 
 ```
 dependencies:
-  searchfield: ^0.5.0-nullsafety.0
+  searchfield: ^0.5.0-nullsafety.beta
 ```
 
 - Import the package
@@ -118,6 +118,8 @@ Form(
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
+- `hasOverlay` : shows floating suggestions on top of the Ui
+  if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
 - `onTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `hint` : hint for the search Input.
 - `searchStyle` : textStyle for the search Input.
