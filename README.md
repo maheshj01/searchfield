@@ -1,4 +1,4 @@
-# [SearchField: ^0.3.2](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.0](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -27,7 +27,7 @@ list of all the properties mentioned below
 
 ```
 dependencies:
-  searchfield: ^0.3.2
+  searchfield: ^0.5.0
 ```
 
 - Import the package
@@ -104,11 +104,22 @@ Form(
   <img src = "https://user-images.githubusercontent.com/31410839/102691410-582bde00-4232-11eb-85fb-8ce8da8d8764.gif" width="210"/>
 </p>
 
+### Support for Overlays
+
+- With v0.5.0 Searchfield now supports Overlays which shows the suggestions floating on top of the Ui.
+- The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
+- Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
+- However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
+
+<img width="500" alt="Screenshot 2021-04-13 at 2 10 12 PM" src="https://user-images.githubusercontent.com/31410839/114523702-27990580-9c62-11eb-8343-4f8c9fb5cc0d.png">
+
 ### Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
+- `hasOverlay` : shows floating suggestions on top of the Ui
+  if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
 - `onTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `hint` : hint for the search Input.
 - `searchStyle` : textStyle for the search Input.
