@@ -2,6 +2,7 @@
 ## [0.5.0] - 13 April 2021
 
 - Adds support for overlays
+- suggestions are lazily loaded on demand
 - Added animation to suggestions
 
 ## [0.3.2] - 10 Jan 2021
