@@ -105,9 +105,7 @@ Form(
 - Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
-
-![](https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif)
-
+<img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
 ### Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
