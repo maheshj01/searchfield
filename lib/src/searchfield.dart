@@ -91,7 +91,7 @@ class SearchField extends StatefulWidget {
   /// SearchField widget needs to be wrapped in a Form
   /// and pass it a Global key
   /// and write your validation logic in the validator
-  /// you can define a gloabl key
+  /// you can define a global key
   ///
   ///  ```
   ///  Form(
@@ -115,11 +115,19 @@ class SearchField extends StatefulWidget {
   ///
   final String? Function(String?)? validator;
 
+  /// if false the suggestions will be shown below
+  /// the searchfield along the Y-axis.
+  /// if true the suggestions will be shown floating like the
+  /// along the Z-axis
+  /// defaults to ```true```
+  final bool hasOverlay;
+
   SearchField({
     Key? key,
     required this.suggestions,
     this.initialValue,
     this.hint,
+    this.hasOverlay = true,
     this.searchStyle,
     this.marginColor,
     this.controller,
@@ -155,6 +163,7 @@ class _SearchFieldState extends State<SearchField> {
     super.dispose();
   }
 
+  late OverlayEntry _overlayEntry;
   @override
   void initState() {
     super.initState();
@@ -163,6 +172,14 @@ class _SearchFieldState extends State<SearchField> {
       setState(() {
         sourceFocused = _focus.hasFocus;
       });
+      if (widget.hasOverlay) {
+        if (sourceFocused) {
+          _overlayEntry = _createOverlay();
+          Overlay.of(context)!.insert(_overlayEntry);
+        } else {
+          _overlayEntry.remove();
+        }
+      }
     });
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (widget.initialValue == null || widget.initialValue!.isEmpty) {
@@ -180,138 +197,165 @@ class _SearchFieldState extends State<SearchField> {
     if (oldWidget.controller != widget.controller) {
       sourceController = widget.controller ?? TextEditingController();
     }
+    if (oldWidget.hasOverlay != widget.hasOverlay) {
+      if (widget.hasOverlay) {
+        setState(() {});
+      } else {
+        _overlayEntry.remove();
+        setState(() {});
+      }
+    }
   }
 
+  Widget _suggestionsBuilder() {
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+    return StreamBuilder<List<String?>?>(
+      stream: sourceStream.stream,
+      builder: (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
+        if (snapshot.data == null || snapshot.data!.isEmpty || !sourceFocused) {
+          return Container();
+        } else {
+          if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
+            height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+          } else if (snapshot.data!.length == 1) {
+            height = widget.itemHeight;
+          } else {
+            height = snapshot.data!.length * widget.itemHeight;
+          }
+          return Container(
+            height: height,
+            alignment: Alignment.centerLeft,
+            decoration: widget.suggestionsDecoration ??
+                BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  boxShadow: [
+                    BoxShadow(
+                      color: onSurfaceColor.withOpacity(0.1),
+                      blurRadius: 8.0, // soften the shadow
+                      spreadRadius: 2.0, // extend the shadow
+                      offset: Offset(
+                        2.0,
+                        5.0,
+                      ),
+                    ),
+                  ],
+                ),
+            child: ListView(
+              physics: snapshot.data!.length == 1
+                  ? NeverScrollableScrollPhysics()
+                  : ScrollPhysics(),
+              children: List.generate(
+                snapshot.data!.length,
+                (index) => GestureDetector(
+                  onTap: () {
+                    sourceController!.text = snapshot.data![index]!;
+                    sourceController!.selection = TextSelection.fromPosition(
+                      TextPosition(
+                        offset: sourceController!.text.length,
+                      ),
+                    );
+                    // hide the suggestions
+                    sourceStream.sink.add(null);
+                    if (widget.onTap != null) {
+                      widget.onTap!(snapshot.data![index]);
+                    }
+                  },
+                  child: Container(
+                    height: widget.itemHeight,
+                    padding: EdgeInsets.symmetric(horizontal: 5) +
+                        EdgeInsets.only(left: 8),
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    decoration: widget.suggestionItemDecoration?.copyWith(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: widget.marginColor ??
+                                  onSurfaceColor.withOpacity(0.1),
+                            ),
+                          ),
+                        ) ??
+                        BoxDecoration(
+                          border: index == snapshot.data!.length - 1
+                              ? null
+                              : Border(
+                                  bottom: BorderSide(
+                                    color: widget.marginColor ??
+                                        onSurfaceColor.withOpacity(0.1),
+                                  ),
+                                ),
+                        ),
+                    child: Text(
+                      snapshot.data![index]!,
+                      style: widget.suggestionStyle,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  OverlayEntry _createOverlay() {
+    final renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
+
+    return OverlayEntry(
+        builder: (context) => Positioned(
+              left: offset.dx,
+              width: size.width,
+              child: CompositedTransformFollower(
+                  offset: Offset(0, widget.itemHeight),
+                  link: _layerLink,
+                  child: Material(child: _suggestionsBuilder())),
+            ));
+  }
+
+  final LayerLink _layerLink = LayerLink();
+  late double height;
   @override
   Widget build(BuildContext context) {
-    double height;
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
       height = widget.itemHeight * widget.maxSuggestionsInViewPort;
     } else {
       height = widget.suggestions.length * widget.itemHeight;
     }
-
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TextFormField(
-          controller: widget.controller ?? sourceController,
-          focusNode: _focus,
-          validator: widget.validator,
-          style: widget.searchStyle,
-          decoration:
-              widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
-                  InputDecoration(hintText: widget.hint),
-          onChanged: (item) {
-            final searchResult = <String>[];
-            if (item.isEmpty) {
-              sourceStream.sink.add(widget.suggestions);
-              return;
-            }
-            for (final suggestion in widget.suggestions) {
-              if (suggestion.toLowerCase().contains(item.toLowerCase())) {
-                searchResult.add(suggestion);
+        CompositedTransformTarget(
+          link: _layerLink,
+          child: TextFormField(
+            controller: widget.controller ?? sourceController,
+            focusNode: _focus,
+            validator: widget.validator,
+            style: widget.searchStyle,
+            decoration:
+                widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
+                    InputDecoration(hintText: widget.hint),
+            onChanged: (item) {
+              final searchResult = <String>[];
+              if (item.isEmpty) {
+                sourceStream.sink.add(widget.suggestions);
+                return;
               }
-            }
-            sourceStream.sink.add(searchResult);
-          },
-        ),
-        SizedBox(
-          height: 2,
-        ),
-        StreamBuilder<List<String?>?>(
-          stream: sourceStream.stream,
-          builder:
-              (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
-            if (snapshot.data == null ||
-                snapshot.data!.isEmpty ||
-                !sourceFocused) {
-              return Container();
-            } else {
-              if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-                height = widget.itemHeight * widget.maxSuggestionsInViewPort;
-              } else if (snapshot.data!.length == 1) {
-                height = widget.itemHeight;
-              } else {
-                height = snapshot.data!.length * widget.itemHeight;
+              for (final suggestion in widget.suggestions) {
+                if (suggestion.toLowerCase().contains(item.toLowerCase())) {
+                  searchResult.add(suggestion);
+                }
               }
-              return Container(
-                height: height,
-                alignment: Alignment.centerLeft,
-                decoration: widget.suggestionsDecoration ??
-                    BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      boxShadow: [
-                        BoxShadow(
-                          color: onSurfaceColor.withOpacity(0.1),
-                          blurRadius: 8.0, // soften the shadow
-                          spreadRadius: 2.0, // extend the shadow
-                          offset: Offset(
-                            2.0,
-                            5.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                child: ListView(
-                  physics: snapshot.data!.length == 1
-                      ? NeverScrollableScrollPhysics()
-                      : ScrollPhysics(),
-                  children: List.generate(
-                    snapshot.data!.length,
-                    (index) => GestureDetector(
-                      onTap: () {
-                        sourceController!.text = snapshot.data![index]!;
-                        sourceController!.selection =
-                            TextSelection.fromPosition(
-                          TextPosition(
-                            offset: sourceController!.text.length,
-                          ),
-                        );
-                        // hide the suggestions
-                        sourceStream.sink.add(null);
-                        if (widget.onTap != null) {
-                          widget.onTap!(snapshot.data![index]);
-                        }
-                      },
-                      child: Container(
-                        height: widget.itemHeight,
-                        padding: EdgeInsets.symmetric(horizontal: 5) +
-                            EdgeInsets.only(left: 8),
-                        width: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        decoration: widget.suggestionItemDecoration?.copyWith(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: widget.marginColor ??
-                                      onSurfaceColor.withOpacity(0.1),
-                                ),
-                              ),
-                            ) ??
-                            BoxDecoration(
-                              border: index == snapshot.data!.length - 1
-                                  ? null
-                                  : Border(
-                                      bottom: BorderSide(
-                                        color: widget.marginColor ??
-                                            onSurfaceColor.withOpacity(0.1),
-                                      ),
-                                    ),
-                            ),
-                        child: Text(
-                          snapshot.data![index]!,
-                          style: widget.suggestionStyle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }
-          },
-        )
+              sourceStream.sink.add(searchResult);
+            },
+          ),
+        ),
+        if (!widget.hasOverlay)
+          SizedBox(
+            height: 2,
+          ),
+        if (!widget.hasOverlay) _suggestionsBuilder()
       ],
     );
   }

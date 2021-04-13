@@ -89,7 +89,6 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         body: ListView(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(
               height: 20,
@@ -118,6 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SearchField(
                   suggestions: _statesOfIndia,
                   hint: 'SearchField Sample 2',
+                  hasOverlay: false,
                   searchStyle: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withOpacity(0.8),
@@ -222,14 +222,14 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: EdgeInsets.symmetric(
                   horizontal: MediaQuery.of(context).size.width * 0.3,
                   vertical: 10),
-              child: RaisedButton(
-                  color: Colors.green,
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-                  hoverColor: Colors.greenAccent,
+              child: ElevatedButton(
                   onPressed: () {
                     _formKey.currentState.validate();
                   },
-                  child: Text('Validate Field 2')),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Validate Field 2'),
+                  )),
             )
           ],
         ),
