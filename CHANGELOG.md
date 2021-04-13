@@ -1,6 +1,6 @@
 ## [0.5.1] - 13 April 2021
 
-- Updates the docs
+- Updated docs
 
 ## [0.5.0] - 13 April 2021
 
