@@ -6,18 +6,12 @@ Think of this widget like a dropdownButton field with an ability
 
 - to Search 🔍.
 - to define height of each Suggestion Item
+- to show dynamic suggestions along the z axis or below the searchfield along the Y-axis.
 - to define max number of items visible in the viewport 📱
 - to completely customize the input searchfield like a normal textfield
 - to customize the suggestions with colors and gradients
 
 list of all the properties mentioned below
-
-## Supported Platforms
-
-- Android
-- Ios
-- Web
-- Macos
 
 ## Getting Started
 
@@ -111,7 +105,8 @@ Form(
 - Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
-<img width="500" alt="Screenshot 2021-04-13 at 2 10 12 PM" src="https://user-images.githubusercontent.com/31410839/114523702-27990580-9c62-11eb-8343-4f8c9fb5cc0d.png">
+
+[![Demo CountPages alpha](https://user-images.githubusercontent.com/31410839/114523702-27990580-9c62-11eb-8343-4f8c9fb5cc0d.png)](https://user-images.githubusercontent.com/31410839/114538577-291dfa00-9c71-11eb-8495-7d1071e95c7e.mov)
 
 ### Properties
 
