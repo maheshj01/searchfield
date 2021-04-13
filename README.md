@@ -27,7 +27,7 @@ list of all the properties mentioned below
 
 ```
 dependencies:
-  searchfield: ^0.3.0
+  searchfield: ^0.5.0-nullsafety.0
 ```
 
 - Import the package
@@ -103,6 +103,15 @@ Form(
   <img src = "https://user-images.githubusercontent.com/31410839/102691101-fff3dc80-422f-11eb-9860-cf4fcf2b1351.gif" width="210"/>
   <img src = "https://user-images.githubusercontent.com/31410839/102691410-582bde00-4232-11eb-85fb-8ce8da8d8764.gif" width="210"/>
 </p>
+
+### Support for Overlays
+
+- With v0.5.0 Searchfield now supports Overlays which shows the suggestions floating on top of the Ui.
+- The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
+- Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
+- However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
+
+<img width="500" alt="Screenshot 2021-04-13 at 2 10 12 PM" src="https://user-images.githubusercontent.com/31410839/114523702-27990580-9c62-11eb-8343-4f8c9fb5cc0d.png">
 
 ### Properties
 

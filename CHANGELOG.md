@@ -21,3 +21,8 @@
 
 - supports sound null safety
 - docs: minor documentation fixes and improvements
+
+## [0.5.0-nullsafety-beta] - 13 April 2021
+
+- Adds support for overlays
+- Added animation to suggestions
