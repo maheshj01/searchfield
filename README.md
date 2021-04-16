@@ -90,12 +90,15 @@ Form(
 
 ```
 
-<img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif"/>
+<img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
+
+
+## Customize the suggestions the way you want
 
 <p float="left;padding=10px">
-  <img src ="https://user-images.githubusercontent.com/31410839/102691041-a55a8080-422f-11eb-939f-6d2d43715e23.gif" width="210"/>
-  <img src = "https://user-images.githubusercontent.com/31410839/102691101-fff3dc80-422f-11eb-9860-cf4fcf2b1351.gif" width="210"/>
-  <img src = "https://user-images.githubusercontent.com/31410839/102691410-582bde00-4232-11eb-85fb-8ce8da8d8764.gif" width="210"/>
+  <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="210"/>
+  <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="170"/>
+  <img src = "https://user-images.githubusercontent.com/31410839/115071445-e3349080-9f13-11eb-8d9b-e4dc81d3e7a7.png"" width="210"/>
 </p>
 
 ### Support for Overlays
@@ -105,7 +108,10 @@ Form(
 - Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
+<p float="left;padding=10px">
 <img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
+<img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
+</p>
 
 ### Properties
 
