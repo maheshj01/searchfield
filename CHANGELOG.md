@@ -1,3 +1,7 @@
+## [0.5.2] - 17 April 2021
+
+- Add overlay example 
+- Update readme
 ## [0.5.1] - 13 April 2021
 
 - Updated docs

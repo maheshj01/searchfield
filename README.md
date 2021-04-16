@@ -1,4 +1,4 @@
-# [searchfield: ^0.5.1](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.2](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```
 dependencies:
-  searchfield: ^0.5.1
+  searchfield: ^0.5.2
 ```
 
 - Import the package
@@ -92,7 +92,6 @@ Form(
 
 <img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
 
-
 ## Customize the suggestions the way you want
 
 <p float="left;padding=10px">
@@ -132,6 +131,7 @@ Form(
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield)
+
 ### Contributing
 
 You are welcome to contribute to this package,contribution doesnt necessarily mean sending a pull request it could be
