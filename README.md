@@ -113,7 +113,7 @@ Form(
 <img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
 </p>
 
-### Properties
+## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**
@@ -131,6 +131,7 @@ Form(
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 
+### You can find all the [code samples here](https://github.com/maheshmnj/searchfield)
 ### Contributing
 
 You are welcome to contribute to this package,contribution doesnt necessarily mean sending a pull request it could be
