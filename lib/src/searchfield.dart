@@ -1,13 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class SearchField extends StatefulWidget {
-  /// Data source to perform search.
-  final List<String> suggestions;
-
-  /// Callback to return the selected suggestion.
-  final Function(String?)? onTap;
-
+class SearchField<T extends Object> extends StatefulWidget {
   /// Hint for the [SearchField].
   final String? hint;
 
@@ -15,7 +9,7 @@ class SearchField extends StatefulWidget {
   /// must be present in [suggestions].
   ///
   /// When not specified, [hint] is shown instead of `initialValue`.
-  final String? initialValue;
+  final T? initialValue;
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
@@ -52,6 +46,9 @@ class SearchField extends StatefulWidget {
   /// ```
   final BoxDecoration? suggestionsDecoration;
 
+  /// The builder for each list Item
+  Widget Function(BuildContext, int) listItemBuilder;
+
   /// Specifies [BoxDecoration] for items in suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
   ///
@@ -67,6 +64,10 @@ class SearchField extends StatefulWidget {
   ///   ),
   /// )
   final BoxDecoration? suggestionItemDecoration;
+
+  /// Specifies the function which returns the resulting list
+  /// based on some logic
+  final List<T> Function(String) optionsBuilder;
 
   /// Specifies height for item suggestion.
   ///
@@ -126,13 +127,14 @@ class SearchField extends StatefulWidget {
 
   SearchField({
     Key? key,
-    required this.suggestions,
+    required this.optionsBuilder,
+    required this.listItemBuilder,
+    this.controller,
     this.initialValue,
     this.hint,
     this.hasOverlay = true,
     this.searchStyle,
     this.marginColor,
-    this.controller,
     this.validator,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
@@ -140,20 +142,17 @@ class SearchField extends StatefulWidget {
     this.searchInputDecoration,
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
-    this.onTap,
-  })  : assert(
-            (initialValue != null && suggestions.contains(initialValue)) ||
-                initialValue == null,
-            'Initial Value should either be null or should be present in suggestions list.'),
+  })  : assert((initialValue != null) || initialValue == null,
+            'Initial Value should either be null or should be of type T'),
         super(key: key);
 
   @override
   _SearchFieldState createState() => _SearchFieldState();
 }
 
-class _SearchFieldState extends State<SearchField> {
-  final StreamController<List<String?>?> sourceStream =
-      StreamController<List<String>?>.broadcast();
+class _SearchFieldState<T extends Object> extends State<SearchField<T>> {
+  final StreamController<List<T?>?> sourceStream =
+      StreamController<List<T>?>.broadcast();
   final FocusNode _focus = FocusNode();
   bool sourceFocused = false;
   TextEditingController? sourceController;
@@ -188,17 +187,17 @@ class _SearchFieldState extends State<SearchField> {
     sourceController = widget.controller ?? TextEditingController();
     initialize();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (widget.initialValue == null || widget.initialValue!.isEmpty) {
+      if (widget.initialValue == null) {
         sourceStream.sink.add(null);
       } else {
-        sourceController!.text = widget.initialValue!;
+        // sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
       }
     });
   }
 
   @override
-  void didUpdateWidget(covariant SearchField oldWidget) {
+  void didUpdateWidget(covariant SearchField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
       sourceController = widget.controller ?? TextEditingController();
@@ -215,98 +214,56 @@ class _SearchFieldState extends State<SearchField> {
     }
   }
 
-  Widget _suggestionsBuilder() {
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-    return StreamBuilder<List<String?>?>(
-      stream: sourceStream.stream,
-      builder: (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
-        if (snapshot.data == null || snapshot.data!.isEmpty || !sourceFocused) {
-          return Container();
-        } else {
-          if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            height = widget.itemHeight * widget.maxSuggestionsInViewPort;
-          } else if (snapshot.data!.length == 1) {
-            height = widget.itemHeight;
-          } else {
-            height = snapshot.data!.length * widget.itemHeight;
-          }
-          return AnimatedContainer(
-            duration: isUp ? Duration.zero : Duration(milliseconds: 300),
-            height: height,
-            alignment: Alignment.centerLeft,
-            decoration: widget.suggestionsDecoration ??
-                BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  boxShadow: [
-                    BoxShadow(
-                      color: onSurfaceColor.withOpacity(0.1),
-                      blurRadius: 8.0, // soften the shadow
-                      spreadRadius: 2.0, // extend the shadow
-                      offset: widget.hasOverlay
-                          ? Offset(
-                              2.0,
-                              5.0,
-                            )
-                          : Offset(1.0, 0.5),
-                    ),
-                  ],
-                ),
-            child: ListView.builder(
-              reverse: isUp,
-              itemCount: snapshot.data!.length,
-              physics: snapshot.data!.length == 1
-                  ? NeverScrollableScrollPhysics()
-                  : ScrollPhysics(),
-              itemBuilder: (_focus, index) => GestureDetector(
-                onTap: () {
-                  sourceController!.text = snapshot.data![index]!;
-                  sourceController!.selection = TextSelection.fromPosition(
-                    TextPosition(
-                      offset: sourceController!.text.length,
-                    ),
-                  );
-                  // hide the suggestions
-                  sourceStream.sink.add(null);
-                  if (widget.onTap != null) {
-                    widget.onTap!(snapshot.data![index]);
-                  }
-                },
-                child: Container(
-                  height: widget.itemHeight,
-                  padding: EdgeInsets.symmetric(horizontal: 5) +
-                      EdgeInsets.only(left: 8),
-                  width: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  decoration: widget.suggestionItemDecoration?.copyWith(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: widget.marginColor ??
-                                onSurfaceColor.withOpacity(0.1),
-                          ),
-                        ),
-                      ) ??
-                      BoxDecoration(
-                        border: index == snapshot.data!.length - 1
-                            ? null
-                            : Border(
-                                bottom: BorderSide(
-                                  color: widget.marginColor ??
-                                      onSurfaceColor.withOpacity(0.1),
-                                ),
-                              ),
-                      ),
-                  child: Text(
-                    snapshot.data![index]!,
-                    style: widget.suggestionStyle,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
+  // Widget listItemBuilder() {
+  //   final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+  //   return StreamBuilder<List<T?>?>(
+  //     stream: sourceStream.stream,
+  //     builder: (BuildContext context, AsyncSnapshot<List<T?>?> snapshot) {
+  //       if (snapshot.data == null || snapshot.data!.isEmpty || !sourceFocused) {
+  //         return Container();
+  //       } else {
+  //         if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
+  //           height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+  //         } else if (snapshot.data!.length == 1) {
+  //           height = widget.itemHeight;
+  //         } else {
+  //           height = snapshot.data!.length * widget.itemHeight;
+  //         }
+  //         return AnimatedContainer(
+  //           duration: isUp ? Duration.zero : Duration(milliseconds: 300),
+  //           height: height,
+  //           alignment: Alignment.centerLeft,
+  //           decoration: widget.suggestionsDecoration ??
+  //               BoxDecoration(
+  //                 color: Theme.of(context).colorScheme.surface,
+  //                 boxShadow: [
+  //                   BoxShadow(
+  //                     color: onSurfaceColor.withOpacity(0.1),
+  //                     blurRadius: 8.0, // soften the shadow
+  //                     spreadRadius: 2.0, // extend the shadow
+  //                     offset: widget.hasOverlay
+  //                         ? Offset(
+  //                             2.0,
+  //                             5.0,
+  //                           )
+  //                         : Offset(1.0, 0.5),
+  //                   ),
+  //                 ],
+  //               ),
+  //           child: ListView.builder(
+  //             reverse: isUp,
+  //             itemCount: snapshot.data!.length,
+  //             physics: snapshot.data!.length == 1
+  //                 ? NeverScrollableScrollPhysics()
+  //                 : ScrollPhysics(),
+  //             itemBuilder: (context, index) =>
+  //                 widget.listItemBuilder(context, index),
+  //           ),
+  //         );
+  //       }
+  //     },
+  //   );
+  // }
 
   Offset getYOffset(Offset widgetOffset, int resultCount) {
     final size = MediaQuery.of(context).size;
@@ -330,10 +287,9 @@ class _SearchFieldState extends State<SearchField> {
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
-        builder: (context) => StreamBuilder<List<String?>?>(
+        builder: (context) => StreamBuilder<List<T?>?>(
             stream: sourceStream.stream,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<List<T?>?> snapshot) {
               late int count = widget.maxSuggestionsInViewPort;
               if (snapshot.data != null) {
                 count = snapshot.data!.length;
@@ -344,21 +300,15 @@ class _SearchFieldState extends State<SearchField> {
                 child: CompositedTransformFollower(
                     offset: getYOffset(offset, count),
                     link: _layerLink,
-                    child: Material(child: _suggestionsBuilder())),
+                    child: Material(child: widget.listItemBuilder(context,))),
               );
             }));
   }
 
   final LayerLink _layerLink = LayerLink();
-  late double height;
   bool isUp = false;
   @override
   Widget build(BuildContext context) {
-    if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
-      height = widget.itemHeight * widget.maxSuggestionsInViewPort;
-    } else {
-      height = widget.suggestions.length * widget.itemHeight;
-    }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -373,17 +323,8 @@ class _SearchFieldState extends State<SearchField> {
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
             onChanged: (item) {
-              final searchResult = <String>[];
-              if (item.isEmpty) {
-                sourceStream.sink.add(widget.suggestions);
-                return;
-              }
-              for (final suggestion in widget.suggestions) {
-                if (suggestion.toLowerCase().contains(item.toLowerCase())) {
-                  searchResult.add(suggestion);
-                }
-              }
-              sourceStream.sink.add(searchResult);
+              final result = widget.optionsBuilder(item);
+              sourceStream.sink.add(result);
             },
           ),
         ),

@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -57,21 +57,51 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SearchField(
-                    suggestions: countries.map((e) => e.name).toList(),
-                    controller: _searchController,
-                    hint: 'Search by country name',
-                    maxSuggestionsInViewPort: 4,
-                    itemHeight: 45,
-                    onTap: (x) {
-                      final country = countries.firstWhere((e) => e.name == x);
-                      Navigator.of(context)
-                          .push(MaterialPageRoute<CountryDetail>(
-                              builder: (_) => CountryDetail(
-                                    country: country,
-                                  )));
-                    },
-                  ),
+                  child: SearchField<String>(
+                      controller: _searchController,
+                      hint: 'Search by country name',
+                      maxSuggestionsInViewPort: 4,
+                      itemHeight: 45,
+                      listItemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            // sourceController!.text = snapshot.data![index]!;
+                            // sourceController!.selection = TextSelection.fromPosition(
+                            //   TextPosition(
+                            //     offset: sourceController!.text.length,
+                            //   ),
+                            // );
+                            // // hide the suggestions
+                            // sourceStream.sink.add(null);
+                            // if (widget.onTap != null) {
+                            //   widget.onTap!(snapshot.data![index]);
+                            // }
+                          },
+                          child: Container(
+                            height: 60,
+                            padding: EdgeInsets.symmetric(horizontal: 5) +
+                                EdgeInsets.only(left: 8),
+                            width: double.infinity,
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.pink),
+                              ),
+                            ),
+                            child: Text(
+                              countries[index].name,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      },
+                      optionsBuilder: (text) {
+                        if (text.isEmpty) {
+                          return [];
+                        }
+        
+                        return [];
+                      }),
                 ),
                 Expanded(
                   child: ListView.builder(
@@ -94,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
 class CountryDetail extends StatefulWidget {
   final Country country;
 
-  const CountryDetail({Key key, this.country}) : super(key: key);
+  const CountryDetail({Key? key, required this.country}) : super(key: key);
   @override
   _CountryDetailState createState() => _CountryDetailState();
 }
