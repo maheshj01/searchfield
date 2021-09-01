@@ -59,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: SearchField(
                     suggestions: countries.map((e) => e.name).toList(),
+                    suggestionType: SuggestionType.enabled,
                     controller: _searchController,
                     hint: 'Search by country name',
                     maxSuggestionsInViewPort: 4,

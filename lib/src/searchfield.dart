@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+
+enum SuggestionType {enabled,hidden}
+
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
   final List<String> suggestions;
@@ -28,6 +31,9 @@ class SearchField extends StatefulWidget {
   /// When not specified, the default value is [InputDecoration] initialized
   /// with [hint].
   final InputDecoration? searchInputDecoration;
+
+  /// defaults to SuggestionType.hidden
+  final SuggestionType suggestionType;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -134,6 +140,7 @@ class SearchField extends StatefulWidget {
     this.marginColor,
     this.controller,
     this.validator,
+    this.suggestionType = SuggestionType.hidden,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
     this.suggestionStyle,
@@ -144,7 +151,7 @@ class SearchField extends StatefulWidget {
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
-            'Initial Value should either be null or should be present in suggestions list.'),
+            'Initial value should either be null or should be present in suggestions list.'),
         super(key: key);
 
   @override
@@ -253,11 +260,12 @@ class _SearchFieldState extends State<SearchField> {
                 ),
             child: ListView.builder(
               reverse: isUp,
+              padding: EdgeInsets.zero,
               itemCount: snapshot.data!.length,
               physics: snapshot.data!.length == 1
                   ? NeverScrollableScrollPhysics()
                   : ScrollPhysics(),
-              itemBuilder: (_focus, index) => GestureDetector(
+              itemBuilder: (context, index) => GestureDetector(
                 onTap: () {
                   sourceController!.text = snapshot.data![index]!;
                   sourceController!.selection = TextSelection.fromPosition(
@@ -369,6 +377,17 @@ class _SearchFieldState extends State<SearchField> {
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
+            onTap:(){
+             if(!sourceFocused &&widget.suggestionType==SuggestionType.enabled){
+               print('focused');
+             setState(() {
+               sourceFocused = true;
+             });
+             Future.delayed(Duration(milliseconds:100),(){
+              sourceStream.sink.add(widget.suggestions);
+             });
+             }
+            },
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
