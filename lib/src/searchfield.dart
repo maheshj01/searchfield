@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
   final List<String> suggestions;
+  
+  /// Specifies whether the [suggestions] should be shown directly on focus,
+  /// or on input callback.
+  final bool? showSuggestionsOnFocus;
 
   /// Callback to return the selected suggestion.
   final Function(String?)? onTap;
@@ -194,6 +198,7 @@ class _SearchFieldState extends State<SearchField> {
         sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
       }
+      if(widget.showSuggestionsOnFocus != null && widget.showSuggestionsOnFocus) sourceStream.sink.add(widget.suggestions)
     });
   }
 
