@@ -1,13 +1,11 @@
 /*
  * File: country_model.dart
  * Project: None
- * File Created: Friday, 16th April 2021"
- * Author: Mahe,h Jamdade
-8:20:56 pm
+ * File Created: Wednesday, 1st September 2021 1:58:27 pm
+ * Author: Mahesh Jamdade
  * -----
- * Last Modified: Friday, 16th April 2021"
- * Modified By: Mahe,h Jamdade
-9:13:39 pm
+ * Last Modified: Wednesday, 1st September 2021 2:06:27 pm
+ * Modified By: Mahesh Jamdade
  * -----
  * Copyright 2021 - 2021 None
  */

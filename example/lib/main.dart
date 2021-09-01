@@ -74,15 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
+                  child: ListView.separated(
                     itemCount: countries.length,
+                    separatorBuilder: (_, index)=>Divider(),
                     itemBuilder: (_, index) => ListTile(
                       title: Text(countries[index].name),
-                      onTap: () => Navigator.of(context)
+                      trailing: IconButton(onPressed: (){
+                        Navigator.of(context)
                           .push(MaterialPageRoute<CountryDetail>(
                               builder: (_) => CountryDetail(
                                     country: countries[index],
-                                  ))),
+                                  )));
+                      }, icon: Icon(Icons.arrow_forward_ios,size:16)),
                     ),
                   ),
                 )
@@ -104,7 +107,7 @@ class _CountryDetailState extends State<CountryDetail> {
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.2),
+          horizontal: MediaQuery.of(context).size.width * 0.15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -112,9 +115,11 @@ class _CountryDetailState extends State<CountryDetail> {
           SizedBox(
             width: 16,
           ),
-          Text(
-            '$value',
-            style: TextStyle(fontSize: 30),
+          Flexible(
+            child: Text(
+              '$value',
+              style: TextStyle(fontSize: 30),
+            ),
           )
         ],
       ),
