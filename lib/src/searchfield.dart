@@ -199,7 +199,7 @@ class _SearchFieldState extends State<SearchField> {
         sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
       }
-      if(widget.showSuggestionsOnFocus != null && widget.showSuggestionsOnFocus!) sourceStream.sink.add(widget.suggestions)
+      if(widget.showSuggestionsOnFocus != null && widget.showSuggestionsOnFocus!) sourceStream.sink.add(widget.suggestions);
     });
   }
 
