@@ -6,7 +6,7 @@ Think of this widget like a dropdownButton field with an ability
 
 - to Search 🔍.
 - to define height of each Suggestion Item
-- to show dynamic suggestions along the z axis or below the searchfield along the Y-axis.
+- to show dynamic suggestions as an overlay above the widgets or in the widget tree.
 - to define max number of items visible in the viewport 📱
 - to completely customize the input searchfield like a normal textfield
 - to customize the suggestions with colors and gradients
@@ -116,7 +116,7 @@ Form(
 
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**.
-- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaulst to `SuggestionState.hidden`. 
+- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.hidden`. 
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
@@ -131,7 +131,7 @@ Form(
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 
-### You can find all the [code samples here](https://github.com/maheshmnj/searchfield)
+### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/example)
 
 ### Contributing
 
