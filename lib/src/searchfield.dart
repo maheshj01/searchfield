@@ -145,6 +145,7 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
+    this.showSuggestionsOnFocus,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
