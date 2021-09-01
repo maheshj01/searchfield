@@ -1,4 +1,4 @@
-# [searchfield: ^0.5.2](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.3](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -19,9 +19,9 @@ list of all the properties mentioned below
 
 - Add the dependency
 
-```
+```yaml
 dependencies:
-  searchfield: ^0.5.2
+  searchfield: ^0.5.3
 ```
 
 - Import the package
@@ -34,7 +34,7 @@ Use the Widget
 
 #### Example1
 
-```
+```dart
  SearchField(
     suggestions: [
     'United States',
@@ -53,7 +53,7 @@ Use the Widget
 
 #### Example2 (Validation)
 
-```
+```dart
 Form(
    key: _formKey,
    child: SearchField(
@@ -115,7 +115,8 @@ Form(
 ## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
-- `suggestions` : list of Strings to search from.**(Mandatory)**
+- `suggestions` : list of Strings to search from.**(Mandatory)**.
+- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaulst to `SuggestionState.hidden`. 
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.

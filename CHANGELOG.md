@@ -1,3 +1,8 @@
+## [0.5.3] - 01 September 2021
+
+- Adds `SuggestionState` enum to show/hide suggestion on focus 
+- Update example
+
 ## [0.5.2] - 17 April 2021
 
 - Add overlay example 
