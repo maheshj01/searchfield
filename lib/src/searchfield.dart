@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 
-enum SuggestionType {enabled,hidden}
+enum SuggestionState {enabled,hidden}
 
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
@@ -32,8 +32,8 @@ class SearchField extends StatefulWidget {
   /// with [hint].
   final InputDecoration? searchInputDecoration;
 
-  /// defaults to SuggestionType.hidden
-  final SuggestionType suggestionType;
+  /// defaults to SuggestionState.hidden
+  final SuggestionState suggestionType;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -140,7 +140,7 @@ class SearchField extends StatefulWidget {
     this.marginColor,
     this.controller,
     this.validator,
-    this.suggestionType = SuggestionType.hidden,
+    this.suggestionType = SuggestionState.hidden,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
     this.suggestionStyle,
@@ -378,7 +378,7 @@ class _SearchFieldState extends State<SearchField> {
             validator: widget.validator,
             style: widget.searchStyle,
             onTap:(){
-             if(!sourceFocused &&widget.suggestionType==SuggestionType.enabled){
+             if(!sourceFocused &&widget.suggestionType==SuggestionState.enabled){
                print('focused');
              setState(() {
                sourceFocused = true;
