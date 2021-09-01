@@ -1,6 +1,9 @@
+## [0.5.4] - 01 September 2021
+
+- renamed property to `SuggestionType` to `SuggestionState`
 ## [0.5.3] - 01 September 2021
 
-- Adds `SuggestionState` enum to show/hide suggestion on focus 
+- Adds `SuggestionType` enum to show/hide suggestion on focus 
 - Update example
 
 ## [0.5.2] - 17 April 2021
