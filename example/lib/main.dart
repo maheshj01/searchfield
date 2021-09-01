@@ -15,7 +15,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Countries Demographic'),
+      home: MyHomePage(
+        title: "Demo Home Page",
+      ),
     );
   }
 }
@@ -77,16 +79,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   child: ListView.separated(
                     itemCount: countries.length,
-                    separatorBuilder: (_, index)=>Divider(),
+                    separatorBuilder: (_, index) => Divider(),
                     itemBuilder: (_, index) => ListTile(
                       title: Text(countries[index].name),
-                      trailing: IconButton(onPressed: (){
-                        Navigator.of(context)
-                          .push(MaterialPageRoute<CountryDetail>(
-                              builder: (_) => CountryDetail(
-                                    country: countries[index],
-                                  )));
-                      }, icon: Icon(Icons.arrow_forward_ios,size:16)),
+                      trailing: IconButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute<CountryDetail>(
+                                    builder: (_) => CountryDetail(
+                                          country: countries[index],
+                                        )));
+                          },
+                          icon: Icon(Icons.arrow_forward_ios, size: 16)),
                     ),
                   ),
                 )

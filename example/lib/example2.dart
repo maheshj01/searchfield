@@ -63,6 +63,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
               suggestions: _suggestions,
+              textInputAction: TextInputAction.next,
               controller: _searchController,
               hint: 'SearchField Sample 1',
               initialValue: _suggestions[2],
