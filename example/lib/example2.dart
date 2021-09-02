@@ -63,7 +63,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
               suggestions: _suggestions,
-              textInputAction: TextInputAction.next,
+              searchInputAction: TextInputAction.next,
               controller: _searchController,
               hint: 'SearchField Sample 1',
               initialValue: _suggestions[2],
@@ -171,6 +171,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               suggestions: _suggestions,
+              suggestionState: SuggestionState.enabled,
               searchInputDecoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'SearchField',

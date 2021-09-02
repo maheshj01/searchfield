@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 enum SuggestionState {
-  /// always show the suggestions
+  /// always show suggestions
   enabled,
 
-  /// always hide the suggestions
+  /// hide the suggestions on initial focus
   hidden,
 }
 
@@ -19,8 +19,8 @@ class SearchField extends StatefulWidget {
   /// Hint for the [SearchField].
   final String? hint;
 
-  /// Define a textInputAction that is called when the field is submitted
-  final TextInputAction? textInputAction;
+  /// Define a [TextInputAction] that is called when the field is submitted
+  final TextInputAction? searchInputAction;
 
   /// The initial value to be selected for [SearchField]. The value
   /// must be present in [suggestions].
@@ -156,7 +156,7 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
-    this.textInputAction,
+    this.searchInputAction,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
@@ -386,11 +386,10 @@ class _SearchFieldState extends State<SearchField> {
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
-            textInputAction: widget.textInputAction,
+            textInputAction: widget.searchInputAction,
             onTap: () {
               if (!sourceFocused &&
                   widget.suggestionState == SuggestionState.enabled) {
-                print('focused');
                 setState(() {
                   sourceFocused = true;
                 });
