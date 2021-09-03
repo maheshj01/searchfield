@@ -1,3 +1,6 @@
+## [0.5.5] - 03 September 2021
+- adds `searchInputaction` property to focus to next input
+
 ## [0.5.4] - 01 September 2021
 
 - renamed property to `SuggestionType` to `SuggestionState`
