@@ -1,8 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+enum SuggestionState {
+  /// always show suggestions
+  enabled,
 
-enum SuggestionState {enabled,hidden}
+  /// hide the suggestions on initial focus
+  hidden,
+}
 
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
@@ -13,6 +18,9 @@ class SearchField extends StatefulWidget {
 
   /// Hint for the [SearchField].
   final String? hint;
+
+  /// Define a [TextInputAction] that is called when the field is submitted
+  final TextInputAction? searchInputAction;
 
   /// The initial value to be selected for [SearchField]. The value
   /// must be present in [suggestions].
@@ -148,6 +156,7 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
+    this.searchInputAction,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
@@ -318,7 +327,7 @@ class _SearchFieldState extends State<SearchField> {
 
   Offset getYOffset(Offset widgetOffset, int resultCount) {
     final size = MediaQuery.of(context).size;
-    double position = widgetOffset.dy;
+    final position = widgetOffset.dy;
     if ((position + height) < (size.height - widget.itemHeight * 2)) {
       return Offset(0, widget.itemHeight + 10.0);
     } else {
@@ -342,7 +351,7 @@ class _SearchFieldState extends State<SearchField> {
             stream: sourceStream.stream,
             builder:
                 (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
-              late int count = widget.maxSuggestionsInViewPort;
+              late var count = widget.maxSuggestionsInViewPort;
               if (snapshot.data != null) {
                 count = snapshot.data!.length;
               }
@@ -377,16 +386,17 @@ class _SearchFieldState extends State<SearchField> {
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
-            onTap:(){
-             if(!sourceFocused &&widget.suggestionState==SuggestionState.enabled){
-               print('focused');
-             setState(() {
-               sourceFocused = true;
-             });
-             Future.delayed(Duration(milliseconds:100),(){
-              sourceStream.sink.add(widget.suggestions);
-             });
-             }
+            textInputAction: widget.searchInputAction,
+            onTap: () {
+              if (!sourceFocused &&
+                  widget.suggestionState == SuggestionState.enabled) {
+                setState(() {
+                  sourceFocused = true;
+                });
+                Future.delayed(Duration(milliseconds: 100), () {
+                  sourceStream.sink.add(widget.suggestions);
+                });
+              }
             },
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
