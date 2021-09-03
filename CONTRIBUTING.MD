@@ -1,0 +1,20 @@
+# Contributing 
+
+ 
+### Contributor
+Thanks for taking you time to contribute to this repo.Before you start contributing please go through the following guidelines which we consider are important to maintain this repository and can
+help new contributers to open source.
+
+- Before you submit a Pull request ensure a issue exist describing the issue / feature request. If it doesn't please file an issue so that we could discuss about the issue.
+-  The issue should be sufficient enough to explain the bug/feature request and a possible solution/ proposal
+- We appreciate any contribution, from fixing a grammar mistake in a comment,improving code snippets to fixing a bug or making a feature requests and writing proper tests are also highly welcome.  
+- Follow the [dart best practices](https://dart.dev/guides/language/effective-dart) to maintain the quality of code.
+
+Contribution
+
+1. Fork This repo
+2. Create a new branch
+3. Commit a Fix
+4. Submit a PR 
+5. Request a review
+6.  wait for LGTM
