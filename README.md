@@ -117,6 +117,7 @@ Form(
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.hidden`. 
+- `searchActionType` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
