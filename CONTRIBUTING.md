@@ -17,6 +17,6 @@ Contribution
 1. Fork This repo
 2. Create a new branch
 3. Commit a Fix
-4. Submit a PR 
+4. Submit a PR referencing the issue
 5. Request a review
 6. wait for LGTM comment
