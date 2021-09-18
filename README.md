@@ -136,11 +136,6 @@ Form(
 
 ### Contributing
 
-You are welcome to contribute to this package,contribution doesnt necessarily mean sending a pull request it could be
-
-- pointing out bugs/issues
-- requesting a new feature
-- improving the documentation
-for more details on contributing to this package please refer [Contributing.md](CONTRIBUTING.md)
-
-If you feel generous and confident send a PR but make sure theres an open issue if not feel free to create one before you send a PR. This helps Identify the problem and helps everyone to stay aligned with the issue :)
+You are welcome to contribute to this package, to contribute please read the [contributing guidelines](CONTRIBUTING.md).
+                                                                                                                              
+                                                                                                                              
