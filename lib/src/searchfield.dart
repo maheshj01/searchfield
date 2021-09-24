@@ -54,7 +54,7 @@ class SearchField extends StatefulWidget {
   /// defaults to SuggestionState.hidden
   final SuggestionState suggestionState;
 
-  /// Specifies whether the [searchInputAction] should directly be called on suggestion selection
+  /// Specifies the [searchInputAction]  called on suggestion tap.
   final SuggestionAction? suggestionAction;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
