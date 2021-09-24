@@ -62,6 +62,8 @@ class _ExampleDemoState extends State<ExampleDemo> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
+              suggestionState: SuggestionState.enabled,
+              suggestionAction: SuggestionAction.shift,
               suggestions: _suggestions,
               searchInputAction: TextInputAction.next,
               controller: _searchController,
@@ -83,6 +85,8 @@ class _ExampleDemoState extends State<ExampleDemo> {
               key: _formKey,
               child: SearchField(
                 suggestions: _statesOfIndia,
+                suggestionState: SuggestionState.enabled,
+                searchInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
                 searchStyle: TextStyle(
                   fontSize: 18,

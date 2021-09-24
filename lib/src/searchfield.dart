@@ -9,6 +9,14 @@ enum SuggestionState {
   hidden,
 }
 
+enum SuggestionAction {
+  /// shift to next focus
+  shift,
+
+  /// close keyboard and unfocus
+  unfocus,
+}
+
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
   final List<String> suggestions;
@@ -42,6 +50,9 @@ class SearchField extends StatefulWidget {
 
   /// defaults to SuggestionState.hidden
   final SuggestionState suggestionState;
+
+  /// Specifies whether the [searchInputAction] should directly be called on suggestion selection
+  final SuggestionAction? suggestionAction;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -157,6 +168,7 @@ class SearchField extends StatefulWidget {
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
     this.searchInputAction,
+    this.suggestionAction,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
@@ -188,11 +200,22 @@ class _SearchFieldState extends State<SearchField> {
       });
       if (widget.hasOverlay) {
         if (sourceFocused) {
+          // if (widget.suggestionState == SuggestionState.enabled) {
+          //   Future.delayed(Duration(milliseconds: 100), () {
+          //     sourceStream.sink.add(widget.suggestions);
+          //   });
+          // }
           _overlayEntry = _createOverlay();
           Overlay.of(context)!.insert(_overlayEntry);
         } else {
           _overlayEntry.remove();
         }
+      } else if (sourceFocused) {
+        // if (widget.suggestionState == SuggestionState.enabled) {
+        //   Future.delayed(Duration(milliseconds: 100), () {
+        //     sourceStream.sink.add(widget.suggestions);
+        //   });
+        // }
       }
     });
   }
@@ -282,6 +305,17 @@ class _SearchFieldState extends State<SearchField> {
                       offset: sourceController!.text.length,
                     ),
                   );
+
+                  // suggestion action
+                  if (widget.suggestionAction != null) {
+                    if (widget.suggestionAction == SuggestionAction.shift) {
+                      _focus.nextFocus();
+                    } else if (widget.suggestionAction ==
+                        SuggestionAction.unfocus) {
+                      _focus.unfocus();
+                    }
+                  }
+
                   // hide the suggestions
                   sourceStream.sink.add(null);
                   if (widget.onTap != null) {
@@ -388,15 +422,15 @@ class _SearchFieldState extends State<SearchField> {
             style: widget.searchStyle,
             textInputAction: widget.searchInputAction,
             onTap: () {
-              if (!sourceFocused &&
-                  widget.suggestionState == SuggestionState.enabled) {
-                setState(() {
-                  sourceFocused = true;
-                });
-                Future.delayed(Duration(milliseconds: 100), () {
-                  sourceStream.sink.add(widget.suggestions);
-                });
-              }
+              // if (!sourceFocused &&
+              //     widget.suggestionState == SuggestionState.enabled) {
+              //   setState(() {
+              //     sourceFocused = true;
+              //   });
+              //   Future.delayed(Duration(milliseconds: 100), () {
+              //     sourceStream.sink.add(widget.suggestions);
+              //   });
+              // }
             },
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??

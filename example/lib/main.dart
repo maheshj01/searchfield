@@ -1,4 +1,5 @@
 import 'package:example/country_model.dart';
+import 'package:example/example2.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -15,9 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(
-        title: "Demo Home Page",
-      ),
+      home: ExampleDemo(),
     );
   }
 }
