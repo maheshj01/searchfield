@@ -7,6 +7,9 @@ enum SuggestionState {
 
   /// hide the suggestions on initial focus
   hidden,
+
+  /// show suggestions only on tap
+  onTap,
 }
 
 enum SuggestionAction {
@@ -200,22 +203,26 @@ class _SearchFieldState extends State<SearchField> {
       });
       if (widget.hasOverlay) {
         if (sourceFocused) {
-          // if (widget.suggestionState == SuggestionState.enabled) {
-          //   Future.delayed(Duration(milliseconds: 100), () {
-          //     sourceStream.sink.add(widget.suggestions);
-          //   });
-          // }
+          if (widget.initialValue == null) {
+            if (widget.suggestionState == SuggestionState.enabled) {
+              Future.delayed(Duration(milliseconds: 100), () {
+                sourceStream.sink.add(widget.suggestions);
+              });
+            }
+          }
           _overlayEntry = _createOverlay();
           Overlay.of(context)!.insert(_overlayEntry);
         } else {
           _overlayEntry.remove();
         }
       } else if (sourceFocused) {
-        // if (widget.suggestionState == SuggestionState.enabled) {
-        //   Future.delayed(Duration(milliseconds: 100), () {
-        //     sourceStream.sink.add(widget.suggestions);
-        //   });
-        // }
+        if (widget.initialValue == null) {
+          if (widget.suggestionState == SuggestionState.enabled) {
+            Future.delayed(Duration(milliseconds: 100), () {
+              sourceStream.sink.add(widget.suggestions);
+            });
+          }
+        }
       }
     });
   }
@@ -416,22 +423,23 @@ class _SearchFieldState extends State<SearchField> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            onTap: () {
+              /// only call that if [SuggestionState.onTap] is selected
+              if (!sourceFocused &&
+                  widget.suggestionState == SuggestionState.onTap) {
+                setState(() {
+                  sourceFocused = true;
+                });
+                Future.delayed(Duration(milliseconds: 100), () {
+                  sourceStream.sink.add(widget.suggestions);
+                });
+              }
+            },
             controller: widget.controller ?? sourceController,
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
             textInputAction: widget.searchInputAction,
-            onTap: () {
-              // if (!sourceFocused &&
-              //     widget.suggestionState == SuggestionState.enabled) {
-              //   setState(() {
-              //     sourceFocused = true;
-              //   });
-              //   Future.delayed(Duration(milliseconds: 100), () {
-              //     sourceStream.sink.add(widget.suggestions);
-              //   });
-              // }
-            },
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
