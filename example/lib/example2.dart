@@ -83,6 +83,8 @@ class _ExampleDemoState extends State<ExampleDemo> {
               key: _formKey,
               child: SearchField(
                 suggestions: _statesOfIndia,
+                suggestionState: SuggestionState.enabled,
+                searchInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
                 searchStyle: TextStyle(
                   fontSize: 18,
@@ -171,7 +173,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               suggestions: _suggestions,
-              suggestionState: SuggestionState.enabled,
+              suggestionState: SuggestionState.hidden,
               searchInputDecoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'SearchField',
