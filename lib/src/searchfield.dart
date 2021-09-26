@@ -15,7 +15,7 @@ enum SuggestionState {
 // enum to define the Focus of the searchfield when a suggestion is tapped
 enum SuggestionAction {
   /// shift to next focus
-  shift,
+  next,
 
   /// close keyboard and unfocus
   unfocus,
@@ -32,7 +32,7 @@ class SearchField extends StatefulWidget {
   final String? hint;
 
   /// Define a [TextInputAction] that is called when the field is submitted
-  final TextInputAction? searchInputAction;
+  final TextInputAction? textInputAction;
 
   /// The initial value to be selected for [SearchField]. The value
   /// must be present in [suggestions].
@@ -55,7 +55,7 @@ class SearchField extends StatefulWidget {
   /// defaults to SuggestionState.hidden
   final SuggestionState suggestionState;
 
-  /// Specifies the [searchInputAction]  called on suggestion tap.
+  /// Specifies the [SuggestionAction] called on suggestion tap.
   final SuggestionAction? suggestionAction;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
@@ -171,7 +171,7 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
-    this.searchInputAction,
+    this.textInputAction,
     this.suggestionAction,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
@@ -316,7 +316,7 @@ class _SearchFieldState extends State<SearchField> {
 
                   // suggestion action
                   if (widget.suggestionAction != null) {
-                    if (widget.suggestionAction == SuggestionAction.shift) {
+                    if (widget.suggestionAction == SuggestionAction.next) {
                       _focus.nextFocus();
                     } else if (widget.suggestionAction ==
                         SuggestionAction.unfocus) {
@@ -440,7 +440,7 @@ class _SearchFieldState extends State<SearchField> {
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
-            textInputAction: widget.searchInputAction,
+            textInputAction: widget.textInputAction,
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
