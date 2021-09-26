@@ -1,5 +1,9 @@
+## [0.5.6] - 26 September 2021
+- adds `suggestionAction` to change focus on suggestion tap
+- suggestions now always show on `SuggestionState.enabled`
+
 ## [0.5.5] - 03 September 2021
-- adds `searchInputaction` property to focus to next input
+- adds `searchInputAction` property to focus to next input
 
 ## [0.5.4] - 01 September 2021
 
