@@ -1,4 +1,4 @@
-# [searchfield: ^0.5.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.5.6](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -117,7 +117,7 @@ Form(
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : list of Strings to search from.**(Mandatory)**.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.hidden`. 
-- `searchActionType` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
+- `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
@@ -131,6 +131,7 @@ Form(
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
+- `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/example)
 
