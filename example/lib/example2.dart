@@ -62,6 +62,8 @@ class _ExampleDemoState extends State<ExampleDemo> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
+              suggestionState: SuggestionState.enabled,
+              suggestionAction: SuggestionAction.shift,
               suggestions: _suggestions,
               searchInputAction: TextInputAction.next,
               controller: _searchController,

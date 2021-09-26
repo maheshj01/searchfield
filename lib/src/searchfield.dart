@@ -7,6 +7,18 @@ enum SuggestionState {
 
   /// hide the suggestions on initial focus
   hidden,
+
+  /// show suggestions only on tap
+  onTap,
+}
+
+// enum to define the Focus of the searchfield when a suggestion is tapped
+enum SuggestionAction {
+  /// shift to next focus
+  next,
+
+  /// close keyboard and unfocus
+  unfocus,
 }
 
 class SearchField extends StatefulWidget {
@@ -20,7 +32,7 @@ class SearchField extends StatefulWidget {
   final String? hint;
 
   /// Define a [TextInputAction] that is called when the field is submitted
-  final TextInputAction? searchInputAction;
+  final TextInputAction? textInputAction;
 
   /// The initial value to be selected for [SearchField]. The value
   /// must be present in [suggestions].
@@ -42,6 +54,9 @@ class SearchField extends StatefulWidget {
 
   /// defaults to SuggestionState.hidden
   final SuggestionState suggestionState;
+
+  /// Specifies the [SuggestionAction] called on suggestion tap.
+  final SuggestionAction? suggestionAction;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -156,7 +171,8 @@ class SearchField extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
-    this.searchInputAction,
+    this.textInputAction,
+    this.suggestionAction,
   })  : assert(
             (initialValue != null && suggestions.contains(initialValue)) ||
                 initialValue == null,
@@ -188,10 +204,25 @@ class _SearchFieldState extends State<SearchField> {
       });
       if (widget.hasOverlay) {
         if (sourceFocused) {
+          if (widget.initialValue == null) {
+            if (widget.suggestionState == SuggestionState.enabled) {
+              Future.delayed(Duration(milliseconds: 100), () {
+                sourceStream.sink.add(widget.suggestions);
+              });
+            }
+          }
           _overlayEntry = _createOverlay();
           Overlay.of(context)!.insert(_overlayEntry);
         } else {
           _overlayEntry.remove();
+        }
+      } else if (sourceFocused) {
+        if (widget.initialValue == null) {
+          if (widget.suggestionState == SuggestionState.enabled) {
+            Future.delayed(Duration(milliseconds: 100), () {
+              sourceStream.sink.add(widget.suggestions);
+            });
+          }
         }
       }
     });
@@ -282,6 +313,17 @@ class _SearchFieldState extends State<SearchField> {
                       offset: sourceController!.text.length,
                     ),
                   );
+
+                  // suggestion action
+                  if (widget.suggestionAction != null) {
+                    if (widget.suggestionAction == SuggestionAction.next) {
+                      _focus.nextFocus();
+                    } else if (widget.suggestionAction ==
+                        SuggestionAction.unfocus) {
+                      _focus.unfocus();
+                    }
+                  }
+
                   // hide the suggestions
                   sourceStream.sink.add(null);
                   if (widget.onTap != null) {
@@ -382,14 +424,10 @@ class _SearchFieldState extends State<SearchField> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
-            controller: widget.controller ?? sourceController,
-            focusNode: _focus,
-            validator: widget.validator,
-            style: widget.searchStyle,
-            textInputAction: widget.searchInputAction,
             onTap: () {
+              /// only call that if [SuggestionState.onTap] is selected
               if (!sourceFocused &&
-                  widget.suggestionState == SuggestionState.enabled) {
+                  widget.suggestionState == SuggestionState.onTap) {
                 setState(() {
                   sourceFocused = true;
                 });
@@ -398,6 +436,11 @@ class _SearchFieldState extends State<SearchField> {
                 });
               }
             },
+            controller: widget.controller ?? sourceController,
+            focusNode: _focus,
+            validator: widget.validator,
+            style: widget.searchStyle,
+            textInputAction: widget.textInputAction,
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
