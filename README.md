@@ -133,7 +133,7 @@ Form(
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
 
-### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/example)
+### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
 
 ### Contributing
 
