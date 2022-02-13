@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
-class ExampleDemo extends StatefulWidget {
+class Example1 extends StatefulWidget {
   @override
-  _ExampleDemoState createState() => _ExampleDemoState();
+  _Example1State createState() => _Example1State();
 }
 
-class _ExampleDemoState extends State<ExampleDemo> {
+class _Example1State extends State<Example1> {
   final List<String> _suggestions = [
     'United States',
     'Germany',
@@ -54,6 +54,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: ListView(
         children: <Widget>[
           SizedBox(
@@ -93,7 +94,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
                   color: Colors.black.withOpacity(0.8),
                 ),
                 validator: (x) {
-                  if (!_statesOfIndia.contains(x) || x.isEmpty) {
+                  if (!_statesOfIndia.contains(x) || x!.isEmpty) {
                     return 'Please Enter a valid State';
                   }
                   return null;
@@ -196,7 +197,7 @@ class _ExampleDemoState extends State<ExampleDemo> {
                 vertical: 10),
             child: ElevatedButton(
                 onPressed: () {
-                  _formKey.currentState.validate();
+                  _formKey.currentState!.validate();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

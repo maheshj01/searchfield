@@ -1,4 +1,5 @@
 import 'package:example/country_model.dart';
+import 'package:example/example1.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -10,28 +11,55 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: MyHomePage(
-        title: "Demo Home Page",
-      ),
-    );
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: ExampleList());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class ExampleList extends StatelessWidget {
+  const ExampleList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('SearchField Demo')),
+        body: Column(
+          children: [
+            ListTile(
+              title: Text('Example 1'),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => Example1()));
+              },
+            ),
+            ListTile(
+              title: Text('Example 2'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => Example2(
+                          title: 'Country List',
+                        )));
+              },
+            ),
+          ],
+        ));
+  }
+}
+
+class Example2 extends StatefulWidget {
+  Example2({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _Example2State createState() => _Example2State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _Example2State extends State<Example2> {
   @override
   void dispose() {
     _searchController.dispose();
@@ -77,23 +105,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.separated(
-                    itemCount: countries.length,
-                    separatorBuilder: (_, index) => Divider(),
-                    itemBuilder: (_, index) => ListTile(
-                      title: Text(countries[index].name),
-                      trailing: IconButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute<CountryDetail>(
-                                    builder: (_) => CountryDetail(
-                                          country: countries[index],
-                                        )));
-                          },
-                          icon: Icon(Icons.arrow_forward_ios, size: 16)),
-                    ),
-                  ),
+                    child: Center(
+                  child: Text('select country'),
                 )
+                    // ListView.separated(
+                    //   itemCount: countries.length,
+                    //   separatorBuilder: (_, index) => Divider(),
+                    //   itemBuilder: (_, index) => ListTile(
+                    //     title: Text(countries[index].name),
+                    //     trailing: IconButton(
+                    //         onPressed: () {
+                    //           Navigator.of(context)
+                    //               .push(MaterialPageRoute<CountryDetail>(
+                    //                   builder: (_) => CountryDetail(
+                    //                         country: countries[index],
+                    //                       )));
+                    //         },
+                    //         icon: Icon(Icons.arrow_forward_ios, size: 16)),
+                    //   ),
+                    // ),
+                    )
               ],
             )));
   }
@@ -102,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
 class CountryDetail extends StatefulWidget {
   final Country country;
 
-  const CountryDetail({Key key, this.country}) : super(key: key);
+  const CountryDetail({Key? key, required this.country}) : super(key: key);
   @override
   _CountryDetailState createState() => _CountryDetailState();
 }
