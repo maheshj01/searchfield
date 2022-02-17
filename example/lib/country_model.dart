@@ -16,6 +16,9 @@ class Country {
   final int landArea;
   final int density;
   Country(this.name, this.population, this.landArea, this.density);
+
+  Country.init(): name = '', population = 0, landArea = 0, density = 0;
+  
   Country.fromMap(Map<String, Object> map)
       : name = map['country'] as String,
         population = map['population'] as int,
@@ -1128,5 +1131,10 @@ List<Map<String, Object>> data = [
     "density": 25,
     "land Area": 743390
   },
-  {"country": "Zimbabwe", "population": 4862924, "density": 38685038}
+  {
+    "country": "Zimbabwe",
+    "population": 4862924,
+    "density": 38685038,
+    "land Area": 27400
+  }
 ];

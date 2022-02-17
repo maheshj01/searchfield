@@ -63,7 +63,7 @@ class _Example1State extends State<Example1> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
-              suggestionState: SuggestionState.enabled,
+              suggestionState: Suggestion.expand,
               suggestionAction: SuggestionAction.next,
               suggestions: _suggestions,
               textInputAction: TextInputAction.next,
@@ -86,7 +86,7 @@ class _Example1State extends State<Example1> {
               key: _formKey,
               child: SearchField(
                 suggestions: _statesOfIndia,
-                suggestionState: SuggestionState.enabled,
+                suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
                 searchStyle: TextStyle(
@@ -176,7 +176,7 @@ class _Example1State extends State<Example1> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               suggestions: _suggestions,
-              suggestionState: SuggestionState.hidden,
+              suggestionState: Suggestion.hidden,
               searchInputDecoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'SearchField',
