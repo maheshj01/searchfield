@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-enum SuggestionState {
-  /// always show suggestions
-  enabled,
+enum Suggestion {
+  /// shows suggestions when searchfield is brought into focus
+  expand,
 
-  /// hide the suggestions on initial focus
+  /// keeps the suggestion overlay hidden until
+  /// first letter is entered
   hidden,
-
-  /// show suggestions only on tap
-  onTap,
 }
 
 // enum to define the Focus of the searchfield when a suggestion is tapped
@@ -53,12 +51,12 @@ class SearchField extends StatefulWidget {
   final InputDecoration? searchInputDecoration;
 
   /// defaults to SuggestionState.hidden
-  final SuggestionState suggestionState;
+  final Suggestion suggestionState;
 
   /// Specifies the [SuggestionAction] called on suggestion tap.
   final SuggestionAction? suggestionAction;
 
-  /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow],
+  /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow], [BoxBorder]
   /// and much more. For more information, checkout [BoxDecoration].
   ///
   /// Default value,
@@ -97,7 +95,7 @@ class SearchField extends StatefulWidget {
   /// )
   final BoxDecoration? suggestionItemDecoration;
 
-  /// Specifies height for item suggestion.
+  /// Specifies height for each suggestion item in the list.
   ///
   /// When not specified, the default value is `35.0`.
   final double itemHeight;
@@ -163,7 +161,7 @@ class SearchField extends StatefulWidget {
     this.marginColor,
     this.controller,
     this.validator,
-    this.suggestionState = SuggestionState.hidden,
+    this.suggestionState = Suggestion.hidden,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
     this.suggestionStyle,
@@ -185,7 +183,7 @@ class SearchField extends StatefulWidget {
 
 class _SearchFieldState extends State<SearchField> {
   final StreamController<List<String?>?> sourceStream =
-      StreamController<List<String>?>.broadcast();
+      StreamController<List<String?>?>.broadcast();
   final FocusNode _focus = FocusNode();
   bool sourceFocused = false;
   TextEditingController? sourceController;
@@ -205,7 +203,7 @@ class _SearchFieldState extends State<SearchField> {
       if (widget.hasOverlay) {
         if (sourceFocused) {
           if (widget.initialValue == null) {
-            if (widget.suggestionState == SuggestionState.enabled) {
+            if (widget.suggestionState == Suggestion.expand) {
               Future.delayed(Duration(milliseconds: 100), () {
                 sourceStream.sink.add(widget.suggestions);
               });
@@ -218,7 +216,7 @@ class _SearchFieldState extends State<SearchField> {
         }
       } else if (sourceFocused) {
         if (widget.initialValue == null) {
-          if (widget.suggestionState == SuggestionState.enabled) {
+          if (widget.suggestionState == Suggestion.expand) {
             Future.delayed(Duration(milliseconds: 100), () {
               sourceStream.sink.add(widget.suggestions);
             });
@@ -241,6 +239,7 @@ class _SearchFieldState extends State<SearchField> {
         sourceController!.text = widget.initialValue!;
         sourceStream.sink.add([widget.initialValue]);
       }
+      sourceStream.sink.add(widget.suggestions);
     });
   }
 
@@ -305,7 +304,7 @@ class _SearchFieldState extends State<SearchField> {
               physics: snapshot.data!.length == 1
                   ? NeverScrollableScrollPhysics()
                   : ScrollPhysics(),
-              itemBuilder: (context, index) => GestureDetector(
+              itemBuilder: (context, index) => InkWell(
                 onTap: () {
                   sourceController!.text = snapshot.data![index]!;
                   sourceController!.selection = TextSelection.fromPosition(
@@ -427,10 +426,12 @@ class _SearchFieldState extends State<SearchField> {
             onTap: () {
               /// only call that if [SuggestionState.onTap] is selected
               if (!sourceFocused &&
-                  widget.suggestionState == SuggestionState.onTap) {
-                setState(() {
-                  sourceFocused = true;
-                });
+                  widget.suggestionState == Suggestion.expand) {
+                if (mounted) {
+                  setState(() {
+                    sourceFocused = true;
+                  });
+                }
                 Future.delayed(Duration(milliseconds: 100), () {
                   sourceStream.sink.add(widget.suggestions);
                 });
