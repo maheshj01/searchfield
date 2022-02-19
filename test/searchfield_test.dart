@@ -29,13 +29,18 @@ void main() {
       expect(
           () => _boilerplate(
               child: SearchField(
-                  suggestions: ['ABC', 'DEF'], initialValue: 'GHI')),
+                  suggestions: ['ABC', 'DEF']
+                      .map((e) => SearchFieldListItem(e, SizedBox()))
+                      .toList(),
+                  initialValue: SearchFieldListItem('ABCD', SizedBox()))),
           throwsAssertionError);
 
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF'],
+        suggestions: ['ABC', 'DEF']
+            .map((e) => SearchFieldListItem(e, SizedBox()))
+            .toList(),
       )));
 
       final finder = find.byType(SearchField);
@@ -46,8 +51,10 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF'],
-        initialValue: 'ABC',
+        suggestions: ['ABC', 'DEF']
+            .map((e) => SearchFieldListItem(e, SizedBox()))
+            .toList(),
+        initialValue: SearchFieldListItem('ABC', SizedBox()),
       )));
       final finder = find.text('ABC');
       expect(finder, findsOneWidget);
@@ -63,7 +70,9 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI', 'JKL'],
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map((e) => SearchFieldListItem(e, SizedBox()))
+            .toList(),
         controller: controller,
         suggestionState: Suggestion.expand,
       )));
@@ -87,7 +96,9 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI'],
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem(e, SizedBox()))
+            .toList(),
         suggestionState: Suggestion.expand,
       )));
       expect(find.byType(TextFormField), findsOneWidget);
