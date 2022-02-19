@@ -44,32 +44,40 @@ class _Example2State extends State<Example2> {
               children: [
                 SearchField(
                   key: const Key('searchfield'),
-                  suggestions: ['ABC', 'DEF', 'GHI'],
+                  suggestions: ['ABC', 'DEF', 'GHI']
+                      .map((e) => SearchFieldListItem(e, SizedBox()))
+                      .toList(),
                   controller: controller,
+                  initialValue: SearchFieldListItem('ABC', SizedBox()),
                   suggestionState: Suggestion.expand,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SearchField(
-                    suggestions: countries.map((e) => e.name).toList(),
+                    suggestions: countries
+                        .map((e) => SearchFieldListItem(e.name, SizedBox()))
+                        .toList(),
                     suggestionState: Suggestion.expand,
                     controller: _searchController,
                     hint: 'Search by country name',
                     maxSuggestionsInViewPort: 4,
                     itemHeight: 45,
                     onTap: (x) {
-                      final country = countries.firstWhere((e) => e.name == x);
+                      final country = countries.firstWhere((e) {
+                        return e.name == x!.searchKey;
+                      });
                       setState(() {
                         _selectedCountry = country;
                       });
-                      ;
                     },
                   ),
                 ),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SearchField(
-                      suggestions: countries.map((e) => e.name).toList(),
+                      suggestions: countries
+                          .map((e) => SearchFieldListItem(e.name, SizedBox()))
+                          .toList(),
                       suggestionState: Suggestion.hidden,
                       itemHeight: 65,
                     )),

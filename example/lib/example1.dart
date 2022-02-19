@@ -53,6 +53,18 @@ class _Example1State extends State<Example1> {
   final _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    print(_suggestions
+        .map((e) => SearchFieldListItem(
+            e,
+            SizedBox(
+              key: Key(e),
+            )))
+        .toList()
+        .containsObject(SearchFieldListItem(
+            _suggestions[2],
+            SizedBox(
+              key: Key('${_suggestions[2]}'),
+            ))));
     return Scaffold(
       appBar: AppBar(),
       body: ListView(
@@ -65,11 +77,13 @@ class _Example1State extends State<Example1> {
             child: SearchField(
               suggestionState: Suggestion.expand,
               suggestionAction: SuggestionAction.next,
-              suggestions: _suggestions,
+              suggestions: _suggestions
+                  .map((e) => SearchFieldListItem(e, SizedBox()))
+                  .toList(),
               textInputAction: TextInputAction.next,
               controller: _searchController,
               hint: 'SearchField Sample 1',
-              initialValue: _suggestions[2],
+              // initialValue: SearchFieldListItem(_suggestions[2], SizedBox()),
               maxSuggestionsInViewPort: 3,
               itemHeight: 45,
               onTap: (x) {
@@ -85,7 +99,9 @@ class _Example1State extends State<Example1> {
             child: Form(
               key: _formKey,
               child: SearchField(
-                suggestions: _statesOfIndia,
+                suggestions: _statesOfIndia
+                    .map((e) => SearchFieldListItem(e, SizedBox()))
+                    .toList(),
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
@@ -158,7 +174,9 @@ class _Example1State extends State<Example1> {
                 border: OutlineInputBorder(),
               ),
               marginColor: Colors.white,
-              suggestions: _suggestions,
+              suggestions: _suggestions
+                  .map((e) => SearchFieldListItem(e, SizedBox()))
+                  .toList(),
             ),
           ),
           SizedBox(
@@ -175,7 +193,9 @@ class _Example1State extends State<Example1> {
                   Color(0xffffd194),
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
-              suggestions: _suggestions,
+              suggestions: _suggestions
+                  .map((e) => SearchFieldListItem(e, SizedBox()))
+                  .toList(),
               suggestionState: Suggestion.hidden,
               searchInputDecoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,

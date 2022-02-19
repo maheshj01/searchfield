@@ -19,12 +19,43 @@ enum SuggestionAction {
   unfocus,
 }
 
+class SearchFieldListItem {
+  Key? key;
+  final String searchKey;
+
+  final Widget child;
+
+  SearchFieldListItem(this.searchKey, this.child, {this.key});
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is SearchFieldListItem &&
+            runtimeType == other.runtimeType &&
+            searchKey == other.searchKey;
+  }
+
+  @override
+  int get hashCode => searchKey.hashCode;
+}
+
+extension ListContainsObject<T> on List {
+  bool containsObject(T object) {
+    for (var item in this) {
+      if (object == item) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
 class SearchField extends StatefulWidget {
   /// Data source to perform search.
-  final List<String> suggestions;
+  final List<SearchFieldListItem> suggestions;
 
   /// Callback to return the selected suggestion.
-  final Function(String?)? onTap;
+  final Function(SearchFieldListItem?)? onTap;
 
   /// Hint for the [SearchField].
   final String? hint;
@@ -36,7 +67,7 @@ class SearchField extends StatefulWidget {
   /// must be present in [suggestions].
   ///
   /// When not specified, [hint] is shown instead of `initialValue`.
-  final String? initialValue;
+  final SearchFieldListItem? initialValue;
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
@@ -172,7 +203,8 @@ class SearchField extends StatefulWidget {
     this.textInputAction,
     this.suggestionAction,
   })  : assert(
-            (initialValue != null && suggestions.contains(initialValue)) ||
+            (initialValue != null &&
+                    suggestions.containsObject(initialValue)) ||
                 initialValue == null,
             'Initial value should either be null or should be present in suggestions list.'),
         super(key: key);
@@ -182,11 +214,11 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final StreamController<List<String?>?> sourceStream =
-      StreamController<List<String?>?>.broadcast();
+  final StreamController<List<SearchFieldListItem?>?> sourceStream =
+      StreamController<List<SearchFieldListItem?>?>.broadcast();
   final FocusNode _focus = FocusNode();
   bool sourceFocused = false;
-  TextEditingController? sourceController;
+  TextEditingController? searchController;
 
   @override
   void dispose() {
@@ -230,13 +262,14 @@ class _SearchFieldState extends State<SearchField> {
   @override
   void initState() {
     super.initState();
-    sourceController = widget.controller ?? TextEditingController();
+    searchController = widget.controller ?? TextEditingController();
     initialize();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (widget.initialValue == null || widget.initialValue!.isEmpty) {
+      if (widget.initialValue == null ||
+          widget.initialValue!.searchKey.isEmpty) {
         sourceStream.sink.add(null);
       } else {
-        sourceController!.text = widget.initialValue!;
+        searchController!.text = widget.initialValue!.searchKey;
         sourceStream.sink.add([widget.initialValue]);
       }
       sourceStream.sink.add(widget.suggestions);
@@ -245,9 +278,8 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void didUpdateWidget(covariant SearchField oldWidget) {
-    super.didUpdateWidget(oldWidget);
     if (oldWidget.controller != widget.controller) {
-      sourceController = widget.controller ?? TextEditingController();
+      searchController = widget.controller ?? TextEditingController();
     }
     if (oldWidget.hasOverlay != widget.hasOverlay) {
       if (widget.hasOverlay) {
@@ -257,15 +289,19 @@ class _SearchFieldState extends State<SearchField> {
           _overlayEntry.remove();
         }
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     }
+    super.didUpdateWidget(oldWidget);
   }
 
   Widget _suggestionsBuilder() {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-    return StreamBuilder<List<String?>?>(
+    return StreamBuilder<List<SearchFieldListItem?>?>(
       stream: sourceStream.stream,
-      builder: (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
         if (snapshot.data == null || snapshot.data!.isEmpty || !sourceFocused) {
           return Container();
         } else {
@@ -306,14 +342,14 @@ class _SearchFieldState extends State<SearchField> {
                   : ScrollPhysics(),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  sourceController!.text = snapshot.data![index]!;
-                  sourceController!.selection = TextSelection.fromPosition(
+                  searchController!.text = snapshot.data![index]!.searchKey;
+                  searchController!.selection = TextSelection.fromPosition(
                     TextPosition(
-                      offset: sourceController!.text.length,
+                      offset: searchController!.text.length,
                     ),
                   );
 
-                  // suggestion action
+                  // suggestion action to switch focus to next focus node
                   if (widget.suggestionAction != null) {
                     if (widget.suggestionAction == SuggestionAction.next) {
                       _focus.nextFocus();
@@ -326,7 +362,7 @@ class _SearchFieldState extends State<SearchField> {
                   // hide the suggestions
                   sourceStream.sink.add(null);
                   if (widget.onTap != null) {
-                    widget.onTap!(snapshot.data![index]);
+                    widget.onTap!(snapshot.data![index] as SearchFieldListItem);
                   }
                 },
                 child: Container(
@@ -354,7 +390,7 @@ class _SearchFieldState extends State<SearchField> {
                               ),
                       ),
                   child: Text(
-                    snapshot.data![index]!,
+                    snapshot.data![index]!.searchKey,
                     style: widget.suggestionStyle,
                   ),
                 ),
@@ -388,10 +424,10 @@ class _SearchFieldState extends State<SearchField> {
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
-        builder: (context) => StreamBuilder<List<String?>?>(
+        builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
             stream: sourceStream.stream,
-            builder:
-                (BuildContext context, AsyncSnapshot<List<String?>?> snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
               late var count = widget.maxSuggestionsInViewPort;
               if (snapshot.data != null) {
                 count = snapshot.data!.length;
@@ -437,7 +473,7 @@ class _SearchFieldState extends State<SearchField> {
                 });
               }
             },
-            controller: widget.controller ?? sourceController,
+            controller: widget.controller ?? searchController,
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
@@ -446,13 +482,15 @@ class _SearchFieldState extends State<SearchField> {
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
             onChanged: (item) {
-              final searchResult = <String>[];
+              final searchResult = <SearchFieldListItem>[];
               if (item.isEmpty) {
                 sourceStream.sink.add(widget.suggestions);
                 return;
               }
               for (final suggestion in widget.suggestions) {
-                if (suggestion.toLowerCase().contains(item.toLowerCase())) {
+                if (suggestion.searchKey
+                    .toLowerCase()
+                    .contains(item.toLowerCase())) {
                   searchResult.add(suggestion);
                 }
               }
