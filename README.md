@@ -115,7 +115,7 @@ Form(
 ## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
-- `suggestions` : list of Strings to search from.**(Mandatory)**.
+- `suggestions` : List of SearchFieldListItem to search from.**(required)**, each item in the list requires a unique searchKey, which is used to search the list. SearchFieldListItem also takes a optional widget child to display custom widget in the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.hidden`. 
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
@@ -124,7 +124,6 @@ Form(
 - `onTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `hint` : hint for the search Input.
 - `searchStyle` : textStyle for the search Input.
-- `suggestionStyle` : textStyle for the SuggestionItem.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.

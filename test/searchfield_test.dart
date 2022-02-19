@@ -30,17 +30,15 @@ void main() {
           () => _boilerplate(
               child: SearchField(
                   suggestions: ['ABC', 'DEF']
-                      .map((e) => SearchFieldListItem(e, SizedBox()))
+                      .map((e) => SearchFieldListItem(e))
                       .toList(),
-                  initialValue: SearchFieldListItem('ABCD', SizedBox()))),
+                  initialValue: SearchFieldListItem('ABCD'))),
           throwsAssertionError);
 
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF']
-            .map((e) => SearchFieldListItem(e, SizedBox()))
-            .toList(),
+        suggestions: ['ABC', 'DEF'].map((e) => SearchFieldListItem(e)).toList(),
       )));
 
       final finder = find.byType(SearchField);
@@ -51,10 +49,8 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF']
-            .map((e) => SearchFieldListItem(e, SizedBox()))
-            .toList(),
-        initialValue: SearchFieldListItem('ABC', SizedBox()),
+        suggestions: ['ABC', 'DEF'].map((e) => SearchFieldListItem(e)).toList(),
+        initialValue: SearchFieldListItem('ABC'),
       )));
       final finder = find.text('ABC');
       expect(finder, findsOneWidget);
@@ -71,7 +67,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-            .map((e) => SearchFieldListItem(e, SizedBox()))
+            .map((e) => SearchFieldListItem(e))
             .toList(),
         controller: controller,
         suggestionState: Suggestion.expand,
@@ -96,9 +92,8 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem(e, SizedBox()))
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map((e) => SearchFieldListItem(e)).toList(),
         suggestionState: Suggestion.expand,
       )));
       expect(find.byType(TextFormField), findsOneWidget);

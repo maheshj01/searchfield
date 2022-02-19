@@ -42,20 +42,11 @@ class _Example2State extends State<Example2> {
             }),
             body: Column(
               children: [
-                SearchField(
-                  key: const Key('searchfield'),
-                  suggestions: ['ABC', 'DEF', 'GHI']
-                      .map((e) => SearchFieldListItem(e, SizedBox()))
-                      .toList(),
-                  controller: controller,
-                  initialValue: SearchFieldListItem('ABC', SizedBox()),
-                  suggestionState: Suggestion.expand,
-                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SearchField(
                     suggestions: countries
-                        .map((e) => SearchFieldListItem(e.name, SizedBox()))
+                        .map((e) => SearchFieldListItem(e.name))
                         .toList(),
                     suggestionState: Suggestion.expand,
                     controller: _searchController,
@@ -76,7 +67,7 @@ class _Example2State extends State<Example2> {
                     padding: const EdgeInsets.all(8.0),
                     child: SearchField(
                       suggestions: countries
-                          .map((e) => SearchFieldListItem(e.name, SizedBox()))
+                          .map((e) => SearchFieldListItem(e.name))
                           .toList(),
                       suggestionState: Suggestion.hidden,
                       itemHeight: 65,

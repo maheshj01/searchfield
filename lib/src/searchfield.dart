@@ -21,11 +21,13 @@ enum SuggestionAction {
 
 class SearchFieldListItem {
   Key? key;
+
+  /// the text based on which the search happens
   final String searchKey;
 
-  final Widget child;
+  final Widget? child;
 
-  SearchFieldListItem(this.searchKey, this.child, {this.key});
+  SearchFieldListItem(this.searchKey, {this.child, this.key});
 
   @override
   bool operator ==(Object other) {
@@ -71,9 +73,6 @@ class SearchField extends StatefulWidget {
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
-
-  /// Specifies [TextStyle] for suggestions.
-  final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
   ///
@@ -195,7 +194,6 @@ class SearchField extends StatefulWidget {
     this.suggestionState = Suggestion.hidden,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
-    this.suggestionStyle,
     this.searchInputDecoration,
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
@@ -229,9 +227,11 @@ class _SearchFieldState extends State<SearchField> {
 
   void initialize() {
     _focus.addListener(() {
-      setState(() {
-        sourceFocused = _focus.hasFocus;
-      });
+      if (mounted) {
+        setState(() {
+          sourceFocused = _focus.hasFocus;
+        });
+      }
       if (widget.hasOverlay) {
         if (sourceFocused) {
           if (widget.initialValue == null) {
@@ -366,34 +366,33 @@ class _SearchFieldState extends State<SearchField> {
                   }
                 },
                 child: Container(
-                  height: widget.itemHeight,
-                  padding: EdgeInsets.symmetric(horizontal: 5) +
-                      EdgeInsets.only(left: 8),
-                  width: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  decoration: widget.suggestionItemDecoration?.copyWith(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: widget.marginColor ??
-                                onSurfaceColor.withOpacity(0.1),
+                    height: widget.itemHeight,
+                    padding: EdgeInsets.symmetric(horizontal: 5) +
+                        EdgeInsets.only(left: 8),
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    decoration: widget.suggestionItemDecoration?.copyWith(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: widget.marginColor ??
+                                  onSurfaceColor.withOpacity(0.1),
+                            ),
                           ),
-                        ),
-                      ) ??
-                      BoxDecoration(
-                        border: index == snapshot.data!.length - 1
-                            ? null
-                            : Border(
-                                bottom: BorderSide(
-                                  color: widget.marginColor ??
-                                      onSurfaceColor.withOpacity(0.1),
+                        ) ??
+                        BoxDecoration(
+                          border: index == snapshot.data!.length - 1
+                              ? null
+                              : Border(
+                                  bottom: BorderSide(
+                                    color: widget.marginColor ??
+                                        onSurfaceColor.withOpacity(0.1),
+                                  ),
                                 ),
-                              ),
-                      ),
-                  child: Text(
-                    snapshot.data![index]!.searchKey,
-                    style: widget.suggestionStyle,
-                  ),
-                ),
+                        ),
+                    child: snapshot.data![index]!.child ??
+                        Text(
+                          snapshot.data![index]!.searchKey,
+                        )),
               ),
             ),
           );

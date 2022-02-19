@@ -53,18 +53,6 @@ class _Example1State extends State<Example1> {
   final _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print(_suggestions
-        .map((e) => SearchFieldListItem(
-            e,
-            SizedBox(
-              key: Key(e),
-            )))
-        .toList()
-        .containsObject(SearchFieldListItem(
-            _suggestions[2],
-            SizedBox(
-              key: Key('${_suggestions[2]}'),
-            ))));
     return Scaffold(
       appBar: AppBar(),
       body: ListView(
@@ -77,9 +65,8 @@ class _Example1State extends State<Example1> {
             child: SearchField(
               suggestionState: Suggestion.expand,
               suggestionAction: SuggestionAction.next,
-              suggestions: _suggestions
-                  .map((e) => SearchFieldListItem(e, SizedBox()))
-                  .toList(),
+              suggestions:
+                  _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               textInputAction: TextInputAction.next,
               controller: _searchController,
               hint: 'SearchField Sample 1',
@@ -99,9 +86,8 @@ class _Example1State extends State<Example1> {
             child: Form(
               key: _formKey,
               child: SearchField(
-                suggestions: _statesOfIndia
-                    .map((e) => SearchFieldListItem(e, SizedBox()))
-                    .toList(),
+                suggestions:
+                    _statesOfIndia.map((e) => SearchFieldListItem(e)).toList(),
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
@@ -174,9 +160,8 @@ class _Example1State extends State<Example1> {
                 border: OutlineInputBorder(),
               ),
               marginColor: Colors.white,
-              suggestions: _suggestions
-                  .map((e) => SearchFieldListItem(e, SizedBox()))
-                  .toList(),
+              suggestions:
+                  _suggestions.map((e) => SearchFieldListItem(e)).toList(),
             ),
           ),
           SizedBox(
@@ -185,7 +170,6 @@ class _Example1State extends State<Example1> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
-              suggestionStyle: TextStyle(color: Colors.green),
               suggestionItemDecoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.2),
                 gradient: LinearGradient(colors: [
@@ -194,7 +178,9 @@ class _Example1State extends State<Example1> {
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
               suggestions: _suggestions
-                  .map((e) => SearchFieldListItem(e, SizedBox()))
+                  .map((e) => SearchFieldListItem(
+                        e,
+                      ))
                   .toList(),
               suggestionState: Suggestion.hidden,
               searchInputDecoration: InputDecoration(
