@@ -91,6 +91,7 @@ class _Example1State extends State<Example1> {
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Sample 2',
+                hasOverlay: false,
                 searchStyle: TextStyle(
                   fontSize: 18,
                   color: Colors.black.withOpacity(0.8),
