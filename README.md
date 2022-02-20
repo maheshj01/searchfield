@@ -57,36 +57,37 @@ Use the Widget
 Form(
    key: _formKey,
    child: SearchField(
-   suggestions: _statesOfIndia,
-   hint: 'SearchField Sample 2',
-   searchStyle: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black.withOpacity(0.8),
+            suggestions: _statesOfIndia.map((e) => 
+               SearchFieldListItem(e)).toList(),
+            suggestionState: Suggestion.expand,
+            textInputAction: TextInputAction.next,
+            hint: 'SearchField Example 2',
+            hasOverlay: false,
+            searchStyle: TextStyle(
+              fontSize: 18,
+              color: Colors.black.withOpacity(0.8),
+            ),
+            validator: (x) {
+              if (!_statesOfIndia.contains(x) || x!.isEmpty) {
+               return 'Please Enter a valid State';
+              }
+            return null;
+            },
+            searchInputDecoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+               borderSide: BorderSide(
+               color: Colors.black.withOpacity(0.8),
                ),
-   validator: (x) {
-      if (!_statesOfIndia.contains(x) || x.isEmpty) {
-            return 'Please Enter a valid State';
-      }
-      return null;
-      },
-   searchInputDecoration:
-         InputDecoration(
-            focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-            color: Colors.black.withOpacity(0.8),
-         ),
-   ),
-   border: OutlineInputBorder(
-   borderSide: BorderSide(color: Colors.red),
-   ),
-   ),
-   maxSuggestionsInViewPort: 6,
-   itemHeight: 50,
-   onTap: (x) {
-      print(x);
-   },
- ),
-),
+              ),
+              border: OutlineInputBorder(
+               borderSide: BorderSide(color: Colors.red),
+              ),
+            ),
+            maxSuggestionsInViewPort: 6,
+            itemHeight: 50,
+            onTap: (x) {},
+         )
+   )
 
 ```
 
@@ -117,7 +118,8 @@ Form(
 ## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
-- `suggestions` : List of SearchFieldListItem to search from.**(required)**, each item in the list requires a unique searchKey, which is used to search the list. SearchFieldListItem also takes a optional widget child to display custom widget in the suggestion list.
+- `suggestions`**(required)** : List of SearchFieldListItem to search from.
+each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`. 
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
