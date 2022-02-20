@@ -69,7 +69,7 @@ class _Example1State extends State<Example1> {
                   _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               textInputAction: TextInputAction.next,
               controller: _searchController,
-              hint: 'SearchField Sample 1',
+              hint: 'SearchField Example 1',
               // initialValue: SearchFieldListItem(_suggestions[2], SizedBox()),
               maxSuggestionsInViewPort: 3,
               itemHeight: 45,
@@ -88,7 +88,7 @@ class _Example1State extends State<Example1> {
                     _statesOfIndia.map((e) => SearchFieldListItem(e)).toList(),
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
-                hint: 'SearchField Sample 2',
+                hint: 'SearchField Example 2',
                 hasOverlay: false,
                 searchStyle: TextStyle(
                   fontSize: 18,
@@ -124,7 +124,7 @@ class _Example1State extends State<Example1> {
             child: SearchField(
               maxSuggestionsInViewPort: 5,
               itemHeight: 40,
-              hint: 'SearchField Sample 3',
+              hint: 'SearchField Example 3',
               suggestionsDecoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
@@ -134,16 +134,7 @@ class _Example1State extends State<Example1> {
                   color: Colors.grey.withOpacity(0.5),
                 ),
               ),
-              suggestionItemDecoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xff9D50BB).withOpacity(0.5),
-                    Color(0xff6E48AA).withOpacity(0.8),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
+              suggestionItemDecoration: BoxDecoration(),
               searchInputDecoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.withOpacity(0.2),
@@ -156,9 +147,10 @@ class _Example1State extends State<Example1> {
                 ),
                 border: OutlineInputBorder(),
               ),
-              marginColor: Colors.white,
-              suggestions:
-                  _suggestions.map((e) => SearchFieldListItem(e)).toList(),
+              marginColor: Colors.grey.shade300,
+              suggestions: _suggestions
+                  .map((e) => SearchFieldListItem(e, child: e.toTitle()))
+                  .toList(),
             ),
           ),
           SizedBox(
@@ -174,11 +166,8 @@ class _Example1State extends State<Example1> {
                   Color(0xffffd194),
                 ], begin: Alignment.topLeft, end: Alignment.bottomRight),
               ),
-              suggestions: _suggestions
-                  .map((e) => SearchFieldListItem(
-                        e,
-                      ))
-                  .toList(),
+              suggestions:
+                  _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               suggestionState: Suggestion.hidden,
               searchInputDecoration: InputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
@@ -186,7 +175,7 @@ class _Example1State extends State<Example1> {
                 border: OutlineInputBorder(),
               ),
               // hasOverlay: false,
-              hint: 'SearchField Sample 4',
+              hint: 'SearchField example 4',
               maxSuggestionsInViewPort: 4,
               itemHeight: 45,
               onTap: (x) {},
@@ -207,6 +196,48 @@ class _Example1State extends State<Example1> {
           )
         ],
       ),
+    );
+  }
+}
+
+extension FurdleTitle on String {
+  Widget toTitle({double boxSize = 25}) {
+    return Material(
+      color: Colors.transparent,
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
+        for (int i = 0; i < length; i++)
+          Container(
+              height: boxSize,
+              width: boxSize,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.symmetric(
+                    horizontal: 2,
+                  ) +
+                  EdgeInsets.only(bottom: i.isOdd ? 8 : 0),
+              child: Text(
+                this[i].toUpperCase(),
+                style: const TextStyle(
+                    height: 1.1,
+                    letterSpacing: 2,
+                    fontSize: 24,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              decoration: this[i] == ' '
+                  ? null
+                  : BoxDecoration(boxShadow: [
+                      BoxShadow(
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          color: Colors.black,
+                          offset: Offset(0, 1)),
+                      BoxShadow(
+                          spreadRadius: 1,
+                          blurRadius: 5,
+                          color: Colors.black,
+                          offset: Offset(2, -1)),
+                    ], color: Colors.blueAccent))
+      ]),
     );
   }
 }
