@@ -28,7 +28,6 @@ class _Example2State extends State<Example2> {
 
   List<Country> countries = [];
   Country _selectedCountry = Country.init();
-  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -37,9 +36,6 @@ class _Example2State extends State<Example2> {
             appBar: AppBar(
               title: Text(widget.title),
             ),
-            floatingActionButton: FloatingActionButton(onPressed: () {
-              controller.text = 'A';
-            }),
             body: Column(
               children: [
                 Padding(
@@ -63,15 +59,6 @@ class _Example2State extends State<Example2> {
                     },
                   ),
                 ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SearchField(
-                      suggestions: countries
-                          .map((e) => SearchFieldListItem(e.name))
-                          .toList(),
-                      suggestionState: Suggestion.hidden,
-                      itemHeight: 65,
-                    )),
                 Expanded(
                     child: Center(
                         child: _selectedCountry.name.isEmpty
