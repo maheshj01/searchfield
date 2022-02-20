@@ -116,7 +116,7 @@ Form(
 
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `suggestions` : List of SearchFieldListItem to search from.**(required)**, each item in the list requires a unique searchKey, which is used to search the list. SearchFieldListItem also takes a optional widget child to display custom widget in the suggestion list.
-- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.hidden`. 
+- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`. 
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `hasOverlay` : shows floating suggestions on top of the Ui

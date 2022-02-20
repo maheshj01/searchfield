@@ -80,7 +80,7 @@ class SearchField extends StatefulWidget {
   /// with [hint].
   final InputDecoration? searchInputDecoration;
 
-  /// defaults to SuggestionState.hidden
+  /// defaults to SuggestionState.expand
   final Suggestion suggestionState;
 
   /// Specifies the [SuggestionAction] called on suggestion tap.
@@ -191,7 +191,7 @@ class SearchField extends StatefulWidget {
     this.marginColor,
     this.controller,
     this.validator,
-    this.suggestionState = Suggestion.hidden,
+    this.suggestionState = Suggestion.expand,
     this.itemHeight = 35.0,
     this.suggestionsDecoration,
     this.searchInputDecoration,
