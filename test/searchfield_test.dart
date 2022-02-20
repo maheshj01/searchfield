@@ -58,11 +58,10 @@ void main() {
       expect(finder2, findsNothing);
     });
 
-    testWidgets(
-        'Searchfield should show searched suggestion and all suggestions on empty searchfield',
+    testWidgets('Searchfield should show searched suggestions',
         (WidgetTester tester) async {
-      final TextEditingController controller = TextEditingController();
-      int kOptionsCount = 4;
+      final controller = TextEditingController();
+      // final kOptionsCount = 4;
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
@@ -100,7 +99,7 @@ void main() {
       expect(find.byType(ListView), findsNothing);
       await tester.tap(find.byType(TextFormField));
 
-      // enter Text isn't required to view the listview, since `suggestionState: Suggestion.expand`
+      // to fix: enter Text isn't required to view the listview, since `suggestionState: Suggestion.expand`
       await tester.enterText(find.byType(TextFormField), 'a');
       await tester.pumpAndSettle();
       expect(find.byType(ListView), findsOneWidget);

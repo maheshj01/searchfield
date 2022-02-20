@@ -73,9 +73,7 @@ class _Example1State extends State<Example1> {
               // initialValue: SearchFieldListItem(_suggestions[2], SizedBox()),
               maxSuggestionsInViewPort: 3,
               itemHeight: 45,
-              onTap: (x) {
-                print('selected =$x ${_searchController.text}');
-              },
+              onTap: (x) {},
             ),
           ),
           SizedBox(
@@ -114,9 +112,7 @@ class _Example1State extends State<Example1> {
                 ),
                 maxSuggestionsInViewPort: 6,
                 itemHeight: 50,
-                onTap: (x) {
-                  print(x);
-                },
+                onTap: (x) {},
               ),
             ),
           ),
@@ -193,9 +189,7 @@ class _Example1State extends State<Example1> {
               hint: 'SearchField Sample 4',
               maxSuggestionsInViewPort: 4,
               itemHeight: 45,
-              onTap: (x) {
-                print(x);
-              },
+              onTap: (x) {},
             ),
           ),
           Container(

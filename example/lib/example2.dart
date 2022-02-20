@@ -88,7 +88,7 @@ class _CountryDetailState extends State<CountryDetail> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("$key:"),
+          Text('$key:'),
           SizedBox(
             width: 16,
           ),
