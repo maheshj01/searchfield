@@ -325,8 +325,8 @@ class _SearchFieldState extends State<SearchField> {
                   boxShadow: [
                     BoxShadow(
                       color: onSurfaceColor.withOpacity(0.1),
-                      blurRadius: 8.0, // soften the shadow
-                      spreadRadius: 2.0, // extend the shadow
+                      blurRadius: 8.0,
+                      spreadRadius: 2.0,
                       offset: widget.hasOverlay
                           ? Offset(
                               2.0,
