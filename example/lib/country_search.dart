@@ -2,16 +2,16 @@ import 'package:example/country_model.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
-class Example2 extends StatefulWidget {
-  Example2({Key? key, required this.title}) : super(key: key);
+class CountrySearch extends StatefulWidget {
+  CountrySearch({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _Example2State createState() => _Example2State();
+  _CountrySearchState createState() => _CountrySearchState();
 }
 
-class _Example2State extends State<Example2> {
+class _CountrySearchState extends State<CountrySearch> {
   @override
   void dispose() {
     _searchController.dispose();

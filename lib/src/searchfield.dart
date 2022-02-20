@@ -232,7 +232,9 @@ class _SearchFieldState extends State<SearchField> {
   void dispose() {
     _focus.dispose();
     suggestionStream.close();
-    searchController!.dispose();
+    if (widget.controller == null) {
+      searchController!.dispose();
+    }
     super.dispose();
   }
 
