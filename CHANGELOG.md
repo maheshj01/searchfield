@@ -1,14 +1,21 @@
 ## [0.6.1] - Feb 21, 2022
+
 - update version in readme
+- pass generic object to `SearchfieldListItem`
+
 ## [0.6.0] - Feb 20, 2022 (Breaking Change)
+
 - add custom widget for Suggestions using `SearchFieldListItem`
 - removes `suggestionStyle` property
 - minor fixes
+
 ## [0.5.6] - Sep 26, 2021
+
 - adds `suggestionAction` to change focus on suggestion tap
 - suggestions now always show on `SuggestionState.enabled`
 
 ## [0.5.5] - Sep 03, 2021
+
 - adds `searchInputAction` property to focus to next input
 
 ## [0.5.4] - Sep 01, 2021
