@@ -1,3 +1,5 @@
+## [0.6.1] - Feb 21, 2022
+- update version in readme
 ## [0.6.0] - Feb 20, 2022
 - add custom widget for Suggestions
 - minor fixes
