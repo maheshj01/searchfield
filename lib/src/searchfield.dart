@@ -212,16 +212,17 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
-  final StreamController<List<SearchFieldListItem?>?> sourceStream =
+  final StreamController<List<SearchFieldListItem?>?> suggestionStream =
       StreamController<List<SearchFieldListItem?>?>.broadcast();
   final FocusNode _focus = FocusNode();
-  bool sourceFocused = false;
+  bool isSuggestionExpanded = false;
   TextEditingController? searchController;
 
   @override
   void dispose() {
     _focus.dispose();
-    sourceStream.close();
+    suggestionStream.close();
+    searchController!.dispose();
     super.dispose();
   }
 
@@ -229,15 +230,15 @@ class _SearchFieldState extends State<SearchField> {
     _focus.addListener(() {
       if (mounted) {
         setState(() {
-          sourceFocused = _focus.hasFocus;
+          isSuggestionExpanded = _focus.hasFocus;
         });
       }
       if (widget.hasOverlay) {
-        if (sourceFocused) {
+        if (isSuggestionExpanded) {
           if (widget.initialValue == null) {
             if (widget.suggestionState == Suggestion.expand) {
               Future.delayed(Duration(milliseconds: 100), () {
-                sourceStream.sink.add(widget.suggestions);
+                suggestionStream.sink.add(widget.suggestions);
               });
             }
           }
@@ -246,11 +247,11 @@ class _SearchFieldState extends State<SearchField> {
         } else {
           _overlayEntry.remove();
         }
-      } else if (sourceFocused) {
+      } else if (isSuggestionExpanded) {
         if (widget.initialValue == null) {
           if (widget.suggestionState == Suggestion.expand) {
             Future.delayed(Duration(milliseconds: 100), () {
-              sourceStream.sink.add(widget.suggestions);
+              suggestionStream.sink.add(widget.suggestions);
             });
           }
         }
@@ -267,12 +268,12 @@ class _SearchFieldState extends State<SearchField> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (widget.initialValue == null ||
           widget.initialValue!.searchKey.isEmpty) {
-        sourceStream.sink.add(null);
+        suggestionStream.sink.add(null);
       } else {
         searchController!.text = widget.initialValue!.searchKey;
-        sourceStream.sink.add([widget.initialValue]);
+        suggestionStream.sink.add([widget.initialValue]);
       }
-      sourceStream.sink.add(widget.suggestions);
+      suggestionStream.sink.add(widget.suggestions);
     });
   }
 
@@ -299,11 +300,13 @@ class _SearchFieldState extends State<SearchField> {
   Widget _suggestionsBuilder() {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return StreamBuilder<List<SearchFieldListItem?>?>(
-      stream: sourceStream.stream,
+      stream: suggestionStream.stream,
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-        if (snapshot.data == null || snapshot.data!.isEmpty || !sourceFocused) {
-          return Container();
+        if (snapshot.data == null ||
+            snapshot.data!.isEmpty ||
+            !isSuggestionExpanded) {
+          return SizedBox();
         } else {
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
             height = widget.itemHeight * widget.maxSuggestionsInViewPort;
@@ -360,7 +363,7 @@ class _SearchFieldState extends State<SearchField> {
                   }
 
                   // hide the suggestions
-                  sourceStream.sink.add(null);
+                  suggestionStream.sink.add(null);
                   if (widget.onTap != null) {
                     widget.onTap!(snapshot.data![index] as SearchFieldListItem);
                   }
@@ -424,7 +427,7 @@ class _SearchFieldState extends State<SearchField> {
     final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
         builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
-            stream: sourceStream.stream,
+            stream: suggestionStream.stream,
             builder: (BuildContext context,
                 AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
               late var count = widget.maxSuggestionsInViewPort;
@@ -460,15 +463,15 @@ class _SearchFieldState extends State<SearchField> {
           child: TextFormField(
             onTap: () {
               /// only call that if [SuggestionState.onTap] is selected
-              if (!sourceFocused &&
+              if (!isSuggestionExpanded &&
                   widget.suggestionState == Suggestion.expand) {
                 if (mounted) {
                   setState(() {
-                    sourceFocused = true;
+                    isSuggestionExpanded = true;
                   });
                 }
                 Future.delayed(Duration(milliseconds: 100), () {
-                  sourceStream.sink.add(widget.suggestions);
+                  suggestionStream.sink.add(widget.suggestions);
                 });
               }
             },
@@ -483,7 +486,7 @@ class _SearchFieldState extends State<SearchField> {
             onChanged: (item) {
               final searchResult = <SearchFieldListItem>[];
               if (item.isEmpty) {
-                sourceStream.sink.add(widget.suggestions);
+                suggestionStream.sink.add(widget.suggestions);
                 return;
               }
               for (final suggestion in widget.suggestions) {
@@ -493,7 +496,7 @@ class _SearchFieldState extends State<SearchField> {
                   searchResult.add(suggestion);
                 }
               }
-              sourceStream.sink.add(searchResult);
+              suggestionStream.sink.add(searchResult);
             },
           ),
         ),
