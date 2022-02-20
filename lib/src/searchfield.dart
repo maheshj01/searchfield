@@ -19,17 +19,21 @@ enum SuggestionAction {
   unfocus,
 }
 
-class SearchFieldListItem {
+class SearchFieldListItem<T> {
   Key? key;
 
   /// the text based on which the search happens
   final String searchKey;
 
+  /// Custom Object to be associated with each ListItem
+  /// see example in [example/lib/country_search.dart](https://github.com/maheshmnj/searchfield/tree/master/example/lib/country_search.dart)
+  final T? item;
+
   /// The widget to be shown in the searchField
   /// if not specified, Text widget with default styling will be used
   final Widget? child;
 
-  SearchFieldListItem(this.searchKey, {this.child, this.key});
+  SearchFieldListItem(this.searchKey, {this.child, this.item, this.key});
 
   @override
   bool operator ==(Object other) {
@@ -54,7 +58,7 @@ extension ListContainsObject<T> on List {
   }
 }
 
-class SearchField extends StatefulWidget {
+class SearchField<T> extends StatefulWidget {
   /// List of suggestions for the searchfield.
   /// each suggestion should have a unique searchKey
   ///
@@ -63,10 +67,10 @@ class SearchField extends StatefulWidget {
   ///   .map((e) => SearchFieldListItem(e, child: Text(e)))
   ///   .toList(),
   /// ```
-  final List<SearchFieldListItem> suggestions;
+  final List<SearchFieldListItem<T>> suggestions;
 
   /// Callback to return the selected suggestion.
-  final Function(SearchFieldListItem?)? onTap;
+  final Function(SearchFieldListItem<T>)? onTap;
 
   /// Hint for the [SearchField].
   final String? hint;
@@ -377,7 +381,7 @@ class _SearchFieldState extends State<SearchField> {
                   // hide the suggestions
                   suggestionStream.sink.add(null);
                   if (widget.onTap != null) {
-                    widget.onTap!(snapshot.data![index] as SearchFieldListItem);
+                    widget.onTap!(snapshot.data![index]!);
                   }
                 },
                 child: Container(

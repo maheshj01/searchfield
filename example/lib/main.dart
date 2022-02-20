@@ -1,5 +1,5 @@
 import 'package:example/example1.dart';
-import 'package:example/example2.dart';
+import 'package:example/country_search.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -39,7 +39,7 @@ class ExampleList extends StatelessWidget {
               title: Text('Example 2'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => Example2(
+                    builder: (_) => CountrySearch(
                           title: 'Country List',
                         )));
               },

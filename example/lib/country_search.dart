@@ -42,19 +42,17 @@ class _CountrySearchState extends State<CountrySearch> {
                   padding: const EdgeInsets.all(8.0),
                   child: SearchField(
                     suggestions: countries
-                        .map((e) => SearchFieldListItem(e.name))
+                        .map((country) =>
+                            SearchFieldListItem(country.name, item: country))
                         .toList(),
                     suggestionState: Suggestion.expand,
                     controller: _searchController,
                     hint: 'Search by country name',
                     maxSuggestionsInViewPort: 4,
                     itemHeight: 45,
-                    onTap: (x) {
-                      final country = countries.firstWhere((e) {
-                        return e.name == x!.searchKey;
-                      });
+                    onTap: (SearchFieldListItem x) {
                       setState(() {
-                        _selectedCountry = country;
+                        _selectedCountry = x.item;
                       });
                     },
                   ),

@@ -28,20 +28,22 @@ void main() {
 
       expect(
           () => _boilerplate(
-              child: SearchField(
+              child: SearchField<String>(
                   suggestions: ['ABC', 'DEF']
-                      .map((e) => SearchFieldListItem(e))
+                      .map<SearchFieldListItem<String>>(
+                          (e) => SearchFieldListItem(e))
                       .toList(),
-                  initialValue: SearchFieldListItem('ABCD'))),
+                  initialValue: SearchFieldListItem<String>('ABCD'))),
           throwsAssertionError);
 
       await tester.pumpWidget(_boilerplate(
-          child: SearchField(
+          child: SearchField<String>(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF'].map((e) => SearchFieldListItem(e)).toList(),
+        suggestions:
+            ['ABC', 'DEF'].map((e) => SearchFieldListItem<String>(e)).toList(),
       )));
 
-      final finder = find.byType(SearchField);
+      final finder = find.byType(TextFormField);
       expect(finder, findsOneWidget);
     });
     testWidgets('Searchfield should set initial Value',
@@ -49,8 +51,9 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF'].map((e) => SearchFieldListItem(e)).toList(),
-        initialValue: SearchFieldListItem('ABC'),
+        suggestions:
+            ['ABC', 'DEF'].map((e) => SearchFieldListItem<String>(e)).toList(),
+        initialValue: SearchFieldListItem<String>('ABC'),
       )));
       final finder = find.text('ABC');
       expect(finder, findsOneWidget);
@@ -66,7 +69,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-            .map((e) => SearchFieldListItem(e))
+            .map((e) => SearchFieldListItem<String>(e))
             .toList(),
         controller: controller,
         suggestionState: Suggestion.expand,
@@ -91,8 +94,9 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions:
-            ['ABC', 'DEF', 'GHI'].map((e) => SearchFieldListItem(e)).toList(),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
         suggestionState: Suggestion.expand,
       )));
       expect(find.byType(TextFormField), findsOneWidget);
