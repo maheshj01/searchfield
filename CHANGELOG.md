@@ -1,7 +1,8 @@
 ## [0.6.1] - Feb 21, 2022
 - update version in readme
-## [0.6.0] - Feb 20, 2022
-- add custom widget for Suggestions
+## [0.6.0] - Feb 20, 2022 (Breaking Change)
+- add custom widget for Suggestions using `SearchFieldListItem`
+- removes `suggestionStyle` property
 - minor fixes
 ## [0.5.6] - Sep 26, 2021
 - adds `suggestionAction` to change focus on suggestion tap

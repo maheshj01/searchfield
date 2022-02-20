@@ -24,3 +24,11 @@ Contribution
 5. Submit a PR referencing the issue
 6. Request a review
 7. wait for LGTM 🚀 comment
+
+### Publishing (Applicable only for the owner of the repository)
+
+When publishing a new release of this package make sure all the below things are done.
+- Update the version in readme(2), pubspec.yaml, and update the changelog
+- make sure the documentation is updated as per the changes
+- make sure existing and new tests are passing
+- make sure the code is well formatted

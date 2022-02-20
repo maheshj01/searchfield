@@ -25,6 +25,8 @@ class SearchFieldListItem {
   /// the text based on which the search happens
   final String searchKey;
 
+  /// The widget to be shown in the searchField
+  /// if not specified, Text widget with default styling will be used
   final Widget? child;
 
   SearchFieldListItem(this.searchKey, {this.child, this.key});
@@ -53,7 +55,14 @@ extension ListContainsObject<T> on List {
 }
 
 class SearchField extends StatefulWidget {
-  /// Data source to perform search.
+  /// List of suggestions for the searchfield.
+  /// each suggestion should have a unique searchKey
+  ///
+  /// ```dart
+  /// ['ABC', 'DEF', 'GHI', 'JKL']
+  ///   .map((e) => SearchFieldListItem(e, child: Text(e)))
+  ///   .toList(),
+  /// ```
   final List<SearchFieldListItem> suggestions;
 
   /// Callback to return the selected suggestion.
@@ -123,6 +132,7 @@ class SearchField extends StatefulWidget {
   ///     ),
   ///   ),
   /// )
+  /// ```
   final BoxDecoration? suggestionItemDecoration;
 
   /// Specifies height for each suggestion item in the list.

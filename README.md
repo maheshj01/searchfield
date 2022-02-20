@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```yaml
 dependencies:
-  searchfield: ^0.5.6
+  searchfield: ^0.6.1
 ```
 
 - Import the package
