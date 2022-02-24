@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:searchfield/searchfield.dart';
@@ -84,7 +86,7 @@ void main() {
     testWidgets('Searchfield should show searched suggestions',
         (WidgetTester tester) async {
       final controller = TextEditingController();
-      // final kOptionsCount = 4;
+      final kOptionsCount = 4;
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
@@ -105,6 +107,7 @@ void main() {
       expect(find.text('ABC'), findsOneWidget);
       expect(listFinder.evaluate().length, 1);
       // await tester.enterText(textField, '');
+      // print('text in controller: ${controller.text}');
       // await tester.pumpAndSettle();
       // expect(listFinder.evaluate().length, kOptionsCount);
     });
@@ -137,5 +140,65 @@ void main() {
       expect(listFinder, findsNothing);
       expect(find.text('No results'), findsOneWidget);
     });
+  });
+
+  testWidgets(
+      'Searchfield Suggestions should default height should be less than 175 when suggestions count < 5',
+      (WidgetTester tester) async {
+    final controller = TextEditingController();
+    final kdefaultLengthInViewPort = 5;
+    final kdefaultHeight = 35;
+    final suggestionListLength = 4;
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+      controller: controller,
+      suggestionState: Suggestion.expand,
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    final baseSize = tester.getSize(listFinder);
+    final resultingHeight = baseSize.height;
+    final expectedHeight =
+        min(suggestionListLength, kdefaultLengthInViewPort) * kdefaultHeight;
+    expect(resultingHeight, equals(expectedHeight));
+  });
+  testWidgets(
+      'Searchfield Suggestions default height should not exceed 175 (35*5) when suggestions count > 5)',
+      (WidgetTester tester) async {
+    final controller = TextEditingController();
+    final kdefaultLengthInViewPort = 5;
+    final kdefaultHeight = 35;
+    final suggestionListLength = 6;
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: ['ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQR']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+      controller: controller,
+      suggestionState: Suggestion.expand,
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    final baseSize = tester.getSize(listFinder);
+    final resultingHeight = baseSize.height;
+    final expectedHeight = kdefaultLengthInViewPort * kdefaultHeight;
+    expect(resultingHeight, equals(expectedHeight));
   });
 }
