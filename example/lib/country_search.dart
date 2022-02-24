@@ -50,6 +50,7 @@ class _CountrySearchState extends State<CountrySearch> {
                     hint: 'Search by country name',
                     maxSuggestionsInViewPort: 4,
                     itemHeight: 45,
+                    inputType: TextInputType.text,
                     onTap: (SearchFieldListItem x) {
                       setState(() {
                         _selectedCountry = x.item;

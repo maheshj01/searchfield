@@ -164,6 +164,9 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies the `TextEditingController` for [SearchField].
   final TextEditingController? controller;
 
+  /// Keyboard Type for SearchField
+  TextInputType? inputType;
+
   /// `validator` for the [SearchField]
   /// to make use of this validator, The
   /// SearchField widget needs to be wrapped in a Form
@@ -214,6 +217,7 @@ class SearchField<T> extends StatefulWidget {
     this.searchStyle,
     this.marginColor,
     this.controller,
+    this.inputType,
     this.validator,
     this.suggestionState = Suggestion.expand,
     this.itemHeight = 35.0,
@@ -505,6 +509,7 @@ class _SearchFieldState extends State<SearchField> {
             validator: widget.validator,
             style: widget.searchStyle,
             textInputAction: widget.textInputAction,
+            keyboardType: widget.inputType,
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
