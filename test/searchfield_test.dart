@@ -86,7 +86,6 @@ void main() {
     testWidgets('Searchfield should show searched suggestions',
         (WidgetTester tester) async {
       final controller = TextEditingController();
-      final kOptionsCount = 4;
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
@@ -178,7 +177,6 @@ void main() {
     final controller = TextEditingController();
     final kdefaultLengthInViewPort = 5;
     final kdefaultHeight = 35;
-    final suggestionListLength = 6;
     await tester.pumpWidget(_boilerplate(
         child: SearchField(
       key: const Key('searchfield'),

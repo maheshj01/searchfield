@@ -165,7 +165,7 @@ class SearchField<T> extends StatefulWidget {
   final TextEditingController? controller;
 
   /// Keyboard Type for SearchField
-  TextInputType? inputType;
+  final TextInputType? inputType;
 
   /// `validator` for the [SearchField]
   /// to make use of this validator, The
