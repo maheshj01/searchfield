@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.1](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.6.2](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```yaml
 dependencies:
-  searchfield: ^0.6.1
+  searchfield: ^0.6.2
 ```
 
 - Import the package
@@ -35,17 +35,15 @@ Use the Widget
 #### Example1
 
 ```dart
- SearchField(
-    suggestions: [
-    'United States',
-    'America',
-    'Washington',
-    'India',
-    'Paris',
-    'Jakarta',
-    'Australia',
-    'Lorem Ipsum'
-    ],
+SearchField<Country>(
+   suggestions: countries
+     .map(
+     (e) => SearchFieldListItem<Country>(
+        e.name,
+        item: e,
+    ),
+  )
+  .toList(),
 ),
 ```
 
@@ -118,23 +116,25 @@ Form(
 ## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
+- `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
+- `hasOverlay` : shows floating suggestions on top of the Ui
+  if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
+- `hint` : hint for the search Input.
+- `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
+- `inputType`: Keyboard Type for SearchField      
+- `itemHeight` : height of each suggestion Item, (defaults to 35.0).
+- `marginColor` : Color for the margin between the suggestions.
+- `onTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`. 
-- `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.          
-- `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
-- `hasOverlay` : shows floating suggestions on top of the Ui
-  if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
-- `onTap` : callback when a sugestion is tapped it also returns the tapped value.
-- `hint` : hint for the search Input.
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
-- `itemHeight` : height of each suggestion Item, (defaults to 35.0).
-- `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
+- `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.    
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
 

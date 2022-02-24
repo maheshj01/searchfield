@@ -1,3 +1,8 @@
+## [0.6.2] - Feb 24, 2022
+
+- Add support for empty widget
+- Add support for changing inputType
+
 ## [0.6.1] - Feb 21, 2022
 
 - update version in readme
