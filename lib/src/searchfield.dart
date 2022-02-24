@@ -47,6 +47,7 @@ class SearchFieldListItem<T> {
   int get hashCode => searchKey.hashCode;
 }
 
+/// extension to check if a Object is present in List<Object>
 extension ListContainsObject<T> on List {
   bool containsObject(T object) {
     for (var item in this) {
@@ -58,6 +59,10 @@ extension ListContainsObject<T> on List {
   }
 }
 
+/// A widget that displays a searchfield and a list of suggestions
+/// when the searchfield is brought into focus
+/// see [example/lib/country_search.dart]
+///
 class SearchField<T> extends StatefulWidget {
   /// List of suggestions for the searchfield.
   /// each suggestion should have a unique searchKey
@@ -195,6 +200,11 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to ```true```
   final bool hasOverlay;
 
+  /// Widget to show when the search returns
+  /// empty results.
+  /// defaults to [SizedBox.shrink]
+  final Widget emptyWidget;
+
   SearchField({
     Key? key,
     required this.suggestions,
@@ -212,6 +222,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
     this.onTap,
+    this.emptyWidget = const SizedBox.shrink(),
     this.textInputAction,
     this.suggestionAction,
   })  : assert(
@@ -319,10 +330,10 @@ class _SearchFieldState extends State<SearchField> {
       stream: suggestionStream.stream,
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-        if (snapshot.data == null ||
-            snapshot.data!.isEmpty ||
-            !isSuggestionExpanded) {
+        if (snapshot.data == null || !isSuggestionExpanded) {
           return SizedBox();
+        } else if (snapshot.data!.isEmpty) {
+          return widget.emptyWidget;
         } else {
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
             height = widget.itemHeight * widget.maxSuggestionsInViewPort;
@@ -478,17 +489,15 @@ class _SearchFieldState extends State<SearchField> {
           link: _layerLink,
           child: TextFormField(
             onTap: () {
-              /// only call that if [SuggestionState.onTap] is selected
+              /// only call if SuggestionState = [Suggestion.expand]
               if (!isSuggestionExpanded &&
                   widget.suggestionState == Suggestion.expand) {
+                suggestionStream.sink.add(widget.suggestions);
                 if (mounted) {
                   setState(() {
                     isSuggestionExpanded = true;
                   });
                 }
-                Future.delayed(Duration(milliseconds: 100), () {
-                  suggestionStream.sink.add(widget.suggestions);
-                });
               }
             },
             controller: widget.controller ?? searchController,
@@ -499,16 +508,16 @@ class _SearchFieldState extends State<SearchField> {
             decoration:
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
-            onChanged: (item) {
+            onChanged: (query) {
               final searchResult = <SearchFieldListItem>[];
-              if (item.isEmpty) {
+              if (query.isEmpty) {
                 suggestionStream.sink.add(widget.suggestions);
                 return;
               }
               for (final suggestion in widget.suggestions) {
                 if (suggestion.searchKey
                     .toLowerCase()
-                    .contains(item.toLowerCase())) {
+                    .contains(query.toLowerCase())) {
                   searchResult.add(suggestion);
                 }
               }
