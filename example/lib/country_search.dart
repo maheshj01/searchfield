@@ -15,6 +15,7 @@ class _CountrySearchState extends State<CountrySearch> {
   @override
   void dispose() {
     _searchController.dispose();
+    focus.dispose();
     super.dispose();
   }
 
@@ -26,6 +27,7 @@ class _CountrySearchState extends State<CountrySearch> {
     countries = data.map((e) => Country.fromMap(e)).toList();
   }
 
+  final focus = FocusNode();
   List<Country> countries = [];
   Country _selectedCountry = Country.init();
   @override
@@ -41,6 +43,7 @@ class _CountrySearchState extends State<CountrySearch> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SearchField(
+                    focusNode: focus,
                     suggestions: countries
                         .map((country) =>
                             SearchFieldListItem(country.name, item: country))
@@ -58,6 +61,7 @@ class _CountrySearchState extends State<CountrySearch> {
                       setState(() {
                         _selectedCountry = x.item!;
                       });
+                      focus.unfocus();
                     },
                   ),
                 ),

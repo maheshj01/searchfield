@@ -64,6 +64,8 @@ extension ListContainsObject<T> on List {
 /// see [example/lib/country_search.dart]
 ///
 class SearchField<T> extends StatefulWidget {
+  final FocusNode? focusNode;
+
   /// List of suggestions for the searchfield.
   /// each suggestion should have a unique searchKey
   ///
@@ -216,6 +218,7 @@ class SearchField<T> extends StatefulWidget {
     Key? key,
     required this.suggestions,
     this.initialValue,
+    this.focusNode,
     this.hint,
     this.hasOverlay = true,
     this.searchStyle,
@@ -248,25 +251,32 @@ class SearchField<T> extends StatefulWidget {
 class _SearchFieldState<T> extends State<SearchField<T>> {
   final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
       StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
-  final FocusNode _focus = FocusNode();
+  FocusNode? _focus;
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
 
   @override
   void dispose() {
-    _focus.dispose();
     suggestionStream.close();
     if (widget.controller == null) {
       searchController!.dispose();
+    }
+    if (widget.focusNode == null) {
+      _focus!.dispose();
     }
     super.dispose();
   }
 
   void initialize() {
-    _focus.addListener(() {
+    if (widget.focusNode != null) {
+      _focus = widget.focusNode;
+    } else {
+      _focus = FocusNode();
+    }
+    _focus!.addListener(() {
       if (mounted) {
         setState(() {
-          isSuggestionExpanded = _focus.hasFocus;
+          isSuggestionExpanded = _focus!.hasFocus;
         });
       }
       if (widget.hasOverlay) {
@@ -391,10 +401,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   // suggestion action to switch focus to next focus node
                   if (widget.suggestionAction != null) {
                     if (widget.suggestionAction == SuggestionAction.next) {
-                      _focus.nextFocus();
+                      _focus!.nextFocus();
                     } else if (widget.suggestionAction ==
                         SuggestionAction.unfocus) {
-                      _focus.unfocus();
+                      _focus!.unfocus();
                     }
                   }
 
@@ -484,6 +494,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final LayerLink _layerLink = LayerLink();
   late double height;
   bool isUp = false;
+
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {

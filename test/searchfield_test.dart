@@ -213,7 +213,8 @@ void main() {
     expect(resultingHeight, equals(expectedHeight));
   });
 
-  testWidgets('SearchField should work with generic type seemlessly)',
+  testWidgets(
+      'SearchField should show generic type search key in searchfield on suggestionTap)',
       (WidgetTester tester) async {
     final controller = TextEditingController();
     final countries = data.map((e) => Country.fromMap(e)).toList();
@@ -240,5 +241,35 @@ void main() {
     expect(tapTarget, findsOneWidget);
     await tester.tap(tapTarget);
     expect(controller.text, countries[0].name);
+  });
+
+  testWidgets('FocusNode should be focused on searchfield',
+      (WidgetTester tester) async {
+    final focus = FocusNode();
+    final countries = data.map((e) => Country.fromMap(e)).toList();
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      focusNode: focus,
+      suggestionState: Suggestion.expand,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        focus.unfocus();
+      },
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    final tapTarget = find.text(countries[0].name);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    expect(focus.hasFocus, true);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    expect(tapTarget, findsOneWidget);
+    await tester.tap(tapTarget);
+    expect(focus.hasFocus, false);
   });
 }
