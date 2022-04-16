@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.2](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.6.3](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```yaml
 dependencies:
-  searchfield: ^0.6.2
+  searchfield: ^0.6.3
 ```
 
 - Import the package
@@ -117,6 +117,7 @@ Form(
 
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
+- `focusNode` : FocusNode to interact with the searchfield.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
 - `hint` : hint for the search Input.
@@ -124,7 +125,8 @@ Form(
 - `inputType`: Keyboard Type for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
-- `onTap` : callback when a sugestion is tapped it also returns the tapped value.
+- `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
+- `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.

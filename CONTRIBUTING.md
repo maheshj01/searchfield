@@ -32,3 +32,4 @@ When publishing a new release of this package make sure all the below things are
 - make sure the documentation is updated as per the changes
 - make sure existing and new tests are passing
 - make sure the code is well formatted
+- ensure the linter warnigs are zero
