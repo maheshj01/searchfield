@@ -74,8 +74,12 @@ class SearchField<T> extends StatefulWidget {
   /// ```
   final List<SearchFieldListItem<T>> suggestions;
 
-  /// Callback to return the selected suggestion.
-  final Function(SearchFieldListItem<T>)? onTap;
+  /// Callback when the suggestion is selected.
+  final Function(SearchFieldListItem<T>)? onSuggestionTap;
+
+  /// Callback when the Searchfield is submitted
+  ///  it returns the text from the searchfield
+  final Function(String)? onSubmit;
 
   /// Hint for the [SearchField].
   final String? hint;
@@ -87,7 +91,7 @@ class SearchField<T> extends StatefulWidget {
   /// must be present in [suggestions].
   ///
   /// When not specified, [hint] is shown instead of `initialValue`.
-  final SearchFieldListItem? initialValue;
+  final SearchFieldListItem<T>? initialValue;
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
@@ -165,7 +169,7 @@ class SearchField<T> extends StatefulWidget {
   final TextEditingController? controller;
 
   /// Keyboard Type for SearchField
-  final TextInputType? inputType;
+  TextInputType? inputType;
 
   /// `validator` for the [SearchField]
   /// to make use of this validator, The
@@ -217,6 +221,7 @@ class SearchField<T> extends StatefulWidget {
     this.searchStyle,
     this.marginColor,
     this.controller,
+    this.onSubmit,
     this.inputType,
     this.validator,
     this.suggestionState = Suggestion.expand,
@@ -225,7 +230,7 @@ class SearchField<T> extends StatefulWidget {
     this.searchInputDecoration,
     this.suggestionItemDecoration,
     this.maxSuggestionsInViewPort = 5,
-    this.onTap,
+    this.onSuggestionTap,
     this.emptyWidget = const SizedBox.shrink(),
     this.textInputAction,
     this.suggestionAction,
@@ -237,12 +242,12 @@ class SearchField<T> extends StatefulWidget {
         super(key: key);
 
   @override
-  _SearchFieldState createState() => _SearchFieldState();
+  _SearchFieldState<T> createState() => _SearchFieldState();
 }
 
-class _SearchFieldState extends State<SearchField> {
-  final StreamController<List<SearchFieldListItem?>?> suggestionStream =
-      StreamController<List<SearchFieldListItem?>?>.broadcast();
+class _SearchFieldState<T> extends State<SearchField<T>> {
+  final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
+      StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
   final FocusNode _focus = FocusNode();
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
@@ -309,7 +314,7 @@ class _SearchFieldState extends State<SearchField> {
   }
 
   @override
-  void didUpdateWidget(covariant SearchField oldWidget) {
+  void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
       searchController = widget.controller ?? TextEditingController();
     }
@@ -330,10 +335,10 @@ class _SearchFieldState extends State<SearchField> {
 
   Widget _suggestionsBuilder() {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-    return StreamBuilder<List<SearchFieldListItem?>?>(
+    return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
       builder: (BuildContext context,
-          AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
+          AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
         if (snapshot.data == null || !isSuggestionExpanded) {
           return SizedBox();
         } else if (snapshot.data!.isEmpty) {
@@ -395,8 +400,8 @@ class _SearchFieldState extends State<SearchField> {
 
                   // hide the suggestions
                   suggestionStream.sink.add(null);
-                  if (widget.onTap != null) {
-                    widget.onTap!(snapshot.data![index]!);
+                  if (widget.onSuggestionTap != null) {
+                    widget.onSuggestionTap!(snapshot.data![index]!);
                   }
                 },
                 child: Container(
@@ -492,6 +497,7 @@ class _SearchFieldState extends State<SearchField> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            onFieldSubmitted: (x) => widget.onSubmit!(x),
             onTap: () {
               /// only call if SuggestionState = [Suggestion.expand]
               if (!isSuggestionExpanded &&
@@ -514,7 +520,7 @@ class _SearchFieldState extends State<SearchField> {
                 widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                     InputDecoration(hintText: widget.hint),
             onChanged: (query) {
-              final searchResult = <SearchFieldListItem>[];
+              final searchResult = <SearchFieldListItem<T>>[];
               if (query.isEmpty) {
                 suggestionStream.sink.add(widget.suggestions);
                 return;
