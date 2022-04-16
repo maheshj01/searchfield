@@ -55,7 +55,7 @@ SearchField<Country>(
 Form(
    key: _formKey,
    child: SearchField(
-            suggestions: _statesOfIndia.map((e) => 
+            suggestions: _statesOfIndia.map((e) =>
                SearchFieldListItem(e)).toList(),
             suggestionState: Suggestion.expand,
             textInputAction: TextInputAction.next,
@@ -111,8 +111,8 @@ Form(
 <img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
 <img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
 </p>
- 
-                                                                                                                              
+
+
 ## Properties
 
 - `controller`: TextEditing Controller to interact with the searchfield.
@@ -121,25 +121,25 @@ Form(
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
 - `hint` : hint for the search Input.
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
-- `inputType`: Keyboard Type for SearchField      
+- `inputType`: Keyboard Type for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `onTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
-- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`. 
+- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
-- `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.    
+- `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
 
 ### Contributing
 
 You are welcome to contribute to this package, to contribute please read the [contributing guidelines](CONTRIBUTING.md).
-                                                                                                                              
-                                                                                                                              
+
+
