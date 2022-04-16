@@ -1,3 +1,7 @@
+## [0.6.3] - Feb 24, 2022
+- Fixes [issue #20](https://github.com/maheshmnj/searchfield/issues/20)
+- renamed property `onTap` to `onSuggestionTap`
+- Adds `focusNode` and `onSubmit` parameters to SearchField
 ## [0.6.2] - Feb 24, 2022
 
 - Add support for empty widget

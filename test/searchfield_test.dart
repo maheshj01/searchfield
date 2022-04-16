@@ -1,8 +1,21 @@
+/*
+ * File: searchfield_test.dart
+ * Project: None
+ * File Created: Sunday, 20th February 2022 10:52:16 pm
+ * Author: Mahesh Jamdade
+ * -----
+ * Last Modified: Saturday, 16th April 2022 6:07:28 pm
+ * Modified By: Mahesh Jamdade
+ * -----
+ * Copyright 2022 - 2022 Widget Media Labs
+ */
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:searchfield/searchfield.dart';
+import 'meta_data.dart';
 
 void main() {
   Widget _boilerplate({required Widget child}) {
@@ -198,5 +211,65 @@ void main() {
     final resultingHeight = baseSize.height;
     final expectedHeight = kdefaultLengthInViewPort * kdefaultHeight;
     expect(resultingHeight, equals(expectedHeight));
+  });
+
+  testWidgets(
+      'SearchField should show generic type search key in searchfield on suggestionTap)',
+      (WidgetTester tester) async {
+    final controller = TextEditingController();
+    final countries = data.map((e) => Country.fromMap(e)).toList();
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      controller: controller,
+      suggestionState: Suggestion.expand,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        print(x.searchKey);
+      },
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    final tapTarget = find.text(countries[0].name);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    expect(tapTarget, findsOneWidget);
+    await tester.tap(tapTarget);
+    expect(controller.text, countries[0].name);
+  });
+
+  testWidgets('FocusNode should be focused on searchfield',
+      (WidgetTester tester) async {
+    final focus = FocusNode();
+    final countries = data.map((e) => Country.fromMap(e)).toList();
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      focusNode: focus,
+      suggestionState: Suggestion.expand,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        focus.unfocus();
+      },
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    final tapTarget = find.text(countries[0].name);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    expect(focus.hasFocus, true);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    expect(tapTarget, findsOneWidget);
+    await tester.tap(tapTarget);
+    expect(focus.hasFocus, false);
   });
 }
