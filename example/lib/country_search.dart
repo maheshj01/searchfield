@@ -50,9 +50,6 @@ class _CountrySearchState extends State<CountrySearch> {
                         .toList(),
                     suggestionState: Suggestion.expand,
                     controller: _searchController,
-                    onSubmit: (x) {
-                      print('submitted $x');
-                    },
                     hint: 'Search by country name',
                     maxSuggestionsInViewPort: 4,
                     itemHeight: 45,
