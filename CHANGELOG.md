@@ -1,3 +1,6 @@
+## [0.6.4] - Apr 21, 2022
+- Fixes [Issue #25](https://github.com/maheshmnj/searchfield/issues/25)
+
 ## [0.6.3] - Feb 24, 2022
 - Fixes [issue #20](https://github.com/maheshmnj/searchfield/issues/20)
 - renamed property `onTap` to `onSuggestionTap`
