@@ -66,6 +66,13 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
+        suggestionItemDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            shape: BoxShape.rectangle,
+            border: Border.all(
+                color: Colors.transparent,
+                style: BorderStyle.solid,
+                width: 1.0)),
         suggestions:
             ['ABC', 'DEF'].map((e) => SearchFieldListItem<String>(e)).toList(),
         initialValue: SearchFieldListItem<String>('ABC'),

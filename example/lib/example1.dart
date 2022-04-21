@@ -134,7 +134,13 @@ class _Example1State extends State<Example1> {
                   color: Colors.grey.withOpacity(0.5),
                 ),
               ),
-              suggestionItemDecoration: BoxDecoration(),
+              suggestionItemDecoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  shape: BoxShape.rectangle,
+                  border: Border.all(
+                      color: Colors.transparent,
+                      style: BorderStyle.solid,
+                      width: 1.0)),
               searchInputDecoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey.withOpacity(0.2),

@@ -421,12 +421,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
                     decoration: widget.suggestionItemDecoration?.copyWith(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: widget.marginColor ??
-                                  onSurfaceColor.withOpacity(0.1),
-                            ),
-                          ),
+                          border: widget.suggestionItemDecoration?.border ??
+                              Border(
+                                bottom: BorderSide(
+                                  color: widget.marginColor ??
+                                      onSurfaceColor.withOpacity(0.1),
+                                ),
+                              ),
                         ) ??
                         BoxDecoration(
                           border: index == snapshot.data!.length - 1
