@@ -311,7 +311,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.initState();
     searchController = widget.controller ?? TextEditingController();
     initialize();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.initialValue == null ||
           widget.initialValue!.searchKey.isEmpty) {
         suggestionStream.sink.add(null);
