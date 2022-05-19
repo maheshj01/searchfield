@@ -311,7 +311,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.initState();
     searchController = widget.controller ?? TextEditingController();
     initialize();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       if (widget.initialValue == null ||
           widget.initialValue!.searchKey.isEmpty) {
         suggestionStream.sink.add(null);
@@ -506,46 +506,49 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CompositedTransformTarget(
-          link: _layerLink,
-          child: TextFormField(
-            onFieldSubmitted: (x) => widget.onSubmit!(x),
-            onTap: () {
-              /// only call if SuggestionState = [Suggestion.expand]
-              if (!isSuggestionExpanded &&
-                  widget.suggestionState == Suggestion.expand) {
-                suggestionStream.sink.add(widget.suggestions);
-                if (mounted) {
-                  setState(() {
-                    isSuggestionExpanded = true;
-                  });
+        SizedBox(
+          height: 50,
+          child: CompositedTransformTarget(
+            link: _layerLink,
+            child: TextFormField(
+              onFieldSubmitted: (x) => widget.onSubmit!(x),
+              onTap: () {
+                /// only call if SuggestionState = [Suggestion.expand]
+                if (!isSuggestionExpanded &&
+                    widget.suggestionState == Suggestion.expand) {
+                  suggestionStream.sink.add(widget.suggestions);
+                  if (mounted) {
+                    setState(() {
+                      isSuggestionExpanded = true;
+                    });
+                  }
                 }
-              }
-            },
-            controller: widget.controller ?? searchController,
-            focusNode: _focus,
-            validator: widget.validator,
-            style: widget.searchStyle,
-            textInputAction: widget.textInputAction,
-            keyboardType: widget.inputType,
-            decoration:
-                widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
-                    InputDecoration(hintText: widget.hint),
-            onChanged: (query) {
-              final searchResult = <SearchFieldListItem<T>>[];
-              if (query.isEmpty) {
-                suggestionStream.sink.add(widget.suggestions);
-                return;
-              }
-              for (final suggestion in widget.suggestions) {
-                if (suggestion.searchKey
-                    .toLowerCase()
-                    .contains(query.toLowerCase())) {
-                  searchResult.add(suggestion);
+              },
+              controller: widget.controller ?? searchController,
+              focusNode: _focus,
+              validator: widget.validator,
+              style: widget.searchStyle,
+              textInputAction: widget.textInputAction,
+              keyboardType: widget.inputType,
+              decoration: widget.searchInputDecoration
+                      ?.copyWith(hintText: widget.hint) ??
+                  InputDecoration(hintText: widget.hint),
+              onChanged: (query) {
+                final searchResult = <SearchFieldListItem<T>>[];
+                if (query.isEmpty) {
+                  suggestionStream.sink.add(widget.suggestions);
+                  return;
                 }
-              }
-              suggestionStream.sink.add(searchResult);
-            },
+                for (final suggestion in widget.suggestions) {
+                  if (suggestion.searchKey
+                      .toLowerCase()
+                      .contains(query.toLowerCase())) {
+                    searchResult.add(suggestion);
+                  }
+                }
+                suggestionStream.sink.add(searchResult);
+              },
+            ),
           ),
         ),
         if (!widget.hasOverlay)
