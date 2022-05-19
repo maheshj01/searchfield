@@ -214,30 +214,34 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
-  SearchField({
-    Key? key,
-    required this.suggestions,
-    this.initialValue,
-    this.focusNode,
-    this.hint,
-    this.hasOverlay = true,
-    this.searchStyle,
-    this.marginColor,
-    this.controller,
-    this.onSubmit,
-    this.inputType,
-    this.validator,
-    this.suggestionState = Suggestion.expand,
-    this.itemHeight = 35.0,
-    this.suggestionsDecoration,
-    this.searchInputDecoration,
-    this.suggestionItemDecoration,
-    this.maxSuggestionsInViewPort = 5,
-    this.onSuggestionTap,
-    this.emptyWidget = const SizedBox.shrink(),
-    this.textInputAction,
-    this.suggestionAction,
-  })  : assert(
+  /// Sets the height of the search box
+  final double? searchBoxHeight;
+
+  SearchField(
+      {Key? key,
+      required this.suggestions,
+      this.initialValue,
+      this.focusNode,
+      this.hint,
+      this.hasOverlay = true,
+      this.searchStyle,
+      this.marginColor,
+      this.controller,
+      this.onSubmit,
+      this.inputType,
+      this.validator,
+      this.suggestionState = Suggestion.expand,
+      this.itemHeight = 35.0,
+      this.suggestionsDecoration,
+      this.searchInputDecoration,
+      this.suggestionItemDecoration,
+      this.maxSuggestionsInViewPort = 5,
+      this.onSuggestionTap,
+      this.emptyWidget = const SizedBox.shrink(),
+      this.textInputAction,
+      this.suggestionAction,
+      this.searchBoxHeight})
+      : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
@@ -507,7 +511,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: 50,
+          height: widget.searchBoxHeight,
           child: CompositedTransformTarget(
             link: _layerLink,
             child: TextFormField(
