@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.4](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.6.5](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -21,7 +21,7 @@ list of all the properties mentioned below
 
 ```yaml
 dependencies:
-  searchfield: ^0.6.4
+  searchfield: ^0.6.5
 ```
 
 - Import the package

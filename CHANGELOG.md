@@ -1,3 +1,5 @@
+## [0.6.5] - May 19, 2022
+- Fixes runtime warning in flutter 3 [Issue #29](https://github.com/maheshmnj/searchfield/issues/29)
 ## [0.6.4] - Apr 21, 2022
 - Fixes [Issue #25](https://github.com/maheshmnj/searchfield/issues/25)
 
