@@ -509,7 +509,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
-            onFieldSubmitted: (x) => widget.onSubmit!(x),
+            onFieldSubmitted: (x) {
+              if (widget.onSubmit != null) widget.onSubmit!(x);
+            },
             onTap: () {
               /// only call if SuggestionState = [Suggestion.expand]
               if (!isSuggestionExpanded &&
