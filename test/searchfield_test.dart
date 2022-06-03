@@ -35,7 +35,7 @@ void main() {
     );
   }
 
-  group('Searchfield integration tests', () {
+  group('Searchfield sanitary tests: ', () {
     testWidgets(
         'Test assert: Initial value should either be null or should be present in suggestions list.',
         (WidgetTester tester) async {
@@ -81,26 +81,6 @@ void main() {
       expect(finder, findsOneWidget);
       final finder2 = find.text('DEF');
       expect(finder2, findsNothing);
-    });
-
-    testWidgets('ListView should be visible when searchfield is tapped',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(_boilerplate(
-          child: SearchField(
-        key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
-            .toList(),
-        suggestionState: Suggestion.expand,
-      )));
-      expect(find.byType(TextFormField), findsOneWidget);
-      expect(find.byType(ListView), findsNothing);
-      await tester.tap(find.byType(TextFormField));
-
-      // to fix: enter Text isn't required to view the listview, since `suggestionState: Suggestion.expand`
-      await tester.enterText(find.byType(TextFormField), 'a');
-      await tester.pumpAndSettle();
-      expect(find.byType(ListView), findsOneWidget);
     });
 
     testWidgets('Searchfield should show searched suggestions',
@@ -250,7 +230,7 @@ void main() {
     expect(controller.text, countries[0].name);
   });
 
-  testWidgets('FocusNode should be focused on searchfield',
+  testWidgets('FocusNode should work with searchfield',
       (WidgetTester tester) async {
     final focus = FocusNode();
     final countries = data.map((e) => Country.fromMap(e)).toList();
@@ -278,5 +258,48 @@ void main() {
     expect(tapTarget, findsOneWidget);
     await tester.tap(tapTarget);
     expect(focus.hasFocus, false);
+  });
+
+  group('Searchfield should respect SuggestionState: ', () {
+    testWidgets('ListView should be visible when searchfield is tapped',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        suggestionState: Suggestion.expand,
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+
+      // potentially a bug: enter Text shouldn;t be required to view the listview, since `suggestionState: Suggestion.expand`
+      await tester.enterText(find.byType(TextFormField), '');
+
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+    });
+
+    testWidgets('ListView should be hidden when searchfield is tapped',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        suggestionState: Suggestion.hidden,
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+
+      await tester.enterText(find.byType(TextFormField), '');
+
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsNothing);
+    });
   });
 }
