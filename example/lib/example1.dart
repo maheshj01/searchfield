@@ -134,6 +134,8 @@ class _Example1State extends State<Example1> {
                   color: Colors.grey.withOpacity(0.5),
                 ),
               ),
+              emptyWidget: SizedBox(
+                  height: 100, child: Center(child: Text('State not found'))),
               suggestionItemDecoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   shape: BoxShape.rectangle,
@@ -207,7 +209,7 @@ class _Example1State extends State<Example1> {
 }
 
 extension FurdleTitle on String {
-  Widget toTitle({double boxSize = 25}) {
+  Widget toTitle({double boxSize = 22}) {
     return Material(
       color: Colors.transparent,
       child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -225,7 +227,7 @@ extension FurdleTitle on String {
                 style: const TextStyle(
                     height: 1.1,
                     letterSpacing: 2,
-                    fontSize: 24,
+                    fontSize: 18,
                     color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
