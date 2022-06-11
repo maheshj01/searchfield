@@ -180,7 +180,7 @@ class SearchField<T> extends StatefulWidget {
   /// and write your validation logic in the validator
   /// you can define a global key
   ///
-  ///  ```
+  ///  ```dart
   ///  Form(
   ///   key: _formKey,
   ///   child: SearchField(
@@ -206,7 +206,7 @@ class SearchField<T> extends StatefulWidget {
   /// the searchfield along the Y-axis.
   /// if true the suggestions will be shown floating like the
   /// along the Z-axis
-  /// defaults to ```true```
+  /// defaults to `true`
   final bool hasOverlay;
 
   /// Widget to show when the search returns
