@@ -261,7 +261,8 @@ void main() {
   });
 
   group('Searchfield should respect SuggestionState: ', () {
-    testWidgets('ListView should be visible when searchfield is tapped',
+    testWidgets(
+        'Suggestion should be visible when searchfield is tapped by default',
         (WidgetTester tester) async {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
@@ -269,7 +270,7 @@ void main() {
         suggestions: ['ABC', 'DEF', 'GHI']
             .map((e) => SearchFieldListItem<String>(e))
             .toList(),
-        suggestionState: Suggestion.expand,
+        // suggestionState: Suggestion.expand,
       )));
       expect(find.byType(TextFormField), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
@@ -282,7 +283,7 @@ void main() {
       expect(find.byType(ListView), findsOneWidget);
     });
 
-    testWidgets('ListView should be hidden when searchfield is tapped',
+    testWidgets('Suggestions should be hidden when searchfield is tapped',
         (WidgetTester tester) async {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(

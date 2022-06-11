@@ -24,47 +24,13 @@ class _CountrySearchState extends State<CountrySearch> {
   @override
   void initState() {
     super.initState();
-    getCountries();
+    countries = data.map((e) => Country.fromMap(e)).toList();
   }
 
   final _formKey = GlobalKey<FormState>();
-  final String randomApi = 'https://randomuser.me/api/?results=50';
-  Future<void> getCountries() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      // final res = await http.get(Uri.parse(randomApi));
-      // if (res.statusCode == 200) {
-      //   final decodedResponse = json.decode(res.body);
-      //   print((decodedResponse['results'] as List).length);
-      // }
-      await Future.value([
-        Future.delayed(Duration(seconds: 5), () {
-          countries = data.map((e) => Country.fromMap(e)).toList();
-          _items = countries
-              .map(
-                  (country) => SearchFieldListItem(country.name, item: country))
-              .toList();
-          setState(() {
-            isLoading = false;
-          });
-        })
-      ]);
-      setState(() {});
-    } catch (_) {
-      print(_.toString());
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
-  bool isLoading = false;
 
   final focus = FocusNode();
   List<Country> countries = [];
-  late List<SearchFieldListItem<Country>> _items;
   Country _selectedCountry = Country.init();
 
   bool containsCountry(String text) {
@@ -90,22 +56,34 @@ class _CountrySearchState extends State<CountrySearch> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SearchField<Country>(
-                    focusNode: focus,
-                    suggestions: _items,
-                    suggestionState: Suggestion.hidden,
-                    controller: _searchController,
-                    suggestionAction: SuggestionAction.unfocus,
-                    hint: 'Search by country name',
-                    maxSuggestionsInViewPort: 4,
-                    itemHeight: 45,
-                    inputType: TextInputType.text,
-                    onSuggestionTap: (SearchFieldListItem<Country> x) {
-                      setState(() {
-                        _selectedCountry = x.item!;
-                      });
-                      focus.unfocus();
-                    },
+                  child: Form(
+                    key: _formKey,
+                    child: SearchField(
+                      focusNode: focus,
+                      suggestions: countries
+                          .map((country) =>
+                              SearchFieldListItem(country.name, item: country))
+                          .toList(),
+                      suggestionState: Suggestion.hidden,
+                      controller: _searchController,
+                      hint: 'Search by country name',
+                      maxSuggestionsInViewPort: 4,
+                      itemHeight: 45,
+                      validator: (x) {
+                        if (x!.isEmpty || !containsCountry(x)) {
+                          return 'Please Enter a valid Country';
+                        }
+                        return null;
+                      },
+                      inputType: TextInputType.text,
+                      onSuggestionTap: (SearchFieldListItem<Country> x) {
+                        setState(() {
+                          _selectedCountry = x.item!;
+                        });
+                        _formKey.currentState!.validate();
+                        focus.unfocus();
+                      },
+                    ),
                   ),
                 ),
                 Expanded(

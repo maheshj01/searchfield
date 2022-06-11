@@ -105,6 +105,9 @@ class SearchField<T> extends StatefulWidget {
   final InputDecoration? searchInputDecoration;
 
   /// defaults to SuggestionState.expand
+  /// if set to SuggestionState.hidden, the suggestions list is hidden and shown
+  /// only when the first letter is entered in the Searchfield
+  ///
   final Suggestion suggestionState;
 
   /// Specifies the [SuggestionAction] called on suggestion tap.
@@ -252,7 +255,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
       StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
   FocusNode? _focus;
-  bool isSuggestionExpanded = false;
+  final _SuggestionState _suggestionState = _SuggestionState<T>.init();
   TextEditingController? searchController;
 
   @override
@@ -267,20 +270,31 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.dispose();
   }
 
+  void updateSuggestionState() {
+    if (widget.suggestionState == Suggestion.expand) {
+      _suggestionState.isExpanded = true;
+    } else {
+      _suggestionState.isExpanded = false;
+    }
+  }
+
+  // TODo add customloading widget
   void initialize() {
     if (widget.focusNode != null) {
       _focus = widget.focusNode;
     } else {
       _focus = FocusNode();
     }
+    updateSuggestionState();
+
     _focus!.addListener(() {
       if (mounted) {
         setState(() {
-          isSuggestionExpanded = _focus!.hasFocus;
+          _suggestionState.isExpanded = _focus!.hasFocus;
         });
       }
       if (widget.hasOverlay) {
-        if (isSuggestionExpanded) {
+        if (_suggestionState.isExpanded) {
           if (widget.initialValue == null) {
             if (widget.suggestionState == Suggestion.expand) {
               Future.delayed(Duration(milliseconds: 100), () {
@@ -293,15 +307,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else {
           _overlayEntry.remove();
         }
-      } else if (isSuggestionExpanded) {
+      } else if (_suggestionState.isExpanded) {
         if (widget.initialValue == null) {
           if (widget.suggestionState == Suggestion.expand) {
-            Future.delayed(Duration(milliseconds: 100), () {
-              suggestionStream.sink.add(widget.suggestions);
-            });
+            _hideExpandedSuggestions();
           }
         }
       }
+    });
+  }
+
+  void _hideExpandedSuggestions() {
+    Future.delayed(Duration(milliseconds: 100), () {
+      _suggestionState.isExpanded = false;
+      suggestionStream.sink.add(null);
     });
   }
 
@@ -314,7 +333,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.initialValue == null ||
           widget.initialValue!.searchKey.isEmpty) {
-        suggestionStream.sink.add(null);
+        suggestionStream.sink.add([]);
       } else {
         searchController!.text = widget.initialValue!.searchKey;
         suggestionStream.sink.add([widget.initialValue]);
@@ -340,17 +359,25 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         setState(() {});
       }
     }
+    if (oldWidget.suggestionState != widget.suggestionState) {
+      updateSuggestionState();
+    }
     super.didUpdateWidget(oldWidget);
   }
 
   Widget _suggestionsBuilder() {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
-        if (snapshot.data == null || !isSuggestionExpanded) {
-          return SizedBox();
+        if (snapshot.data == null) {
+          if (!_suggestionState.isExpanded) {
+            return SizedBox();
+          } else {
+            return SizedBox();
+          }
         } else if (snapshot.data!.isEmpty) {
           return widget.emptyWidget;
         } else {
@@ -367,7 +394,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             alignment: Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
                 BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: surfaceColor,
                   boxShadow: [
                     BoxShadow(
                       color: onSurfaceColor.withOpacity(0.1),
@@ -514,12 +541,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             },
             onTap: () {
               /// only call if SuggestionState = [Suggestion.expand]
-              if (!isSuggestionExpanded &&
+              if (!_suggestionState.isExpanded &&
                   widget.suggestionState == Suggestion.expand) {
                 suggestionStream.sink.add(widget.suggestions);
                 if (mounted) {
                   setState(() {
-                    isSuggestionExpanded = true;
+                    _suggestionState.isExpanded = true;
                   });
                 }
               }
@@ -558,4 +585,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       ],
     );
   }
+}
+
+/// TO decide whether to show or hide suggestions using this widget
+class _SuggestionState<T> {
+  List<T> suggestions;
+  bool isExpanded;
+
+  _SuggestionState(this.isExpanded, this.suggestions);
+
+  _SuggestionState.init()
+      : isExpanded = true,
+        suggestions = [];
 }
