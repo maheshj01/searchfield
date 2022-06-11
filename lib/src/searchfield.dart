@@ -288,18 +288,27 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               });
             }
           }
-          _overlayEntry = _createOverlay();
           Overlay.of(context)!.insert(_overlayEntry);
         } else {
           _overlayEntry.remove();
         }
-      } else if (isSuggestionExpanded) {
-        if (widget.initialValue == null) {
-          if (widget.suggestionState == Suggestion.expand) {
-            Future.delayed(Duration(milliseconds: 100), () {
-              suggestionStream.sink.add(widget.suggestions);
-            });
+      } else {
+        if (isSuggestionExpanded) {
+          if (widget.initialValue == null) {
+            if (widget.suggestionState == Suggestion.expand) {
+              Future.delayed(Duration(milliseconds: 100), () {
+                suggestionStream.sink.add(widget.suggestions);
+              });
+            } else {
+              Future.delayed(Duration(milliseconds: 100), () {
+                suggestionStream.sink.add(null);
+              });
+            }
           }
+        } else {
+          Future.delayed(Duration(milliseconds: 100), () {
+            suggestionStream.sink.add(null);
+          });
         }
       }
     });
@@ -312,6 +321,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     searchController = widget.controller ?? TextEditingController();
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _overlayEntry = _createOverlay();
       if (widget.initialValue == null ||
           widget.initialValue!.searchKey.isEmpty) {
         suggestionStream.sink.add(null);
@@ -319,7 +329,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         searchController!.text = widget.initialValue!.searchKey;
         suggestionStream.sink.add([widget.initialValue]);
       }
-      suggestionStream.sink.add(widget.suggestions);
     });
   }
 
@@ -330,6 +339,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
     if (oldWidget.hasOverlay != widget.hasOverlay) {
       if (widget.hasOverlay) {
+        _overlayEntry = _createOverlay();
+        _focus!.removeListener(initialize);
         initialize();
       } else {
         if (_overlayEntry.mounted) {

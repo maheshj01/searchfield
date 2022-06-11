@@ -301,5 +301,24 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ListView), findsNothing);
     });
+
+    testWidgets('suggestion state should work without overlay',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        hasOverlay: false,
+        suggestionState: Suggestion.hidden,
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsNothing);
+    });
   });
 }
