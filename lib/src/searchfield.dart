@@ -218,7 +218,7 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
-  // input formatter for the searchfield
+  /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
   SearchField({
