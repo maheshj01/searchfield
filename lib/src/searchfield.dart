@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 enum Suggestion {
   /// shows suggestions when searchfield is brought into focus
@@ -214,29 +215,37 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
+  /// Defines whether to enable autoCorrect defaults to `true`
+  final bool autoCorrect;
+
+  // input formatter for the searchfield
+  final List<TextInputFormatter>? inputFormatters;
+
   SearchField({
     Key? key,
     required this.suggestions,
-    this.initialValue,
-    this.focusNode,
-    this.hint,
-    this.hasOverlay = true,
-    this.searchStyle,
-    this.marginColor,
+    this.autoCorrect = true,
     this.controller,
-    this.onSubmit,
-    this.inputType,
-    this.validator,
-    this.suggestionState = Suggestion.expand,
-    this.itemHeight = 35.0,
-    this.suggestionsDecoration,
-    this.searchInputDecoration,
-    this.suggestionItemDecoration,
-    this.maxSuggestionsInViewPort = 5,
-    this.onSuggestionTap,
     this.emptyWidget = const SizedBox.shrink(),
-    this.textInputAction,
+    this.focusNode,
+    this.hasOverlay = true,
+    this.hint,
+    this.initialValue,
+    this.inputFormatters,
+    this.inputType,
+    this.itemHeight = 35.0,
+    this.marginColor,
+    this.maxSuggestionsInViewPort = 5,
+    this.onSubmit,
+    this.onSuggestionTap,
+    this.searchInputDecoration,
+    this.searchStyle,
+    this.suggestionsDecoration,
+    this.suggestionState = Suggestion.expand,
+    this.suggestionItemDecoration,
     this.suggestionAction,
+    this.textInputAction,
+    this.validator,
   })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -520,6 +529,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            autocorrect: widget.autoCorrect,
             onFieldSubmitted: (x) {
               if (widget.onSubmit != null) widget.onSubmit!(x);
             },
@@ -535,6 +545,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 }
               }
             },
+            inputFormatters: widget.inputFormatters,
             controller: widget.controller ?? searchController,
             focusNode: _focus,
             validator: widget.validator,
