@@ -124,7 +124,7 @@ Form(
 - `hint` : hint for the search Input.
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `inputType`: Keyboard Type for SearchField
-- `inputFormatter`: Input Formatter for SearchField
+- `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
