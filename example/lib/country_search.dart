@@ -27,9 +27,23 @@ class _CountrySearchState extends State<CountrySearch> {
     countries = data.map((e) => Country.fromMap(e)).toList();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   final focus = FocusNode();
   List<Country> countries = [];
   Country _selectedCountry = Country.init();
+
+  bool containsCountry(String text) {
+    final Country? result = countries.firstWhere(
+        (Country country) => country.name.toLowerCase() == text.toLowerCase(),
+        orElse: () => Country.init());
+
+    if (result!.name.isEmpty) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,24 +56,35 @@ class _CountrySearchState extends State<CountrySearch> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SearchField(
-                    focusNode: focus,
-                    suggestions: countries
-                        .map((country) =>
-                            SearchFieldListItem(country.name, item: country))
-                        .toList(),
-                    suggestionState: Suggestion.expand,
-                    controller: _searchController,
-                    hint: 'Search by country name',
-                    maxSuggestionsInViewPort: 4,
-                    itemHeight: 45,
-                    inputType: TextInputType.text,
-                    onSuggestionTap: (SearchFieldListItem<Country> x) {
-                      setState(() {
-                        _selectedCountry = x.item!;
-                      });
-                      focus.unfocus();
-                    },
+                  child: Form(
+                    key: _formKey,
+                    child: SearchField(
+                      focusNode: focus,
+                      suggestions: countries
+                          .map((country) =>
+                              SearchFieldListItem(country.name, item: country))
+                          .toList(),
+                      suggestionState: Suggestion.hidden,
+                      hasOverlay: true,
+                      controller: _searchController,
+                      hint: 'Search by country name',
+                      maxSuggestionsInViewPort: 4,
+                      itemHeight: 45,
+                      validator: (x) {
+                        if (x!.isEmpty || !containsCountry(x)) {
+                          return 'Please Enter a valid Country';
+                        }
+                        return null;
+                      },
+                      inputType: TextInputType.text,
+                      onSuggestionTap: (SearchFieldListItem<Country> x) {
+                        setState(() {
+                          _selectedCountry = x.item!;
+                        });
+                        _formKey.currentState!.validate();
+                        focus.unfocus();
+                      },
+                    ),
                   ),
                 ),
                 Expanded(
@@ -68,7 +93,15 @@ class _CountrySearchState extends State<CountrySearch> {
                             ? Text('select Country')
                             : CountryDetail(
                                 country: _selectedCountry,
-                              )))
+                              ))),
+                ElevatedButton(
+                    onPressed: () {
+                      _formKey.currentState!.validate();
+                    },
+                    child: Text('validate')),
+                SizedBox(
+                  height: 100,
+                )
               ],
             )));
   }
