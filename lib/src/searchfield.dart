@@ -364,6 +364,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         setState(() {});
       }
     }
+    if (oldWidget.suggestions != widget.suggestions) {
+      suggestionStream.sink.add(widget.suggestions);
+    }
     super.didUpdateWidget(oldWidget);
   }
 
