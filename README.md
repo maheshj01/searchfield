@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.6](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.6.7](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -20,8 +20,7 @@ list of all the properties mentioned below
 - Add the dependency
 
 ```yaml
-dependencies:
-  searchfield: ^0.6.6
+ flutter pub add searchfield
 ```
 
 - Import the package
@@ -102,7 +101,7 @@ Form(
 
 ### Support for Overlays
 
-- With v0.5.0 Searchfield now supports Overlays which shows the suggestions floating on top of the Ui.
+- With v0.5.0 Searchfield now adds support for Overlays which shows the suggestions floating on top of the Ui.
 - The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
 - Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
