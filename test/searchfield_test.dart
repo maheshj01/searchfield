@@ -320,25 +320,5 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ListView), findsNothing);
     });
-
-    // testWidgets('Scrollbar should be visible on suggestions by default',
-    //     (WidgetTester tester) async {
-    //   await tester.pumpWidget(_boilerplate(
-    //       child: SearchField(
-    //     key: const Key('searchfield'),
-    //     suggestions: ['ABC', 'DEF', 'GHI']
-    //         .map((e) => SearchFieldListItem<String>(e))
-    //         .toList(),
-    //     suggestionState: Suggestion.hidden,
-    //   )));
-
-    //   final textField = find.byType(TextFormField);
-    //   expect(textField, findsOneWidget);
-    //   await tester.tap(textField);
-    //   await tester.enterText(textField, '');
-    //   await tester.pumpAndSettle();
-    //   expect(find.byType(ListView), findsOneWidget);
-    //   expect(find.byType(Scrollbar), findsOneWidget);
-    // });
   });
 }

@@ -218,9 +218,6 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
-  // Whether or not to show the scrollbar, defaults to `true`
-  final bool scrollbarAlwaysVisible;
-
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
@@ -241,7 +238,6 @@ class SearchField<T> extends StatefulWidget {
     this.maxSuggestionsInViewPort = 5,
     this.onSubmit,
     this.onSuggestionTap,
-    this.scrollbarAlwaysVisible = true,
     this.searchInputDecoration,
     this.searchStyle,
     this.suggestionsDecoration,
@@ -370,8 +366,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
-  final ScrollController _scrollController = ScrollController();
-
   Widget _suggestionsBuilder() {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
@@ -411,72 +405,67 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     ),
                   ],
                 ),
-            child: Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: widget.scrollbarAlwaysVisible,
-              child: ListView.builder(
-                reverse: isUp,
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                itemCount: snapshot.data!.length,
-                physics: snapshot.data!.length == 1
-                    ? NeverScrollableScrollPhysics()
-                    : ScrollPhysics(),
-                itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    searchController!.text = snapshot.data![index]!.searchKey;
-                    searchController!.selection = TextSelection.fromPosition(
-                      TextPosition(
-                        offset: searchController!.text.length,
-                      ),
-                    );
+            child: ListView.builder(
+              reverse: isUp,
+              padding: EdgeInsets.zero,
+              itemCount: snapshot.data!.length,
+              physics: snapshot.data!.length == 1
+                  ? NeverScrollableScrollPhysics()
+                  : ScrollPhysics(),
+              itemBuilder: (context, index) => InkWell(
+                onTap: () {
+                  searchController!.text = snapshot.data![index]!.searchKey;
+                  searchController!.selection = TextSelection.fromPosition(
+                    TextPosition(
+                      offset: searchController!.text.length,
+                    ),
+                  );
 
-                    // suggestion action to switch focus to next focus node
-                    if (widget.suggestionAction != null) {
-                      if (widget.suggestionAction == SuggestionAction.next) {
-                        _focus!.nextFocus();
-                      } else if (widget.suggestionAction ==
-                          SuggestionAction.unfocus) {
-                        _focus!.unfocus();
-                      }
+                  // suggestion action to switch focus to next focus node
+                  if (widget.suggestionAction != null) {
+                    if (widget.suggestionAction == SuggestionAction.next) {
+                      _focus!.nextFocus();
+                    } else if (widget.suggestionAction ==
+                        SuggestionAction.unfocus) {
+                      _focus!.unfocus();
                     }
+                  }
 
-                    // hide the suggestions
-                    suggestionStream.sink.add(null);
-                    if (widget.onSuggestionTap != null) {
-                      widget.onSuggestionTap!(snapshot.data![index]!);
-                    }
-                  },
-                  child: Container(
-                      height: widget.itemHeight,
-                      padding: EdgeInsets.symmetric(horizontal: 5) +
-                          EdgeInsets.only(left: 8),
-                      width: double.infinity,
-                      alignment: Alignment.centerLeft,
-                      decoration: widget.suggestionItemDecoration?.copyWith(
-                            border: widget.suggestionItemDecoration?.border ??
-                                Border(
+                  // hide the suggestions
+                  suggestionStream.sink.add(null);
+                  if (widget.onSuggestionTap != null) {
+                    widget.onSuggestionTap!(snapshot.data![index]!);
+                  }
+                },
+                child: Container(
+                    height: widget.itemHeight,
+                    padding: EdgeInsets.symmetric(horizontal: 5) +
+                        EdgeInsets.only(left: 8),
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    decoration: widget.suggestionItemDecoration?.copyWith(
+                          border: widget.suggestionItemDecoration?.border ??
+                              Border(
+                                bottom: BorderSide(
+                                  color: widget.marginColor ??
+                                      onSurfaceColor.withOpacity(0.1),
+                                ),
+                              ),
+                        ) ??
+                        BoxDecoration(
+                          border: index == snapshot.data!.length - 1
+                              ? null
+                              : Border(
                                   bottom: BorderSide(
                                     color: widget.marginColor ??
                                         onSurfaceColor.withOpacity(0.1),
                                   ),
                                 ),
-                          ) ??
-                          BoxDecoration(
-                            border: index == snapshot.data!.length - 1
-                                ? null
-                                : Border(
-                                    bottom: BorderSide(
-                                      color: widget.marginColor ??
-                                          onSurfaceColor.withOpacity(0.1),
-                                    ),
-                                  ),
-                          ),
-                      child: snapshot.data![index]!.child ??
-                          Text(
-                            snapshot.data![index]!.searchKey,
-                          )),
-                ),
+                        ),
+                    child: snapshot.data![index]!.child ??
+                        Text(
+                          snapshot.data![index]!.searchKey,
+                        )),
               ),
             ),
           );
