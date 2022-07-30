@@ -474,19 +474,21 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     );
   }
 
-  Offset getYOffset(Offset widgetOffset, int resultCount) {
-    final size = MediaQuery.of(context).size;
-    final position = widgetOffset.dy;
-    if ((position + height) < (size.height - widget.itemHeight * 2)) {
-      return Offset(0, widget.itemHeight + 10.0);
-    } else {
-      if (resultCount > widget.maxSuggestionsInViewPort) {
-        isUp = false;
-        return Offset(
-            0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+  Offset? getYOffset(Offset widgetOffset, int resultCount) {
+    if (mounted) {
+      final size = MediaQuery.of(context).size;
+      final position = widgetOffset.dy;
+      if ((position + height) < (size.height - widget.itemHeight * 2)) {
+        return Offset(0, widget.itemHeight + 10.0);
       } else {
-        isUp = true;
-        return Offset(0, -(widget.itemHeight * resultCount));
+        if (resultCount > widget.maxSuggestionsInViewPort) {
+          isUp = false;
+          return Offset(
+              0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+        } else {
+          isUp = true;
+          return Offset(0, -(widget.itemHeight * resultCount));
+        }
       }
     }
   }
@@ -508,7 +510,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 left: offset.dx,
                 width: size.width,
                 child: CompositedTransformFollower(
-                    offset: getYOffset(offset, count),
+                    offset: getYOffset(offset, count) ?? Offset.zero,
                     link: _layerLink,
                     child: Material(child: _suggestionsBuilder())),
               );
