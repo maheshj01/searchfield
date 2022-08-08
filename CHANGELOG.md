@@ -1,3 +1,7 @@
+#### [0.6.8] - Aug 8, 2022
+
+- Fix widget not mounted error on Deactivate
+
 #### [0.6.7] - Jul 24, 2022
 
 - Fixes [issue #39](https://github.com/maheshmnj/searchfield/issues/39)
