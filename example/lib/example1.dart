@@ -84,8 +84,16 @@ class _Example1State extends State<Example1> {
             child: Form(
               key: _formKey,
               child: SearchField(
-                suggestions:
-                    _statesOfIndia.map((e) => SearchFieldListItem(e)).toList(),
+                suggestions: _statesOfIndia
+                    .map((e) => SearchFieldListItem(e,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            e,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )))
+                    .toList(),
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
