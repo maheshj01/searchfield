@@ -5,9 +5,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
     steps:
     - uses: actions/checkout@v3
     - uses: subosito/flutter-action@v1
