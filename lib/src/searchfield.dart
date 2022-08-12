@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -98,6 +99,9 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
+
+  /// Specifies [TextStyle] for suggestions when no child is provided.
+  final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
   ///
@@ -240,6 +244,7 @@ class SearchField<T> extends StatefulWidget {
     this.onSuggestionTap,
     this.searchInputDecoration,
     this.searchStyle,
+    this.suggestionStyle,
     this.suggestionsDecoration,
     this.suggestionState = Suggestion.expand,
     this.suggestionItemDecoration,
@@ -438,34 +443,36 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   }
                 },
                 child: Container(
-                    height: widget.itemHeight,
-                    padding: EdgeInsets.symmetric(horizontal: 5) +
-                        EdgeInsets.only(left: 8),
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    decoration: widget.suggestionItemDecoration?.copyWith(
-                          border: widget.suggestionItemDecoration?.border ??
-                              Border(
+                  height: widget.itemHeight,
+                  padding: EdgeInsets.symmetric(horizontal: 5) +
+                      EdgeInsets.only(left: 8),
+                  width: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionItemDecoration?.copyWith(
+                        border: widget.suggestionItemDecoration?.border ??
+                            Border(
+                              bottom: BorderSide(
+                                color: widget.marginColor ??
+                                    onSurfaceColor.withOpacity(0.1),
+                              ),
+                            ),
+                      ) ??
+                      BoxDecoration(
+                        border: index == snapshot.data!.length - 1
+                            ? null
+                            : Border(
                                 bottom: BorderSide(
                                   color: widget.marginColor ??
                                       onSurfaceColor.withOpacity(0.1),
                                 ),
                               ),
-                        ) ??
-                        BoxDecoration(
-                          border: index == snapshot.data!.length - 1
-                              ? null
-                              : Border(
-                                  bottom: BorderSide(
-                                    color: widget.marginColor ??
-                                        onSurfaceColor.withOpacity(0.1),
-                                  ),
-                                ),
-                        ),
-                    child: snapshot.data![index]!.child ??
-                        Text(
-                          snapshot.data![index]!.searchKey,
-                        )),
+                      ),
+                  child: snapshot.data![index]!.child ??
+                      Text(
+                        snapshot.data![index]!.searchKey,
+                        style: widget.suggestionStyle,
+                      ),
+                ),
               ),
             ),
           );
@@ -491,6 +498,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
       }
     }
+    return null;
   }
 
   OverlayEntry _createOverlay() {
