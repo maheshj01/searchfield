@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -110,6 +111,9 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies the [SuggestionAction] called on suggestion tap.
   final SuggestionAction? suggestionAction;
+
+  /// Specifies the [BorderRadius] of the suggestionBox.
+  final BorderRadius? suggestionBoxBorderRadius;
 
   /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow], [BoxBorder]
   /// and much more. For more information, checkout [BoxDecoration].
@@ -244,6 +248,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionState = Suggestion.expand,
     this.suggestionItemDecoration,
     this.suggestionAction,
+    this.suggestionBoxBorderRadius,
     this.textInputAction,
     this.validator,
   })  : assert(
@@ -491,6 +496,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
       }
     }
+    return null;
   }
 
   OverlayEntry _createOverlay() {
@@ -498,23 +504,31 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
-        builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
-            stream: suggestionStream.stream,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-              late var count = widget.maxSuggestionsInViewPort;
-              if (snapshot.data != null) {
-                count = snapshot.data!.length;
-              }
-              return Positioned(
-                left: offset.dx,
-                width: size.width,
-                child: CompositedTransformFollower(
-                    offset: getYOffset(offset, count) ?? Offset.zero,
-                    link: _layerLink,
-                    child: Material(child: _suggestionsBuilder())),
-              );
-            }));
+      builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
+        stream: suggestionStream.stream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
+          late var count = widget.maxSuggestionsInViewPort;
+          if (snapshot.data != null) {
+            count = snapshot.data!.length;
+          }
+          return Positioned(
+            left: offset.dx,
+            width: size.width,
+            child: CompositedTransformFollower(
+              offset: getYOffset(offset, count) ?? Offset.zero,
+              link: _layerLink,
+              child: ClipRRect(
+                borderRadius: widget.suggestionBoxBorderRadius,
+                child: Material(
+                  child: _suggestionsBuilder(),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   final LayerLink _layerLink = LayerLink();
@@ -581,7 +595,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           SizedBox(
             height: 2,
           ),
-        if (!widget.hasOverlay) _suggestionsBuilder()
+        if (!widget.hasOverlay)
+          ClipRRect(
+            borderRadius: widget.suggestionBoxBorderRadius,
+            child: _suggestionsBuilder(),
+          )
       ],
     );
   }
