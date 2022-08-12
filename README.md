@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.8](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.6.9](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -136,7 +136,8 @@ each `SearchFieldListItem` in the list requires a unique searchKey, which is use
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
-- `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
+- `SuggestionAction` : enum to control focus of the searchfield on suggestion tap.
+- `suggestionStyle`:Specifies `TextStyle` for suggestions when no child is provided.
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
