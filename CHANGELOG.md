@@ -1,6 +1,8 @@
-#### [0.6.8] - Aug 12, 2022
+
+#### [0.6.9] - Aug 12, 2022
 
 - Add `suggestionStyle` to style default suggestions.
+
 #### [0.6.8] - Aug 8, 2022
 
 - Fix widget not mounted error on Deactivate
