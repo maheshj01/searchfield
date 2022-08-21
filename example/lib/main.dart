@@ -30,7 +30,7 @@ class ExampleList extends StatelessWidget {
         body: Column(
           children: [
             ListTile(
-              title: Text('Demo'),
+              title: Text('Demo App'),
               onTap: () {
                 Navigator.of(context)
                     .push(MaterialPageRoute(builder: (_) => Example1()));
