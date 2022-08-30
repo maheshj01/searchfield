@@ -127,6 +127,7 @@ Form(
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
+- `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.

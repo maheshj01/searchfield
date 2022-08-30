@@ -1,3 +1,7 @@
+#### [0.7.0] - Aug 30, 2022
+
+- Add `offset` property to position the suggestions.
+
 #### [0.6.9] - Aug 12, 2022
 
 - Add `suggestionStyle` to style default suggestions.

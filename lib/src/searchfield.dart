@@ -214,6 +214,10 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to `true`
   final bool hasOverlay;
 
+  /// suggestion List offset from the searchfield
+  /// The top left corner of the searchfield is the origin (0,0)
+  final Offset? offset;
+
   /// Widget to show when the search returns
   /// empty results.
   /// defaults to [SizedBox.shrink]
@@ -241,6 +245,7 @@ class SearchField<T> extends StatefulWidget {
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
     this.onSubmit,
+    this.offset,
     this.onSuggestionTap,
     this.searchInputDecoration,
     this.searchStyle,
@@ -372,7 +377,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   Widget _suggestionsBuilder() {
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
       builder: (BuildContext context,
@@ -383,15 +387,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           return widget.emptyWidget;
         } else {
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
           } else if (snapshot.data!.length == 1) {
-            height = widget.itemHeight;
+            _totalHeight = widget.itemHeight;
           } else {
-            height = snapshot.data!.length * widget.itemHeight;
+            _totalHeight = snapshot.data!.length * widget.itemHeight;
           }
+          final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
           return AnimatedContainer(
             duration: isUp ? Duration.zero : Duration(milliseconds: 300),
-            height: height,
+            height: _totalHeight,
             alignment: Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
                 BoxDecoration(
@@ -444,8 +449,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 },
                 child: Container(
                   height: widget.itemHeight,
-                  padding: EdgeInsets.symmetric(horizontal: 5) +
-                      EdgeInsets.only(left: 8),
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
                   decoration: widget.suggestionItemDecoration?.copyWith(
@@ -481,20 +484,27 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     );
   }
 
-  Offset? getYOffset(Offset widgetOffset, int resultCount) {
+  /// Decides whether to show the suggestions
+  /// on top or bottom of Searchfield
+  /// User can have more control by manually specifying the offset
+  Offset? getYOffset(
+      Offset textFieldOffset, Size textFieldSize, int suggestionsCount) {
     if (mounted) {
       final size = MediaQuery.of(context).size;
-      final position = widgetOffset.dy;
-      if ((position + height) < (size.height - widget.itemHeight * 2)) {
-        return Offset(0, widget.itemHeight + 10.0);
+      final isSpaceAvailable = size.height >
+          textFieldOffset.dy + textFieldSize.height + _totalHeight;
+      if (isSpaceAvailable) {
+        isUp = false;
+        return Offset(0, textFieldSize.height);
       } else {
-        if (resultCount > widget.maxSuggestionsInViewPort) {
+        // search results should align properly with the searchfield
+        if (suggestionsCount > widget.maxSuggestionsInViewPort) {
           isUp = false;
           return Offset(
               0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
         } else {
           isUp = true;
-          return Offset(0, -(widget.itemHeight * resultCount));
+          return Offset(0, -(widget.itemHeight * suggestionsCount));
         }
       }
     }
@@ -502,9 +512,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   OverlayEntry _createOverlay() {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
+    final textFieldRenderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final textFieldsize = textFieldRenderBox.size;
+    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
         builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
             stream: suggestionStream.stream,
@@ -516,9 +527,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               }
               return Positioned(
                 left: offset.dx,
-                width: size.width,
+                width: textFieldsize.width,
                 child: CompositedTransformFollower(
-                    offset: getYOffset(offset, count) ?? Offset.zero,
+                    offset: widget.offset ??
+                        getYOffset(offset, textFieldsize, count) ??
+                        Offset.zero,
                     link: _layerLink,
                     child: Material(child: _suggestionsBuilder())),
               );
@@ -526,15 +539,15 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   final LayerLink _layerLink = LayerLink();
-  late double height;
+  late double _totalHeight;
   bool isUp = false;
-
+  GlobalKey key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
-      height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+      _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
     } else {
-      height = widget.suggestions.length * widget.itemHeight;
+      _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -542,6 +555,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            key: key,
             autocorrect: widget.autoCorrect,
             onFieldSubmitted: (x) {
               if (widget.onSubmit != null) widget.onSubmit!(x);
@@ -571,6 +585,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             onChanged: (query) {
               final searchResult = <SearchFieldListItem<T>>[];
               if (query.isEmpty) {
+                _createOverlay();
                 suggestionStream.sink.add(widget.suggestions);
                 return;
               }
@@ -587,7 +602,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         ),
         if (!widget.hasOverlay)
           SizedBox(
-            height: 2,
+            height: widget.offset != null ? widget.offset!.dy : 0,
           ),
         if (!widget.hasOverlay) _suggestionsBuilder()
       ],

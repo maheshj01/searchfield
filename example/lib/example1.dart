@@ -18,6 +18,7 @@ class _Example1State extends State<Example1> {
     'Czech Republic',
     'Lorem Ipsum',
   ];
+
   final List<String> _statesOfIndia = [
     'Andhra Pradesh',
     'Assam',
@@ -170,6 +171,36 @@ class _Example1State extends State<Example1> {
           SizedBox(
             height: 20,
           ),
+          SizedBox(
+            height: 250,
+            width: 200,
+            child: SearchField<String>(
+              itemHeight: 50.0,
+              // offset: Offset(100, 0),
+              hasOverlay: true,
+              suggestions: [
+                for (int i = 0; i < 10; i++)
+                  {
+                    'item': 'item$i',
+                    'value': 'value$i',
+                  },
+              ]
+                  .map(
+                    (e) => SearchFieldListItem<String>(
+                      e['item'] ?? '',
+                      item: e['item'],
+                      child: Container(
+                        color: Colors.red,
+                        width: 100,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(right: 300),
+                        child: Text(e['value'] ?? ''),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
@@ -207,7 +238,7 @@ class _Example1State extends State<Example1> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Validate Field 2'),
                 )),
-          )
+          ),
         ],
       ),
     );
