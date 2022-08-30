@@ -400,7 +400,6 @@ void main() {
       final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
       expect(textOffset, equals(Offset.zero));
       expect(offset, equals(textOffset + offset));
-      print('offset: $offset textOffset: $textOffset');
     });
     testWidgets('suggestions should be at custom offset',
         (WidgetTester tester) async {
@@ -426,7 +425,6 @@ void main() {
       final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
       expect(textOffset, equals(Offset.zero));
       expect(offset, equals(offset));
-      print('offset: $offset textOffset: $textOffset');
     });
   });
 }
