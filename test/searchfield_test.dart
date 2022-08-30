@@ -375,4 +375,57 @@ void main() {
       expect(find.byType(ListView), findsNothing);
     });
   });
+  group('Suggestions should respect SuggestionState: ', () {
+    testWidgets('suggestions should be below textfield by default',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+      final suggestionsRenderBox =
+          tester.renderObject(find.byType(ListView)) as RenderBox;
+      final textFieldRenderBox =
+          tester.renderObject(find.byType(TextField)) as RenderBox;
+      final offset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+      expect(textOffset, equals(Offset.zero));
+      expect(offset, equals(textOffset + offset));
+      print('offset: $offset textOffset: $textOffset');
+    });
+    testWidgets('suggestions should be at custom offset',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        offset: Offset(100, 100),
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+      final suggestionsRenderBox =
+          tester.renderObject(find.byType(ListView)) as RenderBox;
+      final textFieldRenderBox =
+          tester.renderObject(find.byType(TextField)) as RenderBox;
+      final offset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+      expect(textOffset, equals(Offset.zero));
+      expect(offset, equals(offset));
+      print('offset: $offset textOffset: $textOffset');
+    });
+  });
 }
