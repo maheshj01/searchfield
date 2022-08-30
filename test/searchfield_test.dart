@@ -381,6 +381,7 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
+        itemHeight: 100,
         suggestions: ['ABC', 'DEF', 'GHI']
             .map((e) => SearchFieldListItem<String>(e))
             .toList(),
