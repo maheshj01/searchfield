@@ -1,3 +1,6 @@
+#### [0.7.1] - Oct 6, 2022
+-  Fixes [#43](https://github.com/maheshmnj/searchfield/issues/43)
+
 #### [0.7.0] - Aug 30, 2022
 
 - Add `offset` property to position the suggestions.
