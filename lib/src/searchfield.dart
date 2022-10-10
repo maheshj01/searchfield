@@ -68,6 +68,8 @@ extension ListContainsObject<T> on List {
 class SearchField<T> extends StatefulWidget {
   final FocusNode? focusNode;
 
+  final EdgeInsets searchKeyPadding;
+
   /// List of suggestions for the searchfield.
   /// each suggestion should have a unique searchKey
   ///
@@ -256,6 +258,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionAction,
     this.textInputAction,
     this.validator,
+    this.searchKeyPadding = const EdgeInsets.symmetric(horizontal: 10),
   })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -472,11 +475,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                                 ),
                               ),
                       ),
-                  child: snapshot.data![index]!.child ??
-                      Text(
-                        snapshot.data![index]!.searchKey,
-                        style: widget.suggestionStyle,
-                      ),
+                  child: Padding(
+                    padding: widget.searchKeyPadding,
+                    child: snapshot.data![index]!.child ??
+                        Text(
+                          snapshot.data![index]!.searchKey,
+                          style: widget.suggestionStyle,
+                        ),
+                  ),
                 ),
               ),
             ),
