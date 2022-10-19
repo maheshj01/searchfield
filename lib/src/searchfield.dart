@@ -231,6 +231,8 @@ class SearchField<T> extends StatefulWidget {
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
+  final EdgeInsets? scrollPadding;
+
   SearchField({
     Key? key,
     required this.suggestions,
@@ -259,6 +261,7 @@ class SearchField<T> extends StatefulWidget {
     this.textInputAction,
     this.validator,
     this.searchKeyPadding = const EdgeInsets.symmetric(horizontal: 10),
+    this.scrollPadding,
   })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -582,6 +585,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             },
             inputFormatters: widget.inputFormatters,
             controller: widget.controller ?? searchController,
+            scrollPadding: widget.scrollPadding ?? const EdgeInsets.all(20.0),
             focusNode: _focus,
             validator: widget.validator,
             style: widget.searchStyle,
