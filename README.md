@@ -136,6 +136,7 @@ each `SearchFieldListItem` in the list requires a unique searchKey, which is use
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
+- `suggestionDirection` : direction of the suggestions list, defaults to `SuggestionDirection.down`.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
 - `SuggestionAction` : enum to control focus of the searchfield on suggestion tap.
 - `suggestionStyle`:Specifies `TextStyle` for suggestions when no child is provided.
