@@ -1,4 +1,4 @@
-#### [0.7.2] - Oct 6, 2022
+#### [0.7.2] - Oct 25, 2022
 
 - Add `suggestionDirection` property to position the suggestions.
 
