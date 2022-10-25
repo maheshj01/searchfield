@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
-class Example1 extends StatefulWidget {
+class DemoApp extends StatefulWidget {
   @override
-  _Example1State createState() => _Example1State();
+  _DemoAppState createState() => _DemoAppState();
 }
 
-class _Example1State extends State<Example1> {
+class _DemoAppState extends State<DemoApp> {
   final List<String> _suggestions = [
     'United States',
     'Germany',
@@ -201,30 +201,40 @@ class _Example1State extends State<Example1> {
                   .toList(),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchField(
-              suggestionItemDecoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.2),
-                gradient: LinearGradient(colors: [
-                  Color(0xff70e1f5),
-                  Color(0xffffd194),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              ),
-              suggestions:
-                  _suggestions.map((e) => SearchFieldListItem(e)).toList(),
-              suggestionState: Suggestion.hidden,
-              searchInputDecoration: InputDecoration(
-                floatingLabelBehavior: FloatingLabelBehavior.auto,
-                labelText: 'SearchField',
-                border: OutlineInputBorder(),
-              ),
-              // hasOverlay: false,
-              hint: 'SearchField example 4',
-              maxSuggestionsInViewPort: 4,
-              itemHeight: 45,
-              onSuggestionTap: (x) {},
-            ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: SearchField(
+          //     suggestionItemDecoration: BoxDecoration(
+          //       color: Colors.grey.withOpacity(0.2),
+          //       gradient: LinearGradient(colors: [
+          //         Color(0xff70e1f5),
+          //         Color(0xffffd194),
+          //       ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          //     ),
+          //     suggestions:
+          //         _suggestions.map((e) => SearchFieldListItem(e)).toList(),
+          //     suggestionState: Suggestion.hidden,
+          //     searchInputDecoration: InputDecoration(
+          //       floatingLabelBehavior: FloatingLabelBehavior.auto,
+          //       labelText: 'SearchField',
+          //       border: OutlineInputBorder(),
+          //     ),
+          //     // hasOverlay: false,
+          //     hint: 'SearchField example 4',
+          //     maxSuggestionsInViewPort: 6,
+          //     suggestionDirection: SuggestionDirection.up,
+          //     // offset: Offset(0, 50),
+          //     itemHeight: 45,
+          //     onSuggestionTap: (x) {},
+          //   ),
+          // ),
+          SearchField(
+            key: const Key('searchfield'),
+            itemHeight: 100,
+            suggestionDirection: SuggestionDirection.up,
+            suggestions: ['ABC', 'DEF', 'GHI']
+                .map((e) => SearchFieldListItem<String>(e))
+                .toList(),
           ),
           Container(
             margin: EdgeInsets.symmetric(
