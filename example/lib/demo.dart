@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
-class Example1 extends StatefulWidget {
+class DemoApp extends StatefulWidget {
   @override
-  _Example1State createState() => _Example1State();
+  _DemoAppState createState() => _DemoAppState();
 }
 
-class _Example1State extends State<Example1> {
+class _DemoAppState extends State<DemoApp> {
   final List<String> _suggestions = [
     'United States',
     'Germany',
@@ -221,7 +221,8 @@ class _Example1State extends State<Example1> {
               ),
               // hasOverlay: false,
               hint: 'SearchField example 4',
-              maxSuggestionsInViewPort: 4,
+              maxSuggestionsInViewPort: 6,
+              suggestionDirection: SuggestionDirection.up,
               itemHeight: 45,
               onSuggestionTap: (x) {},
             ),

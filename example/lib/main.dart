@@ -1,5 +1,5 @@
 import 'package:example/dynamic_suggestions.dart.dart';
-import 'package:example/example1.dart';
+import 'package:example/demo.dart';
 import 'package:example/country_search.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +33,7 @@ class ExampleList extends StatelessWidget {
               title: Text('Demo App'),
               onTap: () {
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => Example1()));
+                    .push(MaterialPageRoute(builder: (_) => DemoApp()));
               },
             ),
             ListTile(
