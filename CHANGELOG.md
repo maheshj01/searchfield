@@ -1,3 +1,7 @@
+#### [0.7.2] - Oct 6, 2022
+
+- Add `suggestionDirection` property to position the suggestions.
+
 #### [0.7.1] - Oct 6, 2022
 -  Fixes [#43](https://github.com/maheshmnj/searchfield/issues/43)
 
