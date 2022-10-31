@@ -130,6 +130,7 @@ Form(
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
+- `scrollbarAlwaysVisible`: Defines whether to show the scrollbar always or only when scrolling.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.

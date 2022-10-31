@@ -432,7 +432,27 @@ void main() {
           ));
     });
   });
+  group('Scrollbar should be visible on suggestions', () {
+    testWidgets('Scrollbar should be visible by default',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        suggestionState: Suggestion.expand,
+      )));
 
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+      expect(find.byType(RawScrollbar), findsOneWidget);
+    });
+  });
   group('Suggestions should respect suggestionDirection', () {
     testWidgets(
         'suggestions should respect suggestionDirection: SuggestionDirection.up',

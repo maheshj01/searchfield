@@ -177,6 +177,7 @@ class _DemoAppState extends State<DemoApp> {
             child: SearchField<String>(
               itemHeight: 50.0,
               // offset: Offset(100, 0),
+              scrollbarAlwaysVisible: true,
               hasOverlay: true,
               suggestions: [
                 for (int i = 0; i < 10; i++)
@@ -204,6 +205,7 @@ class _DemoAppState extends State<DemoApp> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
+              scrollbarAlwaysVisible: false,
               suggestionItemDecoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.2),
                 gradient: LinearGradient(colors: [
