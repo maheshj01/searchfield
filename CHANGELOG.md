@@ -1,5 +1,6 @@
-#### [0.7.2] - Oct 25, 2022
+#### [0.7.3] - Oct 25, 2022
 - Adds Scrollbar for suggestions
+
 #### [0.7.2] - Oct 25, 2022
 
 - Add `suggestionDirection` property to position the suggestions.
