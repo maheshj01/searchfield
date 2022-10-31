@@ -1,4 +1,5 @@
-import 'package:example/example1.dart';
+import 'package:example/dynamic_suggestions.dart.dart';
+import 'package:example/demo.dart';
 import 'package:example/country_search.dart';
 import 'package:flutter/material.dart';
 
@@ -29,19 +30,26 @@ class ExampleList extends StatelessWidget {
         body: Column(
           children: [
             ListTile(
-              title: Text('Example 1'),
+              title: Text('Demo App'),
               onTap: () {
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => Example1()));
+                    .push(MaterialPageRoute(builder: (_) => DemoApp()));
               },
             ),
             ListTile(
-              title: Text('Example 2'),
+              title: Text('Country Search'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => CountrySearch(
                           title: 'Country List',
                         )));
+              },
+            ),
+            ListTile(
+              title: Text('Dynamic sample'),
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => DynamicSample()));
               },
             ),
           ],

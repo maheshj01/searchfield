@@ -1,4 +1,4 @@
-# [searchfield: ^0.6.6](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.7.2](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -20,8 +20,7 @@ list of all the properties mentioned below
 - Add the dependency
 
 ```yaml
-dependencies:
-  searchfield: ^0.6.6
+ flutter pub add searchfield
 ```
 
 - Import the package
@@ -102,7 +101,7 @@ Form(
 
 ### Support for Overlays
 
-- With v0.5.0 Searchfield now supports Overlays which shows the suggestions floating on top of the Ui.
+- With v0.5.0 Searchfield now adds support for Overlays which shows the suggestions floating on top of the Ui.
 - The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
 - Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
 - However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
@@ -128,6 +127,7 @@ Form(
 - `itemHeight` : height of each suggestion Item, (defaults to 35.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
+- `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
@@ -136,8 +136,10 @@ each `SearchFieldListItem` in the list requires a unique searchKey, which is use
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
+- `suggestionDirection` : direction of the suggestions list, defaults to `SuggestionDirection.down`.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
-- `SuggestionAction` : enum to control focus of the searchfield on suggestion tap
+- `SuggestionAction` : enum to control focus of the searchfield on suggestion tap.
+- `suggestionStyle`:Specifies `TextStyle` for suggestions when no child is provided.
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)

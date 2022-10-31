@@ -279,6 +279,60 @@ void main() {
     expect(focus.hasFocus, false);
   });
 
+  testWidgets('suggestions can be updated in the runtime',
+      (WidgetTester tester) async {
+    var counter = 3;
+    final suggestions = [
+      'suggestion 1',
+      'suggestion 2',
+    ];
+    await tester.pumpWidget(_boilerplate(child: StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SearchField(
+              maxSuggestionsInViewPort: counter,
+              key: const Key('searchfield'),
+              suggestions: suggestions
+                  .map((e) => SearchFieldListItem<String>(e))
+                  .toList(),
+              // hasOverlay: false,
+              suggestionState: Suggestion.expand,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      counter++;
+                      suggestions.add('suggestion $counter');
+                    },
+                  );
+                },
+                child: Text('tap me'))
+          ],
+        );
+      },
+    )));
+    final button = find.byType(ElevatedButton);
+    final listView = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(button, findsOneWidget);
+    expect(listView, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listView, findsWidgets);
+    expect(find.text('suggestion $counter'), findsNothing);
+    expect(find.text('suggestion ${counter - 1}'), findsOneWidget);
+    expect(suggestions.length, equals(2));
+    await tester.tap(button);
+    await tester.pumpAndSettle(Duration(seconds: 2));
+    expect(suggestions.length, equals(3));
+    expect(find.text('suggestion $counter'), findsOneWidget);
+  });
+
   group('Searchfield should respect SuggestionState: ', () {
     testWidgets('ListView should be visible when searchfield is tapped',
         (WidgetTester tester) async {
@@ -339,5 +393,133 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.byType(ListView), findsNothing);
     });
+  });
+  group('Suggestions should respect Offset', () {
+    testWidgets('suggestions should be below textfield by default',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        itemHeight: 100,
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+      final suggestionsRenderBox =
+          tester.renderObject(find.byType(ListView)) as RenderBox;
+      final textFieldRenderBox =
+          tester.renderObject(find.byType(TextField)) as RenderBox;
+      final offset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+      expect(textOffset, equals(Offset.zero));
+      expect(offset, equals(textOffset + offset));
+    });
+    testWidgets('suggestions should be at custom offset',
+        (WidgetTester tester) async {
+      final _customOffset = Offset(100, 100);
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        offset: _customOffset,
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+      )));
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(find.byType(ListView), findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(find.byType(ListView), findsOneWidget);
+      final suggestionsRenderBox =
+          tester.renderObject(find.byType(ListView)) as RenderBox;
+      final textFieldRenderBox =
+          tester.renderObject(find.byType(TextField)) as RenderBox;
+      final offset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+      expect(textOffset, equals(Offset.zero));
+      expect(
+          offset,
+          equals(
+            _customOffset,
+          ));
+    });
+  });
+
+  group('Suggestions should respect suggestionDirection', () {
+    testWidgets(
+        'suggestions should respect suggestionDirection: SuggestionDirection.up',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        itemHeight: 100,
+        suggestionDirection: SuggestionDirection.up,
+        suggestions: ['ABC', 'DEF', 'GHI']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+      )));
+      final listFinder = find.byType(ListView);
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final suggestionsRenderBox = tester.renderObject(listFinder) as RenderBox;
+      final textFieldRenderBox =
+          tester.renderObject(find.byType(TextField)) as RenderBox;
+      final suggestionOffset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+      expect(textOffset, equals(Offset.zero));
+      expect(suggestionOffset, equals(Offset(0.0, -300.0)));
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), 'ABC');
+      await tester.pumpAndSettle();
+      expect(listFinder.evaluate().length, 1);
+      final suggestionOffsetNew =
+          suggestionsRenderBox.localToGlobal(Offset.zero);
+      expect(suggestionOffsetNew, equals(Offset(0.0, -100.0)));
+    });
+  });
+
+  testWidgets(
+      'suggestions should respect suggestionDirection: SuggestionDirection.down (default)',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      itemHeight: 100,
+      suggestions: ['ABC', 'DEF', 'GHI']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+    )));
+    final listFinder = find.byType(ListView);
+    expect(find.byType(TextFormField), findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(find.byType(TextFormField));
+    await tester.enterText(find.byType(TextFormField), '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    final suggestionsRenderBox = tester.renderObject(listFinder) as RenderBox;
+    final textFieldRenderBox =
+        tester.renderObject(find.byType(TextField)) as RenderBox;
+    final suggestionOffset = suggestionsRenderBox.localToGlobal(Offset.zero);
+    final textOffset = textFieldRenderBox.localToGlobal(Offset.zero);
+    final textFieldSize = textFieldRenderBox.size;
+    expect(textOffset, equals(Offset.zero));
+    expect(suggestionOffset, equals(Offset(0.0, textFieldSize.height)));
+    await tester.tap(find.byType(TextFormField));
+    await tester.enterText(find.byType(TextFormField), 'ABC');
+    await tester.pumpAndSettle();
+    expect(listFinder.evaluate().length, 1);
+    final suggestionOffsetNew = suggestionsRenderBox.localToGlobal(Offset.zero);
+    expect(suggestionOffsetNew, equals(Offset(0.0, textFieldSize.height)));
   });
 }

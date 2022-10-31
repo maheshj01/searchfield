@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
-class Example1 extends StatefulWidget {
+class DemoApp extends StatefulWidget {
   @override
-  _Example1State createState() => _Example1State();
+  _DemoAppState createState() => _DemoAppState();
 }
 
-class _Example1State extends State<Example1> {
+class _DemoAppState extends State<DemoApp> {
   final List<String> _suggestions = [
     'United States',
     'Germany',
@@ -18,6 +18,7 @@ class _Example1State extends State<Example1> {
     'Czech Republic',
     'Lorem Ipsum',
   ];
+
   final List<String> _statesOfIndia = [
     'Andhra Pradesh',
     'Assam',
@@ -84,8 +85,16 @@ class _Example1State extends State<Example1> {
             child: Form(
               key: _formKey,
               child: SearchField(
-                suggestions:
-                    _statesOfIndia.map((e) => SearchFieldListItem(e)).toList(),
+                suggestions: _statesOfIndia
+                    .map((e) => SearchFieldListItem(e,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            e,
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        )))
+                    .toList(),
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
@@ -162,6 +171,36 @@ class _Example1State extends State<Example1> {
           SizedBox(
             height: 20,
           ),
+          SizedBox(
+            height: 250,
+            width: 200,
+            child: SearchField<String>(
+              itemHeight: 50.0,
+              // offset: Offset(100, 0),
+              hasOverlay: true,
+              suggestions: [
+                for (int i = 0; i < 10; i++)
+                  {
+                    'item': 'item$i',
+                    'value': 'value$i',
+                  },
+              ]
+                  .map(
+                    (e) => SearchFieldListItem<String>(
+                      e['item'] ?? '',
+                      item: e['item'],
+                      child: Container(
+                        color: Colors.red,
+                        width: 100,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(right: 300),
+                        child: Text(e['value'] ?? ''),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
@@ -182,7 +221,8 @@ class _Example1State extends State<Example1> {
               ),
               // hasOverlay: false,
               hint: 'SearchField example 4',
-              maxSuggestionsInViewPort: 4,
+              maxSuggestionsInViewPort: 6,
+              suggestionDirection: SuggestionDirection.up,
               itemHeight: 45,
               onSuggestionTap: (x) {},
             ),
@@ -199,7 +239,7 @@ class _Example1State extends State<Example1> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Validate Field 2'),
                 )),
-          )
+          ),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +19,14 @@ enum SuggestionAction {
 
   /// close keyboard and unfocus
   unfocus,
+}
+
+enum SuggestionDirection {
+  /// show suggestions below the searchfield
+  down,
+
+  /// show suggestions above the searchfield
+  up,
 }
 
 class SearchFieldListItem<T> {
@@ -98,6 +107,9 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
+
+  /// Specifies [TextStyle] for suggestions when no child is provided.
+  final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
   ///
@@ -210,6 +222,10 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to `true`
   final bool hasOverlay;
 
+  /// suggestion List offset from the searchfield
+  /// The top left corner of the searchfield is the origin (0,0)
+  final Offset? offset;
+
   /// Widget to show when the search returns
   /// empty results.
   /// defaults to [SizedBox.shrink]
@@ -224,30 +240,40 @@ class SearchField<T> extends StatefulWidget {
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
-  SearchField(
-      {Key? key,
-      required this.suggestions,
-      this.initialValue,
-      this.focusNode,
-      this.hint,
-      this.hasOverlay = true,
-      this.searchStyle,
-      this.marginColor,
-      this.controller,
-      this.onSubmit,
-      this.inputType,
-      this.validator,
-      this.suggestionState = Suggestion.expand,
-      this.itemHeight = 35.0,
-      this.suggestionsDecoration,
-      this.searchInputDecoration,
-      this.suggestionItemDecoration,
-      this.maxSuggestionsInViewPort = 5,
-      this.onSuggestionTap,
-      this.emptyWidget = const SizedBox.shrink(),
-      this.textInputAction,
-      this.suggestionAction,
-      this.searchBoxHeight,
+  /// suggestion direction defaults to [SuggestionDirection.up]
+  /// if [hasOverlay] is `false` then the direction is ignored
+  /// and the suggestions are shown below the searchfield
+  /// when suggestionDirection and offset is specified then
+  /// suggestionDirection is ignored.
+  final SuggestionDirection suggestionDirection;
+
+  SearchField({
+    Key? key,
+    required this.suggestions,
+    this.autoCorrect = true,
+    this.controller,
+    this.emptyWidget = const SizedBox.shrink(),
+    this.focusNode,
+    this.hasOverlay = true,
+    this.hint,
+    this.initialValue,
+    this.inputFormatters,
+    this.inputType,
+    this.itemHeight = 35.0,
+    this.marginColor,
+    this.maxSuggestionsInViewPort = 5,
+    this.onSubmit,
+    this.offset,
+    this.onSuggestionTap,
+    this.searchInputDecoration,
+    this.searchStyle,
+    this.suggestionStyle,
+    this.suggestionsDecoration,
+    this.suggestionDirection = SuggestionDirection.down,
+    this.suggestionState = Suggestion.expand,
+    this.suggestionItemDecoration,
+    this.suggestionAction,
+    this.searchBoxHeight,
     this.textInputAction,
     this.validator,
   })  : assert(
@@ -334,13 +360,15 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     searchController = widget.controller ?? TextEditingController();
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _overlayEntry = _createOverlay();
-      if (widget.initialValue == null ||
-          widget.initialValue!.searchKey.isEmpty) {
-        suggestionStream.sink.add(null);
-      } else {
-        searchController!.text = widget.initialValue!.searchKey;
-        suggestionStream.sink.add([widget.initialValue]);
+      if (mounted) {
+        _overlayEntry = _createOverlay();
+        if (widget.initialValue == null ||
+            widget.initialValue!.searchKey.isEmpty) {
+          suggestionStream.sink.add(null);
+        } else {
+          searchController!.text = widget.initialValue!.searchKey;
+          suggestionStream.sink.add([widget.initialValue]);
+        }
       }
     });
   }
@@ -364,11 +392,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         setState(() {});
       }
     }
+    if (oldWidget.suggestions != widget.suggestions) {
+      suggestionStream.sink.add(widget.suggestions);
+    }
     super.didUpdateWidget(oldWidget);
   }
 
   Widget _suggestionsBuilder() {
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
       builder: (BuildContext context,
@@ -379,15 +409,18 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           return widget.emptyWidget;
         } else {
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
           } else if (snapshot.data!.length == 1) {
-            height = widget.itemHeight;
+            _totalHeight = widget.itemHeight;
           } else {
-            height = snapshot.data!.length * widget.itemHeight;
+            _totalHeight = snapshot.data!.length * widget.itemHeight;
           }
+          final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
           return AnimatedContainer(
-            duration: isUp ? Duration.zero : Duration(milliseconds: 300),
-            height: height,
+            duration: widget.suggestionDirection == SuggestionDirection.up
+                ? Duration.zero
+                : Duration(milliseconds: 300),
+            height: _totalHeight,
             alignment: Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
                 BoxDecoration(
@@ -407,7 +440,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   ],
                 ),
             child: ListView.builder(
-              reverse: isUp,
+              reverse: widget.suggestionDirection == SuggestionDirection.up,
               padding: EdgeInsets.zero,
               itemCount: snapshot.data!.length,
               physics: snapshot.data!.length == 1
@@ -439,34 +472,34 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   }
                 },
                 child: Container(
-                    height: widget.itemHeight,
-                    padding: EdgeInsets.symmetric(horizontal: 5) +
-                        EdgeInsets.only(left: 8),
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    decoration: widget.suggestionItemDecoration?.copyWith(
-                          border: widget.suggestionItemDecoration?.border ??
-                              Border(
+                  height: widget.itemHeight,
+                  width: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionItemDecoration?.copyWith(
+                        border: widget.suggestionItemDecoration?.border ??
+                            Border(
+                              bottom: BorderSide(
+                                color: widget.marginColor ??
+                                    onSurfaceColor.withOpacity(0.1),
+                              ),
+                            ),
+                      ) ??
+                      BoxDecoration(
+                        border: index == snapshot.data!.length - 1
+                            ? null
+                            : Border(
                                 bottom: BorderSide(
                                   color: widget.marginColor ??
                                       onSurfaceColor.withOpacity(0.1),
                                 ),
                               ),
-                        ) ??
-                        BoxDecoration(
-                          border: index == snapshot.data!.length - 1
-                              ? null
-                              : Border(
-                                  bottom: BorderSide(
-                                    color: widget.marginColor ??
-                                        onSurfaceColor.withOpacity(0.1),
-                                  ),
-                                ),
-                        ),
-                    child: snapshot.data![index]!.child ??
-                        Text(
-                          snapshot.data![index]!.searchKey,
-                        )),
+                      ),
+                  child: snapshot.data![index]!.child ??
+                      Text(
+                        snapshot.data![index]!.searchKey,
+                        style: widget.suggestionStyle,
+                      ),
+                ),
               ),
             ),
           );
@@ -475,27 +508,55 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     );
   }
 
-  Offset getYOffset(Offset widgetOffset, int resultCount) {
-    final size = MediaQuery.of(context).size;
-    final position = widgetOffset.dy;
-    if ((position + height) < (size.height - widget.itemHeight * 2)) {
-      return Offset(0, widget.itemHeight + 10.0);
-    } else {
-      if (resultCount > widget.maxSuggestionsInViewPort) {
-        isUp = false;
-        return Offset(
-            0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+  /// Decides whether to show the suggestions
+  /// on top or bottom of Searchfield
+  /// User can have more control by manually specifying the offset
+  Offset? getYOffset(
+      Offset textFieldOffset, Size textFieldSize, int suggestionsCount) {
+    if (mounted) {
+      final size = MediaQuery.of(context).size;
+      final isSpaceAvailable = size.height >
+          textFieldOffset.dy + textFieldSize.height + _totalHeight;
+      if (widget.suggestionDirection == SuggestionDirection.down) {
+        return Offset(0, textFieldSize.height);
+      } else if (widget.suggestionDirection == SuggestionDirection.up) {
+        // search results should not exceed maxSuggestionsInViewPort
+        if (suggestionsCount > widget.maxSuggestionsInViewPort) {
+          return Offset(
+              0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+        } else {
+          return Offset(0, -(widget.itemHeight * suggestionsCount));
+        }
       } else {
-        isUp = true;
-        return Offset(0, -(widget.itemHeight * resultCount));
+        if (!_isDirectionCalculated) {
+          _isDirectionCalculated = true;
+          if (isSpaceAvailable) {
+            _offset = Offset(0, textFieldSize.height);
+            return _offset;
+          } else {
+            if (suggestionsCount > widget.maxSuggestionsInViewPort) {
+              _offset = Offset(
+                  0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
+              return _offset;
+            } else {
+              _offset = Offset(0, -(widget.itemHeight * suggestionsCount));
+              return _offset;
+            }
+          }
+        } else {
+          return _offset;
+        }
       }
     }
+    return null;
   }
 
   OverlayEntry _createOverlay() {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
+    final textFieldRenderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final textFieldsize = textFieldRenderBox.size;
+    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+    Offset yOffset = Offset.zero;
     return OverlayEntry(
         builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
             stream: suggestionStream.stream,
@@ -505,11 +566,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               if (snapshot.data != null) {
                 count = snapshot.data!.length;
               }
+              yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
               return Positioned(
                 left: offset.dx,
-                width: size.width,
+                width: textFieldsize.width,
                 child: CompositedTransformFollower(
-                    offset: getYOffset(offset, count),
+                    offset: widget.offset ?? yOffset,
                     link: _layerLink,
                     child: Material(child: _suggestionsBuilder())),
               );
@@ -517,15 +579,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   final LayerLink _layerLink = LayerLink();
-  late double height;
-  bool isUp = false;
-
+  late double _totalHeight;
+  GlobalKey key = GlobalKey();
+  bool _isDirectionCalculated = false;
+  Offset _offset = Offset.zero;
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
-      height = widget.itemHeight * widget.maxSuggestionsInViewPort;
+      _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
     } else {
-      height = widget.suggestions.length * widget.itemHeight;
+      _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -536,6 +599,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         CompositedTransformTarget(
           link: _layerLink,
           child: TextFormField(
+            key: key,
             autocorrect: widget.autoCorrect,
             onFieldSubmitted: (x) {
 
@@ -566,6 +630,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             onChanged: (query) {
               final searchResult = <SearchFieldListItem<T>>[];
               if (query.isEmpty) {
+                _createOverlay();
                 suggestionStream.sink.add(widget.suggestions);
                 return;
               }
@@ -589,7 +654,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         ),
         if (!widget.hasOverlay)
           SizedBox(
-            height: 2,
+            height: widget.offset != null ? widget.offset!.dy : 0,
           ),
         if (!widget.hasOverlay) _suggestionsBuilder()
       ],
