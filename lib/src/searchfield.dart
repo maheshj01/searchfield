@@ -117,6 +117,10 @@ class SearchField<T> extends StatefulWidget {
   /// with [hint].
   final InputDecoration? searchInputDecoration;
 
+  ///
+
+  final TextAlign searchAlign;
+
   /// defaults to SuggestionState.expand
   final Suggestion suggestionState;
 
@@ -264,6 +268,7 @@ class SearchField<T> extends StatefulWidget {
     this.onSuggestionTap,
     this.searchInputDecoration,
     this.searchStyle,
+    this.searchAlign = TextAlign.start,
     this.suggestionStyle,
     this.suggestionsDecoration,
     this.suggestionDirection = SuggestionDirection.down,
@@ -273,10 +278,10 @@ class SearchField<T> extends StatefulWidget {
     this.textInputAction,
     this.validator,
   })  : assert(
-            (initialValue != null &&
-                    suggestions.containsObject(initialValue)) ||
-                initialValue == null,
-            'Initial value should either be null or should be present in suggestions list.'),
+  (initialValue != null &&
+      suggestions.containsObject(initialValue)) ||
+      initialValue == null,
+  'Initial value should either be null or should be present in suggestions list.'),
         super(key: key);
 
   @override
@@ -285,7 +290,7 @@ class SearchField<T> extends StatefulWidget {
 
 class _SearchFieldState<T> extends State<SearchField<T>> {
   final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
-      StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
+  StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
   FocusNode? _focus;
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
@@ -428,9 +433,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                       spreadRadius: 2.0,
                       offset: widget.hasOverlay
                           ? Offset(
-                              2.0,
-                              5.0,
-                            )
+                        2.0,
+                        5.0,
+                      )
                           : Offset(1.0, 0.5),
                     ),
                   ],
@@ -472,23 +477,23 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
                   decoration: widget.suggestionItemDecoration?.copyWith(
-                        border: widget.suggestionItemDecoration?.border ??
-                            Border(
-                              bottom: BorderSide(
-                                color: widget.marginColor ??
-                                    onSurfaceColor.withOpacity(0.1),
-                              ),
-                            ),
-                      ) ??
+                    border: widget.suggestionItemDecoration?.border ??
+                        Border(
+                          bottom: BorderSide(
+                            color: widget.marginColor ??
+                                onSurfaceColor.withOpacity(0.1),
+                          ),
+                        ),
+                  ) ??
                       BoxDecoration(
                         border: index == snapshot.data!.length - 1
                             ? null
                             : Border(
-                                bottom: BorderSide(
-                                  color: widget.marginColor ??
-                                      onSurfaceColor.withOpacity(0.1),
-                                ),
-                              ),
+                          bottom: BorderSide(
+                            color: widget.marginColor ??
+                                onSurfaceColor.withOpacity(0.1),
+                          ),
+                        ),
                       ),
                   child: snapshot.data![index]!.child ??
                       Text(
@@ -549,7 +554,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   OverlayEntry _createOverlay() {
     final textFieldRenderBox =
-        key.currentContext!.findRenderObject() as RenderBox;
+    key.currentContext!.findRenderObject() as RenderBox;
     final textFieldsize = textFieldRenderBox.size;
     final offset = textFieldRenderBox.localToGlobal(Offset.zero);
     Offset yOffset = Offset.zero;
@@ -615,10 +620,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             validator: widget.validator,
             style: widget.searchStyle,
             textInputAction: widget.textInputAction,
+            textAlign: widget.searchAlign,
             keyboardType: widget.inputType,
             decoration:
-                widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
-                    InputDecoration(hintText: widget.hint),
+            widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
+                InputDecoration(hintText: widget.hint),
             onChanged: (query) {
               final searchResult = <SearchFieldListItem<T>>[];
               if (query.isEmpty) {
