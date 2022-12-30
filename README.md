@@ -40,6 +40,22 @@ SearchField<Country>(
      (e) => SearchFieldListItem<Country>(
         e.name,
         item: e,
+        // Use child to show Custom Widgets in the suggestions
+        // defaults to Text widget
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundImage: NetworkImage(e.flag),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(e.name),
+            ],
+          ),
+        ),
     ),
   )
   .toList(),
