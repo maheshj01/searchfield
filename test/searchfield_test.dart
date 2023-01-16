@@ -503,4 +503,44 @@ void main() {
     final suggestionOffsetNew = suggestionsRenderBox.localToGlobal(Offset.zero);
     expect(suggestionOffsetNew, equals(Offset(0.0, textFieldSize.height)));
   });
+
+  testWidgets(
+      'enabled parameter should allow user to use the widget',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      enabled: true,
+      suggestions: ['ABC', 'DEF', 'GHI']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+    )));
+    final listFinder = find.byType(ListView);
+    expect(find.byType(TextFormField), findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(find.byType(TextFormField));
+    await tester.enterText(find.byType(TextFormField), '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+  });
+
+  testWidgets(
+      'enabled parameter set to false should not allow user to use the widget',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      enabled: false,
+      suggestions: ['ABC', 'DEF', 'GHI']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+    )));
+    final listFinder = find.byType(ListView);
+    expect(find.byType(TextFormField), findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(find.byType(TextFormField));
+    await tester.enterText(find.byType(TextFormField), '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsNothing);
+  });
 }
