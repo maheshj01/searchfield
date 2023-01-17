@@ -30,6 +30,6 @@ jobs:
             If you still encounter the issue or have more information, please feel free to share it here and I will be happy to reopen the issue.
             Thanks for your contribution.
           # Number of days of inactivity before an issue is closed for lack of response.
-          daysUntilClose: 21
+          daysUntilClose: 60
           # Label requiring a response.
           responseRequiredLabel: "waiting for author"
