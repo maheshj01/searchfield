@@ -92,6 +92,9 @@ class SearchField<T> extends StatefulWidget {
 
   /// Callback when the suggestion is selected.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
+  
+  /// Enable or disable the input
+  final bool? enabled;
 
   /// Callback when the Searchfield is submitted
   ///  it returns the text from the searchfield
@@ -263,6 +266,7 @@ class SearchField<T> extends StatefulWidget {
     this.itemHeight = 35.0,
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
+    this.enabled,
     this.onSubmit,
     this.offset,
     this.onSuggestionTap,
@@ -597,6 +601,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           link: _layerLink,
           child: TextFormField(
             key: key,
+            enabled: widget.enabled,
             autocorrect: widget.autoCorrect,
             onFieldSubmitted: (x) {
               if (widget.onSubmit != null) widget.onSubmit!(x);
