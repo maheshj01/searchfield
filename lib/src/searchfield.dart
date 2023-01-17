@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -234,6 +235,11 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
+  /// if true diacritics are ignored, this means:
+  /// if café is in suggestion list, search for cafe will suggest also café
+  /// and viceversa
+  final bool ignoreDiacritics;
+
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
@@ -276,6 +282,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionAction,
     this.textInputAction,
     this.validator,
+    this.ignoreDiacritics = false
   })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -635,6 +642,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 if (suggestion.searchKey
                     .toLowerCase()
                     .contains(query.toLowerCase())) {
+                  searchResult.add(suggestion);
+                } else if (widget.ignoreDiacritics && 
+                    removeDiacritics(suggestion.searchKey.toLowerCase())
+                    .contains(removeDiacritics(query.toLowerCase()))) {
                   searchResult.add(suggestion);
                 }
               }

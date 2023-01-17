@@ -543,4 +543,69 @@ void main() {
     await tester.pumpAndSettle();
     expect(listFinder, findsNothing);
   });
+
+  testWidgets('Searchfield should not find suggestion with diacritics',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DÉF', 'GHI', 'JKL']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, 'A');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+      await tester.enterText(textField, 'DÉ');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('DÉF'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+      await tester.enterText(textField, 'Á');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsNothing);
+      await tester.enterText(textField, 'DE');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsNothing);
+    });
+
+    testWidgets('Searchfield should find suggestion ignoring diacritics',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        ignoreDiacritics: true,
+        suggestions: ['ABC', 'DÉF', 'GHI', 'JKL']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, 'Á');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+      await tester.enterText(textField, 'DE');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('DÉF'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+    });
 }
