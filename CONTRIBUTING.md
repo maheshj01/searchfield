@@ -12,10 +12,11 @@ Thanks for taking you time to contribute to this repo. Before you start contribu
 
 - Follow the [dart best practices](https://dart.dev/guides/language/effective-dart) to maintain the quality of code.
 
-- Additional changes for publishing a release. Update the version in readme, pubspec.yaml, and update the changelog   
+(Optional)
+- Additional changes for publishing a release. Update the version in readme, pubspec.yaml, and update the changelog. Make sure the documentation is updated as per the changes. Make sure existing and new tests are passing. Make sure the code is well formatted. Ensure the linter warnigs are zero. 
 
 
-Contribution
+### Contributing
 
 1. Fork This repo
 2. Create a new branch
@@ -28,7 +29,7 @@ Contribution
 ### Publishing (Applicable only for the owner of the repository)
 
 When publishing a new release of this package make sure all the below things are done.
-- Update the version in readme(2), pubspec.yaml, and update the changelog
+- Update the version in readme, pubspec.yaml, and update the changelog
 - make sure the documentation is updated as per the changes
 - make sure existing and new tests are passing
 - make sure the code is well formatted

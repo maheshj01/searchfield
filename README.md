@@ -1,4 +1,4 @@
-# [searchfield: ^0.7.2](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.7.3](https://pub.dev/packages/searchfield)
 
 A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
 
@@ -133,6 +133,7 @@ Form(
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
+- `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
 - `hasOverlay` : shows floating suggestions on top of the Ui
   if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.

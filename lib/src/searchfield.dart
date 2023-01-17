@@ -92,8 +92,8 @@ class SearchField<T> extends StatefulWidget {
 
   /// Callback when the suggestion is selected.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
-  
-  /// Enable or disable the input
+
+  /// Defines whether to enable the searchfield defaults to `true`
   final bool? enabled;
 
   /// Callback when the Searchfield is submitted
@@ -560,7 +560,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         key.currentContext!.findRenderObject() as RenderBox;
     final textFieldsize = textFieldRenderBox.size;
     final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-    Offset yOffset = Offset.zero;
+    var yOffset = Offset.zero;
     return OverlayEntry(
         builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
             stream: suggestionStream.stream,

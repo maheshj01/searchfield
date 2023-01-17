@@ -1,3 +1,6 @@
+#### [0.7.3] - Jan 16, 2023
+- Add `enabled` property see [#65](https://github.com/maheshmnj/searchfield/pull/65)
+
 #### [0.7.2] - Oct 25, 2022
 
 - Add `suggestionDirection` property to position the suggestions.
