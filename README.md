@@ -1,15 +1,15 @@
 # [searchfield: ^0.7.4](https://pub.dev/packages/searchfield)
 
-A highly customizable simple and easy to use flutter Widget to add a searchfield to your Flutter Application.This Widget allows you to search and select from list of suggestions.
+A highly customizable simple and easy to use flutter searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
 Think of this widget like a dropdownButton field with an ability
 
 - to Search 🔍.
-- to define height of each Suggestion Item
+- to position and define height of each Suggestion Item
 - to show dynamic suggestions as an overlay above the widgets or in the widget tree.
 - to define max number of items visible in the viewport 📱
-- to completely customize the input searchfield like a normal textfield
-- to customize the suggestions with colors and gradients
+- to filter out the suggestions with a custom logic.
+- to visually customize the input and the suggestions
 
 list of all the properties mentioned below
 
