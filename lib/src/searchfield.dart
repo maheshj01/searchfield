@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -235,10 +234,11 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
-  /// if true diacritics are ignored, this means:
-  /// if café is in suggestion list, search for cafe will suggest also café
-  /// and viceversa
-  final bool ignoreDiacritics;
+  /// Function that implements the comparison criteria,
+  /// the 2 parameters are the input text and each suggestion and 
+  /// should return true or false if the list should shown the suggestionKey
+  /// suggestion when the inputText is typed in the text field
+  final bool Function(String inputText, String suggestionKey)? comparator;
 
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
@@ -282,7 +282,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionAction,
     this.textInputAction,
     this.validator,
-    this.ignoreDiacritics = false
+    this.comparator
   })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -639,13 +639,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 return;
               }
               for (final suggestion in widget.suggestions) {
-                if (suggestion.searchKey
+                if (widget.comparator != null) {
+                  if (widget.comparator!(query, suggestion.searchKey)) {
+                    searchResult.add(suggestion);
+                  }
+                } else if (suggestion.searchKey
                     .toLowerCase()
                     .contains(query.toLowerCase())) {
-                  searchResult.add(suggestion);
-                } else if (widget.ignoreDiacritics && 
-                    removeDiacritics(suggestion.searchKey.toLowerCase())
-                    .contains(removeDiacritics(query.toLowerCase()))) {
                   searchResult.add(suggestion);
                 }
               }
