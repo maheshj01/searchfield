@@ -1,3 +1,8 @@
+#### [0.7.4] - Jan 16, 2023
+
+- Add `comparator` property to filter out the suggestions with a custom logic.
+- Fixes [#69](https://github.com/maheshmnj/searchfield/issues/69)
+
 #### [0.7.3] - Jan 16, 2023
 - Add `enabled` property see [#65](https://github.com/maheshmnj/searchfield/pull/65)
 
