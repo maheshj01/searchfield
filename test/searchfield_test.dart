@@ -543,4 +543,61 @@ void main() {
     await tester.pumpAndSettle();
     expect(listFinder, findsNothing);
   });
+
+  testWidgets('Searchfield should not find suggestion when typed reversed for default',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, 'AB');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+      await tester.enterText(textField, 'BA');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsNothing);
+    });
+
+    testWidgets('Searchfield should find suggestion when typed reversed if we add custom comparator for it',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        comparator: (inputText, suggestionKey) => suggestionKey.contains(inputText.split('').reversed.join()),
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map((e) => SearchFieldListItem<String>(e))
+            .toList(),
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, 'AB');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+      await tester.enterText(textField, 'BA');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+    });
 }
