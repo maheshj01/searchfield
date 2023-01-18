@@ -238,10 +238,11 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
-  /// Function that implements the comparison criteria,
-  /// the 2 parameters are the input text and each suggestion and 
-  /// should return true or false if the list should shown the suggestionKey
-  /// suggestion when the inputText is typed in the text field
+  /// Function that implements the comparison criteria to filter out suggestions.
+  /// The 2 parameters are the input text and the `suggestionKey` passed to each `SearchFieldListItem`
+  /// which should return true or false to filter out the suggestion.
+  /// by default the comparator shows the suggestions that contain the input text
+  /// in the `suggestionKey`
   final bool Function(String inputText, String suggestionKey)? comparator;
 
   /// Defines whether to enable autoCorrect defaults to `true`
@@ -257,37 +258,37 @@ class SearchField<T> extends StatefulWidget {
   /// suggestionDirection is ignored.
   final SuggestionDirection suggestionDirection;
 
-  SearchField({
-    Key? key,
-    required this.suggestions,
-    this.autoCorrect = true,
-    this.controller,
-    this.emptyWidget = const SizedBox.shrink(),
-    this.focusNode,
-    this.hasOverlay = true,
-    this.hint,
-    this.initialValue,
-    this.inputFormatters,
-    this.inputType,
-    this.itemHeight = 35.0,
-    this.marginColor,
-    this.maxSuggestionsInViewPort = 5,
-    this.enabled,
-    this.onSubmit,
-    this.offset,
-    this.onSuggestionTap,
-    this.searchInputDecoration,
-    this.searchStyle,
-    this.suggestionStyle,
-    this.suggestionsDecoration,
-    this.suggestionDirection = SuggestionDirection.down,
-    this.suggestionState = Suggestion.expand,
-    this.suggestionItemDecoration,
-    this.suggestionAction,
-    this.textInputAction,
-    this.validator,
-    this.comparator
-  })  : assert(
+  SearchField(
+      {Key? key,
+      required this.suggestions,
+      this.autoCorrect = true,
+      this.controller,
+      this.emptyWidget = const SizedBox.shrink(),
+      this.focusNode,
+      this.hasOverlay = true,
+      this.hint,
+      this.initialValue,
+      this.inputFormatters,
+      this.inputType,
+      this.itemHeight = 35.0,
+      this.marginColor,
+      this.maxSuggestionsInViewPort = 5,
+      this.enabled,
+      this.onSubmit,
+      this.offset,
+      this.onSuggestionTap,
+      this.searchInputDecoration,
+      this.searchStyle,
+      this.suggestionStyle,
+      this.suggestionsDecoration,
+      this.suggestionDirection = SuggestionDirection.down,
+      this.suggestionState = Suggestion.expand,
+      this.suggestionItemDecoration,
+      this.suggestionAction,
+      this.textInputAction,
+      this.validator,
+      this.comparator})
+      : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
@@ -338,9 +339,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               });
             }
           }
-          Overlay.of(context)!.insert(_overlayEntry);
+          Overlay.of(context)!.insert(_overlayEntry!);
         } else {
-          _overlayEntry.remove();
+          if (_overlayEntry != null && _overlayEntry!.mounted) {
+            _overlayEntry?.remove();
+          }
         }
       } else {
         if (isSuggestionExpanded) {
@@ -364,7 +367,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
-  late OverlayEntry _overlayEntry;
+  OverlayEntry? _overlayEntry;
   @override
   void initState() {
     super.initState();
@@ -395,8 +398,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         _focus!.removeListener(initialize);
         initialize();
       } else {
-        if (_overlayEntry.mounted) {
-          _overlayEntry.remove();
+        if (_overlayEntry!.mounted) {
+          _overlayEntry?.remove();
         }
       }
       if (mounted) {
