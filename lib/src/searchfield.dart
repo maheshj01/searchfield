@@ -453,7 +453,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               physics: snapshot.data!.length == 1
                   ? NeverScrollableScrollPhysics()
                   : ScrollPhysics(),
-              itemBuilder: (context, index) => InkWell(
+              itemBuilder: (context, index) => TextFieldTapRegion(child: InkWell(
                 onTap: () {
                   searchController!.text = snapshot.data![index]!.searchKey;
                   searchController!.selection = TextSelection.fromPosition(
@@ -507,7 +507,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                         style: widget.suggestionStyle,
                       ),
                 ),
-              ),
+              )),
             ),
           );
         }
