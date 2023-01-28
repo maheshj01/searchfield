@@ -437,7 +437,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
-          Widget listView = ListView.builder(
+          final Widget listView = ListView.builder(
             reverse: widget.suggestionDirection == SuggestionDirection.up,
             padding: EdgeInsets.zero,
             controller: _scrollController,
