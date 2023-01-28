@@ -339,7 +339,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               });
             }
           }
-          Overlay.of(context)!.insert(_overlayEntry!);
+          Overlay.of(context).insert(_overlayEntry!);
         } else {
           if (_overlayEntry != null && _overlayEntry!.mounted) {
             _overlayEntry?.remove();
@@ -460,7 +460,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               physics: snapshot.data!.length == 1
                   ? NeverScrollableScrollPhysics()
                   : ScrollPhysics(),
-              itemBuilder: (context, index) => TextFieldTapRegion(child: InkWell(
+              itemBuilder: (context, index) => TextFieldTapRegion(
+                  child: InkWell(
                 onTap: () {
                   searchController!.text = snapshot.data![index]!.searchKey;
                   searchController!.selection = TextSelection.fromPosition(

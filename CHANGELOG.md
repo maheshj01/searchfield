@@ -1,3 +1,6 @@
+#### [0.7.5] - Jan 27, 2023
+- Hot Fix: https://github.com/maheshmnj/searchfield/issues/70 OnSuggestionTap broke in flutter 3.7 for non mobile platforms see: https://github.com/flutter/flutter/issues/119390
+
 #### [0.7.4] - Jan 16, 2023
 
 - Add `comparator` property to filter out the suggestions with a custom logic.
