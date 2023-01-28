@@ -222,6 +222,10 @@ class SearchField<T> extends StatefulWidget {
   ///
   final String? Function(String?)? validator;
 
+  /// Defines whether to show the scrollbar always or only when scrolling.
+  /// defaults to `true`
+  final bool scrollbarAlwaysVisible;
+
   /// if false the suggestions will be shown below
   /// the searchfield along the Y-axis.
   /// if true the suggestions will be shown floating like the
@@ -279,6 +283,7 @@ class SearchField<T> extends StatefulWidget {
     this.onSuggestionTap,
     this.searchInputDecoration,
     this.searchStyle,
+    this.scrollbarAlwaysVisible = true,
     this.suggestionStyle,
     this.suggestionsDecoration,
     this.suggestionDirection = SuggestionDirection.down,
@@ -309,6 +314,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void dispose() {
     suggestionStream.close();
+    _scrollController.dispose();
     if (widget.controller == null) {
       searchController!.dispose();
     }
@@ -430,6 +436,73 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             _totalHeight = snapshot.data!.length * widget.itemHeight;
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
+
+          Widget listView = ListView.builder(
+            reverse: widget.suggestionDirection == SuggestionDirection.up,
+            padding: EdgeInsets.zero,
+            controller: _scrollController,
+            itemCount: snapshot.data!.length,
+            physics: snapshot.data!.length == 1
+                ? NeverScrollableScrollPhysics()
+                : ScrollPhysics(),
+            itemBuilder: (context, index) => TextFieldTapRegion(
+                child: InkWell(
+              onTap: () {
+                searchController!.text = snapshot.data![index]!.searchKey;
+                searchController!.selection = TextSelection.fromPosition(
+                  TextPosition(
+                    offset: searchController!.text.length,
+                  ),
+                );
+
+                // suggestion action to switch focus to next focus node
+                if (widget.suggestionAction != null) {
+                  if (widget.suggestionAction == SuggestionAction.next) {
+                    _focus!.nextFocus();
+                  } else if (widget.suggestionAction ==
+                      SuggestionAction.unfocus) {
+                    _focus!.unfocus();
+                  }
+                }
+
+                // hide the suggestions
+                suggestionStream.sink.add(null);
+                if (widget.onSuggestionTap != null) {
+                  widget.onSuggestionTap!(snapshot.data![index]!);
+                }
+              },
+              child: Container(
+                height: widget.itemHeight,
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                decoration: widget.suggestionItemDecoration?.copyWith(
+                      border: widget.suggestionItemDecoration?.border ??
+                          Border(
+                            bottom: BorderSide(
+                              color: widget.marginColor ??
+                                  onSurfaceColor.withOpacity(0.1),
+                            ),
+                          ),
+                    ) ??
+                    BoxDecoration(
+                      border: index == snapshot.data!.length - 1
+                          ? null
+                          : Border(
+                              bottom: BorderSide(
+                                color: widget.marginColor ??
+                                    onSurfaceColor.withOpacity(0.1),
+                              ),
+                            ),
+                    ),
+                child: snapshot.data![index]!.child ??
+                    Text(
+                      snapshot.data![index]!.searchKey,
+                      style: widget.suggestionStyle,
+                    ),
+              ),
+            )),
+          );
+
           return AnimatedContainer(
             duration: widget.suggestionDirection == SuggestionDirection.up
                 ? Duration.zero
@@ -453,70 +526,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     ),
                   ],
                 ),
-            child: ListView.builder(
-              reverse: widget.suggestionDirection == SuggestionDirection.up,
-              padding: EdgeInsets.zero,
-              itemCount: snapshot.data!.length,
-              physics: snapshot.data!.length == 1
-                  ? NeverScrollableScrollPhysics()
-                  : ScrollPhysics(),
-              itemBuilder: (context, index) => TextFieldTapRegion(
-                  child: InkWell(
-                onTap: () {
-                  searchController!.text = snapshot.data![index]!.searchKey;
-                  searchController!.selection = TextSelection.fromPosition(
-                    TextPosition(
-                      offset: searchController!.text.length,
-                    ),
-                  );
-
-                  // suggestion action to switch focus to next focus node
-                  if (widget.suggestionAction != null) {
-                    if (widget.suggestionAction == SuggestionAction.next) {
-                      _focus!.nextFocus();
-                    } else if (widget.suggestionAction ==
-                        SuggestionAction.unfocus) {
-                      _focus!.unfocus();
-                    }
-                  }
-
-                  // hide the suggestions
-                  suggestionStream.sink.add(null);
-                  if (widget.onSuggestionTap != null) {
-                    widget.onSuggestionTap!(snapshot.data![index]!);
-                  }
-                },
-                child: Container(
-                  height: widget.itemHeight,
-                  width: double.infinity,
-                  alignment: Alignment.centerLeft,
-                  decoration: widget.suggestionItemDecoration?.copyWith(
-                        border: widget.suggestionItemDecoration?.border ??
-                            Border(
-                              bottom: BorderSide(
-                                color: widget.marginColor ??
-                                    onSurfaceColor.withOpacity(0.1),
-                              ),
-                            ),
-                      ) ??
-                      BoxDecoration(
-                        border: index == snapshot.data!.length - 1
-                            ? null
-                            : Border(
-                                bottom: BorderSide(
-                                  color: widget.marginColor ??
-                                      onSurfaceColor.withOpacity(0.1),
-                                ),
-                              ),
-                      ),
-                  child: snapshot.data![index]!.child ??
-                      Text(
-                        snapshot.data![index]!.searchKey,
-                        style: widget.suggestionStyle,
-                      ),
-                ),
-              )),
-            ),
+            child: RawScrollbar(
+                thumbVisibility: widget.scrollbarAlwaysVisible,
+                controller: _scrollController,
+                padding: EdgeInsets.zero,
+                child: listView),
           );
         }
       },
@@ -598,6 +612,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   GlobalKey key = GlobalKey();
   bool _isDirectionCalculated = false;
   Offset _offset = Offset.zero;
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
