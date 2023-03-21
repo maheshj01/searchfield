@@ -2,7 +2,7 @@
 
 - Hot Fix: https://github.com/maheshmnj/searchfield/issues/70 OnSuggestionTap broke in flutter 3.7 for non mobile platforms see: https://github.com/flutter/flutter/issues/119390
 
-- Adds Scrollbar for suggestions
+- Breaking: Adds Scrollbar for suggestions (Requires flutter stable 3.7 or greater.)
 
 #### [0.7.4] - Jan 16, 2023
 
