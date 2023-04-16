@@ -261,6 +261,40 @@ void main() {
     expect(focus.hasFocus, false);
   });
 
+  testWidgets('Searchfield should support readOnly mode',
+      (WidgetTester tester) async {
+    final controller = TextEditingController();
+    final countries = data.map((e) => Country.fromMap(e)).toList();
+    var readOnly = true;
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      readOnly: readOnly,
+      controller: controller,
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      suggestionState: Suggestion.expand,
+    )));
+
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    await tester.tap(textField);
+    await tester.enterText(textField, 'test');
+    await tester.pumpAndSettle();
+    expect(controller.text, '');
+    readOnly = false;
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      readOnly: readOnly,
+      controller: controller,
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      suggestionState: Suggestion.expand,
+    )));
+    await tester.enterText(find.byType(TextFormField), 'test');
+    await tester.pumpAndSettle();
+    expect(controller.text, 'test');
+  });
+
   testWidgets('suggestions can be updated in the runtime',
       (WidgetTester tester) async {
     var counter = 3;

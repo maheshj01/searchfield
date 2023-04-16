@@ -96,6 +96,9 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable the searchfield defaults to `true`
   final bool? enabled;
 
+  /// Defines whether to show the searchfield as readOnly
+  final bool readOnly;
+
   /// Callback when the Searchfield is submitted
   ///  it returns the text from the searchfield
   final Function(String)? onSubmit;
@@ -263,36 +266,37 @@ class SearchField<T> extends StatefulWidget {
   final SuggestionDirection suggestionDirection;
 
   SearchField(
-    {Key? key,
-    required this.suggestions,
-    this.autoCorrect = true,
-    this.controller,
-    this.emptyWidget = const SizedBox.shrink(),
-    this.focusNode,
-    this.hasOverlay = true,
-    this.hint,
-    this.initialValue,
-    this.inputFormatters,
-    this.inputType,
-    this.itemHeight = 35.0,
-    this.marginColor,
-    this.maxSuggestionsInViewPort = 5,
-    this.enabled,
-    this.onSubmit,
-    this.offset,
-    this.onSuggestionTap,
-    this.searchInputDecoration,
-    this.searchStyle,
-    this.scrollbarAlwaysVisible = true,
-    this.suggestionStyle,
-    this.suggestionsDecoration,
-    this.suggestionDirection = SuggestionDirection.down,
-    this.suggestionState = Suggestion.expand,
-    this.suggestionItemDecoration,
-    this.suggestionAction,
-    this.textInputAction,
-    this.validator,
-    this.comparator})
+      {Key? key,
+      required this.suggestions,
+      this.autoCorrect = true,
+      this.controller,
+      this.emptyWidget = const SizedBox.shrink(),
+      this.focusNode,
+      this.hasOverlay = true,
+      this.hint,
+      this.initialValue,
+      this.inputFormatters,
+      this.inputType,
+      this.itemHeight = 35.0,
+      this.marginColor,
+      this.maxSuggestionsInViewPort = 5,
+      this.enabled,
+      this.readOnly = false,
+      this.onSubmit,
+      this.offset,
+      this.onSuggestionTap,
+      this.searchInputDecoration,
+      this.searchStyle,
+      this.scrollbarAlwaysVisible = true,
+      this.suggestionStyle,
+      this.suggestionsDecoration,
+      this.suggestionDirection = SuggestionDirection.down,
+      this.suggestionState = Suggestion.expand,
+      this.suggestionItemDecoration,
+      this.suggestionAction,
+      this.textInputAction,
+      this.validator,
+      this.comparator})
       : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -629,6 +633,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             key: key,
             enabled: widget.enabled,
             autocorrect: widget.autoCorrect,
+            readOnly: widget.readOnly,
             onFieldSubmitted: (x) {
               if (widget.onSubmit != null) widget.onSubmit!(x);
             },
