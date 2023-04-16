@@ -229,13 +229,6 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to `true`
   final bool scrollbarAlwaysVisible;
 
-  /// if false the suggestions will be shown below
-  /// the searchfield along the Y-axis.
-  /// if true the suggestions will be shown floating like the
-  /// along the Z-axis
-  /// defaults to `true`
-  final bool hasOverlay;
-
   /// suggestion List offset from the searchfield
   /// The top left corner of the searchfield is the origin (0,0)
   final Offset? offset;
@@ -259,10 +252,6 @@ class SearchField<T> extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
 
   /// suggestion direction defaults to [SuggestionDirection.up]
-  /// if [hasOverlay] is `false` then the direction is ignored
-  /// and the suggestions are shown below the searchfield
-  /// when suggestionDirection and offset is specified then
-  /// suggestionDirection is ignored.
   final SuggestionDirection suggestionDirection;
 
   SearchField(
@@ -272,7 +261,6 @@ class SearchField<T> extends StatefulWidget {
       this.controller,
       this.emptyWidget = const SizedBox.shrink(),
       this.focusNode,
-      this.hasOverlay = true,
       this.hint,
       this.initialValue,
       this.inputFormatters,
@@ -340,38 +328,18 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           isSuggestionExpanded = _focus!.hasFocus;
         });
       }
-      if (widget.hasOverlay) {
-        if (isSuggestionExpanded) {
-          if (widget.initialValue == null) {
-            if (widget.suggestionState == Suggestion.expand) {
-              Future.delayed(Duration(milliseconds: 100), () {
-                suggestionStream.sink.add(widget.suggestions);
-              });
-            }
-          }
-          Overlay.of(context).insert(_overlayEntry!);
-        } else {
-          if (_overlayEntry != null && _overlayEntry!.mounted) {
-            _overlayEntry?.remove();
+      if (isSuggestionExpanded) {
+        if (widget.initialValue == null) {
+          if (widget.suggestionState == Suggestion.expand) {
+            Future.delayed(Duration(milliseconds: 100), () {
+              suggestionStream.sink.add(widget.suggestions);
+            });
           }
         }
+        Overlay.of(context).insert(_overlayEntry!);
       } else {
-        if (isSuggestionExpanded) {
-          if (widget.initialValue == null) {
-            if (widget.suggestionState == Suggestion.expand) {
-              Future.delayed(Duration(milliseconds: 100), () {
-                suggestionStream.sink.add(widget.suggestions);
-              });
-            } else {
-              Future.delayed(Duration(milliseconds: 100), () {
-                suggestionStream.sink.add(null);
-              });
-            }
-          }
-        } else {
-          Future.delayed(Duration(milliseconds: 100), () {
-            suggestionStream.sink.add(null);
-          });
+        if (_overlayEntry != null && _overlayEntry!.mounted) {
+          _overlayEntry?.remove();
         }
       }
     });
@@ -401,20 +369,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
       searchController = widget.controller ?? TextEditingController();
-    }
-    if (oldWidget.hasOverlay != widget.hasOverlay) {
-      if (widget.hasOverlay) {
-        _overlayEntry = _createOverlay();
-        _focus!.removeListener(initialize);
-        initialize();
-      } else {
-        if (_overlayEntry!.mounted) {
-          _overlayEntry?.remove();
-        }
-      }
-      if (mounted) {
-        setState(() {});
-      }
     }
     if (oldWidget.suggestions != widget.suggestions) {
       suggestionStream.sink.add(widget.suggestions);
@@ -518,16 +472,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   color: Theme.of(context).colorScheme.surface,
                   boxShadow: [
                     BoxShadow(
-                      color: onSurfaceColor.withOpacity(0.1),
-                      blurRadius: 8.0,
-                      spreadRadius: 2.0,
-                      offset: widget.hasOverlay
-                          ? Offset(
-                              2.0,
-                              5.0,
-                            )
-                          : Offset(1.0, 0.5),
-                    ),
+                        color: onSurfaceColor.withOpacity(0.1),
+                        blurRadius: 8.0,
+                        spreadRadius: 2.0,
+                        offset: Offset(
+                          2.0,
+                          5.0,
+                        )),
                   ],
                 ),
             child: RawScrollbar(
@@ -624,69 +575,59 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     } else {
       _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CompositedTransformTarget(
-          link: _layerLink,
-          child: TextFormField(
-            key: key,
-            enabled: widget.enabled,
-            autocorrect: widget.autoCorrect,
-            readOnly: widget.readOnly,
-            onFieldSubmitted: (x) {
-              if (widget.onSubmit != null) widget.onSubmit!(x);
-            },
-            onTap: () {
-              /// only call if SuggestionState = [Suggestion.expand]
-              if (!isSuggestionExpanded &&
-                  widget.suggestionState == Suggestion.expand) {
-                suggestionStream.sink.add(widget.suggestions);
-                if (mounted) {
-                  setState(() {
-                    isSuggestionExpanded = true;
-                  });
-                }
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: TextFormField(
+        key: key,
+        enabled: widget.enabled,
+        autocorrect: widget.autoCorrect,
+        readOnly: widget.readOnly,
+        onFieldSubmitted: (x) {
+          if (widget.onSubmit != null) widget.onSubmit!(x);
+        },
+        onTap: () {
+          /// only call if SuggestionState = [Suggestion.expand]
+          if (!isSuggestionExpanded &&
+              widget.suggestionState == Suggestion.expand) {
+            suggestionStream.sink.add(widget.suggestions);
+            if (mounted) {
+              setState(() {
+                isSuggestionExpanded = true;
+              });
+            }
+          }
+        },
+        inputFormatters: widget.inputFormatters,
+        controller: widget.controller ?? searchController,
+        focusNode: _focus,
+        validator: widget.validator,
+        style: widget.searchStyle,
+        textInputAction: widget.textInputAction,
+        keyboardType: widget.inputType,
+        decoration:
+            widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
+                InputDecoration(hintText: widget.hint),
+        onChanged: (query) {
+          final searchResult = <SearchFieldListItem<T>>[];
+          if (query.isEmpty) {
+            _createOverlay();
+            suggestionStream.sink.add(widget.suggestions);
+            return;
+          }
+          for (final suggestion in widget.suggestions) {
+            if (widget.comparator != null) {
+              if (widget.comparator!(query, suggestion.searchKey)) {
+                searchResult.add(suggestion);
               }
-            },
-            inputFormatters: widget.inputFormatters,
-            controller: widget.controller ?? searchController,
-            focusNode: _focus,
-            validator: widget.validator,
-            style: widget.searchStyle,
-            textInputAction: widget.textInputAction,
-            keyboardType: widget.inputType,
-            decoration:
-                widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
-                    InputDecoration(hintText: widget.hint),
-            onChanged: (query) {
-              final searchResult = <SearchFieldListItem<T>>[];
-              if (query.isEmpty) {
-                _createOverlay();
-                suggestionStream.sink.add(widget.suggestions);
-                return;
-              }
-              for (final suggestion in widget.suggestions) {
-                if (widget.comparator != null) {
-                  if (widget.comparator!(query, suggestion.searchKey)) {
-                    searchResult.add(suggestion);
-                  }
-                } else if (suggestion.searchKey
-                    .toLowerCase()
-                    .contains(query.toLowerCase())) {
-                  searchResult.add(suggestion);
-                }
-              }
-              suggestionStream.sink.add(searchResult);
-            },
-          ),
-        ),
-        if (!widget.hasOverlay)
-          SizedBox(
-            height: widget.offset != null ? widget.offset!.dy : 0,
-          ),
-        if (!widget.hasOverlay) _suggestionsBuilder()
-      ],
+            } else if (suggestion.searchKey
+                .toLowerCase()
+                .contains(query.toLowerCase())) {
+              searchResult.add(suggestion);
+            }
+          }
+          suggestionStream.sink.add(searchResult);
+        },
+      ),
     );
   }
 }

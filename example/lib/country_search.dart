@@ -65,7 +65,6 @@ class _CountrySearchState extends State<CountrySearch> {
                               SearchFieldListItem(country.name, item: country))
                           .toList(),
                       suggestionState: Suggestion.hidden,
-                      hasOverlay: true,
                       controller: _searchController,
                       hint: 'Search by country name',
                       maxSuggestionsInViewPort: 4,

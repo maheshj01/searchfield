@@ -1,5 +1,7 @@
 #### [0.7.6] - Apr 16, 2023
 - Add 'readOnly' property to disable editing
+- BREAKING: [Issue 57](https://github.com/maheshmnj/searchfield/issues/57): Removes `hasOverlay` property, now suggestions are always shown as an overlay
+- Fixes: SearchField Cannot be wrapped with Center [Issue 58](https://github.com/maheshmnj/searchfield/issues/58)
 
 #### [0.7.5] - Jan 27, 2023
 

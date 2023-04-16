@@ -78,7 +78,6 @@ Form(
             suggestionState: Suggestion.expand,
             textInputAction: TextInputAction.next,
             hint: 'SearchField Example 2',
-            hasOverlay: false,
             searchStyle: TextStyle(
               fontSize: 18,
               color: Colors.black.withOpacity(0.8),
@@ -122,8 +121,6 @@ Form(
 
 - With v0.5.0 Searchfield now adds support for Overlays which shows the suggestions floating on top of the Ui.
 - The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
-- Overlay is enabled by default, You can disable this floating suggestions by passing the property `hasOverlay=false`.
-- However Theres also a known issue, when toggling `hasOverflow` from false to true you should manually do a hot restart to make it work.
 
 <p float="left;padding=10px">
 <img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
@@ -139,8 +136,6 @@ Form(
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
-- `hasOverlay` : shows floating suggestions on top of the Ui
-  if disabled the suggestions will be shown along the searchInput. if not specified defaults to `true`.
 - `hint` : hint for the search Input.
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `inputType`: Keyboard Type for SearchField

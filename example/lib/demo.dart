@@ -98,7 +98,6 @@ class _DemoAppState extends State<DemoApp> {
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
-                hasOverlay: false,
                 searchStyle: TextStyle(
                   fontSize: 18,
                   color: Colors.black.withOpacity(0.8),
@@ -178,7 +177,6 @@ class _DemoAppState extends State<DemoApp> {
               itemHeight: 50.0,
               // offset: Offset(100, 0),
               scrollbarAlwaysVisible: true,
-              hasOverlay: true,
               suggestions: [
                 for (int i = 0; i < 10; i++)
                   {
@@ -221,7 +219,6 @@ class _DemoAppState extends State<DemoApp> {
                 labelText: 'SearchField',
                 border: OutlineInputBorder(),
               ),
-              // hasOverlay: false,
               hint: 'SearchField example 4',
               maxSuggestionsInViewPort: 6,
               suggestionDirection: SuggestionDirection.up,
