@@ -1,4 +1,4 @@
-# [searchfield: ^0.7.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.7.6](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
@@ -137,6 +137,7 @@ Form(
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
 - `hint` : hint for the search Input.
+- `readOnly` : Defines whether to enable the searchfield defaults to `false`
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `inputType`: Keyboard Type for SearchField
 - `inputFormatters`: Input Formatter for SearchField

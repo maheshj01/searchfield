@@ -41,16 +41,18 @@ class _DynamicSampleState extends State<DynamicSample> {
           },
           child: Icon(Icons.add),
         ),
-        body: SearchField(
-          key: const Key('searchfield'),
-          suggestions: countries
-              .map((e) => SearchFieldListItem<Country>(e.name))
-              .toList(),
-          focusNode: focus,
-          suggestionState: Suggestion.expand,
-          onSuggestionTap: (SearchFieldListItem<Country> x) {
-            focus.unfocus();
-          },
+        body: Center(
+          child: SearchField(
+            key: const Key('searchfield'),
+            suggestions: countries
+                .map((e) => SearchFieldListItem<Country>(e.name))
+                .toList(),
+            focusNode: focus,
+            suggestionState: Suggestion.expand,
+            onSuggestionTap: (SearchFieldListItem<Country> x) {
+              focus.unfocus();
+            },
+          ),
         ));
   }
 }
