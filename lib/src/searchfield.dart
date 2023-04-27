@@ -313,6 +313,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (widget.focusNode == null) {
       _focus!.dispose();
     }
+    if (_overlayEntry != null && _overlayEntry!.mounted) {
+      _overlayEntry?.remove();
+    }
     super.dispose();
   }
 

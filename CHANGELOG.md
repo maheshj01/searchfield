@@ -1,3 +1,6 @@
+#### [0.7.7] - Apr 27, 2023
+- Fix [Issue: 76](https://github.com/maheshmnj/searchfield/issues/76) Overlay not getting closed on Route pop.
+
 #### [0.7.6] - Apr 16, 2023
 - Add 'readOnly' property to disable editing
 - BREAKING: [Issue 58](https://github.com/maheshmnj/searchfield/issues/58): Removes `hasOverlay` property, now suggestions are always shown as an overlay
