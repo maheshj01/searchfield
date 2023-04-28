@@ -285,7 +285,7 @@ class SearchField<T> extends StatefulWidget {
       this.suggestionState = Suggestion.expand,
       this.suggestionItemDecoration,
       this.suggestionAction,
-      this.textCapitalization,
+      this.textCapitalization = TextCapitalization.none,
       this.textInputAction,
       this.validator,
       this.comparator})
