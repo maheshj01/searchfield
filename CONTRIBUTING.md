@@ -26,11 +26,12 @@ Thanks for taking you time to contribute to this repo. Before you start contribu
 6. Request a review
 7. wait for LGTM 🚀 comment
 
-### Publishing (Applicable only for the owner of the repository)
+### Publishing (Optional for contributors)
 
-When publishing a new release of this package make sure all the below things are done.
-- Update the version in readme, pubspec.yaml, and update the changelog
-- make sure the documentation is updated as per the changes
-- make sure existing and new tests are passing
-- make sure the code is well formatted
-- ensure the linter warnigs are zero
+This part is mainly applicable to the maintainer of the repository but you are welcome to make the below changes which are required to publish the package. When publishing a new release of this package ensure sure all the check list are completed.
+
+✅ Update the version in readme, pubspec.yaml, and update the changelog
+✅ Make sure the documentation is updated as per the new changes.
+✅ Make sure existing and new tests are passing by running `flutter test`
+✅ Make sure the code is well formatted.
+✅ ensure the linter warnigs are zero.

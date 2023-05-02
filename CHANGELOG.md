@@ -1,3 +1,6 @@
+#### [0.7.8] - May 02, 2023
+- Fix [Issue 77](https://github.com/maheshmnj/searchfield/issues/77) Add TextCapitalization property to SearchField.
+
 #### [0.7.7] - Apr 27, 2023
 - Fix [Issue: 76](https://github.com/maheshmnj/searchfield/issues/76) Overlay not getting closed on Route pop.
 
