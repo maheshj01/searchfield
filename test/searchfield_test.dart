@@ -44,7 +44,7 @@ void main() {
               child: SearchField<String>(
                   suggestions: ['ABC', 'DEF']
                       .map<SearchFieldListItem<String>>(
-                          (e) => SearchFieldListItem(e))
+                          SearchFieldListItem.new)
                       .toList(),
                   initialValue: SearchFieldListItem<String>('ABCD'))),
           throwsAssertionError);
@@ -53,7 +53,7 @@ void main() {
           child: SearchField<String>(
         key: const Key('searchfield'),
         suggestions:
-            ['ABC', 'DEF'].map((e) => SearchFieldListItem<String>(e)).toList(),
+            ['ABC', 'DEF'].map(SearchFieldListItem<String>.new).toList(),
       )));
 
       final finder = find.byType(TextFormField);
@@ -72,7 +72,7 @@ void main() {
                 style: BorderStyle.solid,
                 width: 1.0)),
         suggestions:
-            ['ABC', 'DEF'].map((e) => SearchFieldListItem<String>(e)).toList(),
+            ['ABC', 'DEF'].map(SearchFieldListItem<String>.new).toList(),
         initialValue: SearchFieldListItem<String>('ABC'),
       )));
       final finder = find.text('ABC');
@@ -88,7 +88,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
         controller: controller,
         suggestionState: Suggestion.expand,
@@ -116,7 +116,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
         controller: controller,
         emptyWidget: const Text('No results'),
@@ -150,7 +150,7 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
       controller: controller,
       suggestionState: Suggestion.expand,
@@ -179,7 +179,7 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       suggestions: ['ABC', 'DEF', 'GHI', 'JKL', 'MNO', 'PQR']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
       controller: controller,
       suggestionState: Suggestion.expand,
@@ -265,7 +265,7 @@ void main() {
   testWidgets('Searchfield should support readOnly mode',
       (WidgetTester tester) async {
     final controller = TextEditingController();
-    final countries = data.map((e) => Country.fromMap(e)).toList();
+    final countries = data.map(Country.fromMap).toList();
     var readOnly = true;
     await tester.pumpWidget(_boilerplate(
         child: SearchField(
@@ -312,7 +312,7 @@ void main() {
               maxSuggestionsInViewPort: counter,
               key: const Key('searchfield'),
               suggestions: suggestions
-                  .map((e) => SearchFieldListItem<String>(e))
+                  .map(SearchFieldListItem<String>.new)
                   .toList(),
               suggestionState: Suggestion.expand,
             ),
@@ -356,7 +356,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
         suggestionState: Suggestion.expand,
       )));
@@ -377,7 +377,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
         suggestionState: Suggestion.hidden,
       )));
@@ -399,7 +399,7 @@ void main() {
           key: const Key('searchfield'),
           itemHeight: 100,
           suggestions: ['ABC', 'DEF', 'GHI']
-              .map((e) => SearchFieldListItem<String>(e))
+              .map(SearchFieldListItem<String>.new)
               .toList(),
         ),
       ));
@@ -426,7 +426,7 @@ void main() {
         offset: _customOffset,
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
       )));
       expect(find.byType(TextFormField), findsOneWidget);
@@ -456,7 +456,7 @@ void main() {
           child: SearchField(
         key: const Key('searchfield'),
         suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
         suggestionState: Suggestion.expand,
       )));
@@ -480,7 +480,7 @@ void main() {
         itemHeight: 100,
         suggestionDirection: SuggestionDirection.up,
         suggestions: ['ABC', 'DEF', 'GHI']
-            .map((e) => SearchFieldListItem<String>(e))
+            .map(SearchFieldListItem<String>.new)
             .toList(),
       )));
       final listFinder = find.byType(ListView);
@@ -515,7 +515,7 @@ void main() {
       key: const Key('searchfield'),
       itemHeight: 100,
       suggestions: ['ABC', 'DEF', 'GHI']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
     )));
     final listFinder = find.byType(ListView);
@@ -548,7 +548,7 @@ void main() {
       key: const Key('searchfield'),
       enabled: true,
       suggestions: ['ABC', 'DEF', 'GHI']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
     )));
     final listFinder = find.byType(ListView);
@@ -568,7 +568,7 @@ void main() {
       key: const Key('searchfield'),
       enabled: false,
       suggestions: ['ABC', 'DEF', 'GHI']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
     )));
     final listFinder = find.byType(ListView);
@@ -588,7 +588,7 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
       controller: controller,
       suggestionState: Suggestion.expand,
@@ -618,7 +618,7 @@ void main() {
       comparator: (inputText, suggestionKey) =>
           suggestionKey.contains(inputText.split('').reversed.join()),
       suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-          .map((e) => SearchFieldListItem<String>(e))
+          .map(SearchFieldListItem<String>.new)
           .toList(),
       controller: controller,
       suggestionState: Suggestion.expand,
@@ -653,7 +653,7 @@ void main() {
                 style: BorderStyle.solid,
                 width: 1.0)),
         suggestions:
-            ['ABC', 'DEF','def'].map((e) => SearchFieldListItem<String>(e)).toList(),
+            ['ABC', 'DEF','def'].map(SearchFieldListItem<String>.new).toList(),
         textCapitalization: TextCapitalization.characters,
       )));
       final finder = find.byType(TextField);
@@ -675,7 +675,7 @@ void main() {
                 style: BorderStyle.solid,
                 width: 1.0)),
         suggestions:
-            ['ABC', 'DEF','def'].map((e) => SearchFieldListItem<String>(e)).toList(),
+            ['ABC', 'DEF','def'].map(SearchFieldListItem<String>.new).toList(),
       )));
       final finder = find.byType(TextField);
       final textField = tester.firstWidget<TextField>(finder);
