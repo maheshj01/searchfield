@@ -639,4 +639,47 @@ void main() {
     expect(find.text('ABC'), findsOneWidget);
     expect(listFinder.evaluate().length, 1);
   });
+
+    testWidgets('Searchfield should set textCapitalization property',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestionItemDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            shape: BoxShape.rectangle,
+            border: Border.all(
+                color: Colors.transparent,
+                style: BorderStyle.solid,
+                width: 1.0)),
+        suggestions:
+            ['ABC', 'DEF','def'].map((e) => SearchFieldListItem<String>(e)).toList(),
+        textCapitalization: TextCapitalization.characters,
+      )));
+      final finder = find.byType(TextField);
+      final textField = tester.firstWidget<TextField>(finder);
+      expect(finder, findsOneWidget);
+      expect(textField.textCapitalization, TextCapitalization.characters);
+    });
+
+    testWidgets('Searchfield should set textCapitalization to none when no property assigned',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestionItemDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            shape: BoxShape.rectangle,
+            border: Border.all(
+                color: Colors.transparent,
+                style: BorderStyle.solid,
+                width: 1.0)),
+        suggestions:
+            ['ABC', 'DEF','def'].map((e) => SearchFieldListItem<String>(e)).toList(),
+      )));
+      final finder = find.byType(TextField);
+      final textField = tester.firstWidget<TextField>(finder);
+      expect(finder, findsOneWidget);
+      expect(textField.textCapitalization, TextCapitalization.none);
+    });
 }

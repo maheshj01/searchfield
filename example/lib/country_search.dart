@@ -69,6 +69,7 @@ class _CountrySearchState extends State<CountrySearch> {
                       hint: 'Search by country name',
                       maxSuggestionsInViewPort: 4,
                       itemHeight: 45,
+                      textCapitalization: TextCapitalization.words,
                       validator: (x) {
                         if (x!.isEmpty || !containsCountry(x)) {
                           return 'Please Enter a valid Country';

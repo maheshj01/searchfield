@@ -254,6 +254,9 @@ class SearchField<T> extends StatefulWidget {
   /// suggestion direction defaults to [SuggestionDirection.up]
   final SuggestionDirection suggestionDirection;
 
+  /// text capitalization defaults to [TextCapitalization.none]
+  final TextCapitalization textCapitalization;
+  
   SearchField(
       {Key? key,
       required this.suggestions,
@@ -282,6 +285,7 @@ class SearchField<T> extends StatefulWidget {
       this.suggestionState = Suggestion.expand,
       this.suggestionItemDecoration,
       this.suggestionAction,
+      this.textCapitalization = TextCapitalization.none,
       this.textInputAction,
       this.validator,
       this.comparator})
@@ -606,6 +610,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         validator: widget.validator,
         style: widget.searchStyle,
         textInputAction: widget.textInputAction,
+        textCapitalization: widget.textCapitalization,
         keyboardType: widget.inputType,
         decoration:
             widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
