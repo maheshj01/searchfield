@@ -640,7 +640,7 @@ void main() {
     expect(listFinder.evaluate().length, 1);
   });
 
-    testWidgets('Searchfield should set textCapitalization in TextField base on property',
+    testWidgets('Searchfield should set textCapitalization property',
         (WidgetTester tester) async {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
