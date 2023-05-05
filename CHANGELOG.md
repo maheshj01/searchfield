@@ -1,3 +1,7 @@
+#### [0.8.0] - May 05, 2023
+- Fix: [Issue #78](https://github.com/maheshmnj/searchfield/issues/78) Adds `onSearchTextChanged` callback to get the search text on every change.
+- Deprecate `comparator` property, use `onSearchTextChanged` instead.
+
 #### [0.7.8] - May 02, 2023
 - Fix [Issue 77](https://github.com/maheshmnj/searchfield/issues/77) Add TextCapitalization property to SearchField.
 

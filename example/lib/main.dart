@@ -37,21 +37,11 @@ class SearchFieldSample extends StatefulWidget {
 }
 
 class _SearchFieldSampleState extends State<SearchFieldSample> {
-  List<String> suggestions = [
-    'United States',
-    'Germany',
-    'Washington',
-    'Paris',
-    'Jakarta',
-    'Australia',
-    'India',
-    'Czech Republic',
-    'Lorem Ipsum',
-  ];
   int suggestionsCount = 2;
   final focus = FocusNode();
   @override
   Widget build(BuildContext context) {
+    final suggestions = ['ABC', 'ACD', 'DEF', 'GHI', 'JKL'];
     return Scaffold(
         appBar: AppBar(
           title: Text('Dynamic sample Demo'),
@@ -67,6 +57,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         ),
         body: Center(
           child: SearchField(
+            onSearchTextChanged: (query) {
+              final filter = suggestions
+                  .where((element) =>
+                      element.toLowerCase().contains(query.toLowerCase()))
+                  .toList();
+              return filter.map((e) => SearchFieldListItem<String>(e)).toList();
+            },
             key: const Key('searchfield'),
             hint: 'Search by country name',
             suggestions:

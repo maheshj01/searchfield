@@ -93,6 +93,13 @@ class SearchField<T> extends StatefulWidget {
   /// Callback when the suggestion is selected.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
+  /// Callback when the searchfield is searched.
+  /// The callback should return a list of SearchFieldListItem based on custom logic which will be
+  /// shown as suggestions.
+  /// If the callback is not specified, the searchfield will show suggestions which contains the
+  /// search text.
+  List<SearchFieldListItem<T>>? Function(String)? onSearchTextChanged;
+
   /// Defines whether to enable the searchfield defaults to `true`
   final bool? enabled;
 
@@ -243,6 +250,8 @@ class SearchField<T> extends StatefulWidget {
   /// which should return true or false to filter out the suggestion.
   /// by default the comparator shows the suggestions that contain the input text
   /// in the `suggestionKey`
+  ///
+  /// @deprecated use [onSearchTextChanged] instead
   final bool Function(String inputText, String suggestionKey)? comparator;
 
   /// Defines whether to enable autoCorrect defaults to `true`
@@ -256,7 +265,7 @@ class SearchField<T> extends StatefulWidget {
 
   /// text capitalization defaults to [TextCapitalization.none]
   final TextCapitalization textCapitalization;
-  
+
   SearchField(
       {Key? key,
       required this.suggestions,
@@ -273,6 +282,7 @@ class SearchField<T> extends StatefulWidget {
       this.maxSuggestionsInViewPort = 5,
       this.enabled,
       this.readOnly = false,
+      this.onSearchTextChanged,
       this.onSubmit,
       this.offset,
       this.onSuggestionTap,
@@ -288,7 +298,7 @@ class SearchField<T> extends StatefulWidget {
       this.textCapitalization = TextCapitalization.none,
       this.textInputAction,
       this.validator,
-      this.comparator})
+      @deprecated this.comparator})
       : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -616,21 +626,25 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
                 InputDecoration(hintText: widget.hint),
         onChanged: (query) {
-          final searchResult = <SearchFieldListItem<T>>[];
-          if (query.isEmpty) {
-            _createOverlay();
-            suggestionStream.sink.add(widget.suggestions);
-            return;
-          }
-          for (final suggestion in widget.suggestions) {
-            if (widget.comparator != null) {
-              if (widget.comparator!(query, suggestion.searchKey)) {
+          var searchResult = <SearchFieldListItem<T>>[];
+          if (widget.onSearchTextChanged != null) {
+            searchResult = widget.onSearchTextChanged!(query) ?? [];
+          } else {
+            if (query.isEmpty) {
+              _createOverlay();
+              suggestionStream.sink.add(widget.suggestions);
+              return;
+            }
+            for (final suggestion in widget.suggestions) {
+              if (widget.comparator != null) {
+                if (widget.comparator!(query, suggestion.searchKey)) {
+                  searchResult.add(suggestion);
+                }
+              } else if (suggestion.searchKey
+                  .toLowerCase()
+                  .contains(query.toLowerCase())) {
                 searchResult.add(suggestion);
               }
-            } else if (suggestion.searchKey
-                .toLowerCase()
-                .contains(query.toLowerCase())) {
-              searchResult.add(suggestion);
             }
           }
           suggestionStream.sink.add(searchResult);

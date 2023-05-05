@@ -43,8 +43,7 @@ void main() {
           () => _boilerplate(
               child: SearchField<String>(
                   suggestions: ['ABC', 'DEF']
-                      .map<SearchFieldListItem<String>>(
-                          SearchFieldListItem.new)
+                      .map<SearchFieldListItem<String>>(SearchFieldListItem.new)
                       .toList(),
                   initialValue: SearchFieldListItem<String>('ABCD'))),
           throwsAssertionError);
@@ -311,9 +310,8 @@ void main() {
             SearchField(
               maxSuggestionsInViewPort: counter,
               key: const Key('searchfield'),
-              suggestions: suggestions
-                  .map(SearchFieldListItem<String>.new)
-                  .toList(),
+              suggestions:
+                  suggestions.map(SearchFieldListItem<String>.new).toList(),
               suggestionState: Suggestion.expand,
             ),
             ElevatedButton(
@@ -355,9 +353,8 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
         suggestionState: Suggestion.expand,
       )));
       expect(find.byType(TextFormField), findsOneWidget);
@@ -376,9 +373,8 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
         suggestionState: Suggestion.hidden,
       )));
       expect(find.byType(TextFormField), findsOneWidget);
@@ -425,9 +421,8 @@ void main() {
           child: SearchField(
         offset: _customOffset,
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
       )));
       expect(find.byType(TextFormField), findsOneWidget);
       expect(find.byType(ListView), findsNothing);
@@ -455,9 +450,8 @@ void main() {
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
         key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
         suggestionState: Suggestion.expand,
       )));
 
@@ -479,9 +473,8 @@ void main() {
         key: const Key('searchfield'),
         itemHeight: 100,
         suggestionDirection: SuggestionDirection.up,
-        suggestions: ['ABC', 'DEF', 'GHI']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
+        suggestions:
+            ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
       )));
       final listFinder = find.byType(ListView);
       expect(find.byType(TextFormField), findsOneWidget);
@@ -514,9 +507,8 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       itemHeight: 100,
-      suggestions: ['ABC', 'DEF', 'GHI']
-          .map(SearchFieldListItem<String>.new)
-          .toList(),
+      suggestions:
+          ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
     )));
     final listFinder = find.byType(ListView);
     expect(find.byType(TextFormField), findsOneWidget);
@@ -547,9 +539,8 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       enabled: true,
-      suggestions: ['ABC', 'DEF', 'GHI']
-          .map(SearchFieldListItem<String>.new)
-          .toList(),
+      suggestions:
+          ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
     )));
     final listFinder = find.byType(ListView);
     expect(find.byType(TextFormField), findsOneWidget);
@@ -567,9 +558,8 @@ void main() {
         child: SearchField(
       key: const Key('searchfield'),
       enabled: false,
-      suggestions: ['ABC', 'DEF', 'GHI']
-          .map(SearchFieldListItem<String>.new)
-          .toList(),
+      suggestions:
+          ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
     )));
     final listFinder = find.byType(ListView);
     expect(find.byType(TextFormField), findsOneWidget);
@@ -640,46 +630,77 @@ void main() {
     expect(listFinder.evaluate().length, 1);
   });
 
-    testWidgets('Searchfield should set textCapitalization property',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(_boilerplate(
-          child: SearchField(
-        key: const Key('searchfield'),
-        suggestionItemDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            shape: BoxShape.rectangle,
-            border: Border.all(
-                color: Colors.transparent,
-                style: BorderStyle.solid,
-                width: 1.0)),
-        suggestions:
-            ['ABC', 'DEF','def'].map(SearchFieldListItem<String>.new).toList(),
-        textCapitalization: TextCapitalization.characters,
-      )));
-      final finder = find.byType(TextField);
-      final textField = tester.firstWidget<TextField>(finder);
-      expect(finder, findsOneWidget);
-      expect(textField.textCapitalization, TextCapitalization.characters);
-    });
+  testWidgets('Searchfield should allow filtering based on custom logic',
+      (tester) async {
+    final suggestions = ['ABC', 'ACD', 'DEF', 'GHI', 'JKL'];
+    final controller = TextEditingController();
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+      controller: controller,
+      onSearchTextChanged: (query) {
+        final filter = suggestions
+            .where((element) =>
+                element.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        return filter.map(SearchFieldListItem<String>.new).toList();
+      },
+      suggestionState: Suggestion.expand,
+    )));
+    var listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, 'A');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    listFinder = find.byType(ListView);
+    expect(find.text('ABC'), findsOneWidget);
+    expect(find.text('ACD'), findsOneWidget);
+    await tester.enterText(textField, 'HI');
+    await tester.pumpAndSettle();
+    expect(find.text('GHI'), findsOneWidget);
+  });
 
-    testWidgets('Searchfield should set textCapitalization to none when no property assigned',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(_boilerplate(
-          child: SearchField(
-        key: const Key('searchfield'),
-        suggestionItemDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            shape: BoxShape.rectangle,
-            border: Border.all(
-                color: Colors.transparent,
-                style: BorderStyle.solid,
-                width: 1.0)),
-        suggestions:
-            ['ABC', 'DEF','def'].map(SearchFieldListItem<String>.new).toList(),
-      )));
-      final finder = find.byType(TextField);
-      final textField = tester.firstWidget<TextField>(finder);
-      expect(finder, findsOneWidget);
-      expect(textField.textCapitalization, TextCapitalization.none);
-    });
+  testWidgets('Searchfield should set textCapitalization property',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestionItemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          shape: BoxShape.rectangle,
+          border: Border.all(
+              color: Colors.transparent, style: BorderStyle.solid, width: 1.0)),
+      suggestions:
+          ['ABC', 'DEF', 'def'].map(SearchFieldListItem<String>.new).toList(),
+      textCapitalization: TextCapitalization.characters,
+    )));
+    final finder = find.byType(TextField);
+    final textField = tester.firstWidget<TextField>(finder);
+    expect(finder, findsOneWidget);
+    expect(textField.textCapitalization, TextCapitalization.characters);
+  });
+
+  testWidgets(
+      'Searchfield should set textCapitalization to none when no property assigned',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestionItemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          shape: BoxShape.rectangle,
+          border: Border.all(
+              color: Colors.transparent, style: BorderStyle.solid, width: 1.0)),
+      suggestions:
+          ['ABC', 'DEF', 'def'].map(SearchFieldListItem<String>.new).toList(),
+    )));
+    final finder = find.byType(TextField);
+    final textField = tester.firstWidget<TextField>(finder);
+    expect(finder, findsOneWidget);
+    expect(textField.textCapitalization, TextCapitalization.none);
+  });
 }

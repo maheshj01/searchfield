@@ -1,4 +1,4 @@
-# [searchfield: ^0.7.8](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.8.0](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
@@ -119,7 +119,7 @@ Form(
 
 ### Support for Overlays
 
-- With v0.5.0 Searchfield now adds support for Overlays which shows the suggestions floating on top of the Ui.
+- With v0.5.0 Searchfield now adds support for Overlays(default) which shows the suggestions floating on top of the Ui.
 - The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
 
 <p float="left;padding=10px">
@@ -145,6 +145,7 @@ Form(
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
+- `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `scrollbarAlwaysVisible`: Defines whether to show the scrollbar always or only when scrolling.
