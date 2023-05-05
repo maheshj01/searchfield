@@ -98,7 +98,7 @@ class SearchField<T> extends StatefulWidget {
   /// shown as suggestions.
   /// If the callback is not specified, the searchfield will show suggestions which contains the
   /// search text.
-  List<SearchFieldListItem<T>>? Function(String)? onSearchTextChanged;
+  final List<SearchFieldListItem<T>>? Function(String)? onSearchTextChanged;
 
   /// Defines whether to enable the searchfield defaults to `true`
   final bool? enabled;

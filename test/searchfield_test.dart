@@ -602,14 +602,17 @@ void main() {
       'Searchfield should find suggestion when typed reversed if we add custom comparator for it',
       (WidgetTester tester) async {
     final controller = TextEditingController();
+    final suggestions = ['ABC', 'DEF', 'GHI', 'JKL'];
     await tester.pumpWidget(_boilerplate(
         child: SearchField(
       key: const Key('searchfield'),
-      comparator: (inputText, suggestionKey) =>
-          suggestionKey.contains(inputText.split('').reversed.join()),
-      suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-          .map(SearchFieldListItem<String>.new)
-          .toList(),
+      suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+      onSearchTextChanged: (query) {
+        final reversed = query.split('').reversed.join();
+        final filter =
+            suggestions.where((element) => element.contains(reversed)).toList();
+        return filter.map(SearchFieldListItem<String>.new).toList();
+      },
       controller: controller,
       suggestionState: Suggestion.expand,
     )));
