@@ -38,30 +38,29 @@ Use the Widget
 
 ```dart
 SearchField<Country>(
-   suggestions: countries
-     .map(
-     (e) => SearchFieldListItem<Country>(
-        e.name,
-        item: e,
-        // Use child to show Custom Widgets in the suggestions
-        // defaults to Text widget
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(e.flag),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(e.name),
-            ],
-          ),
+  suggestions: countries
+    .map(
+    (e) => SearchFieldListItem<Country>(
+      e.name,
+      item: e,
+      // Use child to show Custom Widgets in the suggestions
+      // defaults to Text widget
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundImage: NetworkImage(e.flag),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(e.name),
+          ],
         ),
-    ),
-  )
-  .toList(),
+      ),
+  ),
+  ).toList(),
 ),
 ```
 
@@ -71,39 +70,38 @@ SearchField<Country>(
 
 ```dart
 Form(
-   key: _formKey,
-   child: SearchField(
-            suggestions: _statesOfIndia.map((e) =>
-               SearchFieldListItem(e)).toList(),
-            suggestionState: Suggestion.expand,
-            textInputAction: TextInputAction.next,
-            hint: 'SearchField Example 2',
-            searchStyle: TextStyle(
-              fontSize: 18,
-              color: Colors.black.withOpacity(0.8),
-            ),
-            validator: (x) {
-              if (!_statesOfIndia.contains(x) || x!.isEmpty) {
-               return 'Please Enter a valid State';
-              }
-            return null;
-            },
-            searchInputDecoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-               borderSide: BorderSide(
-               color: Colors.black.withOpacity(0.8),
-               ),
-              ),
-              border: OutlineInputBorder(
-               borderSide: BorderSide(color: Colors.red),
-              ),
-            ),
-            maxSuggestionsInViewPort: 6,
-            itemHeight: 50,
-            onTap: (x) {},
-         )
-   )
-
+  key: _formKey,
+  child: SearchField(
+    suggestions: _statesOfIndia
+        .map((e) => SearchFieldListItem(e))
+        .toList(),
+    suggestionState: Suggestion.expand,
+    textInputAction: TextInputAction.next,
+    hint: 'SearchField Example 2',
+    searchStyle: TextStyle(
+      fontSize: 18,
+      color: Colors.black.withOpacity(0.8),
+    ),
+    validator: (x) {
+      if (!_statesOfIndia.contains(x) || x!.isEmpty) {
+        return 'Please Enter a valid State';
+      }
+      return null;
+    },
+    searchInputDecoration: InputDecoration(
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.black.withOpacity(0.8),
+        ),
+      ),
+      border: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red),
+      ),
+    ),
+    maxSuggestionsInViewPort: 6,
+    itemHeight: 50,
+    onTap: (x) {},
+  ))
 ```
 
 <img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
