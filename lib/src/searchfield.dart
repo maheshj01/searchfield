@@ -383,6 +383,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (key.currentContext != null) {
+      if (_overlayEntry != null && _overlayEntry!.mounted) {
+        _overlayEntry?.remove();
+      }
+      _overlayEntry = _createOverlay();
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
       searchController = widget.controller ?? TextEditingController();
