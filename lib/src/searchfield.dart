@@ -668,7 +668,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 class SuggestionDecoration extends BoxDecoration {
   /// padding around the suggestion list
   @override
-  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry padding;
 
   SuggestionDecoration({
     this.padding = EdgeInsets.zero,
