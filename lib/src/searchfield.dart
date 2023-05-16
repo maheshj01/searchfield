@@ -140,7 +140,7 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies the [SuggestionAction] called on suggestion tap.
   final SuggestionAction? suggestionAction;
 
-  /// Specifies [BoxDecoration] for suggestion list. The property can be used to add [BoxShadow], [BoxBorder]
+  /// Specifies [SuggestionDecoration] for suggestion list. The property can be used to add [BoxShadow], [BoxBorder]
   /// and much more. For more information, checkout [BoxDecoration].
   ///
   /// Default value,
@@ -161,7 +161,7 @@ class SearchField<T> extends StatefulWidget {
   ///   ],
   /// )
   /// ```
-  final BoxDecoration? suggestionsDecoration;
+  final SuggestionDecoration? suggestionsDecoration;
 
   /// Specifies [BoxDecoration] for items in suggestion list. The property can be used to add [BoxShadow],
   /// and much more. For more information, checkout [BoxDecoration].
@@ -663,4 +663,26 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       ),
     );
   }
+}
+
+class SuggestionDecoration extends BoxDecoration {
+  /// padding around the suggestion list
+  @override
+  EdgeInsetsGeometry padding = EdgeInsets.zero;
+
+  SuggestionDecoration({
+    this.padding = EdgeInsets.zero,
+    Color? color,
+    Border? border,
+    BorderRadiusGeometry? borderRadius,
+    List<BoxShadow>? boxShadow,
+    Gradient? gradient,
+    BoxShape shape = BoxShape.rectangle,
+  }) : super(
+            color: color,
+            border: border,
+            borderRadius: borderRadius,
+            boxShadow: boxShadow,
+            gradient: gradient,
+            shape: shape);
 }

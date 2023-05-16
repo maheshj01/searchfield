@@ -1,5 +1,6 @@
 #### [0.8.1] - May 15, 2023
 - Fixed: Overlay was not updated when the dependency changed.
+- Fix: [Issue #81](https://github.com/maheshmnj/searchfield/issues/81) adds padding property to `SuggestionDecoration`.
 
 #### [0.8.0] - May 05, 2023
 - Fix: [Issue #78](https://github.com/maheshmnj/searchfield/issues/78) Adds `onSearchTextChanged` callback to get the search text on every change.

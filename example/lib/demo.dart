@@ -133,7 +133,7 @@ class _DemoAppState extends State<DemoApp> {
               maxSuggestionsInViewPort: 5,
               itemHeight: 40,
               hint: 'SearchField Example 3',
-              suggestionsDecoration: BoxDecoration(
+              suggestionsDecoration: SuggestionDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
                   bottomRight: Radius.circular(8),

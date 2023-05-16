@@ -37,12 +37,14 @@ class SearchFieldSample extends StatefulWidget {
 }
 
 class _SearchFieldSampleState extends State<SearchFieldSample> {
-  int suggestionsCount = 2;
+  int suggestionsCount = 12;
   final focus = FocusNode();
   @override
   Widget build(BuildContext context) {
-    final suggestions = ['ABC', 'ACD', 'DEF', 'GHI', 'JKL'];
+    final suggestions =
+        List.generate(suggestionsCount, (index) => 'suggestion $index');
     return Scaffold(
+        backgroundColor: Colors.blueGrey,
         appBar: AppBar(
           title: Text('Dynamic sample Demo'),
         ),
@@ -62,12 +64,27 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   .where((element) =>
                       element.toLowerCase().contains(query.toLowerCase()))
                   .toList();
-              return filter.map((e) => SearchFieldListItem<String>(e)).toList();
+              return filter
+                  .map((e) => SearchFieldListItem<String>(
+                        e,
+                      ))
+                  .toList();
             },
             key: const Key('searchfield'),
             hint: 'Search by country name',
-            suggestions:
-                suggestions.map((e) => SearchFieldListItem<String>(e)).toList(),
+            itemHeight: 50,
+            suggestionsDecoration: SuggestionDecoration(
+                padding: EdgeInsets.only(top: 10.0, left: 20, bottom: 20),
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            suggestions: suggestions
+                .map((e) => SearchFieldListItem<String>(e,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Text(e,
+                          style: TextStyle(fontSize: 24, color: Colors.red)),
+                    )))
+                .toList(),
             focusNode: focus,
             suggestionState: Suggestion.expand,
             onSuggestionTap: (SearchFieldListItem<String> x) {
