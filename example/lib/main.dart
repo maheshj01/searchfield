@@ -65,17 +65,20 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                       element.toLowerCase().contains(query.toLowerCase()))
                   .toList();
               return filter
-                  .map((e) => SearchFieldListItem<String>(
-                        e,
-                      ))
+                  .map((e) => SearchFieldListItem<String>(e,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Text(e,
+                            style: TextStyle(fontSize: 24, color: Colors.red)),
+                      )))
                   .toList();
             },
             key: const Key('searchfield'),
             hint: 'Search by country name',
             itemHeight: 50,
             suggestionsDecoration: SuggestionDecoration(
-                padding: EdgeInsets.only(top: 10.0, left: 20, bottom: 20),
-                color: Colors.white,
+                padding: const EdgeInsets.all(4),
+                border: Border.all(color: Colors.red),
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             suggestions: suggestions
                 .map((e) => SearchFieldListItem<String>(e,
