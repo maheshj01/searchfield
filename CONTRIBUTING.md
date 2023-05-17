@@ -34,4 +34,4 @@ This part is mainly applicable to the maintainer of the repository but you are w
 ✅ Make sure the documentation is updated as per the new changes.
 ✅ Make sure existing and new tests are passing by running `flutter test`
 ✅ Make sure the code is well formatted.
-✅ ensure the linter warnigs are zero.
+✅ ensure there are no linter warnings by running `flutter analyze`
