@@ -58,6 +58,7 @@ void main() {
       final finder = find.byType(TextFormField);
       expect(finder, findsOneWidget);
     });
+
     testWidgets('Searchfield should set initial Value',
         (WidgetTester tester) async {
       await tester.pumpWidget(_boilerplate(
@@ -78,6 +79,31 @@ void main() {
       expect(finder, findsOneWidget);
       final finder2 = find.text('DEF');
       expect(finder2, findsNothing);
+    });
+
+    testWidgets(
+        'Searchfield should show suggestions when `resizeToAvoidBottomInset` false',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+        child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Center(
+              child: SearchField<String>(
+                  suggestions: ['ABC', 'DE', 'DFHK']
+                      .map<SearchFieldListItem<String>>(
+                          (e) => SearchFieldListItem(e, child: Text(e)))
+                      .toList()),
+            )),
+      ));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      // await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
     });
 
     testWidgets('Searchfield should show searched suggestions',

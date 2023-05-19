@@ -23,7 +23,15 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: SearchFieldSample(),
+      home: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Center(
+        child: SearchField(
+            suggestions: ['ABC', 'DE', 'DFHK']
+                .map<SearchFieldListItem>(
+                    (e) => SearchFieldListItem(e, child: Text(e)))
+                .toList()),
+      )),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -44,7 +52,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
     final suggestions =
         List.generate(suggestionsCount, (index) => 'suggestion $index');
     return Scaffold(
-        backgroundColor: Colors.blueGrey,
         appBar: AppBar(
           title: Text('Dynamic sample Demo'),
         ),
