@@ -1,3 +1,6 @@
+#### [0.8.3] - May 19, 2023
+- Fix Regressed Issue: https://github.com/maheshmnj/searchfield/issues/83
+
 #### [0.8.2] - May 16, 2023
 - Fix static analysis issue
 
