@@ -84,7 +84,6 @@ void main() {
     testWidgets(
         'Searchfield should show suggestions when `resizeToAvoidBottomInset` false',
         (WidgetTester tester) async {
-      final controller = TextEditingController();
       await tester.pumpWidget(_boilerplate(
         child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -101,7 +100,7 @@ void main() {
       expect(textField, findsOneWidget);
       expect(listFinder, findsNothing);
       await tester.tap(textField);
-      // await tester.enterText(textField, '');
+      await tester.enterText(textField, '');
       await tester.pumpAndSettle();
       expect(listFinder, findsOneWidget);
     });
@@ -442,10 +441,10 @@ void main() {
     });
     testWidgets('suggestions should be at custom offset',
         (WidgetTester tester) async {
-      final _customOffset = Offset(100, 100);
+      final customOffset = Offset(100, 100);
       await tester.pumpWidget(_boilerplate(
           child: SearchField(
-        offset: _customOffset,
+        offset: customOffset,
         key: const Key('searchfield'),
         suggestions:
             ['ABC', 'DEF', 'GHI'].map(SearchFieldListItem<String>.new).toList(),
@@ -466,7 +465,7 @@ void main() {
       expect(
           offset,
           equals(
-            _customOffset,
+            customOffset,
           ));
     });
   });

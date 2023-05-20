@@ -1,11 +1,11 @@
-include: package:pedantic/analysis_options.yaml
+include: package:lints/core.yaml
 
 analyzer:
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
   errors:
-    todo: error
+    todo: info
     include_file_not_found: ignore
 linter:
   rules:

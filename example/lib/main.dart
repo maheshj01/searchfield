@@ -23,15 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Center(
-        child: SearchField(
-            suggestions: ['ABC', 'DE', 'DFHK']
-                .map<SearchFieldListItem>(
-                    (e) => SearchFieldListItem(e, child: Text(e)))
-                .toList()),
-      )),
+      home: SearchFieldSample(),
       debugShowCheckedModeBanner: false,
     );
   }

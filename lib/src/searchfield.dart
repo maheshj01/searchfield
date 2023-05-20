@@ -298,7 +298,7 @@ class SearchField<T> extends StatefulWidget {
       this.textCapitalization = TextCapitalization.none,
       this.textInputAction,
       this.validator,
-      @deprecated this.comparator})
+      @Deprecated('use `onSearchTextChanged` instead.') this.comparator})
       : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
@@ -382,6 +382,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
+  // TODO update overlay dimensions on mediaQuery change
   // @override
   // void didChangeDependencies() {
   //   if (key.currentContext != null) {
