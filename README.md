@@ -64,7 +64,7 @@ SearchField<Country>(
 ),
 ```
 
- <img src="https://user-images.githubusercontent.com/31410839/101930194-d74f5f80-3bfd-11eb-8f08-ca8f593cdb01.gif" width="210"/>
+ <img src="https://github.com/maheshmnj/searchfield/assets/31410839/08bd594c-1593-4865-81a8-5d347077b98a" width="210"/>
 
 #### Example2 (Validation)
 
