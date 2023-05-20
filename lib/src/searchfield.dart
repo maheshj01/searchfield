@@ -415,12 +415,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else if (snapshot.data!.isEmpty) {
           return widget.emptyWidget;
         } else {
+          final paddingHeight = widget.suggestionsDecoration != null
+              ? widget.suggestionsDecoration!.padding.vertical
+              : 0;
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
+            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort +
+                paddingHeight;
           } else if (snapshot.data!.length == 1) {
-            _totalHeight = widget.itemHeight;
+            _totalHeight = widget.itemHeight + paddingHeight;
           } else {
-            _totalHeight = snapshot.data!.length * widget.itemHeight;
+            _totalHeight =
+                snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
