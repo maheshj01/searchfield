@@ -2,8 +2,7 @@ include: package:lints/core.yaml
 
 analyzer:
   strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
+
   errors:
     todo: info
     include_file_not_found: ignore

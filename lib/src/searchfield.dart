@@ -327,9 +327,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (widget.focusNode == null) {
       _focus!.dispose();
     }
-    if (_overlayEntry != null && _overlayEntry!.mounted) {
-      _overlayEntry?.remove();
-    }
     super.dispose();
   }
 
@@ -353,16 +350,15 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             });
           }
         }
-        Overlay.of(context).insert(_overlayEntry!);
+        _portalController.show();
       } else {
-        if (_overlayEntry != null && _overlayEntry!.mounted) {
-          _overlayEntry?.remove();
+        if (_portalController.isShowing) {
+          _portalController.hide();
         }
       }
     });
   }
 
-  OverlayEntry? _overlayEntry;
   @override
   void initState() {
     super.initState();
@@ -370,7 +366,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _overlayEntry = _createOverlay();
         if (widget.initialValue == null ||
             widget.initialValue!.searchKey.isEmpty) {
           suggestionStream.sink.add(null);
@@ -381,18 +376,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       }
     });
   }
-
-  // TODO update overlay dimensions on mediaQuery change
-  // @override
-  // void didChangeDependencies() {
-  //   if (key.currentContext != null) {
-  //     if (_overlayEntry != null && _overlayEntry!.mounted) {
-  //       _overlayEntry?.remove();
-  //     }
-  //     _overlayEntry = _createOverlay();
-  //   }
-  //   super.didChangeDependencies();
-  // }
 
   @override
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
@@ -415,12 +398,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else if (snapshot.data!.isEmpty) {
           return widget.emptyWidget;
         } else {
+          final paddingHeight = widget.suggestionsDecoration != null
+              ? widget.suggestionsDecoration!.padding.vertical
+              : 0;
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
+            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort +
+                paddingHeight;
           } else if (snapshot.data!.length == 1) {
-            _totalHeight = widget.itemHeight;
+            _totalHeight = widget.itemHeight + paddingHeight;
           } else {
-            _totalHeight = snapshot.data!.length * widget.itemHeight;
+            _totalHeight =
+                snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
@@ -441,7 +429,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     offset: searchController!.text.length,
                   ),
                 );
-
                 // suggestion action to switch focus to next focus node
                 if (widget.suggestionAction != null) {
                   if (widget.suggestionAction == SuggestionAction.next) {
@@ -564,39 +551,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return null;
   }
 
-  OverlayEntry _createOverlay() {
-    final textFieldRenderBox =
-        key.currentContext!.findRenderObject() as RenderBox;
-    final textFieldsize = textFieldRenderBox.size;
-    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-    var yOffset = Offset.zero;
-    return OverlayEntry(
-        builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
-            stream: suggestionStream.stream,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-              late var count = widget.maxSuggestionsInViewPort;
-              if (snapshot.data != null) {
-                count = snapshot.data!.length;
-              }
-              yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
-              return Positioned(
-                left: offset.dx,
-                width: textFieldsize.width,
-                child: CompositedTransformFollower(
-                    offset: widget.offset ?? yOffset,
-                    link: _layerLink,
-                    child: Material(child: _suggestionsBuilder())),
-              );
-            }));
-  }
-
-  final LayerLink _layerLink = LayerLink();
   late double _totalHeight;
-  GlobalKey key = GlobalKey();
   bool _isDirectionCalculated = false;
   Offset _offset = Offset.zero;
   final ScrollController _scrollController = ScrollController();
+  GlobalKey tkey = GlobalKey();
+  final OverlayPortalController _portalController = OverlayPortalController();
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
@@ -604,10 +564,27 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     } else {
       _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
-    return CompositedTransformTarget(
-      link: _layerLink,
+    return OverlayPortal(
+      controller: _portalController,
+      overlayChildBuilder: (BuildContext context) {
+        final renderBox = tkey.currentContext!.findRenderObject() as RenderBox;
+        final Size tSize = renderBox.size;
+        final Offset offset = renderBox.localToGlobal(Offset.zero);
+        final bottomPadding = MediaQuery.of(context).viewInsets.bottom;
+        print("bottomPadding $bottomPadding offset $offset");
+        return Positioned(
+          left: offset.dx,
+          top: offset.dy + tSize.height,
+          child: Material(
+            child: SizedBox(
+              width: tSize.width,
+              child: _suggestionsBuilder(),
+            ),
+          ),
+        );
+      },
       child: TextFormField(
-        key: key,
+        key: tkey,
         enabled: widget.enabled,
         autocorrect: widget.autoCorrect,
         readOnly: widget.readOnly,
@@ -643,7 +620,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             searchResult = widget.onSearchTextChanged!(query) ?? [];
           } else {
             if (query.isEmpty) {
-              _createOverlay();
               suggestionStream.sink.add(widget.suggestions);
               return;
             }
