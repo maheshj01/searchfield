@@ -346,6 +346,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         });
       }
       if (isSuggestionExpanded) {
+        _overlayEntry = _createOverlay();
         if (widget.initialValue == null) {
           if (widget.suggestionState == Suggestion.expand) {
             Future.delayed(Duration(milliseconds: 100), () {
