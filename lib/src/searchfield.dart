@@ -257,6 +257,9 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
+  /// Enables automatic validation of form fields periodically.
+  final AutovalidateMode? autoValidateMode;
+
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
@@ -270,6 +273,7 @@ class SearchField<T> extends StatefulWidget {
       {Key? key,
       required this.suggestions,
       this.autoCorrect = true,
+      this.autoValidateMode,
       this.controller,
       this.emptyWidget = const SizedBox.shrink(),
       this.focusNode,
@@ -610,6 +614,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       child: TextFormField(
         key: key,
         enabled: widget.enabled,
+        autovalidateMode: widget.autoValidateMode,
         autocorrect: widget.autoCorrect,
         readOnly: widget.readOnly,
         onFieldSubmitted: (x) {
