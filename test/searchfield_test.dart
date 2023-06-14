@@ -731,4 +731,19 @@ void main() {
     expect(finder, findsOneWidget);
     expect(textField.textCapitalization, TextCapitalization.none);
   });
+
+  testWidgets('SearchField should set autoValidateMode property',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions:
+          ['ABC', 'DEF', 'def'].map(SearchFieldListItem<String>.new).toList(),
+      autoValidateMode: AutovalidateMode.always,
+    )));
+    final finder = find.byType(TextFormField);
+    final textField = tester.firstWidget<TextFormField>(finder);
+    expect(finder, findsOneWidget);
+    expect(textField.autovalidateMode, AutovalidateMode.always);
+  });
 }
