@@ -489,6 +489,69 @@ void main() {
       expect(find.byType(RawScrollbar), findsOneWidget);
     });
   });
+
+  group('Suggestions should respect suggestionsAlignment', () {
+    testWidgets('suggestions should be aligned to left by default',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        itemHeight: 100,
+        suggestions:
+            ['ABC'].map(SearchFieldListItem<String>.new).toList(),
+      )));
+      final listFinder = find.byType(ListView);
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final suggestionFinder = find.byKey(Key('0-suggestion'));
+      final suggestionsRenderBox = tester.renderObject(suggestionFinder) as RenderBox;
+      final suggestionOffset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      final suggestionPredictedOffset = Offset(0.0,643.0);
+      expect(suggestionOffset, equals(suggestionPredictedOffset));
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), 'ABC');
+      await tester.pumpAndSettle();
+      expect(listFinder.evaluate().length, 1);
+      final suggestionOffsetNew =
+          suggestionsRenderBox.localToGlobal(Offset.zero);
+      expect(suggestionOffsetNew, equals(suggestionPredictedOffset));
+
+    });
+    testWidgets('suggestions should be aligned to right',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        itemHeight: 100,
+        suggestions:
+            ['ABC'].map(SearchFieldListItem<String>.new).toList(),
+        suggestionsAlignment: Alignment.centerRight,
+      )));
+      final listFinder = find.byType(ListView);
+      expect(find.byType(TextFormField), findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final suggestionFinder = find.byKey(Key('0-suggestion'));
+      final suggestionsRenderBox = tester.renderObject(suggestionFinder) as RenderBox;
+      final suggestionOffset = suggestionsRenderBox.localToGlobal(Offset.zero);
+      expect(suggestionOffset, equals(Offset(758.0, 643.0)));
+      await tester.tap(find.byType(TextFormField));
+      await tester.enterText(find.byType(TextFormField), 'ABC');
+      await tester.pumpAndSettle();
+      expect(listFinder.evaluate().length, 1);
+      final suggestionOffsetNew =
+          suggestionsRenderBox.localToGlobal(Offset.zero);
+      expect(suggestionOffsetNew, equals(Offset(758.0, 643.0)));
+
+   });
+  });
   group('Suggestions should respect suggestionDirection', () {
     testWidgets(
         'suggestions should respect suggestionDirection: SuggestionDirection.up',

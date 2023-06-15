@@ -203,6 +203,10 @@ class SearchField<T> extends StatefulWidget {
   /// Keyboard Type for SearchField
   final TextInputType? inputType;
 
+  /// Alignment for the suggestion list
+  /// defaults to [Alignment.centerLeft]
+  final AlignmentGeometry? suggestionsAlignment;
+
   /// `validator` for the [SearchField]
   /// to make use of this validator, The
   /// SearchField widget needs to be wrapped in a Form
@@ -298,6 +302,7 @@ class SearchField<T> extends StatefulWidget {
       this.textCapitalization = TextCapitalization.none,
       this.textInputAction,
       this.validator,
+      this.suggestionsAlignment,
       @Deprecated('use `onSearchTextChanged` instead.') this.comparator})
       : assert(
             (initialValue != null &&
@@ -460,9 +465,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 }
               },
               child: Container(
+                
                 height: widget.itemHeight,
                 width: double.infinity,
-                alignment: Alignment.centerLeft,
+                alignment: widget.suggestionsAlignment??Alignment.centerLeft,
                 decoration: widget.suggestionItemDecoration?.copyWith(
                       border: widget.suggestionItemDecoration?.border ??
                           Border(
@@ -485,6 +491,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 child: snapshot.data![index]!.child ??
                     Text(
                       snapshot.data![index]!.searchKey,
+                      key: Key('$index-suggestion'),
                       style: widget.suggestionStyle,
                     ),
               ),
@@ -496,7 +503,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 ? Duration.zero
                 : Duration(milliseconds: 300),
             height: _totalHeight,
-            alignment: Alignment.centerLeft,
+            alignment:widget.suggestionsAlignment?? Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
                 BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
