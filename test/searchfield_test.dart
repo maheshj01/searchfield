@@ -537,18 +537,20 @@ void main() {
       await tester.tap(find.byType(TextFormField));
       await tester.enterText(find.byType(TextFormField), '');
       await tester.pumpAndSettle();
+      final suggestionPredictedOffset = Offset(758.0, 643.0);
       expect(listFinder, findsOneWidget);
       final suggestionFinder = find.byKey(Key('0-suggestion'));
       final suggestionsRenderBox = tester.renderObject(suggestionFinder) as RenderBox;
       final suggestionOffset = suggestionsRenderBox.localToGlobal(Offset.zero);
-      expect(suggestionOffset, equals(Offset(758.0, 643.0)));
+      
+      expect(suggestionOffset, equals(suggestionPredictedOffset));
       await tester.tap(find.byType(TextFormField));
       await tester.enterText(find.byType(TextFormField), 'ABC');
       await tester.pumpAndSettle();
       expect(listFinder.evaluate().length, 1);
       final suggestionOffsetNew =
           suggestionsRenderBox.localToGlobal(Offset.zero);
-      expect(suggestionOffsetNew, equals(Offset(758.0, 643.0)));
+      expect(suggestionOffsetNew, equals(suggestionPredictedOffset));
 
    });
   });
