@@ -1,15 +1,3 @@
-/*
- * File: searchfield_test.dart
- * Project: None
- * File Created: Thursday, 21st April 2022 7:47:45 am
- * Author: Mahesh Jamdade
- * -----
- * Last Modified: Thursday, 21st April 2022 7:49:41 am
- * Modified By: Mahesh Jamdade
- * -----
- * Copyright 2022 - 2022 Widget Media Labs
- */
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
