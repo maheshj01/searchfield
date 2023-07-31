@@ -130,7 +130,7 @@ Form(
 
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `controller`: TextEditing Controller to interact with the searchfield.
-- `comparator` property to filter out the suggestions with a custom logic.
+- `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
