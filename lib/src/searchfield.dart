@@ -240,6 +240,9 @@ class SearchField<T> extends StatefulWidget {
   /// The top left corner of the searchfield is the origin (0,0)
   final Offset? offset;
 
+  /// An optional method to call with the final value when the form is saved via FormState.save.
+  final void Function(String?)? onSaved;
+
   /// Widget to show when the search returns
   /// empty results.
   /// defaults to [SizedBox.shrink]
@@ -283,6 +286,7 @@ class SearchField<T> extends StatefulWidget {
       this.enabled,
       this.readOnly = false,
       this.onSearchTextChanged,
+      this.onSaved,
       this.onSubmit,
       this.offset,
       this.onSuggestionTap,
@@ -626,6 +630,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               });
             }
           }
+        },
+        onSaved: (x) {
+          if (widget.onSaved != null) widget.onSaved!(x);
         },
         inputFormatters: widget.inputFormatters,
         controller: widget.controller ?? searchController,

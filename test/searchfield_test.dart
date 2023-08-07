@@ -719,4 +719,34 @@ void main() {
     expect(finder, findsOneWidget);
     expect(textField.textCapitalization, TextCapitalization.none);
   });
+
+  testWidgets("SearchField should trigger onSaved", (widgetTester) async {
+    final formKey = GlobalKey<FormState>();
+    final controller = TextEditingController();
+    await widgetTester.pumpWidget(_boilerplate(
+      child: Form(
+        key: formKey,
+        child: SearchField(
+          key: const Key('searchfield'),
+          suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+              .map(SearchFieldListItem<String>.new)
+              .toList(),
+          controller: controller,
+          suggestionState: Suggestion.expand,
+          onSaved: (value) {
+            expect(value, 'ABC');
+          },
+        ),
+      ),
+    ));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await widgetTester.tap(textField);
+    await widgetTester.enterText(textField, 'ABC');
+    await widgetTester.pumpAndSettle();
+    expect(formKey.currentState!.validate(), true);
+    formKey.currentState!.save();
+  });
 }

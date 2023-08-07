@@ -1,3 +1,4 @@
+import 'package:example/demo.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: SearchFieldSample(),
+      home: DemoApp(),
       debugShowCheckedModeBanner: false,
     );
   }

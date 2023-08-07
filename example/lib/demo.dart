@@ -89,12 +89,19 @@ class _DemoAppState extends State<DemoApp> {
                     .map((e) => SearchFieldListItem(e,
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text(
-                            e,
-                            style: TextStyle(color: Colors.red),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal:16.0),
+                            child: Text(
+                              e,
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
                         )))
                     .toList(),
+                onSaved: (x) {
+                  print("Saved $x");
+                },
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
@@ -140,6 +147,18 @@ class _DemoAppState extends State<DemoApp> {
                 ),
                 border: Border.all(
                   color: Colors.grey.withOpacity(0.5),
+                ),
+              ),
+              initialValue: SearchFieldListItem(
+                _suggestions[2],
+                child: Container(
+                  color: Colors.red,
+                  width: 100,
+                  alignment: Alignment.center,
+                  child: Text(
+                    _suggestions[2],
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
               suggestionItemDecoration: BoxDecoration(
@@ -233,6 +252,7 @@ class _DemoAppState extends State<DemoApp> {
             child: ElevatedButton(
                 onPressed: () {
                   _formKey.currentState!.validate();
+                  _formKey.currentState!.save();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

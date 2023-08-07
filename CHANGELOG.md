@@ -1,3 +1,7 @@
+#### [0.8.4] - Aug 07, 2023
+- Addresses [Issue 92](https://github.com/maheshmnj/searchfield/issues/92): Add `onSaved` callback to SearchField
+- Addresses [Issue 90](https://github.com/maheshmnj/searchfield/issues/90) Update Docs to clarify Alignment of suggestions
+
 #### [0.8.3] - May 19, 2023
 - Fix Regressed Issue: https://github.com/maheshmnj/searchfield/issues/83
 
