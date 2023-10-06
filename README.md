@@ -174,7 +174,7 @@ SearchField(
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
 - `searchStyle` : textStyle for the search Input.
-- `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
+- `searchInputDecoration` : decoration for the search Input (e.g to update HintStyle) similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionDirection` : direction of the suggestions list, defaults to `SuggestionDirection.down`.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.
