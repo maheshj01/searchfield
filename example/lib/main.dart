@@ -1,4 +1,3 @@
-import 'package:example/demo.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -24,7 +23,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: DemoApp(),
+      home: SearchFieldSample(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -76,6 +75,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             key: const Key('searchfield'),
             hint: 'Search by country name',
             itemHeight: 50,
+            scrollbarDecoration: ScrollbarDecoration(),
+            //   thumbVisibility: true,
+            //   thumbColor: Colors.red,
+            //   fadeDuration: const Duration(milliseconds: 3000),
+            //   trackColor: Colors.blue,
+            //   trackRadius: const Radius.circular(10),
+            // ),
             searchInputDecoration:
                 InputDecoration(hintStyle: TextStyle(color: Colors.red)),
             suggestionsDecoration: SuggestionDecoration(

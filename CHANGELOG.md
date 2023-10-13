@@ -1,28 +1,41 @@
+#### [0.8.5] - Oct 12, 2023
+
+- Adds `scrollbarDecoration` property to customize the scrollbar [Issue 99](https://github.com/maheshmnj/searchfield/issues/99)
+- [BREAKING] Removes `scrollbarAlwaysVisible` property, instead use `scrollbarDecoration.thumbVisibility` to customize the scrollbar.
+
 #### [0.8.4] - Aug 07, 2023
+
 - Addresses [Issue 92](https://github.com/maheshmnj/searchfield/issues/92): Add `onSaved` callback to SearchField
 - Addresses [Issue 90](https://github.com/maheshmnj/searchfield/issues/90) Update Docs to clarify Alignment of suggestions
 
 #### [0.8.3] - May 19, 2023
+
 - Fix Regressed Issue: https://github.com/maheshmnj/searchfield/issues/83
 
 #### [0.8.2] - May 16, 2023
+
 - Fix static analysis issue
 
 #### [0.8.1] - May 15, 2023
+
 - Fixed: Overlay was not updated when the dependency changed.
 - Fix: [Issue #81](https://github.com/maheshmnj/searchfield/issues/81) adds padding property to `SuggestionDecoration`.
 
 #### [0.8.0] - May 05, 2023
+
 - Fix: [Issue #78](https://github.com/maheshmnj/searchfield/issues/78) Adds `onSearchTextChanged` callback to get the search text on every change.
 - Deprecate `comparator` property, use `onSearchTextChanged` instead.
 
 #### [0.7.8] - May 02, 2023
+
 - Fix [Issue 77](https://github.com/maheshmnj/searchfield/issues/77) Add TextCapitalization property to SearchField.
 
 #### [0.7.7] - Apr 27, 2023
+
 - Fix [Issue: 76](https://github.com/maheshmnj/searchfield/issues/76) Overlay not getting closed on Route pop.
 
 #### [0.7.6] - Apr 16, 2023
+
 - Add 'readOnly' property to disable editing
 - [BREAKING] [Issue 58](https://github.com/maheshmnj/searchfield/issues/58): Removes `hasOverlay` property, now suggestions are always shown as an overlay
 - Fixes: SearchField Cannot be wrapped with Center [Issue 57](https://github.com/maheshmnj/searchfield/issues/57)
@@ -47,7 +60,8 @@
 - Add `suggestionDirection` property to position the suggestions.
 
 #### [0.7.1] - Oct 6, 2022
--  Fixes [#43](https://github.com/maheshmnj/searchfield/issues/43)
+
+- Fixes [#43](https://github.com/maheshmnj/searchfield/issues/43)
 
 #### [0.7.0] - Aug 30, 2022
 
@@ -56,6 +70,7 @@
 #### [0.6.9] - Aug 12, 2022
 
 - Add `suggestionStyle` to style default suggestions.
+
 #### [0.6.8] - Aug 8, 2022
 
 - Fix widget not mounted error on Deactivate
@@ -63,14 +78,16 @@
 #### [0.6.7] - Jul 24, 2022
 
 - Fixes [issue #39](https://github.com/maheshmnj/searchfield/issues/39)
+
 #### [0.6.6] - Jun 12, 2022
 
-- Add `autoCorrect` and `inputFormatter`  property
+- Add `autoCorrect` and `inputFormatter` property
 - Fix suggestionState for `hasOverlay:false`
 
 #### [0.6.5] - May 19, 2022
 
 - Fixes runtime warning in flutter 3 [Issue #29](https://github.com/maheshmnj/searchfield/issues/29)
+
 #### [0.6.4] - Apr 21, 2022
 
 - Fixes [Issue #25](https://github.com/maheshmnj/searchfield/issues/25)
@@ -80,6 +97,7 @@
 - Fixes [issue #20](https://github.com/maheshmnj/searchfield/issues/20)
 - renamed property `onTap` to `onSuggestionTap`
 - Adds `focusNode` and `onSubmit` parameters to SearchField
+
 #### [0.6.2] - Feb 24, 2022
 
 - Add support for empty widget
@@ -108,15 +126,17 @@
 #### [0.5.4] - Sep 01, 2021
 
 - renamed property to `SuggestionType` to `SuggestionState`
+
 #### [0.5.3] - Sep 01, 2021
 
-- Adds `SuggestionType` enum to show/hide suggestion on focus 
+- Adds `SuggestionType` enum to show/hide suggestion on focus
 - Update example
 
 #### [0.5.2] - Apr 17, 2021
 
-- Add overlay example 
+- Add overlay example
 - Update readme
+
 #### [0.5.1] - Apr 13, 2021
 
 - Updated docs

@@ -1,4 +1,4 @@
-# [searchfield: ^0.8.4](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.8.5](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
@@ -211,10 +211,10 @@ SearchField(
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
-- `scrollbarAlwaysVisible`: Defines whether to show the scrollbar always or only when scrolling.
+- `scrollbarDecoration`: decoration for the scrollbar.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
-- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
+- `suggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input (e.g to update HintStyle) similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
