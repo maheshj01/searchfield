@@ -104,6 +104,48 @@ Form(
   ))
 ```
 
+```dart
+ SearchField(
+    onSearchTextChanged: (query) {
+      final filter = suggestions
+          .where((element) =>
+              element.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      return filter
+          .map((e) => SearchFieldListItem<String>(e,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(e,
+                    style: TextStyle(fontSize: 24, color: Colors.red)),
+              )))
+          .toList();
+    },
+    key: const Key('searchfield'),
+    hint: 'Search by country name',
+    itemHeight: 50,
+    searchInputDecoration:
+        InputDecoration(hintStyle: TextStyle(color: Colors.red)),
+    suggestionsDecoration: SuggestionDecoration(
+        padding: const EdgeInsets.all(4),
+        border: Border.all(color: Colors.red),
+        borderRadius: BorderRadius.all(Radius.circular(10))),
+    suggestions: suggestions
+        .map((e) => SearchFieldListItem<String>(e,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(e,
+                  style: TextStyle(fontSize: 24, color: Colors.red)),
+            )))
+        .toList(),
+    focusNode: focus,
+    suggestionState: Suggestion.expand,
+    onSuggestionTap: (SearchFieldListItem<String> x) {
+      focus.unfocus();
+    },
+  ),
+));
+```
+
 <img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
 
 ## Customize the suggestions the way you want
