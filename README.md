@@ -1,4 +1,4 @@
-# [searchfield: ^0.8.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.8.6](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
