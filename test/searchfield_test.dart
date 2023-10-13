@@ -749,4 +749,92 @@ void main() {
     expect(formKey.currentState!.validate(), true);
     formKey.currentState!.save();
   });
+
+  group('Scrollbar should be customizable', () {
+    testWidgets('Widget should render with default scrollbar Decoration',
+        (widgetTester) async {
+      await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+          scrollbarDecoration: ScrollbarDecoration(),
+          key: const Key('searchfield'),
+          suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+              .map(SearchFieldListItem<String>.new)
+              .toList(),
+          suggestionState: Suggestion.expand,
+        ),
+      ));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.pumpAndSettle();
+      await widgetTester.enterText(textField, 'A');
+      await widgetTester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+    });
+
+    testWidgets('Scrollbar should allow setting custom properties',
+        (widgetTester) async {
+      await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+          scrollbarDecoration: ScrollbarDecoration(
+              thumbColor: Colors.blue,
+              thickness: 10,
+              // radius: Radius.circular(10),
+              fadeDuration: Duration(seconds: 1),
+              pressDuration: Duration(seconds: 1),
+              minThumbLength: 10,
+              trackColor: Colors.red,
+              timeToFade: Duration(seconds: 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              trackRadius: Radius.circular(10),
+              trackBorderColor: Colors.red,
+              trackVisibility: true),
+          key: const Key('searchfield'),
+          suggestions: [
+            'ABC',
+            'DEF',
+            'GHI',
+            'JKL',
+            'MNO',
+            'PQR',
+            'STU',
+            'VWX',
+            'YZ'
+          ].map(SearchFieldListItem<String>.new).toList(),
+          suggestionState: Suggestion.expand,
+        ),
+      ));
+
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.enterText(textField, '');
+      await widgetTester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final scrollbar = find.byType(RawScrollbar);
+      expect(scrollbar, findsOneWidget);
+      final scrollbarWidget = widgetTester.widget<RawScrollbar>(scrollbar);
+      expect(scrollbarWidget, isNotNull);
+      expect(scrollbarWidget.thumbColor, Colors.blue);
+      expect(scrollbarWidget.thickness, 10);
+      // expect(scrollbarWidget.radius, Radius.circular(10));
+      expect(scrollbarWidget.fadeDuration, Duration(seconds: 1));
+      expect(scrollbarWidget.pressDuration, Duration(seconds: 1));
+      expect(scrollbarWidget.minThumbLength, 10);
+      expect(scrollbarWidget.trackColor, Colors.red);
+      expect(scrollbarWidget.timeToFade, Duration(seconds: 1));
+      expect(scrollbarWidget.shape, isNotNull);
+      expect(scrollbarWidget.trackRadius, Radius.circular(10));
+      expect(scrollbarWidget.trackBorderColor, Colors.red);
+      expect(scrollbarWidget.trackVisibility, true);
+    });
+  });
 }
