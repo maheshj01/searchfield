@@ -1,4 +1,4 @@
-#### [0.8.5] - Oct 13, 2023
+#### [0.8.6] - Oct 13, 2023
 - Remove default scrollbar from listview
 #### [0.8.5] - Oct 12, 2023
 
