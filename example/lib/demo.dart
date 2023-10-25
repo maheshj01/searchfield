@@ -89,12 +89,17 @@ class _DemoAppState extends State<DemoApp> {
                     .map((e) => SearchFieldListItem(e,
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text(
-                            e,
-                            style: TextStyle(color: Colors.red),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              e,
+                              style: TextStyle(color: Colors.red),
+                            ),
                           ),
                         )))
                     .toList(),
+                onSaved: (x) {},
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
@@ -142,6 +147,18 @@ class _DemoAppState extends State<DemoApp> {
                   color: Colors.grey.withOpacity(0.5),
                 ),
               ),
+              initialValue: SearchFieldListItem(
+                _suggestions[2],
+                child: Container(
+                  color: Colors.red,
+                  width: 100,
+                  alignment: Alignment.center,
+                  child: Text(
+                    _suggestions[2],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
               suggestionItemDecoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   shape: BoxShape.rectangle,
@@ -176,7 +193,6 @@ class _DemoAppState extends State<DemoApp> {
             child: SearchField<String>(
               itemHeight: 50.0,
               // offset: Offset(100, 0),
-              scrollbarAlwaysVisible: true,
               suggestions: [
                 for (int i = 0; i < 10; i++)
                   {
@@ -203,7 +219,7 @@ class _DemoAppState extends State<DemoApp> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SearchField(
-              scrollbarAlwaysVisible: false,
+              scrollbarDecoration: ScrollbarDecoration(thumbVisibility: false),
               suggestionItemDecoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.2),
                 gradient: LinearGradient(colors: [
@@ -233,6 +249,7 @@ class _DemoAppState extends State<DemoApp> {
             child: ElevatedButton(
                 onPressed: () {
                   _formKey.currentState!.validate();
+                  _formKey.currentState!.save();
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -1,15 +1,3 @@
-/*
- * File: searchfield_test.dart
- * Project: None
- * File Created: Thursday, 21st April 2022 7:47:45 am
- * Author: Mahesh Jamdade
- * -----
- * Last Modified: Thursday, 21st April 2022 7:49:41 am
- * Modified By: Mahesh Jamdade
- * -----
- * Copyright 2022 - 2022 Widget Media Labs
- */
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -730,5 +718,123 @@ void main() {
     final textField = tester.firstWidget<TextField>(finder);
     expect(finder, findsOneWidget);
     expect(textField.textCapitalization, TextCapitalization.none);
+  });
+
+  testWidgets("SearchField should trigger onSaved", (widgetTester) async {
+    final formKey = GlobalKey<FormState>();
+    final controller = TextEditingController();
+    await widgetTester.pumpWidget(_boilerplate(
+      child: Form(
+        key: formKey,
+        child: SearchField(
+          key: const Key('searchfield'),
+          suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+              .map(SearchFieldListItem<String>.new)
+              .toList(),
+          controller: controller,
+          suggestionState: Suggestion.expand,
+          onSaved: (value) {
+            expect(value, 'ABC');
+          },
+        ),
+      ),
+    ));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await widgetTester.tap(textField);
+    await widgetTester.enterText(textField, 'ABC');
+    await widgetTester.pumpAndSettle();
+    expect(formKey.currentState!.validate(), true);
+    formKey.currentState!.save();
+  });
+
+  group('Scrollbar should be customizable', () {
+    testWidgets('Widget should render with default scrollbar Decoration',
+        (widgetTester) async {
+      await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+          scrollbarDecoration: ScrollbarDecoration(),
+          key: const Key('searchfield'),
+          suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+              .map(SearchFieldListItem<String>.new)
+              .toList(),
+          suggestionState: Suggestion.expand,
+        ),
+      ));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.pumpAndSettle();
+      await widgetTester.enterText(textField, 'A');
+      await widgetTester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      expect(find.text('ABC'), findsOneWidget);
+      expect(listFinder.evaluate().length, 1);
+    });
+
+    testWidgets('Scrollbar should allow setting custom properties',
+        (widgetTester) async {
+      await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+          scrollbarDecoration: ScrollbarDecoration(
+              thumbColor: Colors.blue,
+              thickness: 10,
+              // radius: Radius.circular(10),
+              fadeDuration: Duration(seconds: 1),
+              pressDuration: Duration(seconds: 1),
+              minThumbLength: 10,
+              trackColor: Colors.red,
+              timeToFade: Duration(seconds: 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              trackRadius: Radius.circular(10),
+              trackBorderColor: Colors.red,
+              trackVisibility: true),
+          key: const Key('searchfield'),
+          suggestions: [
+            'ABC',
+            'DEF',
+            'GHI',
+            'JKL',
+            'MNO',
+            'PQR',
+            'STU',
+            'VWX',
+            'YZ'
+          ].map(SearchFieldListItem<String>.new).toList(),
+          suggestionState: Suggestion.expand,
+        ),
+      ));
+
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.enterText(textField, '');
+      await widgetTester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final scrollbar = find.byType(RawScrollbar);
+      expect(scrollbar, findsOneWidget);
+      final scrollbarWidget = widgetTester.widget<RawScrollbar>(scrollbar);
+      expect(scrollbarWidget, isNotNull);
+      expect(scrollbarWidget.thumbColor, Colors.blue);
+      expect(scrollbarWidget.thickness, 10);
+      // expect(scrollbarWidget.radius, Radius.circular(10));
+      expect(scrollbarWidget.fadeDuration, Duration(seconds: 1));
+      expect(scrollbarWidget.pressDuration, Duration(seconds: 1));
+      expect(scrollbarWidget.minThumbLength, 10);
+      expect(scrollbarWidget.trackColor, Colors.red);
+      expect(scrollbarWidget.timeToFade, Duration(seconds: 1));
+      expect(scrollbarWidget.shape, isNotNull);
+      expect(scrollbarWidget.trackRadius, Radius.circular(10));
+      expect(scrollbarWidget.trackBorderColor, Colors.red);
+      expect(scrollbarWidget.trackVisibility, true);
+    });
   });
 }
