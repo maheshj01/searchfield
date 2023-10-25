@@ -477,6 +477,204 @@ void main() {
       expect(find.byType(RawScrollbar), findsOneWidget);
     });
   });
+
+  group(
+      'AnimatedContainer should be render with BoxConstraints height must be include itemHeight, '
+      'amount of suggestions and SuggestionDecoration EdgeInsets different cases',
+      () {
+    testWidgets(
+        'AnimatedContainer should be render with BoxConstraints height must be include itemHeight'
+        ' and amount of suggestions and without vertical padding without SuggestionDecoration EdgeInsets',
+        (WidgetTester tester) async {
+      const suggestions = ['ABC', 'DEF', 'GHI'];
+      const double itemHeight = 40;
+      final animatedContainerHeight = suggestions.length * itemHeight;
+      final expectedBoxConstraintsResult = BoxConstraints(
+        minHeight: animatedContainerHeight,
+        maxHeight: animatedContainerHeight,
+      );
+
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        itemHeight: itemHeight,
+        key: const Key('searchfield'),
+        suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+        suggestionState: Suggestion.expand,
+      )));
+
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      final animatedContainer = find.byType(AnimatedContainer);
+      final BoxConstraints? animatedContainerConstraints =
+          tester.widget<AnimatedContainer>(animatedContainer).constraints;
+      expect(find.byType(ListView), findsOneWidget);
+      expect(animatedContainer, findsOneWidget);
+      expect(animatedContainerConstraints, expectedBoxConstraintsResult);
+    });
+
+    testWidgets(
+        'AnimatedContainer should be render with BoxConstraints height must be include itemHeight'
+        ' and amount of suggestions with EdgeInsets.only without left and right property',
+        (WidgetTester tester) async {
+      const suggestions = ['ABC', 'DEF', 'GHI'];
+      const double itemHeight = 40;
+      const suggestionDecorationPadding =
+          EdgeInsets.only(left: 0, right: 0, top: 5, bottom: 7);
+      final animatedContainerHeight = suggestions.length * itemHeight +
+          suggestionDecorationPadding.top +
+          suggestionDecorationPadding.bottom;
+      final expectedBoxConstraintsResult = BoxConstraints(
+        minHeight: animatedContainerHeight,
+        maxHeight: animatedContainerHeight,
+      );
+
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        itemHeight: itemHeight,
+        key: const Key('searchfield'),
+        suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+        suggestionState: Suggestion.expand,
+        suggestionsDecoration: SuggestionDecoration(
+          padding: suggestionDecorationPadding,
+        ),
+      )));
+
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      final animatedContainer = find.byType(AnimatedContainer);
+      final BoxConstraints? animatedContainerConstraints =
+          tester.widget<AnimatedContainer>(animatedContainer).constraints;
+      expect(find.byType(ListView), findsOneWidget);
+      expect(animatedContainer, findsOneWidget);
+      expect(animatedContainerConstraints, expectedBoxConstraintsResult);
+    });
+
+    testWidgets(
+        'AnimatedContainer should be render with BoxConstraints height must be include itemHeight'
+        ' and amount of suggestions with EdgeInsets.only with all property but left and right should be ignored ',
+        (WidgetTester tester) async {
+      const suggestions = ['ABC', 'DEF', 'GHI'];
+      const double itemHeight = 40;
+      const suggestionDecorationPadding =
+          EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 7);
+      final animatedContainerHeight = suggestions.length * itemHeight +
+          suggestionDecorationPadding.top +
+          suggestionDecorationPadding.bottom;
+      final expectedBoxConstraintsResult = BoxConstraints(
+        minHeight: animatedContainerHeight,
+        maxHeight: animatedContainerHeight,
+      );
+
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        itemHeight: itemHeight,
+        key: const Key('searchfield'),
+        suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+        suggestionState: Suggestion.expand,
+        suggestionsDecoration: SuggestionDecoration(
+          padding: suggestionDecorationPadding,
+        ),
+      )));
+
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      final animatedContainer = find.byType(AnimatedContainer);
+      final BoxConstraints? animatedContainerConstraints =
+          tester.widget<AnimatedContainer>(animatedContainer).constraints;
+      expect(find.byType(ListView), findsOneWidget);
+      expect(animatedContainer, findsOneWidget);
+      expect(animatedContainerConstraints, expectedBoxConstraintsResult);
+    });
+
+    testWidgets(
+        'AnimatedContainer should be render with BoxConstraints height must be include itemHeight'
+        ' and amount of suggestions with EdgeInsets.symmetric with all property but horizontal should be ignored',
+        (WidgetTester tester) async {
+      const suggestions = ['ABC', 'DEF', 'GHI'];
+      const double itemHeight = 40;
+      const suggestionDecorationPadding =
+          EdgeInsets.symmetric(vertical: 20, horizontal: 20);
+      final animatedContainerHeight = suggestions.length * itemHeight +
+          suggestionDecorationPadding.top +
+          suggestionDecorationPadding.bottom;
+      final expectedBoxConstraintsResult = BoxConstraints(
+        minHeight: animatedContainerHeight,
+        maxHeight: animatedContainerHeight,
+      );
+
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        itemHeight: itemHeight,
+        key: const Key('searchfield'),
+        suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+        suggestionState: Suggestion.expand,
+        suggestionsDecoration: SuggestionDecoration(
+          padding: suggestionDecorationPadding,
+        ),
+      )));
+
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      final animatedContainer = find.byType(AnimatedContainer);
+      final BoxConstraints? animatedContainerConstraints =
+          tester.widget<AnimatedContainer>(animatedContainer).constraints;
+      expect(find.byType(ListView), findsOneWidget);
+      expect(animatedContainer, findsOneWidget);
+      expect(animatedContainerConstraints, expectedBoxConstraintsResult);
+    });
+
+    testWidgets(
+        'AnimatedContainer should be render with BoxConstraints height must be include itemHeight'
+        ' and amount of suggestions with EdgeInsets.all ',
+        (WidgetTester tester) async {
+      const suggestions = ['ABC', 'DEF', 'GHI'];
+      const double itemHeight = 40;
+      const suggestionDecorationPadding = EdgeInsets.all(20);
+      final animatedContainerHeight = suggestions.length * itemHeight +
+          suggestionDecorationPadding.top +
+          suggestionDecorationPadding.bottom;
+      final expectedBoxConstraintsResult = BoxConstraints(
+        minHeight: animatedContainerHeight,
+        maxHeight: animatedContainerHeight,
+      );
+
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        itemHeight: itemHeight,
+        key: const Key('searchfield'),
+        suggestions: suggestions.map(SearchFieldListItem<String>.new).toList(),
+        suggestionState: Suggestion.expand,
+        suggestionsDecoration: SuggestionDecoration(
+          padding: suggestionDecorationPadding,
+        ),
+      )));
+
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      final animatedContainer = find.byType(AnimatedContainer);
+      final BoxConstraints? animatedContainerConstraints =
+          tester.widget<AnimatedContainer>(animatedContainer).constraints;
+      expect(find.byType(ListView), findsOneWidget);
+      expect(animatedContainer, findsOneWidget);
+      expect(animatedContainerConstraints, expectedBoxConstraintsResult);
+    });
+  });
+
   group('Suggestions should respect suggestionDirection', () {
     testWidgets(
         'suggestions should respect suggestionDirection: SuggestionDirection.up',
