@@ -1,5 +1,9 @@
+#### [0.8.7] - Oct 27, 2023
+- Minor Fix in suggestions total height calculation. [#PR 85](https://github.com/maheshmnj/searchfield/pull/85)
+
 #### [0.8.6] - Oct 13, 2023
 - Remove default scrollbar from listview
+
 #### [0.8.5] - Oct 12, 2023
 
 - Adds `scrollbarDecoration` property to customize the scrollbar [Issue 99](https://github.com/maheshmnj/searchfield/issues/99)
