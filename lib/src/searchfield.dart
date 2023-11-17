@@ -36,6 +36,7 @@ class SearchFieldListItem<T> {
   final String searchKey;
 
   /// Custom Object to be associated with each ListItem
+  /// For Suggestions with Custom Objects, pass [item] parameter to [SearchFieldListItem]
   /// see example in [example/lib/country_search.dart](https://github.com/maheshmnj/searchfield/tree/master/example/lib/country_search.dart)
   final T? item;
 
