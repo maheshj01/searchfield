@@ -92,6 +92,7 @@ class SearchField<T> extends StatefulWidget {
   final List<SearchFieldListItem<T>> suggestions;
 
   /// Callback when the suggestion is selected.
+  /// The parameters passed to`SearchFieldListItem` in `suggestions` will be returned in the callback.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
   /// Callback when the searchfield is searched.
