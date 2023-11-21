@@ -258,6 +258,12 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
+  /// Defines whether to enable autofocus defaults to `false`
+  final bool autofocus;
+
+  /// Callback when a tap is performed outside Searchfield (during the time the field has focus)
+  final void Function(PointerDownEvent)? onTapOutside;
+
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
 
@@ -273,8 +279,10 @@ class SearchField<T> extends StatefulWidget {
       {Key? key,
       required this.suggestions,
       this.autoCorrect = true,
+      this.autofocus = false,
       this.controller,
       this.emptyWidget = const SizedBox.shrink(),
+      this.enabled,
       this.focusNode,
       this.hint,
       this.initialValue,
@@ -283,11 +291,11 @@ class SearchField<T> extends StatefulWidget {
       this.itemHeight = 35.0,
       this.marginColor,
       this.maxSuggestionsInViewPort = 5,
-      this.enabled,
       this.readOnly = false,
       this.onSearchTextChanged,
       this.onSaved,
       this.onSubmit,
+      this.onTapOutside,
       this.offset,
       this.onSuggestionTap,
       this.searchInputDecoration,
@@ -649,6 +657,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       child: TextFormField(
         key: key,
         enabled: widget.enabled,
+        autofocus: widget.autofocus,
+        onTapOutside: widget.onTapOutside,
         autocorrect: widget.autoCorrect,
         readOnly: widget.readOnly,
         onFieldSubmitted: (x) {

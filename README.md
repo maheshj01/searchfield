@@ -1,4 +1,4 @@
-# [searchfield: ^0.8.7](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.8.8](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
@@ -193,6 +193,7 @@ SearchField(
 ## Properties
 
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
+- `autofocus`: Defines whether to enable autofocus defaults to `false`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
@@ -207,6 +208,7 @@ SearchField(
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
+- `onOutSideTap` : callback when the user taps outside the searchfield.
 - `onSaved` : An optional method to call with the final value when the form is saved via FormState.save.
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.

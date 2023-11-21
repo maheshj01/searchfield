@@ -918,6 +918,72 @@ void main() {
     expect(textField.textCapitalization, TextCapitalization.none);
   });
 
+  group('Test Searchfield autofocus', () {
+    testWidgets('Searchfield should not autofocus by default (hidden keyboard)',
+        (widgetTester) async {
+      final focus = FocusNode();
+      final boilerPlate = _boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        focusNode: focus,
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+      ));
+      await widgetTester.pumpWidget(boilerPlate);
+      await widgetTester.pumpAndSettle();
+      // keyboard should not be visible
+      expect(widgetTester.testTextInput.isVisible, isFalse);
+    });
+    testWidgets('Searchfield autofocus should launch keyboard',
+        (widgetTester) async {
+      final autoFocus = true;
+      final focus = FocusNode();
+      final boilerPlate = _boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        autofocus: autoFocus,
+        focusNode: focus,
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+      ));
+      await widgetTester.pumpWidget(boilerPlate);
+      await widgetTester.pumpAndSettle();
+      // keyboard should not be visible
+      expect(widgetTester.testTextInput.isVisible, isTrue);
+    });
+  });
+
+  testWidgets("Test onTapOutside", (widgetTester) async {
+    bool outSideTap = false;
+    await widgetTester.pumpWidget(_boilerplate(
+      child: Column(
+        children: [
+          Center(
+            child: SearchField(
+              key: const Key('searchfield'),
+              suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                  .map(SearchFieldListItem<String>.new)
+                  .toList(),
+              onTapOutside: (x) {
+                outSideTap = true;
+              },
+              suggestionState: Suggestion.expand,
+            ),
+          ),
+        ],
+      ),
+    ));
+    expect(outSideTap, false);
+    //  simulate tap outside searchField
+    final textField = find.byType(TextFormField);
+    final position = widgetTester.getCenter(textField);
+    await widgetTester.tapAt(position - const Offset(0, -100));
+    await widgetTester.pumpAndSettle();
+    expect(outSideTap, true);
+  });
+
   testWidgets("SearchField should trigger onSaved", (widgetTester) async {
     final formKey = GlobalKey<FormState>();
     final controller = TextEditingController();
