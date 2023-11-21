@@ -1,4 +1,4 @@
-# [searchfield: ^0.8.3](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.8.7](https://pub.dev/packages/searchfield)
 
  <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
@@ -104,15 +104,79 @@ Form(
   ))
 ```
 
+```dart
+ SearchField(
+    onSearchTextChanged: (query) {
+      final filter = suggestions
+          .where((element) =>
+              element.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+      return filter
+          .map((e) => SearchFieldListItem<String>(e,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Text(e,
+                    style: TextStyle(fontSize: 24, color: Colors.red)),
+              )))
+          .toList();
+    },
+    key: const Key('searchfield'),
+    hint: 'Search by country name',
+    itemHeight: 50,
+    searchInputDecoration:
+        InputDecoration(hintStyle: TextStyle(color: Colors.red)),
+    suggestionsDecoration: SuggestionDecoration(
+        padding: const EdgeInsets.all(4),
+        border: Border.all(color: Colors.red),
+        borderRadius: BorderRadius.all(Radius.circular(10))),
+    suggestions: suggestions
+        .map((e) => SearchFieldListItem<String>(e,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(e,
+                  style: TextStyle(fontSize: 24, color: Colors.red)),
+            )))
+        .toList(),
+    focusNode: focus,
+    suggestionState: Suggestion.expand,
+    onSuggestionTap: (SearchFieldListItem<String> x) {
+      focus.unfocus();
+    },
+  ),
+));
+```
+
 <img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
 
 ## Customize the suggestions the way you want
 
+Suggestions can be passed as a widget using the child property of `SearchFieldListItem`
+
+```dart
+SearchField(
+  suggestions: _statesOfIndia
+     .map((e) => SearchFieldListItem(e,
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+             padding: const EdgeInsets.symmetric(horizontal:16.0),
+               child: Text(e,
+                 style: TextStyle(color: Colors.red),
+               ),
+             ),
+          ))).toList(),
+    ...
+    ...
+)
+```
 <p float="left;padding=10px">
   <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="210"/>
   <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="170"/>
   <img src = "https://user-images.githubusercontent.com/31410839/115071445-e3349080-9f13-11eb-8d9b-e4dc81d3e7a7.png"" width="232"/>
-  <img src="https://user-images.githubusercontent.com/31410839/154835349-3d06376c-98ec-45ca-bede-10f9e2f69589.png" width="215"/>
+</p>
+<p float="left;padding=10px">
+  <img src="https://user-images.githubusercontent.com/31410839/154835349-3d06376c-98ec-45ca-bede-10f9e2f69589.png" width="300"/>
+ <img width="300" alt="image" src="https://github.com/maheshmnj/searchfield/assets/31410839/e109e6c4-c36a-4d58-b5b2-b6b4999924d6">
 </p>
 
 ### Support for Overlays
@@ -130,7 +194,7 @@ Form(
 
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `controller`: TextEditing Controller to interact with the searchfield.
-- `comparator` property to filter out the suggestions with a custom logic.
+- `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
@@ -143,15 +207,16 @@ Form(
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
+- `onSaved` : An optional method to call with the final value when the form is saved via FormState.save.
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
-- `scrollbarAlwaysVisible`: Defines whether to show the scrollbar always or only when scrolling.
+- `scrollbarDecoration`: decoration for the scrollbar.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
 each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
-- `SuggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
+- `suggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
 - `searchStyle` : textStyle for the search Input.
-- `searchInputDecoration` : decoration for the search Input similar to built in textfield widget.
+- `searchInputDecoration` : decoration for the search Input (e.g to update HintStyle) similar to built in textfield widget.
 - `suggestionsDecoration` : decoration for suggestions List with ability to add box shadow background color and much more.
 - `suggestionDirection` : direction of the suggestions list, defaults to `SuggestionDirection.down`.
 - `suggestionItemDecoration` : decoration for suggestionItem with ability to add color and gradient in the background.

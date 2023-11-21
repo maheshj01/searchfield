@@ -36,6 +36,7 @@ class SearchFieldListItem<T> {
   final String searchKey;
 
   /// Custom Object to be associated with each ListItem
+  /// For Suggestions with Custom Objects, pass [item] parameter to [SearchFieldListItem]
   /// see example in [example/lib/country_search.dart](https://github.com/maheshmnj/searchfield/tree/master/example/lib/country_search.dart)
   final T? item;
 
@@ -91,6 +92,7 @@ class SearchField<T> extends StatefulWidget {
   final List<SearchFieldListItem<T>> suggestions;
 
   /// Callback when the suggestion is selected.
+  /// The parameters passed to`SearchFieldListItem` in `suggestions` will be returned in the callback.
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
   /// Callback when the searchfield is searched.
@@ -232,13 +234,12 @@ class SearchField<T> extends StatefulWidget {
   ///
   final String? Function(String?)? validator;
 
-  /// Defines whether to show the scrollbar always or only when scrolling.
-  /// defaults to `true`
-  final bool scrollbarAlwaysVisible;
-
   /// suggestion List offset from the searchfield
   /// The top left corner of the searchfield is the origin (0,0)
   final Offset? offset;
+
+  /// An optional method to call with the final value when the form is saved via FormState.save.
+  final void Function(String?)? onSaved;
 
   /// Widget to show when the search returns
   /// empty results.
@@ -262,6 +263,8 @@ class SearchField<T> extends StatefulWidget {
 
   /// input formatter for the searchfield
   final List<TextInputFormatter>? inputFormatters;
+
+  final ScrollbarDecoration? scrollbarDecoration;
 
   /// suggestion direction defaults to [SuggestionDirection.up]
   final SuggestionDirection suggestionDirection;
@@ -287,12 +290,13 @@ class SearchField<T> extends StatefulWidget {
       this.enabled,
       this.readOnly = false,
       this.onSearchTextChanged,
+      this.onSaved,
       this.onSubmit,
       this.offset,
       this.onSuggestionTap,
       this.searchInputDecoration,
       this.searchStyle,
-      this.scrollbarAlwaysVisible = true,
+      this.scrollbarDecoration,
       this.suggestionStyle,
       this.suggestionsDecoration,
       this.suggestionDirection = SuggestionDirection.down,
@@ -320,7 +324,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   FocusNode? _focus;
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
-
+  ScrollbarDecoration? _scrollbarDecoration;
   @override
   void dispose() {
     suggestionStream.close();
@@ -338,6 +342,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void initialize() {
+    if (widget.scrollbarDecoration == null) {
+      _scrollbarDecoration = ScrollbarDecoration();
+    } else {
+      _scrollbarDecoration = widget.scrollbarDecoration;
+    }
+
     if (widget.focusNode != null) {
       _focus = widget.focusNode;
     } else {
@@ -407,6 +417,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.suggestions != widget.suggestions) {
       suggestionStream.sink.add(widget.suggestions);
     }
+    if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
+      if (widget.scrollbarDecoration == null) {
+        _scrollbarDecoration = ScrollbarDecoration();
+      } else {
+        _scrollbarDecoration = widget.scrollbarDecoration;
+      }
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -420,12 +437,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else if (snapshot.data!.isEmpty) {
           return widget.emptyWidget;
         } else {
+          final paddingHeight = widget.suggestionsDecoration != null
+              ? widget.suggestionsDecoration!.padding.vertical
+              : 0;
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
-            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
+            _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort +
+                paddingHeight;
           } else if (snapshot.data!.length == 1) {
-            _totalHeight = widget.itemHeight;
+            _totalHeight = widget.itemHeight + paddingHeight;
           } else {
-            _totalHeight = snapshot.data!.length * widget.itemHeight;
+            _totalHeight =
+                snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
@@ -516,10 +538,27 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   ],
                 ),
             child: RawScrollbar(
-                thumbVisibility: widget.scrollbarAlwaysVisible,
-                controller: _scrollController,
-                padding: EdgeInsets.zero,
-                child: listView),
+              thumbVisibility: _scrollbarDecoration!.thumbVisibility,
+              controller: _scrollController,
+              padding: EdgeInsets.zero,
+              shape: _scrollbarDecoration!.shape,
+              fadeDuration: _scrollbarDecoration!.fadeDuration,
+              radius: _scrollbarDecoration!.radius,
+              thickness: _scrollbarDecoration!.thickness,
+              thumbColor: _scrollbarDecoration!.thumbColor,
+              minThumbLength: _scrollbarDecoration!.minThumbLength,
+              trackRadius: _scrollbarDecoration!.trackRadius,
+              trackVisibility: _scrollbarDecoration!.trackVisibility,
+              timeToFade: _scrollbarDecoration!.timeToFade,
+              pressDuration: _scrollbarDecoration!.pressDuration,
+              trackBorderColor: _scrollbarDecoration!.trackBorderColor,
+              trackColor: _scrollbarDecoration!.trackColor,
+              child: ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: listView,
+              ),
+            ),
           );
         }
       },
@@ -632,6 +671,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             }
           }
         },
+        onSaved: (x) {
+          if (widget.onSaved != null) widget.onSaved!(x);
+        },
         inputFormatters: widget.inputFormatters,
         controller: widget.controller ?? searchController,
         focusNode: _focus,
@@ -692,4 +734,70 @@ class SuggestionDecoration extends BoxDecoration {
             boxShadow: boxShadow,
             gradient: gradient,
             shape: shape);
+}
+
+class ScrollbarDecoration {
+  /// The [OutlinedBorder] of the scrollbar's thumb.
+  ///
+  /// Only one of [radius] and [shape] may be specified. For a rounded rectangle,
+  /// it's simplest to just specify [radius]. By default, the scrollbar thumb's
+  /// shape is a simple rectangle.
+  OutlinedBorder? shape;
+
+  /// The [Radius] of the scrollbar's thumb.
+  /// Only one of [radius] and [shape] may be specified. For a rounded rectangle,
+  Radius? radius;
+
+  /// The thickness of the scrollbar's thumb.
+  double? thickness;
+
+  /// Mustn't be null and the value has to be greater or equal to `minOverscrollLength`, which in
+  /// turn is >= 0. Defaults to 18.0.
+  double minThumbLength;
+
+  /// The [Color] of the scrollbar's thumb.
+  Color? thumbColor;
+
+  /// The [Color] of the scrollbar's track.
+  bool? trackVisibility;
+
+  /// The [Radius] of the scrollbar's track.
+  Radius? trackRadius;
+
+  /// The [Color] of the scrollbar's track.
+  Color? trackColor;
+
+  /// The [Color] of the scrollbar's track border.
+  Color? trackBorderColor;
+
+  /// The [Duration] of the fade animation.
+  Duration fadeDuration;
+
+  /// Defines whether to show the scrollbar always or only when scrolling.
+  /// defaults to `true`
+  final bool? thumbVisibility;
+
+  /// The [Duration] of time until the fade animation begins.
+  /// Cannot be null, defaults to a [Duration] of 600 milliseconds.
+  Duration timeToFade;
+
+  /// The [Duration] of time that a LongPress will trigger the drag gesture of the scrollbar thumb.
+  /// Cannot be null, defaults to [Duration.zero].
+  Duration pressDuration;
+
+  ScrollbarDecoration({
+    this.minThumbLength = 18.0,
+    this.thumbVisibility = true,
+    this.radius,
+    this.thickness,
+    this.thumbColor,
+    this.shape,
+    this.trackVisibility,
+    this.trackRadius,
+    this.trackColor,
+    this.trackBorderColor,
+    this.fadeDuration = const Duration(milliseconds: 300),
+    this.timeToFade = const Duration(milliseconds: 600),
+    this.pressDuration = const Duration(milliseconds: 100),
+  });
 }
