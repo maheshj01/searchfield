@@ -1,3 +1,6 @@
+#### [0.8.9] - Nov 23, 2023
+- Clip Suggsestions within Material, Fixes [issue #44](https://github.com/maheshmnj/searchfield/issues/44)
+
 #### [0.8.8] - Nov 21, 2023
 
 - add `onTapOutside` callback to SearchField [Issue #94](https://github.com/maheshmnj/searchfield/issues/94)
