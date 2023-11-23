@@ -39,10 +39,21 @@ class SearchFieldSample extends StatefulWidget {
 class _SearchFieldSampleState extends State<SearchFieldSample> {
   int suggestionsCount = 12;
   final focus = FocusNode();
+
+  @override
+  void initState() {
+    suggestions =
+        List.generate(suggestionsCount, (index) => 'suggestion $index');
+    super.initState();
+  }
+
+  var suggestions = <String>[];
   @override
   Widget build(BuildContext context) {
-    final suggestions =
-        List.generate(suggestionsCount, (index) => 'suggestion $index');
+    Widget searchChild(x) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
+          child: Text(x, style: TextStyle(fontSize: 24, color: Colors.white)),
+        );
     return Scaffold(
         appBar: AppBar(
           title: Text('Dynamic sample Demo'),
@@ -66,13 +77,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                         element.toLowerCase().contains(query.toLowerCase()))
                     .toList();
                 return filter
-                    .map((e) => SearchFieldListItem<String>(e,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(e,
-                              style:
-                                  TextStyle(fontSize: 24, color: Colors.red)),
-                        )))
+                    .map((e) =>
+                        SearchFieldListItem<String>(e, child: searchChild(e)))
                     .toList();
               },
               key: const Key('searchfield'),
@@ -86,6 +92,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               //   trackRadius: const Radius.circular(10),
               // ),
               onTapOutside: (x) {},
+              suggestionStyle:
+                  const TextStyle(fontSize: 24, color: Colors.white),
               searchInputDecoration: InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(24),
@@ -115,12 +123,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 borderRadius: BorderRadius.circular(24),
               ),
               suggestions: suggestions
-                  .map((e) => SearchFieldListItem<String>(e,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 12),
-                        child: Text(e,
-                            style: TextStyle(fontSize: 24, color: Colors.white)),
-                      )))
+                  .map((e) =>
+                      SearchFieldListItem<String>(e, child: searchChild(e)))
                   .toList(),
               focusNode: focus,
               suggestionState: Suggestion.expand,
