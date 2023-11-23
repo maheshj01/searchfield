@@ -634,7 +634,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 child: CompositedTransformFollower(
                     offset: widget.offset ?? yOffset,
                     link: _layerLink,
-                    child: Material(child: _suggestionsBuilder())),
+                    child: ClipRRect(
+                      borderRadius:
+                          widget.suggestionsDecoration!.borderRadius ??
+                              BorderRadius.zero,
+                      child: Material(
+                        child: _suggestionsBuilder(),
+                      ),
+                    )),
               );
             }));
   }
