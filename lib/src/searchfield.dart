@@ -636,7 +636,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     link: _layerLink,
                     child: ClipRRect(
                       borderRadius:
-                          widget.suggestionsDecoration!.borderRadius ??
+                          widget.suggestionsDecoration?.borderRadius ??
                               BorderRadius.zero,
                       child: Material(
                         child: _suggestionsBuilder(),
