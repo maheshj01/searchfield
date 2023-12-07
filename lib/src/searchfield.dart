@@ -241,6 +241,8 @@ class SearchField<T> extends StatefulWidget {
   /// An optional method to call with the final value when the form is saved via FormState.save.
   final void Function(String?)? onSaved;
 
+  final void Function()? onTap;
+
   /// Widget to show when the search returns
   /// empty results.
   /// defaults to [SizedBox.shrink]
@@ -294,6 +296,7 @@ class SearchField<T> extends StatefulWidget {
       this.readOnly = false,
       this.onSearchTextChanged,
       this.onSaved,
+      this.onTap,
       this.onSubmit,
       this.onTapOutside,
       this.offset,
@@ -682,6 +685,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               });
             }
           }
+          if (widget.onTap != null) widget.onTap!();
         },
         onSaved: (x) {
           if (widget.onSaved != null) widget.onSaved!(x);

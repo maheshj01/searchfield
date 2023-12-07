@@ -81,6 +81,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                         SearchFieldListItem<String>(e, child: searchChild(e)))
                     .toList();
               },
+              onTap: () {},
               key: const Key('searchfield'),
               hint: 'Search by country name',
               itemHeight: 50,

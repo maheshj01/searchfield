@@ -274,6 +274,30 @@ void main() {
   //   expect(focus.hasFocus, false);
   // });
 
+  testWidgets('Searchfield should trigger onTap when tapped',
+      (widgetTester) async {
+    final controller = TextEditingController();
+    final countries = data.map(Country.fromMap).toList();
+    int tapCount = 0;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+      controller: controller,
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      suggestionState: Suggestion.expand,
+      onTap: () {
+        tapCount++;
+      },
+    )));
+
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(tapCount, 0);
+    await widgetTester.tap(textField);
+    await widgetTester.pumpAndSettle();
+    expect(tapCount, 1);
+  });
+
   testWidgets('Searchfield should support readOnly mode',
       (WidgetTester tester) async {
     final controller = TextEditingController();
