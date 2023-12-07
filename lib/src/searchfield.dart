@@ -108,6 +108,9 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to show the searchfield as readOnly
   final bool readOnly;
 
+  /// Defines whether to show the searchfield as autofocused
+  AutovalidateMode? autovalidateMode;
+
   /// Callback when the Searchfield is submitted
   ///  it returns the text from the searchfield
   final Function(String)? onSubmit;
@@ -282,6 +285,7 @@ class SearchField<T> extends StatefulWidget {
       required this.suggestions,
       this.autoCorrect = true,
       this.autofocus = false,
+      this.autovalidateMode,
       this.controller,
       this.emptyWidget = const SizedBox.shrink(),
       this.enabled,
@@ -671,6 +675,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         onTapOutside: widget.onTapOutside,
         autocorrect: widget.autoCorrect,
         readOnly: widget.readOnly,
+        autovalidateMode: widget.autovalidateMode,
         onFieldSubmitted: (x) {
           if (widget.onSubmit != null) widget.onSubmit!(x);
         },

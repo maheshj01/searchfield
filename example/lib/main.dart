@@ -67,72 +67,96 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           },
           child: Icon(Icons.add),
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SearchField(
-              onSearchTextChanged: (query) {
-                final filter = suggestions
-                    .where((element) =>
-                        element.toLowerCase().contains(query.toLowerCase()))
-                    .toList();
-                return filter
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    labelText: 'Flutter TextFormField',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.length < 4) {
+                      return 'error';
+                    }
+                    return null;
+                  }),
+              SizedBox(
+                height: 50,
+              ),
+              SearchField(
+                onSearchTextChanged: (query) {
+                  final filter = suggestions
+                      .where((element) =>
+                          element.toLowerCase().contains(query.toLowerCase()))
+                      .toList();
+                  return filter
+                      .map((e) =>
+                          SearchFieldListItem<String>(e, child: searchChild(e)))
+                      .toList();
+                },
+                onTap: () {},
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || value.length < 4) {
+                    return 'error';
+                  }
+                  return null;
+                },
+                key: const Key('searchfield'),
+                hint: 'Search by country name',
+                itemHeight: 50,
+                scrollbarDecoration: ScrollbarDecoration(),
+                //   thumbVisibility: true,
+                //   thumbColor: Colors.red,
+                //   fadeDuration: const Duration(milliseconds: 3000),
+                //   trackColor: Colors.blue,
+                //   trackRadius: const Radius.circular(10),
+                // ),
+                onTapOutside: (x) {},
+                suggestionStyle:
+                    const TextStyle(fontSize: 24, color: Colors.white),
+                searchInputDecoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.orange,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.black,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                ),
+                suggestionsDecoration: SuggestionDecoration(
+                  color: Colors.red,
+                  border: Border.all(color: Colors.orange),
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                suggestions: suggestions
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))
-                    .toList();
-              },
-              onTap: () {},
-              key: const Key('searchfield'),
-              hint: 'Search by country name',
-              itemHeight: 50,
-              scrollbarDecoration: ScrollbarDecoration(),
-              //   thumbVisibility: true,
-              //   thumbColor: Colors.red,
-              //   fadeDuration: const Duration(milliseconds: 3000),
-              //   trackColor: Colors.blue,
-              //   trackRadius: const Radius.circular(10),
-              // ),
-              onTapOutside: (x) {},
-              suggestionStyle:
-                  const TextStyle(fontSize: 24, color: Colors.white),
-              searchInputDecoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    color: Colors.orange,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: const BorderSide(
-                    width: 1,
-                    color: Colors.black,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-                fillColor: Colors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
+                    .toList(),
+                focusNode: focus,
+                suggestionState: Suggestion.expand,
+                onSuggestionTap: (SearchFieldListItem<String> x) {
+                  focus.unfocus();
+                },
               ),
-              suggestionsDecoration: SuggestionDecoration(
-                color: Colors.red,
-                border: Border.all(color: Colors.orange),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              suggestions: suggestions
-                  .map((e) =>
-                      SearchFieldListItem<String>(e, child: searchChild(e)))
-                  .toList(),
-              focusNode: focus,
-              suggestionState: Suggestion.expand,
-              onSuggestionTap: (SearchFieldListItem<String> x) {
-                focus.unfocus();
-              },
-            ),
+            ],
           ),
         ));
   }
