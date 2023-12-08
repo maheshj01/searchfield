@@ -108,8 +108,14 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to show the searchfield as readOnly
   final bool readOnly;
 
-  /// Defines whether to show the searchfield as autofocused
-  AutovalidateMode? autovalidateMode;
+  /// Used to enable/disable this form field auto validation and update its error text.
+
+  /// If AutovalidateMode.onUserInteraction, this FormField will only auto-validate after its
+  /// content changes. If AutovalidateMode.always, it will auto-validate even without user
+  /// interaction. If AutovalidateMode.disabled, auto-validation will be disabled.
+  ///
+  /// Defaults to AutovalidateMode.disabled.
+  final AutovalidateMode? autovalidateMode;
 
   /// Callback when the Searchfield is submitted
   ///  it returns the text from the searchfield
@@ -244,6 +250,7 @@ class SearchField<T> extends StatefulWidget {
   /// An optional method to call with the final value when the form is saved via FormState.save.
   final void Function(String?)? onSaved;
 
+  /// Callback when the searchfield is tapped
   final void Function()? onTap;
 
   /// Widget to show when the search returns

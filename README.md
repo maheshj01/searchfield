@@ -169,6 +169,7 @@ SearchField(
     ...
 )
 ```
+
 <p float="left;padding=10px">
   <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="210"/>
   <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="170"/>
@@ -189,11 +190,11 @@ SearchField(
 <img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
 </p>
 
-
 ## Properties
 
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `autofocus`: Defines whether to enable autofocus defaults to `false`
+- `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
@@ -213,9 +214,10 @@ SearchField(
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
+- `onTap`: callback when the searchfield is tapped.
 - `scrollbarDecoration`: decoration for the scrollbar.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
-each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
+  each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `suggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.
 - `searchStyle` : textStyle for the search Input.
 - `searchInputDecoration` : decoration for the search Input (e.g to update HintStyle) similar to built in textfield widget.
@@ -232,5 +234,3 @@ each `SearchFieldListItem` in the list requires a unique searchKey, which is use
 ### Contributing
 
 You are welcome to contribute to this package, to contribute please read the [contributing guidelines](CONTRIBUTING.md).
-
-
