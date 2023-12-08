@@ -1,4 +1,10 @@
+#### [0.9.0] - Dec 07, 2023
+
+- Expose onTap onTap to get the tap event on the searchfield
+- Add autoValidateMode property to SearchField
+
 #### [0.8.9] - Nov 23, 2023
+
 - Clip Suggsestions within Material, Fixes [issue #44](https://github.com/maheshmnj/searchfield/issues/44)
 
 #### [0.8.8] - Nov 21, 2023
