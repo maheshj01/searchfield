@@ -9,6 +9,8 @@ Think of this widget like a dropdownButton field with an ability
 
 - to Search 🔍.
 - to position and define height of each Suggestion Item
+- show suggestions of custom type (not just String)
+- lazy load the suggestions from Network with custom loading widget
 - to show dynamic suggestions as an overlay above the widgets or in the widget tree.
 - to define max number of items visible in the viewport 📱
 - to filter out the suggestions with a custom logic.
@@ -66,7 +68,64 @@ SearchField<Country>(
 
  <img src="https://github.com/maheshmnj/searchfield/assets/31410839/08bd594c-1593-4865-81a8-5d347077b98a" width="210"/>
 
-#### Example2 (Validation)
+#### [Example 2 (Network demo)](https://github.com/maheshmnj/searchfield/blob/master/example/lib/network_sample.dart)
+
+Ability to load suggestions from the network with a custom loading widget
+
+```dart
+SearchField(
+    onSearchTextChanged: (query) {
+    final filter = suggestions
+        .where((element) =>
+            element.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    return filter
+        .map((e) =>
+            SearchFieldListItem<String>(e, child: searchChild(e)))
+        .toList();
+    },
+    onTap: () async {
+    final result = await getSuggestions();
+    setState(() {
+        suggestions = result;
+    });
+    },
+    /// widget to show when suggestions are empty
+    emptyWidget: Container(
+        decoration: suggestionDecoration,
+        height: 200,
+        child: const Center(
+            child: CircularProgressIndicator(
+        color: Colors.white,
+        ))),
+    hint: 'Load suggestions from network',
+    itemHeight: 50,
+    scrollbarDecoration: ScrollbarDecoration(),
+    suggestionStyle: const TextStyle(fontSize: 24, color: Colors.white),
+    searchInputDecoration: InputDecoration(...),
+    border: OutlineInputBorder(...)
+    fillColor: Colors.white,
+    filled: true,
+    contentPadding: const EdgeInsets.symmetric(
+        horizontal: 20,
+    ),
+    ),
+    suggestionsDecoration: suggestionDecoration,
+    suggestions: suggestions
+        .map((e) => SearchFieldListItem<String>(e, child: searchChild(e)))
+        .toList(),
+    focusNode: focus,
+    suggestionState: Suggestion.expand,
+    onSuggestionTap: (SearchFieldListItem<String> x) {
+    focus.unfocus();
+    },
+),
+```
+
+ <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
+
+
+#### Example 3 (Validation)
 
 ```dart
 Form(
