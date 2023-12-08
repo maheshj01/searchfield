@@ -1,3 +1,4 @@
+import 'package:example/network_sample.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -83,6 +84,10 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     }
                     return null;
                   }),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
               SizedBox(
                 height: 50,
               ),
