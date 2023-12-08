@@ -1,6 +1,6 @@
 #### [0.9.0] - Dec 07, 2023
 
-- Expose onTap onTap to get the tap event on the searchfield
+- Expose onTap callback to get the tap event on the searchfield
 - Add autoValidateMode property to SearchField
 
 #### [0.8.9] - Nov 23, 2023
