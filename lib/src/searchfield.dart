@@ -675,8 +675,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// height of suggestions overlay
   late double _totalHeight;
   GlobalKey key = GlobalKey();
-  bool _isDirectionCalculated = false;
-  Offset _offset = Offset.zero;
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {

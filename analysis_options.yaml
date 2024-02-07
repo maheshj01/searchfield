@@ -1,7 +1,6 @@
 include: package:lints/core.yaml
 
 analyzer:
-  strong-mode:
   errors:
     todo: info
     include_file_not_found: ignore
