@@ -403,21 +403,18 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
   /// shown above the searchfield.
   SuggestionDirection getDirection() {
-    if (_suggestionDirection == SuggestionDirection.flex) {
-      final size = MediaQuery.of(context).size;
-      final textFieldRenderBox =
-          key.currentContext!.findRenderObject() as RenderBox;
-      final textFieldSize = textFieldRenderBox.size;
-      final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      final isSpaceAvailable =
-          size.height > offset.dy + textFieldSize.height + _totalHeight;
-      if (isSpaceAvailable) {
-        return SuggestionDirection.down;
-      } else {
-        return SuggestionDirection.up;
-      }
+    final size = MediaQuery.of(context).size;
+    final textFieldRenderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final textFieldSize = textFieldRenderBox.size;
+    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+    final isSpaceAvailable =
+        size.height > offset.dy + textFieldSize.height + _totalHeight;
+    if (isSpaceAvailable) {
+      return SuggestionDirection.down;
+    } else {
+      return SuggestionDirection.up;
     }
-    return _suggestionDirection;
   }
 
   OverlayEntry? _overlayEntry;
@@ -429,6 +426,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
+        if (_suggestionDirection == SuggestionDirection.flex) {
+          _suggestionDirection = getDirection();
+        }
         _overlayEntry = _createOverlay();
         if (widget.initialValue == null ||
             widget.initialValue!.searchKey.isEmpty) {
@@ -618,11 +618,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// User can have more control by manually specifying the offset
   Offset? getYOffset(
       Offset textFieldOffset, Size textFieldSize, int suggestionsCount) {
-    final direction = getDirection();
     if (mounted) {
-      if (direction == SuggestionDirection.down) {
+      if (_suggestionDirection == SuggestionDirection.down) {
         return Offset(0, textFieldSize.height);
-      } else if (direction == SuggestionDirection.up) {
+      } else if (_suggestionDirection == SuggestionDirection.up) {
         // search results should not exceed maxSuggestionsInViewPort
         if (suggestionsCount > widget.maxSuggestionsInViewPort) {
           return Offset(
@@ -641,7 +640,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           key.currentContext!.findRenderObject() as RenderBox;
       final textFieldsize = textFieldRenderBox.size;
       final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      var yOffset = Offset.zero;
       return StreamBuilder<List<SearchFieldListItem?>?>(
           stream: suggestionStream.stream,
           builder: (BuildContext context,
@@ -650,7 +648,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             if (snapshot.data != null) {
               count = snapshot.data!.length;
             }
-            yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
+            _suggestionDirection = getDirection();
+            final yOffset =
+                getYOffset(offset, textFieldsize, count) ?? Offset.zero;
             return Positioned(
               left: offset.dx,
               width: textFieldsize.width,
@@ -675,8 +675,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// height of suggestions overlay
   late double _totalHeight;
   GlobalKey key = GlobalKey();
-  bool _isDirectionCalculated = false;
-  Offset _offset = Offset.zero;
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
