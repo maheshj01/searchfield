@@ -20,8 +20,6 @@ linter:
     - directives_ordering
     - empty_statements
     - implementation_imports
-    - iterable_contains_unrelated_type
-    - list_remove_unrelated_type
     - no_adjacent_strings_in_list
     - non_constant_identifier_names
     - only_throw_errors
