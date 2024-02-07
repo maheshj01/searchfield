@@ -1,3 +1,8 @@
+#### [0.9.1] - Feb 07, 2024
+
+- Update Suggestion dimensions on Window resize [Issue 84](https://github.com/maheshmnj/searchfield/issues/84)
+- Adds a enum `SuggestionDirection.flexible` to position the suggestions based on the available space. [Issue 56](https://github.com/maheshmnj/searchfield/issues/56)
+
 #### [0.9.0] - Dec 07, 2023
 
 - Expose onTap callback to get the tap event on the searchfield

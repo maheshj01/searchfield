@@ -27,6 +27,9 @@ enum SuggestionDirection {
 
   /// show suggestions above the searchfield
   up,
+
+  /// suggestions will be shown based on the available space
+  flex
 }
 
 class SearchFieldListItem<T> {
@@ -281,7 +284,7 @@ class SearchField<T> extends StatefulWidget {
 
   final ScrollbarDecoration? scrollbarDecoration;
 
-  /// suggestion direction defaults to [SuggestionDirection.up]
+  /// suggestion direction defaults to [SuggestionDirection.down]
   final SuggestionDirection suggestionDirection;
 
   /// text capitalization defaults to [TextCapitalization.none]
@@ -395,11 +398,34 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
+  /// With SuggestionDirection.flex, the widget will automatically decide the direction of the
+  /// suggestion list based on the space available in the viewport. If the suggestions have enough
+  /// space below the searchfield, the list will be shown below the searchfield, else it will be
+  /// shown above the searchfield.
+  SuggestionDirection getDirection() {
+    if (_suggestionDirection == SuggestionDirection.flex) {
+      final size = MediaQuery.of(context).size;
+      final textFieldRenderBox =
+          key.currentContext!.findRenderObject() as RenderBox;
+      final textFieldSize = textFieldRenderBox.size;
+      final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+      final isSpaceAvailable =
+          size.height > offset.dy + textFieldSize.height + _totalHeight;
+      if (isSpaceAvailable) {
+        return SuggestionDirection.down;
+      } else {
+        return SuggestionDirection.up;
+      }
+    }
+    return _suggestionDirection;
+  }
+
   OverlayEntry? _overlayEntry;
   @override
   void initState() {
     super.initState();
     searchController = widget.controller ?? TextEditingController();
+    _suggestionDirection = widget.suggestionDirection;
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -432,6 +458,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
       searchController = widget.controller ?? TextEditingController();
+    }
+    if (_suggestionDirection != oldWidget.suggestionDirection) {
+      _suggestionDirection = widget.suggestionDirection;
     }
     if (oldWidget.suggestions != widget.suggestions) {
       suggestionStream.sink.add(widget.suggestions);
@@ -471,7 +500,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
           final Widget listView = ListView.builder(
-            reverse: widget.suggestionDirection == SuggestionDirection.up,
+            reverse: _suggestionDirection == SuggestionDirection.up,
             padding: EdgeInsets.zero,
             controller: _scrollController,
             itemCount: snapshot.data!.length,
@@ -537,7 +566,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           );
 
           return AnimatedContainer(
-            duration: widget.suggestionDirection == SuggestionDirection.up
+            duration: _suggestionDirection == SuggestionDirection.up
                 ? Duration.zero
                 : Duration(milliseconds: 300),
             height: _totalHeight,
@@ -589,38 +618,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// User can have more control by manually specifying the offset
   Offset? getYOffset(
       Offset textFieldOffset, Size textFieldSize, int suggestionsCount) {
+    final direction = getDirection();
     if (mounted) {
-      final size = MediaQuery.of(context).size;
-      final isSpaceAvailable = size.height >
-          textFieldOffset.dy + textFieldSize.height + _totalHeight;
-      if (widget.suggestionDirection == SuggestionDirection.down) {
+      if (direction == SuggestionDirection.down) {
         return Offset(0, textFieldSize.height);
-      } else if (widget.suggestionDirection == SuggestionDirection.up) {
+      } else if (direction == SuggestionDirection.up) {
         // search results should not exceed maxSuggestionsInViewPort
         if (suggestionsCount > widget.maxSuggestionsInViewPort) {
           return Offset(
               0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
         } else {
           return Offset(0, -(widget.itemHeight * suggestionsCount));
-        }
-      } else {
-        if (!_isDirectionCalculated) {
-          _isDirectionCalculated = true;
-          if (isSpaceAvailable) {
-            _offset = Offset(0, textFieldSize.height);
-            return _offset;
-          } else {
-            if (suggestionsCount > widget.maxSuggestionsInViewPort) {
-              _offset = Offset(
-                  0, -(widget.itemHeight * widget.maxSuggestionsInViewPort));
-              return _offset;
-            } else {
-              _offset = Offset(0, -(widget.itemHeight * suggestionsCount));
-              return _offset;
-            }
-          }
-        } else {
-          return _offset;
         }
       }
     }
@@ -661,7 +669,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
+  late SuggestionDirection _suggestionDirection;
   final LayerLink _layerLink = LayerLink();
+
+  /// height of suggestions overlay
   late double _totalHeight;
   GlobalKey key = GlobalKey();
   bool _isDirectionCalculated = false;

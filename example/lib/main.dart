@@ -1,4 +1,3 @@
-import 'package:example/network_sample.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -43,8 +42,17 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
 
   @override
   void initState() {
-    suggestions =
-        List.generate(suggestionsCount, (index) => 'suggestion $index');
+    suggestions = [
+      'United States',
+      'Germany',
+      'Washington',
+      'Paris',
+      'Jakarta',
+      'Australia',
+      'India',
+      'Czech Republic',
+      'Lorem Ipsum',
+    ];
     super.initState();
   }
 
@@ -73,25 +81,26 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: 'Flutter TextFormField',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.length < 4) {
-                      return 'error';
-                    }
-                    return null;
-                  }),
-              SizedBox(
-                height: 50,
-              ),
-              NetworkSample(),
+              // TextFormField(
+              //     autovalidateMode: AutovalidateMode.onUserInteraction,
+              //     decoration: InputDecoration(
+              //       labelText: 'Flutter TextFormField',
+              //     ),
+              //     validator: (value) {
+              //       if (value == null || value.length < 4) {
+              //         return 'error';
+              //       }
+              //       return null;
+              //     }),
+              // SizedBox(
+              //   height: 50,
+              // ),
+              // NetworkSample(),
               SizedBox(
                 height: 50,
               ),
               SearchField(
+                suggestionDirection: SuggestionDirection.flex,
                 onSearchTextChanged: (query) {
                   final filter = suggestions
                       .where((element) =>
@@ -105,8 +114,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 onTap: () {},
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  if (value == null || value.length < 4) {
-                    return 'error';
+                  if (value == null || !suggestions.contains(value.trim())) {
+                    return 'Enter a valid country name';
                   }
                   return null;
                 },
@@ -124,10 +133,10 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   focus.unfocus();
                 },
                 suggestionStyle:
-                    const TextStyle(fontSize: 24, color: Colors.white),
-                searchStyle: TextStyle(fontSize: 24, color: Colors.black),
+                    const TextStyle(fontSize: 18, color: Colors.white),
+                searchStyle: TextStyle(fontSize: 18, color: Colors.black),
                 searchInputDecoration: InputDecoration(
-                  hintStyle: TextStyle(fontSize: 24, color: Colors.grey),
+                  hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(
