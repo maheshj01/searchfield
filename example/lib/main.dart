@@ -120,10 +120,14 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 //   trackColor: Colors.blue,
                 //   trackRadius: const Radius.circular(10),
                 // ),
-                onTapOutside: (x) {},
+                onTapOutside: (x) {
+                  focus.unfocus();
+                },
                 suggestionStyle:
                     const TextStyle(fontSize: 24, color: Colors.white),
+                searchStyle: TextStyle(fontSize: 24, color: Colors.black),
                 searchInputDecoration: InputDecoration(
+                  hintStyle: TextStyle(fontSize: 24, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(

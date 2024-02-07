@@ -415,17 +415,18 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
-  // TODO update overlay dimensions on mediaQuery change
-  // @override
-  // void didChangeDependencies() {
-  //   if (key.currentContext != null) {
-  //     if (_overlayEntry != null && _overlayEntry!.mounted) {
-  //       _overlayEntry?.remove();
-  //     }
-  //     _overlayEntry = _createOverlay();
-  //   }
-  //   super.didChangeDependencies();
-  // }
+  @override
+  void didChangeDependencies() {
+    // update overlay dimensions on mediaQuery change
+    if (_overlayEntry != null && _overlayEntry!.mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (mounted) {
+          _overlayEntry!.markNeedsBuild();
+        }
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
@@ -627,37 +628,37 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   OverlayEntry _createOverlay() {
-    final textFieldRenderBox =
-        key.currentContext!.findRenderObject() as RenderBox;
-    final textFieldsize = textFieldRenderBox.size;
-    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-    var yOffset = Offset.zero;
-    return OverlayEntry(
-        builder: (context) => StreamBuilder<List<SearchFieldListItem?>?>(
-            stream: suggestionStream.stream,
-            builder: (BuildContext context,
-                AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-              late var count = widget.maxSuggestionsInViewPort;
-              if (snapshot.data != null) {
-                count = snapshot.data!.length;
-              }
-              yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
-              return Positioned(
-                left: offset.dx,
-                width: textFieldsize.width,
-                child: CompositedTransformFollower(
-                    offset: widget.offset ?? yOffset,
-                    link: _layerLink,
-                    child: ClipRRect(
-                      borderRadius:
-                          widget.suggestionsDecoration?.borderRadius ??
-                              BorderRadius.zero,
-                      child: Material(
-                        child: _suggestionsBuilder(),
-                      ),
-                    )),
-              );
-            }));
+    return OverlayEntry(builder: (context) {
+      final textFieldRenderBox =
+          key.currentContext!.findRenderObject() as RenderBox;
+      final textFieldsize = textFieldRenderBox.size;
+      final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+      var yOffset = Offset.zero;
+      return StreamBuilder<List<SearchFieldListItem?>?>(
+          stream: suggestionStream.stream,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
+            late var count = widget.maxSuggestionsInViewPort;
+            if (snapshot.data != null) {
+              count = snapshot.data!.length;
+            }
+            yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
+            return Positioned(
+              left: offset.dx,
+              width: textFieldsize.width,
+              child: CompositedTransformFollower(
+                  offset: widget.offset ?? yOffset,
+                  link: _layerLink,
+                  child: ClipRRect(
+                    borderRadius: widget.suggestionsDecoration?.borderRadius ??
+                        BorderRadius.zero,
+                    child: Material(
+                      child: _suggestionsBuilder(),
+                    ),
+                  )),
+            );
+          });
+    });
   }
 
   final LayerLink _layerLink = LayerLink();
