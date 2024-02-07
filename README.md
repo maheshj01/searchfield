@@ -1,7 +1,6 @@
-# [searchfield: ^0.9.0](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.9.1](https://pub.dev/packages/searchfield)
 
- <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
-
+<a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
 A highly customizable simple and easy to use flutter searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
@@ -11,7 +10,7 @@ Think of this widget like a dropdownButton field with an ability
 - to position and define height of each Suggestion Item
 - show suggestions of custom type (not just String)
 - lazy load the suggestions from Network with custom loading widget
-- to show dynamic suggestions as an overlay above the widgets or in the widget tree.
+- to show dynamic suggestions above or below the input field
 - to define max number of items visible in the viewport 📱
 - to filter out the suggestions with a custom logic.
 - to visually customize the input and the suggestions
@@ -25,7 +24,7 @@ list of all the properties mentioned below
 - Add the dependency
 
 ```yaml
- flutter pub add searchfield
+flutter pub add searchfield
 ```
 
 - Import the package
@@ -123,7 +122,6 @@ SearchField(
 ```
 
  <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
-
 
 #### Example 3 (Validation)
 
@@ -241,13 +239,15 @@ SearchField(
 
 ### Support for Overlays
 
-- With v0.5.0 Searchfield now adds support for Overlays(default) which shows the suggestions floating on top of the Ui.
-- The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
+With v0.5.0 Searchfield now adds support for Overlays(default) which shows the suggestions floating on top of the Ui.
 
-<p float="left;padding=10px">
-<img src = "https://user-images.githubusercontent.com/31410839/114541712-b31b9200-9c74-11eb-90be-dee7ef8a4e4b.gif" width="400">
-<img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
-</p>
+  <img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
+
+### Support for Dynamic positioning of suggestions
+
+The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
+
+<img src = "https://github.com/maheshmnj/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
 
 ## Properties
 
