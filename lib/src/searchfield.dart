@@ -573,13 +573,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                       const NextIntent(),
                   LogicalKeySet(LogicalKeyboardKey.arrowUp):
                       const PreviousIntent(),
-                  LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
+                  LogicalKeySet(LogicalKeyboardKey.enter):
+                      const SelectionIntent(),
                 },
                 child: Actions(
                   actions: <Type, Action<Intent>>{
                     NextIntent: _nextAction,
                     PreviousIntent: _previousAction,
-                    SelectIntent: _selectAction,
+                    SelectionIntent: _selectAction,
                     UnFocusIntent: _unFocusAction,
                   },
                   child: TextFieldTapRegion(
@@ -783,13 +784,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         shortcuts: <LogicalKeySet, Intent>{
           LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
           LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
-          LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
+          LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
         },
         child: Actions(
           actions: <Type, Action<Intent>>{
             NextIntent: _nextAction,
             PreviousIntent: _previousAction,
-            SelectIntent: _selectAction,
+            SelectionIntent: _selectAction,
             UnFocusIntent: _unFocusAction,
           },
           child: CompositedTransformTarget(
