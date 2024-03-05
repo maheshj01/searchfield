@@ -569,9 +569,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 : ScrollPhysics(),
             itemBuilder: (context, index) => Shortcuts(
                 shortcuts: <LogicalKeySet, Intent>{
+                  LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(),
                   LogicalKeySet(LogicalKeyboardKey.arrowDown):
                       const NextIntent(),
                   LogicalKeySet(LogicalKeyboardKey.arrowUp):
+                      const PreviousIntent(),
+                  LogicalKeySet(
+                          LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.tab):
                       const PreviousIntent(),
                   LogicalKeySet(LogicalKeyboardKey.enter):
                       const SelectionIntent(),
@@ -782,6 +786,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
+          LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(),
           LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
           LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
           LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
