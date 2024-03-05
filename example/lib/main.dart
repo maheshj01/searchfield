@@ -159,11 +159,11 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     horizontal: 20,
                   ),
                 ),
-                suggestionsDecoration: SuggestionDecoration(
-                  color: Colors.red,
-                  border: Border.all(color: Colors.orange),
-                  borderRadius: BorderRadius.circular(24),
-                ),
+                // suggestionsDecoration: SuggestionDecoration(
+                //   color: Colors.red,
+                //   border: Border.all(color: Colors.orange),
+                //   borderRadius: BorderRadius.circular(24),
+                // ),
                 suggestions: suggestions
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))
