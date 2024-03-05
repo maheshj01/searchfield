@@ -342,7 +342,7 @@ class SearchField<T> extends StatefulWidget {
 class _SearchFieldState<T> extends State<SearchField<T>> {
   final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
       StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
-  FocusNode? _focus;
+  FocusNode? _searchFocus;
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
@@ -354,7 +354,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       searchController!.dispose();
     }
     if (widget.focusNode == null) {
-      _focus!.dispose();
+      _searchFocus!.dispose();
     }
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       _overlayEntry?.remove();
@@ -370,14 +370,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
 
     if (widget.focusNode != null) {
-      _focus = widget.focusNode;
+      _searchFocus = widget.focusNode;
     } else {
-      _focus = FocusNode();
+      _searchFocus = FocusNode();
     }
-    _focus!.addListener(() {
+    _searchFocus!.addListener(() {
       if (mounted) {
         setState(() {
-          isSuggestionExpanded = _focus!.hasFocus;
+          isSuggestionExpanded = _searchFocus!.hasFocus;
         });
       }
       if (isSuggestionExpanded) {
@@ -424,6 +424,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void initState() {
     super.initState();
+    _previousAction =
+        _CallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
+    _nextAction = _CallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
+    _selectAction =
+        _CallbackAction<SelectIntent>(onInvoke: handleSelectKeyPress);
+    _unFocusAction =
+        _CallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
+
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
     initialize();
@@ -439,6 +447,22 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
       }
     });
+  }
+
+  void handlePreviousKeyPress(PreviousIntent intent) {
+    print("previous press");
+  }
+
+  void handleNextKeyPress(NextIntent intent) {
+    print("next press");
+  }
+
+  void handleSelectKeyPress(SelectIntent intent) {
+    print("select press");
+  }
+
+  void handleUnFocusKeyPress(UnFocusIntent intent) {
+    print("unfocus press");
   }
 
   @override
@@ -475,6 +499,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
+  int? selectedIndex;
   Widget _suggestionsBuilder() {
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
@@ -520,10 +545,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 // suggestion action to switch focus to next focus node
                 if (widget.suggestionAction != null) {
                   if (widget.suggestionAction == SuggestionAction.next) {
-                    _focus!.nextFocus();
+                    _searchFocus!.nextFocus();
                   } else if (widget.suggestionAction ==
                       SuggestionAction.unfocus) {
-                    _focus!.unfocus();
+                    _searchFocus!.unfocus();
                   }
                 }
 
@@ -565,49 +590,64 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             )),
           );
 
-          return AnimatedContainer(
-            duration: _suggestionDirection == SuggestionDirection.up
-                ? Duration.zero
-                : Duration(milliseconds: 300),
-            height: _totalHeight,
-            alignment: Alignment.centerLeft,
-            decoration: widget.suggestionsDecoration ??
-                BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  boxShadow: [
-                    BoxShadow(
-                        color: onSurfaceColor.withOpacity(0.1),
-                        blurRadius: 8.0,
-                        spreadRadius: 2.0,
-                        offset: Offset(
-                          2.0,
-                          5.0,
-                        )),
-                  ],
+          return Shortcuts(
+              shortcuts: <LogicalKeySet, Intent>{
+                LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
+                LogicalKeySet(LogicalKeyboardKey.arrowUp):
+                    const PreviousIntent(),
+                LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
+              },
+              child: Actions(
+                actions: <Type, Action<Intent>>{
+                  NextIntent: _nextAction,
+                  PreviousIntent: _previousAction,
+                  SelectIntent: _selectAction,
+                  UnFocusIntent: _unFocusAction,
+                },
+                child: AnimatedContainer(
+                  duration: _suggestionDirection == SuggestionDirection.up
+                      ? Duration.zero
+                      : Duration(milliseconds: 300),
+                  height: _totalHeight,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionsDecoration ??
+                      BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        boxShadow: [
+                          BoxShadow(
+                              color: onSurfaceColor.withOpacity(0.1),
+                              blurRadius: 8.0,
+                              spreadRadius: 2.0,
+                              offset: Offset(
+                                2.0,
+                                5.0,
+                              )),
+                        ],
+                      ),
+                  child: RawScrollbar(
+                    thumbVisibility: _scrollbarDecoration!.thumbVisibility,
+                    controller: _scrollController,
+                    padding: EdgeInsets.zero,
+                    shape: _scrollbarDecoration!.shape,
+                    fadeDuration: _scrollbarDecoration!.fadeDuration,
+                    radius: _scrollbarDecoration!.radius,
+                    thickness: _scrollbarDecoration!.thickness,
+                    thumbColor: _scrollbarDecoration!.thumbColor,
+                    minThumbLength: _scrollbarDecoration!.minThumbLength,
+                    trackRadius: _scrollbarDecoration!.trackRadius,
+                    trackVisibility: _scrollbarDecoration!.trackVisibility,
+                    timeToFade: _scrollbarDecoration!.timeToFade,
+                    pressDuration: _scrollbarDecoration!.pressDuration,
+                    trackBorderColor: _scrollbarDecoration!.trackBorderColor,
+                    trackColor: _scrollbarDecoration!.trackColor,
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(scrollbars: false),
+                      child: listView,
+                    ),
+                  ),
                 ),
-            child: RawScrollbar(
-              thumbVisibility: _scrollbarDecoration!.thumbVisibility,
-              controller: _scrollController,
-              padding: EdgeInsets.zero,
-              shape: _scrollbarDecoration!.shape,
-              fadeDuration: _scrollbarDecoration!.fadeDuration,
-              radius: _scrollbarDecoration!.radius,
-              thickness: _scrollbarDecoration!.thickness,
-              thumbColor: _scrollbarDecoration!.thumbColor,
-              minThumbLength: _scrollbarDecoration!.minThumbLength,
-              trackRadius: _scrollbarDecoration!.trackRadius,
-              trackVisibility: _scrollbarDecoration!.trackVisibility,
-              timeToFade: _scrollbarDecoration!.timeToFade,
-              pressDuration: _scrollbarDecoration!.pressDuration,
-              trackBorderColor: _scrollbarDecoration!.trackBorderColor,
-              trackColor: _scrollbarDecoration!.trackColor,
-              child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: listView,
-              ),
-            ),
-          );
+              ));
         }
       },
     );
@@ -676,6 +716,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   late double _totalHeight;
   GlobalKey key = GlobalKey();
   final ScrollController _scrollController = ScrollController();
+  late final _CallbackAction<PreviousIntent> _previousAction;
+  late final _CallbackAction<NextIntent> _nextAction;
+  late final _CallbackAction<SelectIntent> _selectAction;
+  late final _CallbackAction<UnFocusIntent> _unFocusAction;
+
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
@@ -714,7 +759,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         },
         inputFormatters: widget.inputFormatters,
         controller: widget.controller ?? searchController,
-        focusNode: _focus,
+        focusNode: _searchFocus,
         validator: widget.validator,
         style: widget.searchStyle,
         textInputAction: widget.textInputAction,
@@ -750,6 +795,30 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       ),
     );
   }
+}
+
+class _CallbackAction<T extends Intent> extends CallbackAction<T> {
+  _CallbackAction({required void Function(T) onInvoke})
+      : super(onInvoke: onInvoke);
+}
+
+class NextIntent extends Intent {
+  const NextIntent();
+}
+
+// action to move to the next suggestion
+class PreviousIntent extends Intent {
+  const PreviousIntent();
+}
+
+// action to select the suggestion
+class SelectIntent extends Intent {
+  const SelectIntent();
+}
+
+// action to hide the suggestions
+class UnFocusIntent extends Intent {
+  const UnFocusIntent();
 }
 
 class SuggestionDecoration extends BoxDecoration {
