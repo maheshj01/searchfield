@@ -1,4 +1,4 @@
-#### [0.9.5] - March 05, 2024
+#### [0.9.5] - March 06, 2024
 
 - Add keyboard support for suggestions
 - Remove depreacted property `comparator`
