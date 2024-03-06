@@ -597,10 +597,27 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
           final Widget listView = Container(
-            decoration: widget.suggestionsDecoration,
+            decoration: widget.suggestionsDecoration ??
+                SuggestionDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  border: Border.all(
+                    color: onSurfaceColor.withOpacity(0.1),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: onSurfaceColor.withOpacity(0.1),
+                      blurRadius: 8.0, // soften the shadow
+                      spreadRadius: 2.0, //extend the shadow
+                      offset: Offset(
+                        2.0,
+                        5.0,
+                      ),
+                    ),
+                  ],
+                ),
             child: ListView.builder(
               reverse: _suggestionDirection == SuggestionDirection.up,
-              padding: EdgeInsets.all(1),
+              padding: EdgeInsets.zero,
               controller: _scrollController,
               itemCount: snapshot.data!.length,
               physics: snapshot.data!.length == 1
@@ -617,52 +634,46 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     onTapOutside: (x) {
                       _searchFocus!.unfocus();
                     },
-                    child: Container(
-                      height: widget.itemHeight,
-                      width: double.infinity,
-                      decoration: widget.suggestionItemDecoration?.copyWith(
-                            border: widget.suggestionItemDecoration?.border ??
-                                Border(
-                                  bottom: BorderSide(
-                                    color: widget.marginColor ??
-                                        onSurfaceColor.withOpacity(0.1),
-                                  ),
-                                ),
-                          ) ??
-                          BoxDecoration(
-                              color: selected == index
-                                  ? widget.suggestionsDecoration
-                                          ?.selectionColor ??
-                                      Theme.of(context).highlightColor
-                                  : null,
-                              border: index == snapshot.data!.length - 1
-                                  ? null
-                                  : Border(
-                                      bottom: BorderSide(
-                                        color: widget.marginColor ??
-                                            onSurfaceColor.withOpacity(0.1),
+                    child: Material(
+                      color: widget.suggestionsDecoration == null
+                          ? Theme.of(context).colorScheme.surface
+                          : Colors.transparent,
+                      child: InkWell(
+                        hoverColor: widget.suggestionsDecoration?.hoverColor ??
+                            Theme.of(context).hoverColor,
+                        onTap: () => onSuggestionTapped(snapshot.data![index]!),
+                        child: Container(
+                          width: double.infinity,
+                          decoration: widget.suggestionItemDecoration?.copyWith(
+                                color: selected == index
+                                    ? widget.suggestionsDecoration
+                                            ?.selectionColor ??
+                                        Theme.of(context).highlightColor
+                                    : null,
+                                border:
+                                    widget.suggestionItemDecoration?.border ??
+                                        Border(
+                                          bottom: BorderSide(
+                                            color: widget.marginColor ??
+                                                onSurfaceColor.withOpacity(0.1),
+                                          ),
+                                        ),
+                              ) ??
+                              BoxDecoration(
+                                color: selected == index
+                                    ? widget.suggestionsDecoration
+                                            ?.selectionColor ??
+                                        Theme.of(context).highlightColor
+                                    : null,
+                                border: index == snapshot.data!.length - 1
+                                    ? null
+                                    : Border(
+                                        bottom: BorderSide(
+                                          color: widget.marginColor ??
+                                              onSurfaceColor.withOpacity(0.1),
+                                        ),
                                       ),
-                                    ),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: onSurfaceColor.withOpacity(0.1),
-                                    blurRadius: 8.0,
-                                    spreadRadius: 2.0,
-                                    offset: Offset(
-                                      2.0,
-                                      5.0,
-                                    )),
-                              ]),
-                      child: Material(
-                        color: widget.suggestionsDecoration == null
-                            ? Theme.of(context).colorScheme.surface
-                            : Colors.transparent,
-                        child: InkWell(
-                          hoverColor:
-                              widget.suggestionsDecoration?.hoverColor ??
-                                  Theme.of(context).hoverColor,
-                          onTap: () =>
-                              onSuggestionTapped(snapshot.data![index]!),
+                              ),
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -686,7 +697,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 : Duration(milliseconds: 300),
             height: _totalHeight,
             alignment: Alignment.centerLeft,
-            // decoration: widget.suggestionsDecoration,
             child: RawScrollbar(
               thumbVisibility: _scrollbarDecoration!.thumbVisibility,
               controller: _scrollController,
