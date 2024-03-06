@@ -6,12 +6,14 @@ class KCallbackAction<T extends Intent> extends CallbackAction<T> {
 }
 
 class NextIntent extends Intent {
-  const NextIntent();
+  final bool isTabKey;
+  const NextIntent(this.isTabKey);
 }
 
 // action to move to the next suggestion
 class PreviousIntent extends Intent {
-  const PreviousIntent();
+  final bool isTabKey;
+  const PreviousIntent(this.isTabKey);
 }
 
 // action to select the suggestion

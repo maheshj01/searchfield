@@ -457,7 +457,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void handlePreviousKeyPress(PreviousIntent intent) {
-    if (selected == null) return;
+    if (selected == null) {
+      if (intent.isTabKey) {
+        _searchFocus!.previousFocus();
+      }
+      return;
+    }
     if (selected! > 0) {
       selected = selected! - 1;
     } else {
@@ -469,6 +474,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handleNextKeyPress(NextIntent intent) {
     if (selected == null) {
+      // focus to next focus node
+      if (intent.isTabKey) {
+        _searchFocus!.nextFocus();
+        return;
+      }
       selected = 0;
       _overlayEntry!.markNeedsBuild();
       return;
@@ -772,12 +782,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(),
+          LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(true),
           LogicalKeySet(LogicalKeyboardKey.tab, LogicalKeyboardKey.shiftLeft):
-              const PreviousIntent(),
+              const PreviousIntent(true),
           LogicalKeySet(LogicalKeyboardKey.escape): const UnFocusIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
-          LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(false),
+          LogicalKeySet(LogicalKeyboardKey.arrowUp):
+              const PreviousIntent(false),
           LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
         },
         child: Actions(
