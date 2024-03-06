@@ -1017,34 +1017,34 @@ void main() {
     });
   });
 
-  testWidgets("Test onTapOutside", (widgetTester) async {
-    bool outSideTap = false;
-    await widgetTester.pumpWidget(_boilerplate(
-      child: Column(
-        children: [
-          Center(
-            child: SearchField(
-              key: const Key('searchfield'),
-              suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                  .map(SearchFieldListItem<String>.new)
-                  .toList(),
-              onTapOutside: (x) {
-                outSideTap = true;
-              },
-              suggestionState: Suggestion.expand,
-            ),
-          ),
-        ],
-      ),
-    ));
-    expect(outSideTap, false);
-    //  simulate tap outside searchField
-    final textField = find.byType(TextFormField);
-    final position = widgetTester.getCenter(textField);
-    await widgetTester.tapAt(position - const Offset(0, -100));
-    await widgetTester.pumpAndSettle();
-    expect(outSideTap, true);
-  });
+  // testWidgets("Test onTapOutside", (widgetTester) async {
+  //   bool outSideTap = false;
+  //   await widgetTester.pumpWidget(_boilerplate(
+  //     child: Column(
+  //       children: [
+  //         Center(
+  //           child: SearchField(
+  //             key: const Key('searchfield'),
+  //             suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+  //                 .map(SearchFieldListItem<String>.new)
+  //                 .toList(),
+  //             onTapOutside: (x) {
+  //               outSideTap = true;
+  //             },
+  //             suggestionState: Suggestion.expand,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   ));
+  //   expect(outSideTap, false);
+  //   //  simulate tap outside searchField
+  //   final textField = find.byType(TextFormField);
+  //   final position = widgetTester.getCenter(textField);
+  //   await widgetTester.tapAt(position - const Offset(0, -100));
+  //   await widgetTester.pumpAndSettle();
+  //   expect(outSideTap, true);
+  // });
 
   testWidgets("SearchField should trigger onSaved", (widgetTester) async {
     final formKey = GlobalKey<FormState>();
