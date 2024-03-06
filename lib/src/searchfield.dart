@@ -99,7 +99,6 @@ class SearchField<T> extends StatefulWidget {
 
   /// Callback when the suggestion is selected.
   /// The parameters passed to`SearchFieldListItem` in `suggestions` will be returned in the callback.
-  /// @deprecated use [onSubmit] instead
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
   /// Callback when the searchfield is searched.
@@ -124,8 +123,9 @@ class SearchField<T> extends StatefulWidget {
   /// Defaults to AutovalidateMode.disabled.
   final AutovalidateMode? autovalidateMode;
 
-  /// Callback when the Searchfield is submitted
-  ///  it returns the text from the searchfield
+  /// Callback when the Searchfield is submitted by pressing
+  /// the enter key on the keyboard
+  /// This callback returns the text from the searchfield
   final Function(String)? onSubmit;
 
   /// Hint for the [SearchField].
@@ -309,8 +309,6 @@ class SearchField<T> extends StatefulWidget {
     this.onSubmit,
     this.onTapOutside,
     this.offset,
-    @Deprecated(
-        'onSuggestionTap is deprecated and will be removed in upcoming release. Use `onSubmit` instead')
     this.onSuggestionTap,
     this.searchInputDecoration,
     this.searchStyle,
