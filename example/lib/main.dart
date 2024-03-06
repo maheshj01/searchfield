@@ -133,6 +133,16 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 suggestionStyle:
                     const TextStyle(fontSize: 18, color: Colors.black),
                 searchStyle: TextStyle(fontSize: 18, color: Colors.black),
+                suggestionItemDecoration: BoxDecoration(
+                  // color: Colors.grey[100],
+                  // borderRadius: BorderRadius.circular(10),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.shade200, 
+                      width: 1,
+                    ),
+                  ),
+                ),
                 searchInputDecoration: InputDecoration(
                   hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
@@ -158,7 +168,9 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   ),
                 ),
                 suggestionsDecoration: SuggestionDecoration(
-                  border: Border.all(color: Colors.orange),
+                  // border: Border.all(color: Colors.orange),
+                  selectionColor: Colors.grey.shade100,
+                  hoverColor: Colors.purple.shade100,
                   gradient: LinearGradient(
                     colors: [
                       Color(0xfffc466b),
@@ -168,7 +180,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 suggestions: suggestions
                     .map((e) =>
