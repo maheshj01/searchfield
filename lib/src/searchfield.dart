@@ -381,7 +381,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _searchFocus!.addListener(() {
       // When focus shifts to ListView prevent suggestions from rebuilding
       // when user navigates through suggestions using keyboard
-      if (!_searchFocus!.hasFocus) return;
+      if (!_searchFocus!.hasFocus) {
+        _overlayEntry?.remove();
+        if (searchController!.text.isEmpty) {
+          selected = null;
+        }
+        suggestionStream.sink.add(null);
+        return;
+      }
       if (mounted) {
         setState(() {
           isSuggestionExpanded = _searchFocus!.hasFocus;
@@ -440,7 +447,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         KCallbackAction<SelectionIntent>(onInvoke: handleSelectKeyPress);
     _unFocusAction =
         KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
-
+    _scrollController = ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
     initialize();
@@ -460,17 +467,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handlePreviousKeyPress(PreviousIntent intent) {
     if (selected == null) return;
-    print("previous press  $selected");
     if (selected! > 0) {
       selected = selected! - 1;
     } else {
+      selected = null;
       _searchFocus!.requestFocus();
     }
     _overlayEntry!.markNeedsBuild();
   }
 
   void handleNextKeyPress(NextIntent intent) {
-    print("next press $selected");
     if (selected == null) {
       selected = 0;
       _overlayEntry!.markNeedsBuild();
@@ -482,16 +488,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _overlayEntry!.markNeedsBuild();
   }
 
+  // This is not invoked since enter key is reserved
+  // for onSubmitted callback of the textfield
   void handleSelectKeyPress(SelectionIntent intent) {
     if (selected == null) return;
-    print("select press $selected");
     suggestionStream.sink.add(null);
-    // onSuggestionTapped(widget.suggestions[selected!]);
+    onSuggestionTapped(widget.suggestions[selected!]);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
     if (selected == null) return;
-    print("esc key press  $selected");
     _searchFocus!.unfocus();
     selected = null;
     _overlayEntry!.markNeedsBuild();
@@ -599,7 +605,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               if (selected == index) {
                 SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
                   Scrollable.ensureVisible(context,
-                      alignment: 0.5, duration: Duration(milliseconds: 300));
+                      alignment: 0.1, duration: Duration(milliseconds: 300));
                 });
               }
               return TextFieldTapRegion(
@@ -760,7 +766,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// height of suggestions overlay
   late double _totalHeight;
   GlobalKey key = GlobalKey();
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
   late final KCallbackAction<PreviousIntent> _previousAction;
   late final KCallbackAction<NextIntent> _nextAction;
   late final KCallbackAction<SelectionIntent> _selectAction;
@@ -796,11 +802,16 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               key: key,
               enabled: widget.enabled,
               autofocus: widget.autofocus,
-              onTapOutside: widget.onTapOutside,
+              onTapOutside: (x) {
+                if (widget.onTapOutside != null) widget.onTapOutside!(x);
+              },
               autocorrect: widget.autoCorrect,
               readOnly: widget.readOnly,
               autovalidateMode: widget.autovalidateMode,
               onFieldSubmitted: (x) {
+                if (selected != null) {
+                  handleSelectKeyPress(SelectionIntent());
+                }
                 if (widget.onSubmit != null) widget.onSubmit!(x);
               },
               onTap: () {
