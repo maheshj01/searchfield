@@ -415,6 +415,10 @@ void main() {
     await tester.tap(button);
     await tester.pumpAndSettle(Duration(seconds: 2));
     expect(suggestions.length, equals(3));
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listView, findsWidgets);
     expect(find.text('suggestion $counter'), findsOneWidget);
   });
 

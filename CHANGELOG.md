@@ -1,6 +1,10 @@
+#### [0.9.6] - March 07, 2024
+
+- Add `hoverColor` and `selectionColor` property to SuggestionDecoration. [Issue #112](https://github.com/maheshmnj/searchfield/issues/112)
+
 #### [0.9.5] - March 06, 2024
 
-- Add keyboard support for suggestions
+- Add keyboard support for suggestions [Issue 7](https://github.com/maheshmnj/searchfield/issues/7)
 - Remove deprecated property `comparator`
 
 #### [0.9.2] - Feb 07, 2024

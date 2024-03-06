@@ -70,6 +70,12 @@ class SuggestionDecoration extends BoxDecoration {
   /// padding around the suggestion list
   @override
   final EdgeInsetsGeometry padding;
+  // color when the suggestion is hovered
+  // defaults to Theme.of(context).hoverColor
+  final Color? hoverColor;
+  // color of the selected suggestion
+  // defaults to Theme.of(context).highlightColor
+  final Color? selectionColor;
 
   SuggestionDecoration({
     this.padding = EdgeInsets.zero,
@@ -78,6 +84,8 @@ class SuggestionDecoration extends BoxDecoration {
     BorderRadiusGeometry? borderRadius,
     List<BoxShadow>? boxShadow,
     Gradient? gradient,
+    this.hoverColor,
+    this.selectionColor,
     BoxShape shape = BoxShape.rectangle,
   }) : super(
             color: color,
