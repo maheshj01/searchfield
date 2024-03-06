@@ -99,6 +99,7 @@ class SearchField<T> extends StatefulWidget {
 
   /// Callback when the suggestion is selected.
   /// The parameters passed to`SearchFieldListItem` in `suggestions` will be returned in the callback.
+  /// @deprecated use [onSubmit] instead
   final Function(SearchFieldListItem<T>)? onSuggestionTap;
 
   /// Callback when the searchfield is searched.
@@ -264,15 +265,6 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
-  /// Function that implements the comparison criteria to filter out suggestions.
-  /// The 2 parameters are the input text and the `suggestionKey` passed to each `SearchFieldListItem`
-  /// which should return true or false to filter out the suggestion.
-  /// by default the comparator shows the suggestions that contain the input text
-  /// in the `suggestionKey`
-  ///
-  /// @deprecated use [onSearchTextChanged] instead
-  final bool Function(String inputText, String suggestionKey)? comparator;
-
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
@@ -293,45 +285,46 @@ class SearchField<T> extends StatefulWidget {
   /// text capitalization defaults to [TextCapitalization.none]
   final TextCapitalization textCapitalization;
 
-  SearchField(
-      {Key? key,
-      required this.suggestions,
-      this.autoCorrect = true,
-      this.autofocus = false,
-      this.autovalidateMode,
-      this.controller,
-      this.emptyWidget = const SizedBox.shrink(),
-      this.enabled,
-      this.focusNode,
-      this.hint,
-      this.initialValue,
-      this.inputFormatters,
-      this.inputType,
-      this.itemHeight = 35.0,
-      this.marginColor,
-      this.maxSuggestionsInViewPort = 5,
-      this.readOnly = false,
-      this.onSearchTextChanged,
-      this.onSaved,
-      this.onTap,
-      this.onSubmit,
-      this.onTapOutside,
-      this.offset,
-      this.onSuggestionTap,
-      this.searchInputDecoration,
-      this.searchStyle,
-      this.scrollbarDecoration,
-      this.suggestionStyle,
-      this.suggestionsDecoration,
-      this.suggestionDirection = SuggestionDirection.down,
-      this.suggestionState = Suggestion.expand,
-      this.suggestionItemDecoration,
-      this.suggestionAction,
-      this.textCapitalization = TextCapitalization.none,
-      this.textInputAction,
-      this.validator,
-      @Deprecated('use `onSearchTextChanged` instead.') this.comparator})
-      : assert(
+  SearchField({
+    Key? key,
+    required this.suggestions,
+    this.autoCorrect = true,
+    this.autofocus = false,
+    this.autovalidateMode,
+    this.controller,
+    this.emptyWidget = const SizedBox.shrink(),
+    this.enabled,
+    this.focusNode,
+    this.hint,
+    this.initialValue,
+    this.inputFormatters,
+    this.inputType,
+    this.itemHeight = 35.0,
+    this.marginColor,
+    this.maxSuggestionsInViewPort = 5,
+    this.readOnly = false,
+    this.onSearchTextChanged,
+    this.onSaved,
+    this.onTap,
+    this.onSubmit,
+    this.onTapOutside,
+    this.offset,
+    @Deprecated(
+        'onSuggestionTap is deprecated and will be removed in upcoming release. Use `onSubmit` instead')
+    this.onSuggestionTap,
+    this.searchInputDecoration,
+    this.searchStyle,
+    this.scrollbarDecoration,
+    this.suggestionStyle,
+    this.suggestionsDecoration,
+    this.suggestionDirection = SuggestionDirection.down,
+    this.suggestionState = Suggestion.expand,
+    this.suggestionItemDecoration,
+    this.suggestionAction,
+    this.textCapitalization = TextCapitalization.none,
+    this.textInputAction,
+    this.validator,
+  })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
@@ -852,11 +845,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     return;
                   }
                   for (final suggestion in widget.suggestions) {
-                    if (widget.comparator != null) {
-                      if (widget.comparator!(query, suggestion.searchKey)) {
-                        searchResult.add(suggestion);
-                      }
-                    } else if (suggestion.searchKey
+                    if (suggestion.searchKey
                         .toLowerCase()
                         .contains(query.toLowerCase())) {
                       searchResult.add(suggestion);

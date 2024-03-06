@@ -121,6 +121,9 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   }
                   return null;
                 },
+                onSubmit: (x) {
+                  print('onSubmit $x');
+                },
                 key: const Key('searchfield'),
                 hint: 'Search by country name',
                 itemHeight: 50,
