@@ -258,6 +258,7 @@ class SearchField<T> extends StatefulWidget {
   final void Function(String?)? onSaved;
 
   /// Callback when the searchfield is tapped
+  /// or brought into focus
   final void Function()? onTap;
 
   /// Widget to show when the search returns
@@ -380,6 +381,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         suggestionStream.sink.add(null);
         return;
       }
+      widget.onTap?.call();
       if (mounted) {
         setState(() {
           isSuggestionExpanded = _searchFocus!.hasFocus;

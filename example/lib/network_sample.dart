@@ -12,7 +12,7 @@ class _NetworkSampleState extends State<NetworkSample> {
   final focus = FocusNode();
 
   Future<List<String>> getSuggestions() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
     return [
       'United States',
       'Germany',
