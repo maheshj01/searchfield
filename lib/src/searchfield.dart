@@ -829,7 +829,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     });
                   }
                 }
-                if (widget.onTap != null) widget.onTap!();
               },
               onSaved: (x) {
                 if (widget.onSaved != null) widget.onSaved!(x);
