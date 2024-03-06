@@ -122,9 +122,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   }
                   return null;
                 },
-                onSubmit: (x) {
-                  print('onSubmit $x');
-                },
+                onSubmit: (x) {},
                 autofocus: false,
                 key: const Key('searchfield'),
                 hint: 'Search by country name',
@@ -162,7 +160,10 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 suggestionsDecoration: SuggestionDecoration(
                   border: Border.all(color: Colors.orange),
                   gradient: LinearGradient(
-                    colors: [Color(0xfffc466b), Color.fromARGB(255, 103, 128, 255)],
+                    colors: [
+                      Color(0xfffc466b),
+                      Color.fromARGB(255, 103, 128, 255)
+                    ],
                     stops: [0.25, 0.75],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -177,7 +178,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 suggestionState: Suggestion.expand,
                 onSuggestionTap: (SearchFieldListItem<String> x) {
                   // focus.unfocus();
-                  print('${searchController.text} ${x.searchKey}');
                 },
               ),
               SizedBox(
