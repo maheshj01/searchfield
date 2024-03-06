@@ -1,8 +1,8 @@
-# [searchfield: ^0.9.2](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.9.5](https://pub.dev/packages/searchfield)
 
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 
-A highly customizable simple and easy to use flutter searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
+A highly customizable simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
 Think of this widget like a dropdownButton field with an ability
 
@@ -14,6 +14,7 @@ Think of this widget like a dropdownButton field with an ability
 - to define max number of items visible in the viewport 📱
 - to filter out the suggestions with a custom logic.
 - to visually customize the input and the suggestions
+- navigate through the suggestions using keyboard
 
 list of all the properties mentioned below
 

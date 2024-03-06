@@ -831,7 +831,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 if (widget.onSaved != null) widget.onSaved!(x);
               },
               inputFormatters: widget.inputFormatters,
-              controller: widget.controller ?? searchController,
+              controller: searchController,
               focusNode: _searchFocus,
               validator: widget.validator,
               style: widget.searchStyle,

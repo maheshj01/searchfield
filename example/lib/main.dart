@@ -56,6 +56,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
     super.initState();
   }
 
+  final TextEditingController searchController = TextEditingController();
   var suggestions = <String>[];
   @override
   Widget build(BuildContext context) {
@@ -112,6 +113,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                       .toList();
                 },
                 onTap: () {},
+                controller: searchController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value == null || !suggestions.contains(value.trim())) {
@@ -172,6 +174,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 suggestionState: Suggestion.expand,
                 onSuggestionTap: (SearchFieldListItem<String> x) {
                   focus.unfocus();
+                  print('${searchController.text} ${x.searchKey}');
                 },
               ),
             ],
