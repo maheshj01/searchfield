@@ -1,6 +1,9 @@
 # [searchfield: ^0.9.6](https://pub.dev/packages/searchfield)
 
+<a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
+[![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
+<a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
 A highly customizable simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
@@ -237,8 +240,6 @@ SearchField(
   <img src="https://user-images.githubusercontent.com/31410839/154835349-3d06376c-98ec-45ca-bede-10f9e2f69589.png" width="300"/>
  <img width="300" alt="image" src="https://github.com/maheshmnj/searchfield/assets/31410839/e109e6c4-c36a-4d58-b5b2-b6b4999924d6">
 </p>
-
-
 
 ### Support for Keyboard Navigation
 
