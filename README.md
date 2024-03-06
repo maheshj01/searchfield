@@ -238,11 +238,13 @@ SearchField(
  <img width="300" alt="image" src="https://github.com/maheshmnj/searchfield/assets/31410839/e109e6c4-c36a-4d58-b5b2-b6b4999924d6">
 </p>
 
-### Support for Overlays
 
-With v0.5.0 Searchfield now adds support for Overlays(default) which shows the suggestions floating on top of the Ui.
 
-  <img src = "https://user-images.githubusercontent.com/31410839/115070269-5a692500-9f12-11eb-9de9-73ae970bf337.gif" width="300">
+### Support for Keyboard Navigation
+
+With v0.9.5 Searchfield now adds support for Keyboard navigation, you can now navigate through the suggestions using the keyboard.
+
+  <img src = "https://github.com/maheshmnj/searchfield/assets/31410839/17ed4c43-f0c3-4ba8-8fae-beedf42ae781" width="300">
 
 ### Support for Dynamic positioning of suggestions
 
