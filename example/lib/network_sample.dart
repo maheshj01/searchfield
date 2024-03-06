@@ -26,18 +26,26 @@ class _NetworkSampleState extends State<NetworkSample> {
     ];
   }
 
+  static const surfaceGreen = Color.fromARGB(255, 237, 255, 227);
+  static const surfaceBlue = Color(0xffd3e8fb);
+  static const skyBlue = Color(0xfff3ddec);
   var suggestions = <String>[];
-
+  static const gradient = LinearGradient(
+    colors: [skyBlue, surfaceBlue, surfaceGreen],
+    stops: [0.15, 0.35, 0.9],
+    begin: Alignment.bottomRight,
+    end: Alignment.topLeft,
+  );
   final suggestionDecoration = SuggestionDecoration(
-    color: Colors.red,
-    border: Border.all(color: Colors.orange),
+    border: Border.all(color: Colors.grey),
+    gradient: gradient,
     borderRadius: BorderRadius.circular(24),
   );
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-          child: Text(x, style: TextStyle(fontSize: 24, color: Colors.white)),
+          child: Text(x, style: TextStyle(fontSize: 20, color: Colors.black)),
         );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -78,13 +86,13 @@ class _NetworkSampleState extends State<NetworkSample> {
           itemHeight: 50,
           scrollbarDecoration: ScrollbarDecoration(),
           onTapOutside: (x) {},
-          suggestionStyle: const TextStyle(fontSize: 24, color: Colors.white),
+          suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),
           searchInputDecoration: InputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: const BorderSide(
                 width: 1,
-                color: Colors.orange,
+                color: Colors.grey,
                 style: BorderStyle.solid,
               ),
             ),

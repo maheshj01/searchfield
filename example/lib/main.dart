@@ -1,3 +1,4 @@
+import 'package:example/network_sample.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -58,20 +59,20 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
 
   final TextEditingController searchController = TextEditingController();
   var suggestions = <String>[];
+  int counter = 0;
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-          child: Text(x, style: TextStyle(fontSize: 24, color: Colors.white)),
+          child: Text(x, style: TextStyle(fontSize: 18, color: Colors.black)),
         );
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Dynamic sample Demo'),
-        ),
+        appBar: AppBar(title: Text('Searchfield Keyboard Support')),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
               suggestionsCount++;
+              counter++;
               suggestions.add('suggestion $suggestionsCount');
             });
           },
@@ -80,23 +81,23 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // TextFormField(
-              //     autovalidateMode: AutovalidateMode.onUserInteraction,
-              //     decoration: InputDecoration(
-              //       labelText: 'Flutter TextFormField',
-              //     ),
-              //     validator: (value) {
-              //       if (value == null || value.length < 4) {
-              //         return 'error';
-              //       }
-              //       return null;
-              //     }),
-              // SizedBox(
-              //   height: 50,
-              // ),
-              // NetworkSample(),
+              TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    labelText: 'Flutter TextFormField',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.length < 4) {
+                      return 'error';
+                    }
+                    return null;
+                  }),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
               SizedBox(
                 height: 50,
               ),
@@ -124,21 +125,15 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 onSubmit: (x) {
                   print('onSubmit $x');
                 },
+                autofocus: false,
                 key: const Key('searchfield'),
                 hint: 'Search by country name',
                 itemHeight: 50,
-                scrollbarDecoration: ScrollbarDecoration(),
-                //   thumbVisibility: true,
-                //   thumbColor: Colors.red,
-                //   fadeDuration: const Duration(milliseconds: 3000),
-                //   trackColor: Colors.blue,
-                //   trackRadius: const Radius.circular(10),
-                // ),
                 onTapOutside: (x) {
-                  focus.unfocus();
+                  // focus.unfocus();
                 },
                 suggestionStyle:
-                    const TextStyle(fontSize: 18, color: Colors.white),
+                    const TextStyle(fontSize: 18, color: Colors.black),
                 searchStyle: TextStyle(fontSize: 18, color: Colors.black),
                 searchInputDecoration: InputDecoration(
                   hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
@@ -164,11 +159,16 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     horizontal: 20,
                   ),
                 ),
-                // suggestionsDecoration: SuggestionDecoration(
-                //   color: Colors.red,
-                //   border: Border.all(color: Colors.orange),
-                //   borderRadius: BorderRadius.circular(24),
-                // ),
+                suggestionsDecoration: SuggestionDecoration(
+                  border: Border.all(color: Colors.orange),
+                  gradient: LinearGradient(
+                    colors: [Color(0xfffc466b), Color.fromARGB(255, 103, 128, 255)],
+                    stops: [0.25, 0.75],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 suggestions: suggestions
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))
@@ -176,9 +176,16 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 focusNode: focus,
                 suggestionState: Suggestion.expand,
                 onSuggestionTap: (SearchFieldListItem<String> x) {
-                  focus.unfocus();
+                  // focus.unfocus();
                   print('${searchController.text} ${x.searchKey}');
                 },
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Text(
+                'Counter: $counter',
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),

@@ -143,7 +143,8 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
 
-  /// Specifies [TextStyle] for suggestions when no child is provided.
+  /// Specifies [TextStyle] for suggestions when no child is provided
+  /// in [SearchFieldListItem].
   final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
@@ -500,7 +501,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
-    if (selected == null) return;
     _searchFocus!.unfocus();
     selected = null;
     _overlayEntry!.markNeedsBuild();
