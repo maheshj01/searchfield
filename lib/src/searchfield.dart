@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:searchfield/src/decoration.dart';
+import 'package:searchfield/src/key_intents.dart';
 
 enum Suggestion {
   /// shows suggestions when searchfield is brought into focus
@@ -120,8 +123,9 @@ class SearchField<T> extends StatefulWidget {
   /// Defaults to AutovalidateMode.disabled.
   final AutovalidateMode? autovalidateMode;
 
-  /// Callback when the Searchfield is submitted
-  ///  it returns the text from the searchfield
+  /// Callback when the Searchfield is submitted by pressing
+  /// the enter key on the keyboard
+  /// This callback returns the text from the searchfield
   final Function(String)? onSubmit;
 
   /// Hint for the [SearchField].
@@ -139,7 +143,8 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies [TextStyle] for search input.
   final TextStyle? searchStyle;
 
-  /// Specifies [TextStyle] for suggestions when no child is provided.
+  /// Specifies [TextStyle] for suggestions when no child is provided
+  /// in [SearchFieldListItem].
   final TextStyle? suggestionStyle;
 
   /// Specifies [InputDecoration] for search input [TextField].
@@ -254,21 +259,13 @@ class SearchField<T> extends StatefulWidget {
   final void Function(String?)? onSaved;
 
   /// Callback when the searchfield is tapped
+  /// or brought into focus
   final void Function()? onTap;
 
   /// Widget to show when the search returns
   /// empty results.
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
-
-  /// Function that implements the comparison criteria to filter out suggestions.
-  /// The 2 parameters are the input text and the `suggestionKey` passed to each `SearchFieldListItem`
-  /// which should return true or false to filter out the suggestion.
-  /// by default the comparator shows the suggestions that contain the input text
-  /// in the `suggestionKey`
-  ///
-  /// @deprecated use [onSearchTextChanged] instead
-  final bool Function(String inputText, String suggestionKey)? comparator;
 
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
@@ -290,45 +287,44 @@ class SearchField<T> extends StatefulWidget {
   /// text capitalization defaults to [TextCapitalization.none]
   final TextCapitalization textCapitalization;
 
-  SearchField(
-      {Key? key,
-      required this.suggestions,
-      this.autoCorrect = true,
-      this.autofocus = false,
-      this.autovalidateMode,
-      this.controller,
-      this.emptyWidget = const SizedBox.shrink(),
-      this.enabled,
-      this.focusNode,
-      this.hint,
-      this.initialValue,
-      this.inputFormatters,
-      this.inputType,
-      this.itemHeight = 35.0,
-      this.marginColor,
-      this.maxSuggestionsInViewPort = 5,
-      this.readOnly = false,
-      this.onSearchTextChanged,
-      this.onSaved,
-      this.onTap,
-      this.onSubmit,
-      this.onTapOutside,
-      this.offset,
-      this.onSuggestionTap,
-      this.searchInputDecoration,
-      this.searchStyle,
-      this.scrollbarDecoration,
-      this.suggestionStyle,
-      this.suggestionsDecoration,
-      this.suggestionDirection = SuggestionDirection.down,
-      this.suggestionState = Suggestion.expand,
-      this.suggestionItemDecoration,
-      this.suggestionAction,
-      this.textCapitalization = TextCapitalization.none,
-      this.textInputAction,
-      this.validator,
-      @Deprecated('use `onSearchTextChanged` instead.') this.comparator})
-      : assert(
+  SearchField({
+    Key? key,
+    required this.suggestions,
+    this.autoCorrect = true,
+    this.autofocus = false,
+    this.autovalidateMode,
+    this.controller,
+    this.emptyWidget = const SizedBox.shrink(),
+    this.enabled,
+    this.focusNode,
+    this.hint,
+    this.initialValue,
+    this.inputFormatters,
+    this.inputType,
+    this.itemHeight = 35.0,
+    this.marginColor,
+    this.maxSuggestionsInViewPort = 5,
+    this.readOnly = false,
+    this.onSearchTextChanged,
+    this.onSaved,
+    this.onTap,
+    this.onSubmit,
+    this.onTapOutside,
+    this.offset,
+    this.onSuggestionTap,
+    this.searchInputDecoration,
+    this.searchStyle,
+    this.scrollbarDecoration,
+    this.suggestionStyle,
+    this.suggestionsDecoration,
+    this.suggestionDirection = SuggestionDirection.down,
+    this.suggestionState = Suggestion.expand,
+    this.suggestionItemDecoration,
+    this.suggestionAction,
+    this.textCapitalization = TextCapitalization.none,
+    this.textInputAction,
+    this.validator,
+  })  : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
@@ -346,6 +342,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
+
   @override
   void dispose() {
     suggestionStream.close();
@@ -375,6 +372,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _searchFocus = FocusNode();
     }
     _searchFocus!.addListener(() {
+      // When focus shifts to ListView prevent suggestions from rebuilding
+      // when user navigates through suggestions using keyboard
+      if (!_searchFocus!.hasFocus) {
+        _overlayEntry?.remove();
+        if (searchController!.text.isEmpty) {
+          selected = null;
+        }
+        suggestionStream.sink.add(null);
+        return;
+      }
+      widget.onTap?.call();
       if (mounted) {
         setState(() {
           isSuggestionExpanded = _searchFocus!.hasFocus;
@@ -420,18 +428,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return _suggestionDirection;
   }
 
+  int? selected = null;
   OverlayEntry? _overlayEntry;
   @override
   void initState() {
     super.initState();
+    length = widget.suggestions.length;
     _previousAction =
-        _CallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
-    _nextAction = _CallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
+        KCallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
+    _nextAction = KCallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
     _selectAction =
-        _CallbackAction<SelectIntent>(onInvoke: handleSelectKeyPress);
+        KCallbackAction<SelectionIntent>(onInvoke: handleSelectKeyPress);
     _unFocusAction =
-        _CallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
-
+        KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
+    _scrollController = ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
     initialize();
@@ -450,19 +460,50 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void handlePreviousKeyPress(PreviousIntent intent) {
-    print("previous press");
+    if (selected == null) {
+      if (intent.isTabKey) {
+        _searchFocus!.previousFocus();
+      }
+      return;
+    }
+    if (selected! > 0) {
+      selected = selected! - 1;
+    } else {
+      selected = null;
+      _searchFocus!.requestFocus();
+    }
+    _overlayEntry!.markNeedsBuild();
   }
 
   void handleNextKeyPress(NextIntent intent) {
-    print("next press");
+    if (selected == null) {
+      // focus to next focus node
+      if (intent.isTabKey) {
+        _searchFocus!.nextFocus();
+        return;
+      }
+      selected = 0;
+      _overlayEntry!.markNeedsBuild();
+      return;
+    }
+    if (selected! < length - 1) {
+      selected = selected! + 1;
+    }
+    _overlayEntry!.markNeedsBuild();
   }
 
-  void handleSelectKeyPress(SelectIntent intent) {
-    print("select press");
+  // This is not invoked since enter key is reserved
+  // for onSubmitted callback of the textfield
+  void handleSelectKeyPress(SelectionIntent intent) {
+    if (selected == null) return;
+    suggestionStream.sink.add(null);
+    onSuggestionTapped(widget.suggestions[selected!]);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
-    print("unfocus press");
+    _searchFocus!.unfocus();
+    selected = null;
+    _overlayEntry!.markNeedsBuild();
   }
 
   @override
@@ -487,6 +528,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _suggestionDirection = widget.suggestionDirection;
     }
     if (oldWidget.suggestions != widget.suggestions) {
+      selected = null;
+      length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
@@ -499,7 +542,36 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
+  void onSuggestionTapped(SearchFieldListItem<T> item) {
+    {
+      searchController!.text = item.searchKey;
+      searchController!.selection = TextSelection.fromPosition(
+        TextPosition(
+          offset: searchController!.text.length,
+        ),
+      );
+
+      // suggestion action to switch focus to next focus node
+      if (widget.suggestionAction != null) {
+        if (widget.suggestionAction == SuggestionAction.next) {
+          _searchFocus!.nextFocus();
+        } else if (widget.suggestionAction == SuggestionAction.unfocus) {
+          _searchFocus!.unfocus();
+        }
+      }
+
+      // hide the suggestions
+      suggestionStream.sink.add(null);
+      if (widget.onSuggestionTap != null) {
+        widget.onSuggestionTap!(item);
+      }
+    }
+  }
+
   int? selectedIndex;
+
+  /// length of the suggestions
+  int length = 0;
   Widget _suggestionsBuilder() {
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
@@ -532,122 +604,104 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             physics: snapshot.data!.length == 1
                 ? NeverScrollableScrollPhysics()
                 : ScrollPhysics(),
-            itemBuilder: (context, index) => TextFieldTapRegion(
-                child: InkWell(
-              onTap: () {
-                searchController!.text = snapshot.data![index]!.searchKey;
-                searchController!.selection = TextSelection.fromPosition(
-                  TextPosition(
-                    offset: searchController!.text.length,
-                  ),
-                );
-
-                // suggestion action to switch focus to next focus node
-                if (widget.suggestionAction != null) {
-                  if (widget.suggestionAction == SuggestionAction.next) {
-                    _searchFocus!.nextFocus();
-                  } else if (widget.suggestionAction ==
-                      SuggestionAction.unfocus) {
-                    _searchFocus!.unfocus();
-                  }
-                }
-
-                // hide the suggestions
-                suggestionStream.sink.add(null);
-                if (widget.onSuggestionTap != null) {
-                  widget.onSuggestionTap!(snapshot.data![index]!);
-                }
-              },
-              child: Container(
-                height: widget.itemHeight,
-                width: double.infinity,
-                alignment: Alignment.centerLeft,
-                decoration: widget.suggestionItemDecoration?.copyWith(
-                      border: widget.suggestionItemDecoration?.border ??
-                          Border(
-                            bottom: BorderSide(
-                              color: widget.marginColor ??
-                                  onSurfaceColor.withOpacity(0.1),
-                            ),
-                          ),
-                    ) ??
-                    BoxDecoration(
-                      border: index == snapshot.data!.length - 1
-                          ? null
-                          : Border(
+            itemBuilder: (context, index) => Builder(builder: (context) {
+              if (selected == index) {
+                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  Scrollable.ensureVisible(context,
+                      alignment: 0.1, duration: Duration(milliseconds: 300));
+                });
+              }
+              return TextFieldTapRegion(
+                  child: InkWell(
+                onTap: () => onSuggestionTapped(snapshot.data![index]!),
+                child: Container(
+                  height: widget.itemHeight,
+                  width: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionItemDecoration?.copyWith(
+                        border: widget.suggestionItemDecoration?.border ??
+                            Border(
                               bottom: BorderSide(
                                 color: widget.marginColor ??
                                     onSurfaceColor.withOpacity(0.1),
                               ),
                             ),
-                    ),
-                child: snapshot.data![index]!.child ??
-                    Text(
-                      snapshot.data![index]!.searchKey,
-                      style: widget.suggestionStyle,
-                    ),
-              ),
-            )),
-          );
-
-          return Shortcuts(
-              shortcuts: <LogicalKeySet, Intent>{
-                LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
-                LogicalKeySet(LogicalKeyboardKey.arrowUp):
-                    const PreviousIntent(),
-                LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
-              },
-              child: Actions(
-                actions: <Type, Action<Intent>>{
-                  NextIntent: _nextAction,
-                  PreviousIntent: _previousAction,
-                  SelectIntent: _selectAction,
-                  UnFocusIntent: _unFocusAction,
-                },
-                child: AnimatedContainer(
-                  duration: _suggestionDirection == SuggestionDirection.up
-                      ? Duration.zero
-                      : Duration(milliseconds: 300),
-                  height: _totalHeight,
-                  alignment: Alignment.centerLeft,
-                  decoration: widget.suggestionsDecoration ??
+                      ) ??
                       BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        boxShadow: [
-                          BoxShadow(
-                              color: onSurfaceColor.withOpacity(0.1),
-                              blurRadius: 8.0,
-                              spreadRadius: 2.0,
-                              offset: Offset(
-                                2.0,
-                                5.0,
-                              )),
-                        ],
+                          color: selected == index
+                              ? Theme.of(context).focusColor
+                              : null,
+                          border: index == snapshot.data!.length - 1
+                              ? null
+                              : Border(
+                                  bottom: BorderSide(
+                                    color: widget.marginColor ??
+                                        onSurfaceColor.withOpacity(0.1),
+                                  ),
+                                ),
+                          boxShadow: [
+                            BoxShadow(
+                                color: onSurfaceColor.withOpacity(0.1),
+                                blurRadius: 8.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(
+                                  2.0,
+                                  5.0,
+                                )),
+                          ]),
+                  child: snapshot.data![index]!.child ??
+                      Text(
+                        snapshot.data![index]!.searchKey,
+                        style: widget.suggestionStyle,
                       ),
-                  child: RawScrollbar(
-                    thumbVisibility: _scrollbarDecoration!.thumbVisibility,
-                    controller: _scrollController,
-                    padding: EdgeInsets.zero,
-                    shape: _scrollbarDecoration!.shape,
-                    fadeDuration: _scrollbarDecoration!.fadeDuration,
-                    radius: _scrollbarDecoration!.radius,
-                    thickness: _scrollbarDecoration!.thickness,
-                    thumbColor: _scrollbarDecoration!.thumbColor,
-                    minThumbLength: _scrollbarDecoration!.minThumbLength,
-                    trackRadius: _scrollbarDecoration!.trackRadius,
-                    trackVisibility: _scrollbarDecoration!.trackVisibility,
-                    timeToFade: _scrollbarDecoration!.timeToFade,
-                    pressDuration: _scrollbarDecoration!.pressDuration,
-                    trackBorderColor: _scrollbarDecoration!.trackBorderColor,
-                    trackColor: _scrollbarDecoration!.trackColor,
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(scrollbars: false),
-                      child: listView,
-                    ),
-                  ),
                 ),
               ));
+            }),
+          );
+
+          return AnimatedContainer(
+            duration: _suggestionDirection == SuggestionDirection.up
+                ? Duration.zero
+                : Duration(milliseconds: 300),
+            height: _totalHeight,
+            alignment: Alignment.centerLeft,
+            decoration: widget.suggestionsDecoration ??
+                BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  boxShadow: [
+                    BoxShadow(
+                        color: onSurfaceColor.withOpacity(0.1),
+                        blurRadius: 8.0,
+                        spreadRadius: 2.0,
+                        offset: Offset(
+                          2.0,
+                          5.0,
+                        )),
+                  ],
+                ),
+            child: RawScrollbar(
+              thumbVisibility: _scrollbarDecoration!.thumbVisibility,
+              controller: _scrollController,
+              padding: EdgeInsets.zero,
+              shape: _scrollbarDecoration!.shape,
+              fadeDuration: _scrollbarDecoration!.fadeDuration,
+              radius: _scrollbarDecoration!.radius,
+              thickness: _scrollbarDecoration!.thickness,
+              thumbColor: _scrollbarDecoration!.thumbColor,
+              minThumbLength: _scrollbarDecoration!.minThumbLength,
+              trackRadius: _scrollbarDecoration!.trackRadius,
+              trackVisibility: _scrollbarDecoration!.trackVisibility,
+              timeToFade: _scrollbarDecoration!.timeToFade,
+              pressDuration: _scrollbarDecoration!.pressDuration,
+              trackBorderColor: _scrollbarDecoration!.trackBorderColor,
+              trackColor: _scrollbarDecoration!.trackColor,
+              child: ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: listView,
+              ),
+            ),
+          );
         }
       },
     );
@@ -715,11 +769,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// height of suggestions overlay
   late double _totalHeight;
   GlobalKey key = GlobalKey();
-  final ScrollController _scrollController = ScrollController();
-  late final _CallbackAction<PreviousIntent> _previousAction;
-  late final _CallbackAction<NextIntent> _nextAction;
-  late final _CallbackAction<SelectIntent> _selectAction;
-  late final _CallbackAction<UnFocusIntent> _unFocusAction;
+  late final ScrollController _scrollController;
+  late final KCallbackAction<PreviousIntent> _previousAction;
+  late final KCallbackAction<NextIntent> _nextAction;
+  late final KCallbackAction<SelectionIntent> _selectAction;
+  late final KCallbackAction<UnFocusIntent> _unFocusAction;
 
   @override
   Widget build(BuildContext context) {
@@ -728,183 +782,90 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     } else {
       _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: TextFormField(
-        key: key,
-        enabled: widget.enabled,
-        autofocus: widget.autofocus,
-        onTapOutside: widget.onTapOutside,
-        autocorrect: widget.autoCorrect,
-        readOnly: widget.readOnly,
-        autovalidateMode: widget.autovalidateMode,
-        onFieldSubmitted: (x) {
-          if (widget.onSubmit != null) widget.onSubmit!(x);
+    return Shortcuts(
+        shortcuts: <LogicalKeySet, Intent>{
+          LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(true),
+          LogicalKeySet(LogicalKeyboardKey.tab, LogicalKeyboardKey.shiftLeft):
+              const PreviousIntent(true),
+          LogicalKeySet(LogicalKeyboardKey.escape): const UnFocusIntent(),
+          LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(false),
+          LogicalKeySet(LogicalKeyboardKey.arrowUp):
+              const PreviousIntent(false),
+          LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
         },
-        onTap: () {
-          /// only call if SuggestionState = [Suggestion.expand]
-          if (!isSuggestionExpanded &&
-              widget.suggestionState == Suggestion.expand) {
-            suggestionStream.sink.add(widget.suggestions);
-            if (mounted) {
-              setState(() {
-                isSuggestionExpanded = true;
-              });
-            }
-          }
-          if (widget.onTap != null) widget.onTap!();
-        },
-        onSaved: (x) {
-          if (widget.onSaved != null) widget.onSaved!(x);
-        },
-        inputFormatters: widget.inputFormatters,
-        controller: widget.controller ?? searchController,
-        focusNode: _searchFocus,
-        validator: widget.validator,
-        style: widget.searchStyle,
-        textInputAction: widget.textInputAction,
-        textCapitalization: widget.textCapitalization,
-        keyboardType: widget.inputType,
-        decoration:
-            widget.searchInputDecoration?.copyWith(hintText: widget.hint) ??
-                InputDecoration(hintText: widget.hint),
-        onChanged: (query) {
-          var searchResult = <SearchFieldListItem<T>>[];
-          if (widget.onSearchTextChanged != null) {
-            searchResult = widget.onSearchTextChanged!(query) ?? [];
-          } else {
-            if (query.isEmpty) {
-              _createOverlay();
-              suggestionStream.sink.add(widget.suggestions);
-              return;
-            }
-            for (final suggestion in widget.suggestions) {
-              if (widget.comparator != null) {
-                if (widget.comparator!(query, suggestion.searchKey)) {
-                  searchResult.add(suggestion);
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            NextIntent: _nextAction,
+            PreviousIntent: _previousAction,
+            SelectionIntent: _selectAction,
+            UnFocusIntent: _unFocusAction,
+          },
+          child: CompositedTransformTarget(
+            link: _layerLink,
+            child: TextFormField(
+              key: key,
+              enabled: widget.enabled,
+              autofocus: widget.autofocus,
+              onTapOutside: (x) {
+                if (widget.onTapOutside != null) widget.onTapOutside!(x);
+              },
+              autocorrect: widget.autoCorrect,
+              readOnly: widget.readOnly,
+              autovalidateMode: widget.autovalidateMode,
+              onFieldSubmitted: (x) {
+                if (selected != null) {
+                  handleSelectKeyPress(SelectionIntent());
                 }
-              } else if (suggestion.searchKey
-                  .toLowerCase()
-                  .contains(query.toLowerCase())) {
-                searchResult.add(suggestion);
-              }
-            }
-          }
-          suggestionStream.sink.add(searchResult);
-        },
-      ),
-    );
+                if (widget.onSubmit != null) widget.onSubmit!(x);
+              },
+              onTap: () {
+                /// only call if SuggestionState = [Suggestion.expand]
+                if (!isSuggestionExpanded &&
+                    widget.suggestionState == Suggestion.expand) {
+                  suggestionStream.sink.add(widget.suggestions);
+                  if (mounted) {
+                    setState(() {
+                      isSuggestionExpanded = true;
+                    });
+                  }
+                }
+              },
+              onSaved: (x) {
+                if (widget.onSaved != null) widget.onSaved!(x);
+              },
+              inputFormatters: widget.inputFormatters,
+              controller: searchController,
+              focusNode: _searchFocus,
+              validator: widget.validator,
+              style: widget.searchStyle,
+              textInputAction: widget.textInputAction,
+              textCapitalization: widget.textCapitalization,
+              keyboardType: widget.inputType,
+              decoration: widget.searchInputDecoration
+                      ?.copyWith(hintText: widget.hint) ??
+                  InputDecoration(hintText: widget.hint),
+              onChanged: (query) {
+                var searchResult = <SearchFieldListItem<T>>[];
+                if (widget.onSearchTextChanged != null) {
+                  searchResult = widget.onSearchTextChanged!(query) ?? [];
+                } else {
+                  if (query.isEmpty) {
+                    _createOverlay();
+                    suggestionStream.sink.add(widget.suggestions);
+                    return;
+                  }
+                  for (final suggestion in widget.suggestions) {
+                    if (suggestion.searchKey
+                        .toLowerCase()
+                        .contains(query.toLowerCase())) {
+                      searchResult.add(suggestion);
+                    }
+                  }
+                }
+                suggestionStream.sink.add(searchResult);
+              },
+            ),
+          ),
+        ));
   }
-}
-
-class _CallbackAction<T extends Intent> extends CallbackAction<T> {
-  _CallbackAction({required void Function(T) onInvoke})
-      : super(onInvoke: onInvoke);
-}
-
-class NextIntent extends Intent {
-  const NextIntent();
-}
-
-// action to move to the next suggestion
-class PreviousIntent extends Intent {
-  const PreviousIntent();
-}
-
-// action to select the suggestion
-class SelectIntent extends Intent {
-  const SelectIntent();
-}
-
-// action to hide the suggestions
-class UnFocusIntent extends Intent {
-  const UnFocusIntent();
-}
-
-class SuggestionDecoration extends BoxDecoration {
-  /// padding around the suggestion list
-  @override
-  final EdgeInsetsGeometry padding;
-
-  SuggestionDecoration({
-    this.padding = EdgeInsets.zero,
-    Color? color,
-    Border? border,
-    BorderRadiusGeometry? borderRadius,
-    List<BoxShadow>? boxShadow,
-    Gradient? gradient,
-    BoxShape shape = BoxShape.rectangle,
-  }) : super(
-            color: color,
-            border: border,
-            borderRadius: borderRadius,
-            boxShadow: boxShadow,
-            gradient: gradient,
-            shape: shape);
-}
-
-class ScrollbarDecoration {
-  /// The [OutlinedBorder] of the scrollbar's thumb.
-  ///
-  /// Only one of [radius] and [shape] may be specified. For a rounded rectangle,
-  /// it's simplest to just specify [radius]. By default, the scrollbar thumb's
-  /// shape is a simple rectangle.
-  OutlinedBorder? shape;
-
-  /// The [Radius] of the scrollbar's thumb.
-  /// Only one of [radius] and [shape] may be specified. For a rounded rectangle,
-  Radius? radius;
-
-  /// The thickness of the scrollbar's thumb.
-  double? thickness;
-
-  /// Mustn't be null and the value has to be greater or equal to `minOverscrollLength`, which in
-  /// turn is >= 0. Defaults to 18.0.
-  double minThumbLength;
-
-  /// The [Color] of the scrollbar's thumb.
-  Color? thumbColor;
-
-  /// The [Color] of the scrollbar's track.
-  bool? trackVisibility;
-
-  /// The [Radius] of the scrollbar's track.
-  Radius? trackRadius;
-
-  /// The [Color] of the scrollbar's track.
-  Color? trackColor;
-
-  /// The [Color] of the scrollbar's track border.
-  Color? trackBorderColor;
-
-  /// The [Duration] of the fade animation.
-  Duration fadeDuration;
-
-  /// Defines whether to show the scrollbar always or only when scrolling.
-  /// defaults to `true`
-  final bool? thumbVisibility;
-
-  /// The [Duration] of time until the fade animation begins.
-  /// Cannot be null, defaults to a [Duration] of 600 milliseconds.
-  Duration timeToFade;
-
-  /// The [Duration] of time that a LongPress will trigger the drag gesture of the scrollbar thumb.
-  /// Cannot be null, defaults to [Duration.zero].
-  Duration pressDuration;
-
-  ScrollbarDecoration({
-    this.minThumbLength = 18.0,
-    this.thumbVisibility = true,
-    this.radius,
-    this.thickness,
-    this.thumbColor,
-    this.shape,
-    this.trackVisibility,
-    this.trackRadius,
-    this.trackColor,
-    this.trackBorderColor,
-    this.fadeDuration = const Duration(milliseconds: 300),
-    this.timeToFade = const Duration(milliseconds: 600),
-    this.pressDuration = const Duration(milliseconds: 100),
-  });
 }

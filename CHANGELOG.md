@@ -1,5 +1,12 @@
+#### [0.9.5] - March 05, 2024
+
+- Add keyboard support for suggestions
+- Remove depreacted property `comparator`
+
 #### [0.9.2] - Feb 07, 2024
+
 - Fix SuggestionDirection broken
+
 #### [0.9.1] - Feb 07, 2024
 
 - Update Suggestion dimensions on Window resize [Issue 84](https://github.com/maheshmnj/searchfield/issues/84)
