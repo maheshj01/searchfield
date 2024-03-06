@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:searchfield/src/decoration.dart';
 import 'package:searchfield/src/key_intents.dart';
@@ -348,6 +349,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   bool isSuggestionExpanded = false;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
+
   @override
   void dispose() {
     suggestionStream.close();
@@ -430,7 +432,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void initState() {
     super.initState();
-    focus = List.generate(widget.suggestions.length, (index) => FocusNode());
+    length = widget.suggestions.length;
     _previousAction =
         KCallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
     _nextAction = KCallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
@@ -461,8 +463,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     print("previous press  $selected");
     if (selected! > 0) {
       selected = selected! - 1;
-      focus[selected!].requestFocus();
-      // ensure visibility of the selected item
     } else {
       _searchFocus!.requestFocus();
     }
@@ -473,12 +473,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     print("next press $selected");
     if (selected == null) {
       selected = 0;
-      focus[selected!].requestFocus();
+      _overlayEntry!.markNeedsBuild();
       return;
     }
-    if (selected! < focus.length - 1) {
+    if (selected! < length - 1) {
       selected = selected! + 1;
-      focus[selected!].requestFocus();
     }
     _overlayEntry!.markNeedsBuild();
   }
@@ -486,7 +485,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void handleSelectKeyPress(SelectionIntent intent) {
     if (selected == null) return;
     print("select press $selected");
-    _overlayEntry!.markNeedsBuild();
+    suggestionStream.sink.add(null);
+    // onSuggestionTapped(widget.suggestions[selected!]);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
@@ -519,8 +519,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _suggestionDirection = widget.suggestionDirection;
     }
     if (oldWidget.suggestions != widget.suggestions) {
-      focus.clear();
-      focus = List.generate(widget.suggestions.length, (index) => FocusNode());
+      selected = null;
+      length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
@@ -533,8 +533,36 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
-  List<FocusNode> focus = [];
+  void onSuggestionTapped(SearchFieldListItem<T> item) {
+    {
+      searchController!.text = item.searchKey;
+      searchController!.selection = TextSelection.fromPosition(
+        TextPosition(
+          offset: searchController!.text.length,
+        ),
+      );
+
+      // suggestion action to switch focus to next focus node
+      if (widget.suggestionAction != null) {
+        if (widget.suggestionAction == SuggestionAction.next) {
+          _searchFocus!.nextFocus();
+        } else if (widget.suggestionAction == SuggestionAction.unfocus) {
+          _searchFocus!.unfocus();
+        }
+      }
+
+      // hide the suggestions
+      suggestionStream.sink.add(null);
+      if (widget.onSuggestionTap != null) {
+        widget.onSuggestionTap!(item);
+      }
+    }
+  }
+
   int? selectedIndex;
+
+  /// length of the suggestions
+  int length = 0;
   Widget _suggestionsBuilder() {
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
@@ -567,98 +595,59 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             physics: snapshot.data!.length == 1
                 ? NeverScrollableScrollPhysics()
                 : ScrollPhysics(),
-            itemBuilder: (context, index) => Shortcuts(
-                shortcuts: <LogicalKeySet, Intent>{
-                  LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(),
-                  LogicalKeySet(LogicalKeyboardKey.arrowDown):
-                      const NextIntent(),
-                  LogicalKeySet(LogicalKeyboardKey.arrowUp):
-                      const PreviousIntent(),
-                  LogicalKeySet(
-                          LogicalKeyboardKey.shiftLeft, LogicalKeyboardKey.tab):
-                      const PreviousIntent(),
-                  LogicalKeySet(LogicalKeyboardKey.enter):
-                      const SelectionIntent(),
-                },
-                child: Actions(
-                  actions: <Type, Action<Intent>>{
-                    NextIntent: _nextAction,
-                    PreviousIntent: _previousAction,
-                    SelectionIntent: _selectAction,
-                    UnFocusIntent: _unFocusAction,
-                  },
-                  child: TextFieldTapRegion(
-                      child: InkWell(
-                    onTap: () {
-                      searchController!.text = snapshot.data![index]!.searchKey;
-                      searchController!.selection = TextSelection.fromPosition(
-                        TextPosition(
-                          offset: searchController!.text.length,
-                        ),
-                      );
-
-                      // suggestion action to switch focus to next focus node
-                      if (widget.suggestionAction != null) {
-                        if (widget.suggestionAction == SuggestionAction.next) {
-                          _searchFocus!.nextFocus();
-                        } else if (widget.suggestionAction ==
-                            SuggestionAction.unfocus) {
-                          _searchFocus!.unfocus();
-                        }
-                      }
-
-                      // hide the suggestions
-                      suggestionStream.sink.add(null);
-                      if (widget.onSuggestionTap != null) {
-                        widget.onSuggestionTap!(snapshot.data![index]!);
-                      }
-                    },
-                    child: Focus(
-                      focusNode: focus[index],
-                      child: Container(
-                        height: widget.itemHeight,
-                        width: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        decoration: widget.suggestionItemDecoration?.copyWith(
-                              border: widget.suggestionItemDecoration?.border ??
-                                  Border(
-                                    bottom: BorderSide(
-                                      color: widget.marginColor ??
-                                          onSurfaceColor.withOpacity(0.1),
-                                    ),
-                                  ),
-                            ) ??
-                            BoxDecoration(
-                                color: selected == index
-                                    ? Theme.of(context).focusColor
-                                    : null,
-                                border: index == snapshot.data!.length - 1
-                                    ? null
-                                    : Border(
-                                        bottom: BorderSide(
-                                          color: widget.marginColor ??
-                                              onSurfaceColor.withOpacity(0.1),
-                                        ),
-                                      ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: onSurfaceColor.withOpacity(0.1),
-                                      blurRadius: 8.0,
-                                      spreadRadius: 2.0,
-                                      offset: Offset(
-                                        2.0,
-                                        5.0,
-                                      )),
-                                ]),
-                        child: snapshot.data![index]!.child ??
-                            Text(
-                              snapshot.data![index]!.searchKey,
-                              style: widget.suggestionStyle,
+            itemBuilder: (context, index) => Builder(builder: (context) {
+              if (selected == index) {
+                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  Scrollable.ensureVisible(context,
+                      alignment: 0.5, duration: Duration(milliseconds: 300));
+                });
+              }
+              return TextFieldTapRegion(
+                  child: InkWell(
+                onTap: () => onSuggestionTapped(snapshot.data![index]!),
+                child: Container(
+                  height: widget.itemHeight,
+                  width: double.infinity,
+                  alignment: Alignment.centerLeft,
+                  decoration: widget.suggestionItemDecoration?.copyWith(
+                        border: widget.suggestionItemDecoration?.border ??
+                            Border(
+                              bottom: BorderSide(
+                                color: widget.marginColor ??
+                                    onSurfaceColor.withOpacity(0.1),
+                              ),
                             ),
+                      ) ??
+                      BoxDecoration(
+                          color: selected == index
+                              ? Theme.of(context).focusColor
+                              : null,
+                          border: index == snapshot.data!.length - 1
+                              ? null
+                              : Border(
+                                  bottom: BorderSide(
+                                    color: widget.marginColor ??
+                                        onSurfaceColor.withOpacity(0.1),
+                                  ),
+                                ),
+                          boxShadow: [
+                            BoxShadow(
+                                color: onSurfaceColor.withOpacity(0.1),
+                                blurRadius: 8.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(
+                                  2.0,
+                                  5.0,
+                                )),
+                          ]),
+                  child: snapshot.data![index]!.child ??
+                      Text(
+                        snapshot.data![index]!.searchKey,
+                        style: widget.suggestionStyle,
                       ),
-                    ),
-                  )),
-                )),
+                ),
+              ));
+            }),
           );
 
           return AnimatedContainer(
@@ -787,6 +776,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
           LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(),
+          LogicalKeySet(LogicalKeyboardKey.tab, LogicalKeyboardKey.shiftLeft):
+              const PreviousIntent(),
+          LogicalKeySet(LogicalKeyboardKey.escape): const UnFocusIntent(),
           LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
           LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
           LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
