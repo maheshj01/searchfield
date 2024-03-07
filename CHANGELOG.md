@@ -5,7 +5,7 @@
 #### [0.9.5] - March 06, 2024
 
 - Add keyboard support for suggestions [Issue 7](https://github.com/maheshmnj/searchfield/issues/7)
-- Remove deprecated property `comparator`
+- [BREAKING] Remove deprecated property `comparator`, use `onSearchTextChanged` instead
 
 #### [0.9.2] - Feb 07, 2024
 
