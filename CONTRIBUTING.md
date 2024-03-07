@@ -27,12 +27,12 @@ Thanks for taking you time to contribute to this repo. Before you start contribu
 
 ### Publishing (Optional for contributors)
 
-This part is mainly applicable to the maintainer of the repository but you are welcome to make the below changes which are required to publish the package. When publishing a new release of this package ensure sure all the check list are completed.
+This part is mainly applicable to the maintainer of the repository but you are welcome to make the below changes which are required to publish the package. When publishing a new release of this package ensure all the checklist are completed.
 
-✅ Update the version in readme, pubspec.yaml, and update the changelog
-✅ Make sure the documentation is updated as per the new changes.
-✅ Make sure existing and new tests are passing by running `flutter test`
-✅ Make sure the code is well formatted.
-✅ ensure there are no linter warnings by running `flutter analyze`
-✅ Tag a package release in github [related to #Issue 103](https://github.com/maheshmnj/searchfield/issues/103)
-✅ Publish the package by running `flutter pub publish --dry-run` and `flutter pub publish`
+- ✅ Update the version in readme, pubspec.yaml, and update the changelog
+- ✅ Make sure the documentation is updated as per the new changes.
+- ✅ Make sure existing and new tests are passing by running `flutter test`
+- ✅ Make sure the code is well formatted.
+- ✅ ensure there are no linter warnings by running `flutter analyze`
+- ✅ Tag a package release in github [related to #Issue 103](https://github.com/maheshmnj/searchfield/issues/103)
+- ✅ Publish the package by running `flutter pub publish --dry-run` and `flutter pub publish`
