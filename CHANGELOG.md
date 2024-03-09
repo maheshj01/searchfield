@@ -1,3 +1,8 @@
+#### [0.9.7] - March 09, 2024
+
+- Expose `onScroll` event listener
+- Add `showEmpty` parameter to hide/show emptyWidget
+
 #### [0.9.6] - March 07, 2024
 
 - Add `hoverColor` and `selectionColor` property to SuggestionDecoration. [Issue #112](https://github.com/maheshmnj/searchfield/issues/112)
