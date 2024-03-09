@@ -1,4 +1,5 @@
 import 'package:example/network_sample.dart';
+import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -104,6 +105,10 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .toList(),
                 suggestionState: Suggestion.expand,
               ),
+              SizedBox(
+                height: 50,
+              ),
+              Pagination(),
               SizedBox(
                 height: 50,
               ),

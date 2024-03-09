@@ -258,12 +258,23 @@ class SearchField<T> extends StatefulWidget {
   /// An optional method to call with the final value when the form is saved via FormState.save.
   final void Function(String?)? onSaved;
 
+  /// Callback when the suggestions are scrolled
+  /// The callback returns the current scroll offset and the maximum scroll extent
+  /// of the suggestions list. The callback can be used to implement feature like
+  /// lazy loading of suggestions.
+  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart)
+  final void Function(double, double)? onScroll;
+
   /// Callback when the searchfield is tapped
   /// or brought into focus
   final void Function()? onTap;
 
+  // boolean to hide/show empty widget
+  // defaults to false
+  final bool showEmpty;
+
   /// Widget to show when the search returns
-  /// empty results.
+  /// empty results or when showEmpty: true.
   /// defaults to [SizedBox.shrink]
   final Widget emptyWidget;
 
@@ -307,6 +318,7 @@ class SearchField<T> extends StatefulWidget {
     this.readOnly = false,
     this.onSearchTextChanged,
     this.onSaved,
+    this.onScroll,
     this.onTap,
     this.onSubmit,
     this.onTapOutside,
@@ -315,6 +327,7 @@ class SearchField<T> extends StatefulWidget {
     this.searchInputDecoration,
     this.searchStyle,
     this.scrollbarDecoration,
+    this.showEmpty = false,
     this.suggestionStyle,
     this.suggestionsDecoration,
     this.suggestionDirection = SuggestionDirection.down,
@@ -406,6 +419,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
+  void listenToScrollEvents() {
+    if (widget.onScroll != null) {
+      _scrollController.addListener(() {
+        widget.onScroll!(_scrollController.offset,
+            _scrollController.position.maxScrollExtent);
+      });
+    } else {
+      _scrollController.removeListener(() {});
+    }
+  }
+
   /// With SuggestionDirection.flex, the widget will automatically decide the direction of the
   /// suggestion list based on the space available in the viewport. If the suggestions have enough
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
@@ -444,6 +468,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _scrollController = ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
+    listenToScrollEvents();
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -539,6 +564,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         _scrollbarDecoration = widget.scrollbarDecoration;
       }
     }
+    if (oldWidget.onScroll != widget.onScroll) {
+      listenToScrollEvents();
+    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -572,6 +600,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   /// length of the suggestions
   int length = 0;
+  double scrolloffset = 0.0;
   Widget _suggestionsBuilder() {
     return StreamBuilder<List<SearchFieldListItem<T>?>?>(
       stream: suggestionStream.stream,
@@ -579,7 +608,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
         if (snapshot.data == null || !isSuggestionExpanded) {
           return SizedBox();
-        } else if (snapshot.data!.isEmpty) {
+        } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           return widget.emptyWidget;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null

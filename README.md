@@ -261,7 +261,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
-- `emptyWidget`: Custom Widget to show when search returns empty Results (defaults to `SizedBox.shrink`)
+- `emptyWidget`: Custom Widget to show when search returns empty Results or when `showEmpty` is true. (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
 - `hint` : hint for the search Input.
@@ -275,11 +275,13 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onOutSideTap` : callback when the user taps outside the searchfield.
 - `onSaved` : An optional method to call with the final value when the form is saved via FormState.save.
+- `onScroll` : callback when the suggestion list is scrolled. It returns the current scroll position and the max scroll position.
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `onTap`: callback when the searchfield is tapped or brought into focus.
 - `scrollbarDecoration`: decoration for the scrollbar.
+- `showEmpty`: Boolean to show/hide the emptyWidget.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
   each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.
 - `suggestionState`: enum to hide/show the suggestion on focusing the searchfield defaults to `SuggestionState.expand`.

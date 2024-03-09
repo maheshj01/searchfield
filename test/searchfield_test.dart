@@ -181,6 +181,47 @@ void main() {
     });
   });
 
+  testWidgets('searchfield should respect showEmpty parameter',
+      (widgetTester) async {
+    final controller = TextEditingController();
+    final suggestions = ['ABC', 'DEF', 'GHI', 'JKL']
+        .map(SearchFieldListItem<String>.new)
+        .toList();
+    final emptyWidget = const Text('No results');
+    bool showEmpty = false;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: suggestions,
+      controller: controller,
+      showEmpty: showEmpty,
+      emptyWidget: emptyWidget,
+      suggestionState: Suggestion.expand,
+    )));
+
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    await widgetTester.tap(textField);
+    await widgetTester.enterText(textField, 'A');
+    await widgetTester.pumpAndSettle();
+    expect(find.text('ABC'), findsOneWidget);
+    expect(find.text('No results'), findsNothing);
+    showEmpty = true;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: suggestions,
+      controller: controller,
+      showEmpty: showEmpty,
+      emptyWidget: emptyWidget,
+      suggestionState: Suggestion.expand,
+    )));
+
+    await widgetTester.enterText(textField, 'text not in list');
+    await widgetTester.pumpAndSettle();
+    expect(find.text('No results'), findsOneWidget);
+  });
+
   testWidgets(
       'Searchfield Suggestions should default height should be less than 175 when suggestions count < 5',
       (WidgetTester tester) async {
@@ -1233,4 +1274,36 @@ void main() {
       expect(find.text(countries[2].name), findsOneWidget);
     });
   });
+
+// Drag is always 0 looks related to https://github.com/flutter/flutter/issues/100758
+//   testWidgets('Fire onScroll when suggestions are scrolled',
+//       (widgetTester) async {
+//     final suggestions = List.generate(500, (index) => index.toString())
+//         .map((e) => SearchFieldListItem<String>(e))
+//         .toList();
+
+//     double scrollOffset = 0.0;
+//     await widgetTester.pumpWidget(_boilerplate(
+//         child: SearchField(
+//       key: const Key('searchfield'),
+//       suggestions: suggestions,
+//       suggestionState: Suggestion.expand,
+//       onScroll: (offset, maxOffset) {
+//         print(offset);
+//         scrollOffset = offset;
+//       },
+//     )));
+
+//     final listFinder = find.byType(ListView);
+//     final textField = find.byType(TextFormField);
+//     expect(textField, findsOneWidget);
+//     expect(listFinder, findsNothing);
+//     await widgetTester.tap(textField);
+//     await widgetTester.enterText(textField, '');
+//     await widgetTester.pumpAndSettle();
+//     expect(listFinder, findsOneWidget);
+//     await widgetTester.drag(listFinder, const Offset(0, -100));
+//     await widgetTester.pumpAndSettle(Duration(seconds: 1));
+//     expect(scrollOffset, 100.0);
+//   });
 }
