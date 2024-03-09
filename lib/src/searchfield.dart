@@ -496,7 +496,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   // for onSubmitted callback of the textfield
   void handleSelectKeyPress(SelectionIntent intent) {
     if (selected == null) return;
-    suggestionStream.sink.add(null);
+    _searchFocus!.unfocus();
     onSuggestionTapped(widget.suggestions[selected!]);
   }
 
@@ -632,6 +632,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 }
                 return TextFieldTapRegion(
                     onTapOutside: (x) {
+                      if (widget.onTapOutside != null) widget.onTapOutside!(x);
                       _searchFocus!.unfocus();
                     },
                     child: Material(
@@ -643,6 +644,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                             Theme.of(context).hoverColor,
                         onTap: () => onSuggestionTapped(snapshot.data![index]!),
                         child: Container(
+                          key: snapshot.data![index]!.key,
                           width: double.infinity,
                           decoration: widget.suggestionItemDecoration?.copyWith(
                                 color: selected == index
@@ -824,9 +826,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               key: key,
               enabled: widget.enabled,
               autofocus: widget.autofocus,
-              onTapOutside: (x) {
-                if (widget.onTapOutside != null) widget.onTapOutside!(x);
-              },
               autocorrect: widget.autoCorrect,
               readOnly: widget.readOnly,
               autovalidateMode: widget.autovalidateMode,

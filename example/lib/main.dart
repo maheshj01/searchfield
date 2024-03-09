@@ -97,6 +97,16 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               SizedBox(
                 height: 50,
               ),
+              SearchField(
+                hint: 'Basic SearchField',
+                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                    .map(SearchFieldListItem<String>.new)
+                    .toList(),
+                suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 50,
+              ),
               NetworkSample(),
               SizedBox(
                 height: 50,
@@ -138,7 +148,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   // borderRadius: BorderRadius.circular(10),
                   border: Border(
                     bottom: BorderSide(
-                      color: Colors.grey.shade200, 
+                      color: Colors.grey.shade200,
                       width: 1,
                     ),
                   ),

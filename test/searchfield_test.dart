@@ -95,37 +95,33 @@ void main() {
     });
 
     // Todo this test is failing on last line
-    // testWidgets('searchfield should show tapped suggestion',
-    //     (WidgetTester tester) async {
-    //   String selected = '';
-    //   final controller = TextEditingController();
-    //   await tester.pumpWidget(_boilerplate(
-    //       child: SearchField(
-    //     onSuggestionTap: (x) {
-    //       selected = x.searchKey;
-    //     },
-    //     key: const Key('searchfield'),
-    //     suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-    //         .map(SearchFieldListItem<String>.new)
-    //         .toList(),
-    //     controller: controller,
-    //     suggestionState: Suggestion.expand,
-    //   )));
-    //   final listFinder = find.byType(ListView);
-    //   final textField = find.byType(TextFormField);
-    //   expect(textField, findsOneWidget);
-    //   expect(listFinder, findsNothing);
-    //   await tester.tap(textField);
-    //   await tester.enterText(textField, '');
-    //   await tester.pumpAndSettle();
-    //   expect(listFinder, findsOneWidget);
-    //   final tapTarget = find.text('ABC');
-    //   expect(tapTarget, findsOneWidget);
-    //   await tester.tap(tapTarget);
-    //   await tester.pumpAndSettle(Duration(seconds: 2));
-    //   // this line fails
-    //   expect(controller.text, equals('ABC'));
-    // });
+    testWidgets('searchfield should show tapped suggestion',
+        (WidgetTester tester) async {
+      final controller = TextEditingController();
+      await tester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      final tapTarget = find.text('ABC');
+      await tester.ensureVisible(tapTarget);
+      expect(tapTarget, findsOneWidget);
+      await tester.tap(tapTarget);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+      expect(find.text('ABC'), findsOneWidget);
+    });
 
     testWidgets('Searchfield should show searched suggestions',
         (WidgetTester tester) async {
@@ -246,36 +242,36 @@ void main() {
 
   /// "TODO: Fix this test"
 
-  // testWidgets(
-  //     'SearchField should show generic type search key in searchfield on suggestionTap)',
-  //     (WidgetTester tester) async {
-  //   final controller = TextEditingController();
-  //   final countries = data.map((e) => Country.fromMap(e)).toList();
-  //   await tester.pumpWidget(_boilerplate(
-  //       child: SearchField(
-  //     key: const Key('searchfield'),
-  //     suggestions:
-  //         countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
-  //     controller: controller,
-  //     suggestionState: Suggestion.expand,
-  //     onSuggestionTap: (SearchFieldListItem<Country> x) {
-  //       print(x.searchKey);
-  //     },
-  //   )));
-  //   final listFinder = find.byType(ListView);
-  //   final textField = find.byType(TextFormField);
-  //   final tapTarget = find.text(countries[0].name);
-  //   expect(textField, findsOneWidget);
-  //   expect(listFinder, findsNothing);
-  //   await tester.tap(textField);
-  //   await tester.enterText(textField, '');
-  //   await tester.pumpAndSettle();
-  //   expect(listFinder, findsOneWidget);
-  //   expect(tapTarget, findsOneWidget);
-  //   await tester.tap(tapTarget);
-  //   await tester.pumpAndSettle(Duration(seconds: 1));
-  //   expect(controller.text, equals(countries[0].name));
-  // });
+  testWidgets(
+      'SearchField should show generic type search key in searchfield on suggestionTap)',
+      (WidgetTester tester) async {
+    final controller = TextEditingController();
+    final countries = data.map((e) => Country.fromMap(e)).toList();
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      key: const Key('searchfield'),
+      suggestions: countries
+          .map((e) => SearchFieldListItem<Country>(e.name, key: Key(e.name)))
+          .toList(),
+      controller: controller,
+      suggestionState: Suggestion.expand,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        print(x.searchKey);
+      },
+    )));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await tester.tap(textField);
+    await tester.enterText(textField, '');
+    await tester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    final tapTarget = find.byKey(Key(countries[0].name));
+    expect(tapTarget, findsOneWidget);
+    await tester.pumpAndSettle(Duration(seconds: 1));
+    expect(find.text(countries[0].name), findsOneWidget);
+  });
 
   // testWidgets('FocusNode should work with searchfield',
   //     (WidgetTester tester) async {
@@ -1197,40 +1193,38 @@ void main() {
       expect(listFinder, findsNothing);
     });
 
-    // testWidgets(
-    //     'pressing enter should input the selected suggestion in the searchfield',
-    //     (widgetTester) async {
-    //   final controller = TextEditingController();
-    //   final countries = data.map(Country.fromMap).toList();
-    //   final suggestions =
-    //       countries.map((e) => SearchFieldListItem<Country>(e.name)).toList();
-    //   await widgetTester.pumpWidget(_boilerplate(
-    //       child: SearchField(
-    //     key: const Key('searchfield'),
-    //     suggestions: suggestions,
-    //     controller: controller,
-    //     suggestionState: Suggestion.expand,
-    //     onSuggestionTap: (SearchFieldListItem<Country> x) {
-    //       print(x.searchKey);
-    //     },
-    //   )));
+    testWidgets(
+        'pressing enter should input the selected suggestion in the searchfield',
+        (widgetTester) async {
+      final controller = TextEditingController();
+      final countries = data.map(Country.fromMap).toList();
+      final suggestions =
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList();
+      await widgetTester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: suggestions,
+        controller: controller,
+        suggestionState: Suggestion.expand,
+        onSuggestionTap: (SearchFieldListItem<Country> x) {
+          print(x.searchKey);
+        },
+      )));
 
-    //   final listFinder = find.byType(ListView);
-    //   final textField = find.byType(TextFormField);
-    //   expect(textField, findsOneWidget);
-    //   expect(listFinder, findsNothing);
-    //   await widgetTester.tap(textField);
-    //   await widgetTester.enterText(textField, '');
-    //   await widgetTester.pumpAndSettle();
-    //   expect(listFinder, findsOneWidget);
-    //   await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
-    //   await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
-    //   await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
-    //   await widgetTester.pumpAndSettle();
-    //   await simulateKeyDownEvent(LogicalKeyboardKey.enter);
-    //   await widgetTester.pumpAndSettle();
-    //   expect(listFinder, findsNothing);
-    //   expect(controller.text, countries[2].name);
-    // });
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.enterText(textField, '');
+      await widgetTester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+      await widgetTester.pumpAndSettle();
+      expect(find.text(countries[2].name), findsOneWidget);
+    });
   });
 }
