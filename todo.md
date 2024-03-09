@@ -2,6 +2,12 @@
 [] Textcontroller used after dispose (on widget tree changed)
 [X] Investigate onFieldSubmitted and onSuggestionTap are conflicting
 
+[ ] SuggestionDirection.up
+
+- [ ] Test that the suggestions are displayed above the textfield in reverse order
+- [ ] Arrow keys should navigate suggestions in correct order
+- [ ] emptyWidget should be displayed in the overlay
+
 <!-- Focus -->
 
 1. Widget should have focus when pressed Tab
