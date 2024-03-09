@@ -868,7 +868,7 @@ void main() {
   });
 
   testWidgets(
-      'Searchfield should find suggestion when typed reversed if we add custom comparator for it',
+      'Searchfield should find suggestion when typed reversed if we add custom search logic',
       (WidgetTester tester) async {
     final controller = TextEditingController();
     final suggestions = ['ABC', 'DEF', 'GHI', 'JKL'];
