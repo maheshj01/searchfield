@@ -184,6 +184,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 ),
                 suggestionsDecoration: SuggestionDecoration(
                   // border: Border.all(color: Colors.orange),
+                  elevation: 8.0,
                   selectionColor: Colors.grey.shade100,
                   hoverColor: Colors.purple.shade100,
                   gradient: LinearGradient(

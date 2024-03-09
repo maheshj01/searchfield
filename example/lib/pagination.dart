@@ -41,7 +41,6 @@ class _PaginationState extends State<Pagination> {
   bool isLoading = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final result = await getPaginatedSuggestions();

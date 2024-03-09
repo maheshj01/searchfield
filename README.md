@@ -3,6 +3,7 @@
 <a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 [![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
+[![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
 A highly customizable simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.

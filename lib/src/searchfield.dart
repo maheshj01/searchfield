@@ -625,100 +625,109 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           }
           final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
 
-          final Widget listView = Container(
-            decoration: widget.suggestionsDecoration ??
-                SuggestionDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  border: Border.all(
-                    color: onSurfaceColor.withOpacity(0.1),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
+          final Widget listView = ClipRRect(
+            borderRadius: widget.suggestionsDecoration?.borderRadius ??
+                kDefaultShapeBorder.borderRadius,
+            child: Container(
+              decoration: widget.suggestionsDecoration ??
+                  SuggestionDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    border: Border.all(
                       color: onSurfaceColor.withOpacity(0.1),
-                      blurRadius: 8.0, // soften the shadow
-                      spreadRadius: 2.0, //extend the shadow
-                      offset: Offset(
-                        2.0,
-                        5.0,
-                      ),
                     ),
-                  ],
-                ),
-            child: ListView.builder(
-              reverse: _suggestionDirection == SuggestionDirection.up,
-              padding: EdgeInsets.zero,
-              controller: _scrollController,
-              itemCount: snapshot.data!.length,
-              physics: snapshot.data!.length == 1
-                  ? NeverScrollableScrollPhysics()
-                  : ScrollPhysics(),
-              itemBuilder: (context, index) => Builder(builder: (context) {
-                if (selected == index) {
-                  SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                    Scrollable.ensureVisible(context,
-                        alignment: 0.1, duration: Duration(milliseconds: 300));
-                  });
-                }
-                return TextFieldTapRegion(
-                    onTapOutside: (x) {
-                      if (widget.onTapOutside != null) widget.onTapOutside!(x);
-                      _searchFocus!.unfocus();
-                    },
-                    child: Material(
-                      color: widget.suggestionsDecoration == null
-                          ? Theme.of(context).colorScheme.surface
-                          : Colors.transparent,
-                      child: InkWell(
-                        hoverColor: widget.suggestionsDecoration?.hoverColor ??
-                            Theme.of(context).hoverColor,
-                        onTap: () => onSuggestionTapped(snapshot.data![index]!),
-                        child: Container(
-                          key: snapshot.data![index]!.key,
-                          width: double.infinity,
-                          decoration: widget.suggestionItemDecoration?.copyWith(
-                                color: selected == index
-                                    ? widget.suggestionsDecoration
-                                            ?.selectionColor ??
-                                        Theme.of(context).highlightColor
-                                    : null,
-                                border:
-                                    widget.suggestionItemDecoration?.border ??
-                                        Border(
-                                          bottom: BorderSide(
-                                            color: widget.marginColor ??
-                                                onSurfaceColor.withOpacity(0.1),
-                                          ),
-                                        ),
-                              ) ??
-                              BoxDecoration(
-                                color: selected == index
-                                    ? widget.suggestionsDecoration
-                                            ?.selectionColor ??
-                                        Theme.of(context).highlightColor
-                                    : null,
-                                border: index == snapshot.data!.length - 1
-                                    ? null
-                                    : Border(
+                    boxShadow: [
+                      BoxShadow(
+                        color: onSurfaceColor.withOpacity(0.1),
+                        blurRadius: 8.0, // soften the shadow
+                        spreadRadius: 2.0, //extend the shadow
+                        offset: Offset(
+                          2.0,
+                          5.0,
+                        ),
+                      ),
+                    ],
+                  ),
+              child: ListView.builder(
+                reverse: _suggestionDirection == SuggestionDirection.up,
+                padding: EdgeInsets.zero,
+                controller: _scrollController,
+                itemCount: snapshot.data!.length,
+                physics: snapshot.data!.length == 1
+                    ? NeverScrollableScrollPhysics()
+                    : ScrollPhysics(),
+                itemBuilder: (context, index) => Builder(builder: (context) {
+                  if (selected == index) {
+                    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                      Scrollable.ensureVisible(context,
+                          alignment: 0.1,
+                          duration: Duration(milliseconds: 300));
+                    });
+                  }
+                  return TextFieldTapRegion(
+                      onTapOutside: (x) {
+                        if (widget.onTapOutside != null)
+                          widget.onTapOutside!(x);
+                        _searchFocus!.unfocus();
+                      },
+                      child: Material(
+                        color: widget.suggestionsDecoration == null
+                            ? Theme.of(context).colorScheme.surface
+                            : Colors.transparent,
+                        child: InkWell(
+                          hoverColor:
+                              widget.suggestionsDecoration?.hoverColor ??
+                                  Theme.of(context).hoverColor,
+                          onTap: () =>
+                              onSuggestionTapped(snapshot.data![index]!),
+                          child: Container(
+                            key: snapshot.data![index]!.key,
+                            width: double.infinity,
+                            decoration: widget.suggestionItemDecoration
+                                    ?.copyWith(
+                                  color: selected == index
+                                      ? widget.suggestionsDecoration
+                                              ?.selectionColor ??
+                                          Theme.of(context).highlightColor
+                                      : null,
+                                  border: widget
+                                          .suggestionItemDecoration?.border ??
+                                      Border(
                                         bottom: BorderSide(
                                           color: widget.marginColor ??
                                               onSurfaceColor.withOpacity(0.1),
                                         ),
                                       ),
-                              ),
-                          child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: snapshot.data![index]!.child ??
-                                    Text(
-                                      snapshot.data![index]!.searchKey,
-                                      style: widget.suggestionStyle,
-                                    ),
-                              )),
+                                ) ??
+                                BoxDecoration(
+                                  color: selected == index
+                                      ? widget.suggestionsDecoration
+                                              ?.selectionColor ??
+                                          Theme.of(context).highlightColor
+                                      : null,
+                                  border: index == snapshot.data!.length - 1
+                                      ? null
+                                      : Border(
+                                          bottom: BorderSide(
+                                            color: widget.marginColor ??
+                                                onSurfaceColor.withOpacity(0.1),
+                                          ),
+                                        ),
+                                ),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: snapshot.data![index]!.child ??
+                                      Text(
+                                        snapshot.data![index]!.searchKey,
+                                        style: widget.suggestionStyle,
+                                      ),
+                                )),
+                          ),
                         ),
-                      ),
-                    ));
-              }),
+                      ));
+                }),
+              ),
             ),
           );
 
@@ -798,15 +807,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               left: offset.dx,
               width: textFieldsize.width,
               child: CompositedTransformFollower(
-                  offset: widget.offset ?? yOffset,
-                  link: _layerLink,
-                  child: ClipRRect(
-                    borderRadius: widget.suggestionsDecoration?.borderRadius ??
-                        BorderRadius.zero,
-                    child: Material(
-                      child: _suggestionsBuilder(),
-                    ),
-                  )),
+                offset: widget.offset ?? yOffset,
+                link: _layerLink,
+                child: Material(
+                  borderRadius: widget.suggestionsDecoration?.borderRadius ??
+                      BorderRadius.zero,
+                  shadowColor: widget.suggestionsDecoration?.shadowColor,
+                  elevation: widget.suggestionsDecoration?.elevation ??
+                      kDefaultElevation,
+                  child: _suggestionsBuilder(),
+                ),
+              ),
             );
           });
     });
