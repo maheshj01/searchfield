@@ -665,8 +665,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   }
                   return TextFieldTapRegion(
                       onTapOutside: (x) {
-                        if (widget.onTapOutside != null)
+                        if (widget.onTapOutside != null) {
                           widget.onTapOutside!(x);
+                        }
                         _searchFocus!.unfocus();
                       },
                       child: Material(
