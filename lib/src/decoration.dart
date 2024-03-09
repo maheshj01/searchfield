@@ -77,6 +77,12 @@ class SuggestionDecoration extends BoxDecoration {
   // defaults to Theme.of(context).highlightColor
   final Color? selectionColor;
 
+  /// The elevation of the suggestion list
+  /// defaults to 2.0
+  final double? elevation;
+
+  final Color? shadowColor;
+
   SuggestionDecoration({
     this.padding = EdgeInsets.zero,
     Color? color,
@@ -84,7 +90,9 @@ class SuggestionDecoration extends BoxDecoration {
     BorderRadiusGeometry? borderRadius,
     List<BoxShadow>? boxShadow,
     Gradient? gradient,
+    this.elevation,
     this.hoverColor,
+    this.shadowColor,
     this.selectionColor,
     BoxShape shape = BoxShape.rectangle,
   }) : super(
@@ -95,3 +103,11 @@ class SuggestionDecoration extends BoxDecoration {
             gradient: gradient,
             shape: shape);
 }
+
+const kDefaultShapeBorder = RoundedRectangleBorder(
+    borderRadius: BorderRadius.only(
+  bottomLeft: Radius.circular(4),
+  bottomRight: Radius.circular(4),
+));
+
+const kDefaultElevation = 2.0;

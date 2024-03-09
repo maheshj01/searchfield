@@ -37,8 +37,9 @@ class _NetworkSampleState extends State<NetworkSample> {
     end: Alignment.topLeft,
   );
   final suggestionDecoration = SuggestionDecoration(
-    border: Border.all(color: Colors.grey),
+    // border: Border.all(color: Colors.grey),
     gradient: gradient,
+    elevation: 16.0,
     borderRadius: BorderRadius.circular(24),
   );
   @override
