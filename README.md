@@ -18,9 +18,10 @@ Searchfield can
 - lazy load the suggestions from Network with custom Loading widget
 - show dynamic suggestions above or below the input field
 - define max number of items visible in the viewport 📱
-- filter out the suggestions with a custom logic.
+- filter out the suggestions with a custom logic
 - visually customize the input and the suggestions
 - navigate through the suggestions using keyboard
+- Listen to scroll events of the suggestions see [example](example/lib/pagination.dart)
 
 ## Getting Started
 

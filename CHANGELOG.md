@@ -1,6 +1,6 @@
 #### [0.9.7] - March 09, 2024
 
-- Expose `onScroll` event listener
+- Expose `onScroll` event listener [Issue #118](https://github.com/maheshmnj/searchfield/issues/118)
 - Add `showEmpty` parameter to hide/show emptyWidget
 
 #### [0.9.6] - March 07, 2024
@@ -9,7 +9,7 @@
 
 #### [0.9.5] - March 06, 2024
 
-- Add keyboard support for suggestions [Issue 7](https://github.com/maheshmnj/searchfield/issues/7)
+- Add keyboard support for suggestions [Issue #7](https://github.com/maheshmnj/searchfield/issues/7)
 - [BREAKING] Remove deprecated property `comparator`, use `onSearchTextChanged` instead
 
 #### [0.9.2] - Feb 07, 2024
@@ -18,8 +18,8 @@
 
 #### [0.9.1] - Feb 07, 2024
 
-- Update Suggestion dimensions on Window resize [Issue 84](https://github.com/maheshmnj/searchfield/issues/84)
-- Adds a enum `SuggestionDirection.flexible` to position the suggestions based on the available space. [Issue 56](https://github.com/maheshmnj/searchfield/issues/56)
+- Update Suggestion dimensions on Window resize [Issue #84](https://github.com/maheshmnj/searchfield/issues/84)
+- Adds a enum `SuggestionDirection.flexible` to position the suggestions based on the available space. [Issue #56](https://github.com/maheshmnj/searchfield/issues/56)
 
 #### [0.9.0] - Dec 07, 2023
 
@@ -45,13 +45,13 @@
 
 #### [0.8.5] - Oct 12, 2023
 
-- Adds `scrollbarDecoration` property to customize the scrollbar [Issue 99](https://github.com/maheshmnj/searchfield/issues/99)
+- Adds `scrollbarDecoration` property to customize the scrollbar [Issue #99](https://github.com/maheshmnj/searchfield/issues/99)
 - [BREAKING] Removes `scrollbarAlwaysVisible` property, instead use `scrollbarDecoration.thumbVisibility` to customize the scrollbar.
 
 #### [0.8.4] - Aug 07, 2023
 
-- Addresses [Issue 92](https://github.com/maheshmnj/searchfield/issues/92): Add `onSaved` callback to SearchField
-- Addresses [Issue 90](https://github.com/maheshmnj/searchfield/issues/90) Update Docs to clarify Alignment of suggestions
+- Addresses [Issue #92](https://github.com/maheshmnj/searchfield/issues/92): Add `onSaved` callback to SearchField
+- Addresses [Issue #90](https://github.com/maheshmnj/searchfield/issues/90) Update Docs to clarify Alignment of suggestions
 
 #### [0.8.3] - May 19, 2023
 
@@ -73,7 +73,7 @@
 
 #### [0.7.8] - May 02, 2023
 
-- Fix [Issue 77](https://github.com/maheshmnj/searchfield/issues/77) Add TextCapitalization property to SearchField.
+- Fix [Issue #77](https://github.com/maheshmnj/searchfield/issues/77) Add TextCapitalization property to SearchField.
 
 #### [0.7.7] - Apr 27, 2023
 
@@ -82,7 +82,7 @@
 #### [0.7.6] - Apr 16, 2023
 
 - Add 'readOnly' property to disable editing
-- [BREAKING] [Issue 58](https://github.com/maheshmnj/searchfield/issues/58): Removes `hasOverlay` property, now suggestions are always shown as an overlay
+- [BREAKING] [Issue #58](https://github.com/maheshmnj/searchfield/issues/58): Removes `hasOverlay` property, now suggestions are always shown as an overlay
 - Fixes: SearchField Cannot be wrapped with Center [Issue 57](https://github.com/maheshmnj/searchfield/issues/57)
 
 #### [0.7.5] - Jan 27, 2023
