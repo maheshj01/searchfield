@@ -183,21 +183,23 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   ),
                 ),
                 suggestionsDecoration: SuggestionDecoration(
-                  // border: Border.all(color: Colors.orange),
-                  elevation: 8.0,
-                  selectionColor: Colors.grey.shade100,
-                  hoverColor: Colors.purple.shade100,
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xfffc466b),
-                      Color.fromARGB(255, 103, 128, 255)
-                    ],
-                    stops: [0.25, 0.75],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                    // border: Border.all(color: Colors.orange),
+                    elevation: 8.0,
+                    selectionColor: Colors.grey.shade100,
+                    hoverColor: Colors.purple.shade100,
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xfffc466b),
+                        Color.fromARGB(255, 103, 128, 255)
+                      ],
+                      stops: [0.25, 0.75],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )),
                 suggestions: suggestions
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))

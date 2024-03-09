@@ -1,6 +1,7 @@
 #### [0.9.8] - March 09, 2024
 
 - Add `elevation` and `shadowColor` property to SuggestionDecoration class fixes [Issue #110](https://github.com/maheshmnj/searchfield/issues/110)
+- Customize width of suggestions using `SuggestionDecoration.width` property
 
 #### [0.9.7] - March 09, 2024
 

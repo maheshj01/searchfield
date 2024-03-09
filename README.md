@@ -235,13 +235,14 @@ SearchField(
 ```
 
 <p float="left;padding=10px">
-  <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="210"/>
-  <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="170"/>
-  <img src = "https://user-images.githubusercontent.com/31410839/115071445-e3349080-9f13-11eb-8d9b-e4dc81d3e7a7.png"" width="232"/>
+  <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="250"/>
+  <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="210"/>
+   <img width="260" alt="image" src="https://gist.github.com/assets/31410839/3fa88012-12c5-4704-8b27-847090c5e13f">
 </p>
 <p float="left;padding=10px">
   <img src="https://user-images.githubusercontent.com/31410839/154835349-3d06376c-98ec-45ca-bede-10f9e2f69589.png" width="300"/>
  <img width="300" alt="image" src="https://github.com/maheshmnj/searchfield/assets/31410839/e109e6c4-c36a-4d58-b5b2-b6b4999924d6">
+  <img src = "https://user-images.githubusercontent.com/31410839/115071445-e3349080-9f13-11eb-8d9b-e4dc81d3e7a7.png"" width="232"/>
 </p>
 
 ### Support for Keyboard Navigation

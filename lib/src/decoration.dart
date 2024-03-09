@@ -81,7 +81,11 @@ class SuggestionDecoration extends BoxDecoration {
   /// defaults to 2.0
   final double? elevation;
 
+  /// The shadow color of the suggestion list
   final Color? shadowColor;
+
+  /// The width of the suggestion menu from left to right
+  final double? width;
 
   SuggestionDecoration({
     this.padding = EdgeInsets.zero,
@@ -90,6 +94,7 @@ class SuggestionDecoration extends BoxDecoration {
     BorderRadiusGeometry? borderRadius,
     List<BoxShadow>? boxShadow,
     Gradient? gradient,
+    this.width,
     this.elevation,
     this.hoverColor,
     this.shadowColor,

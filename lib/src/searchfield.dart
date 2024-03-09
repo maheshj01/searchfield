@@ -805,7 +805,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
             return Positioned(
               left: offset.dx,
-              width: textFieldsize.width,
+              width: widget.suggestionsDecoration?.width ?? textFieldsize.width,
               child: CompositedTransformFollower(
                 offset: widget.offset ?? yOffset,
                 link: _layerLink,
