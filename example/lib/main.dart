@@ -205,6 +205,17 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               SizedBox(
                 height: 50,
               ),
+              SearchField(
+                enabled: false,
+                hint: 'Disabled SearchField',
+                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                    .map(SearchFieldListItem<String>.new)
+                    .toList(),
+                suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 50,
+              ),
               Text(
                 'Counter: $counter',
                 style: Theme.of(context).textTheme.bodyLarge,

@@ -5,22 +5,22 @@
 [![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
-
 A highly customizable simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
-Think of this widget like a dropdownButton field with an ability
+Think of this widget like a dropdownButton field with the following capabilities
 
-- to Search 🔍.
-- to position and define height of each Suggestion Item
+Searchfield can
+
+- search 🔍 from a list of suggestions.
+- validate the input with custom validation logic.
+- position and define height of each Suggestion Item
 - show suggestions of custom type (not just String)
-- lazy load the suggestions from Network with custom loading widget
-- to show dynamic suggestions above or below the input field
-- to define max number of items visible in the viewport 📱
-- to filter out the suggestions with a custom logic.
-- to visually customize the input and the suggestions
+- lazy load the suggestions from Network with custom Loading widget
+- show dynamic suggestions above or below the input field
+- define max number of items visible in the viewport 📱
+- filter out the suggestions with a custom logic.
+- visually customize the input and the suggestions
 - navigate through the suggestions using keyboard
-
-list of all the properties mentioned below
 
 ## Getting Started
 
