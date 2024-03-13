@@ -1,3 +1,7 @@
+#### [0.9.9] - March 13, 2024
+
+- Return key would enter wrong text in searchfield Fix [Issue #126](https://github.com/maheshmnj/searchfield/issues/126)
+
 #### [0.9.8] - March 13, 2024
 
 - Add `elevation` and `shadowColor` property to SuggestionDecoration class fixes [Issue #110](https://github.com/maheshmnj/searchfield/issues/110)

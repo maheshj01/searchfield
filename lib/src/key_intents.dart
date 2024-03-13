@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:searchfield/searchfield.dart';
 
 class KCallbackAction<T extends Intent> extends CallbackAction<T> {
   KCallbackAction({required void Function(T) onInvoke})
@@ -17,8 +18,9 @@ class PreviousIntent extends Intent {
 }
 
 // action to select the suggestion
-class SelectionIntent extends Intent {
-  const SelectionIntent();
+class SelectionIntent<T> extends Intent {
+  final SearchFieldListItem<T> selectedItem;
+  const SelectionIntent(this.selectedItem);
 }
 
 // action to hide the suggestions

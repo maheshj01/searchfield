@@ -456,7 +456,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         KCallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
     _nextAction = KCallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
     _selectAction =
-        KCallbackAction<SelectionIntent>(onInvoke: handleSelectKeyPress);
+        KCallbackAction<SelectionIntent<T>>(onInvoke: handleSelectKeyPress);
     _unFocusAction =
         KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
     _scrollController = ScrollController();
@@ -514,10 +514,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   // This is not invoked since enter key is reserved
   // for onSubmitted callback of the textfield
-  void handleSelectKeyPress(SelectionIntent intent) {
+  void handleSelectKeyPress(SelectionIntent<T> intent) {
     if (selected == null) return;
     _searchFocus!.unfocus();
-    onSuggestionTapped(widget.suggestions[selected!]);
+    onSuggestionTapped(intent.selectedItem);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
@@ -737,9 +737,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   late final ScrollController _scrollController;
   late final KCallbackAction<PreviousIntent> _previousAction;
   late final KCallbackAction<NextIntent> _nextAction;
-  late final KCallbackAction<SelectionIntent> _selectAction;
+  late final KCallbackAction<SelectionIntent<T>> _selectAction;
   late final KCallbackAction<UnFocusIntent> _unFocusAction;
-
+  final lastSearchResult = <SearchFieldListItem<T>>[];
   @override
   Widget build(BuildContext context) {
     if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
@@ -756,7 +756,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(false),
           LogicalKeySet(LogicalKeyboardKey.arrowUp):
               const PreviousIntent(false),
-          LogicalKeySet(LogicalKeyboardKey.enter): const SelectionIntent(),
+          LogicalKeySet(LogicalKeyboardKey.enter): SelectionIntent<T>(
+            widget.initialValue ?? SearchFieldListItem(''),
+          ),
         },
         child: Actions(
           actions: <Type, Action<Intent>>{
@@ -777,7 +779,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               autovalidateMode: widget.autovalidateMode,
               onFieldSubmitted: (x) {
                 if (selected != null) {
-                  handleSelectKeyPress(SelectionIntent());
+                  if (lastSearchResult.isNotEmpty) {
+                    handleSelectKeyPress(
+                        SelectionIntent(lastSearchResult[selected!]));
+                  } else {
+                    handleSelectKeyPress(
+                        SelectionIntent(widget.suggestions[selected!]));
+                  }
                 }
                 if (widget.onSubmit != null) widget.onSubmit!(x);
               },
@@ -814,6 +822,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 } else {
                   if (query.isEmpty) {
                     _createOverlay();
+                    lastSearchResult.clear();
+                    lastSearchResult.addAll(searchResult);
                     suggestionStream.sink.add(widget.suggestions);
                     return;
                   }
@@ -825,6 +835,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     }
                   }
                 }
+                lastSearchResult.clear();
+                lastSearchResult.addAll(searchResult);
                 suggestionStream.sink.add(searchResult);
               },
             ),
