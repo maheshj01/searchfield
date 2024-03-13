@@ -297,6 +297,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `suggestionStyle`:Specifies `TextStyle` for suggestions when no child is provided.
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.
 - `textCapitalization` : Configures how the platform keyboard will select an uppercase or lowercase keyboard on IOS and Android.
+- `textAlign`: specifies the alignment of the text in the searchfield. Defaults to `TextAlign.start`.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
 
