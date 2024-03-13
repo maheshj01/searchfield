@@ -630,48 +630,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             _totalHeight =
                 snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
-          final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
-
-          final Widget listView = ClipRRect(
-            borderRadius: widget.suggestionsDecoration?.borderRadius ??
-                kDefaultShapeBorder.borderRadius,
-            child: Container(
-                decoration: widget.suggestionsDecoration ??
-                    SuggestionDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      border: Border.all(
-                        color: onSurfaceColor.withOpacity(0.1),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: onSurfaceColor.withOpacity(0.1),
-                          blurRadius: 8.0, // soften the shadow
-                          spreadRadius: 2.0, //extend the shadow
-                          offset: Offset(
-                            2.0,
-                            5.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                child: SFListview<T>(
-                  scrollController: _scrollController,
-                  selected: selected,
-                  suggestionDirection: _suggestionDirection,
-                  onTapOutside: (x) {
-                    if (widget.onTapOutside != null) {
-                      widget.onTapOutside!(x);
-                    }
-                    _searchFocus!.unfocus();
-                  },
-                  onSuggestionTapped: onSuggestionTapped,
-                  suggestionItemDecoration: widget.suggestionItemDecoration,
-                  suggestionsDecoration: widget.suggestionsDecoration,
-                  marginColor: widget.marginColor,
-                  list: snapshot.data! as List<SearchFieldListItem<T>>,
-                )),
-          );
-
           return AnimatedContainer(
             duration: _suggestionDirection == SuggestionDirection.up
                 ? Duration.zero
@@ -695,10 +653,24 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               trackBorderColor: _scrollbarDecoration!.trackBorderColor,
               trackColor: _scrollbarDecoration!.trackColor,
               child: ScrollConfiguration(
-                behavior:
-                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: listView,
-              ),
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
+                  child: SFListview<T>(
+                    scrollController: _scrollController,
+                    selected: selected,
+                    suggestionDirection: _suggestionDirection,
+                    onTapOutside: (x) {
+                      if (widget.onTapOutside != null) {
+                        widget.onTapOutside!(x);
+                      }
+                      _searchFocus!.unfocus();
+                    },
+                    onSuggestionTapped: onSuggestionTapped,
+                    suggestionItemDecoration: widget.suggestionItemDecoration,
+                    suggestionsDecoration: widget.suggestionsDecoration,
+                    marginColor: widget.marginColor,
+                    list: snapshot.data! as List<SearchFieldListItem<T>>,
+                  )),
             ),
           );
         }
