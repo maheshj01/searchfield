@@ -1,6 +1,6 @@
 #### [0.9.9] - March 13, 2024
 
-- Return key would enter wrong text in searchfield Fix [Issue #126](https://github.com/maheshmnj/searchfield/issues/126)
+- Incorrect search result passed to onSubmit [Issue #126](https://github.com/maheshmnj/searchfield/issues/126)
 
 #### [0.9.8] - March 13, 2024
 

@@ -1,4 +1,4 @@
-# [searchfield: ^0.9.8](https://pub.dev/packages/searchfield)
+# [searchfield: ^0.9.9](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
