@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:searchfield/src/decoration.dart';
 import 'package:searchfield/src/key_intents.dart';
+import 'package:searchfield/src/listview.dart';
 
 enum Suggestion {
   /// shows suggestions when searchfield is brought into focus
@@ -305,7 +305,7 @@ class SearchField<T> extends StatefulWidget {
     this.autofocus = false,
     this.autovalidateMode,
     this.controller,
-    this.emptyWidget = const SizedBox.shrink(),
+    this.emptyWidget = const SizedBox(),
     this.enabled,
     this.focusNode,
     this.hint,
@@ -636,107 +636,40 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             borderRadius: widget.suggestionsDecoration?.borderRadius ??
                 kDefaultShapeBorder.borderRadius,
             child: Container(
-              decoration: widget.suggestionsDecoration ??
-                  SuggestionDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    border: Border.all(
-                      color: onSurfaceColor.withOpacity(0.1),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
+                decoration: widget.suggestionsDecoration ??
+                    SuggestionDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      border: Border.all(
                         color: onSurfaceColor.withOpacity(0.1),
-                        blurRadius: 8.0, // soften the shadow
-                        spreadRadius: 2.0, //extend the shadow
-                        offset: Offset(
-                          2.0,
-                          5.0,
-                        ),
                       ),
-                    ],
-                  ),
-              child: ListView.builder(
-                reverse: _suggestionDirection == SuggestionDirection.up,
-                padding: EdgeInsets.zero,
-                controller: _scrollController,
-                itemCount: snapshot.data!.length,
-                physics: snapshot.data!.length == 1
-                    ? NeverScrollableScrollPhysics()
-                    : ScrollPhysics(),
-                itemBuilder: (context, index) => Builder(builder: (context) {
-                  if (selected == index) {
-                    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                      Scrollable.ensureVisible(context,
-                          alignment: 0.1,
-                          duration: Duration(milliseconds: 300));
-                    });
-                  }
-                  return TextFieldTapRegion(
-                      onTapOutside: (x) {
-                        if (widget.onTapOutside != null) {
-                          widget.onTapOutside!(x);
-                        }
-                        _searchFocus!.unfocus();
-                      },
-                      child: Material(
-                        color: widget.suggestionsDecoration == null
-                            ? Theme.of(context).colorScheme.surface
-                            : Colors.transparent,
-                        child: InkWell(
-                          hoverColor:
-                              widget.suggestionsDecoration?.hoverColor ??
-                                  Theme.of(context).hoverColor,
-                          onTap: () =>
-                              onSuggestionTapped(snapshot.data![index]!),
-                          child: Container(
-                            key: snapshot.data![index]!.key,
-                            width: double.infinity,
-                            decoration: widget.suggestionItemDecoration
-                                    ?.copyWith(
-                                  color: selected == index
-                                      ? widget.suggestionsDecoration
-                                              ?.selectionColor ??
-                                          Theme.of(context).highlightColor
-                                      : null,
-                                  border: widget
-                                          .suggestionItemDecoration?.border ??
-                                      Border(
-                                        bottom: BorderSide(
-                                          color: widget.marginColor ??
-                                              onSurfaceColor.withOpacity(0.1),
-                                        ),
-                                      ),
-                                ) ??
-                                BoxDecoration(
-                                  color: selected == index
-                                      ? widget.suggestionsDecoration
-                                              ?.selectionColor ??
-                                          Theme.of(context).highlightColor
-                                      : null,
-                                  border: index == snapshot.data!.length - 1
-                                      ? null
-                                      : Border(
-                                          bottom: BorderSide(
-                                            color: widget.marginColor ??
-                                                onSurfaceColor.withOpacity(0.1),
-                                          ),
-                                        ),
-                                ),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: snapshot.data![index]!.child ??
-                                      Text(
-                                        snapshot.data![index]!.searchKey,
-                                        style: widget.suggestionStyle,
-                                      ),
-                                )),
+                      boxShadow: [
+                        BoxShadow(
+                          color: onSurfaceColor.withOpacity(0.1),
+                          blurRadius: 8.0, // soften the shadow
+                          spreadRadius: 2.0, //extend the shadow
+                          offset: Offset(
+                            2.0,
+                            5.0,
                           ),
                         ),
-                      ));
-                }),
-              ),
-            ),
+                      ],
+                    ),
+                child: SFListview<T>(
+                  scrollController: _scrollController,
+                  selected: selected,
+                  suggestionDirection: _suggestionDirection,
+                  onTapOutside: (x) {
+                    if (widget.onTapOutside != null) {
+                      widget.onTapOutside!(x);
+                    }
+                    _searchFocus!.unfocus();
+                  },
+                  onSuggestionTapped: onSuggestionTapped,
+                  suggestionItemDecoration: widget.suggestionItemDecoration,
+                  suggestionsDecoration: widget.suggestionsDecoration,
+                  marginColor: widget.marginColor,
+                  list: snapshot.data! as List<SearchFieldListItem<T>>,
+                )),
           );
 
           return AnimatedContainer(

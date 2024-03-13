@@ -71,9 +71,8 @@ class _PaginationState extends State<Pagination> {
                 .toList();
           },
           showEmpty: isLoading,
-          onScroll: (position, maxOffset) async {
-            print('position: $position, maxOffset: $maxOffset');
-            if (position < maxOffset) return;
+          onScroll: (offset, maxOffset) async {
+            if (offset < maxOffset) return;
             setState(() {
               isLoading = true;
             });
