@@ -62,6 +62,7 @@ class _NetworkSampleState extends State<NetworkSample> {
                     SearchFieldListItem<String>(e, child: searchChild(e)))
                 .toList();
           },
+          
           onTap: () async {
             final result = await getSuggestions();
             setState(() {

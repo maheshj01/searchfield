@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:searchfield/searchfield.dart';
 
-class SFListview<T> extends StatelessWidget {
-  final ScrollController scrollController;
+class SFListview<T> extends StatefulWidget {
+  final ScrollController? scrollController;
   final SuggestionDirection suggestionDirection;
   final int? selected;
   final Function(PointerDownEvent)? onTapOutside;
@@ -13,6 +13,7 @@ class SFListview<T> extends StatelessWidget {
   final BoxDecoration? suggestionItemDecoration;
   final Color? marginColor;
   final TextStyle? suggestionStyle;
+  final Function(double, double)? onScroll;
   SFListview(
       {super.key,
       required this.scrollController,
@@ -22,18 +23,51 @@ class SFListview<T> extends StatelessWidget {
       required this.suggestionsDecoration,
       required this.suggestionItemDecoration,
       required this.onSuggestionTapped,
+      this.onScroll,
       this.suggestionStyle,
       this.marginColor,
       this.suggestionDirection = SuggestionDirection.down});
 
   @override
+  State<SFListview<T>> createState() => _SFListviewState<T>();
+}
+
+class _SFListviewState<T> extends State<SFListview<T>> {
+  late final ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = widget.scrollController ?? ScrollController();
+    listenToScrollEvents();
+  }
+
+  void listenToScrollEvents() {
+    if (widget.onScroll != null) {
+      _scrollController.addListener(() {
+        widget.onScroll!(_scrollController.position.pixels,
+            _scrollController.position.maxScrollExtent);
+      });
+    } else {
+      _scrollController.removeListener(() {});
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant SFListview<T> oldWidget) {
+    if (oldWidget.onScroll != widget.onScroll) {
+      listenToScrollEvents();
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     return ClipRRect(
-      borderRadius: suggestionsDecoration?.borderRadius ??
+      borderRadius: widget.suggestionsDecoration?.borderRadius ??
           kDefaultShapeBorder.borderRadius,
       child: Container(
-        decoration: suggestionsDecoration ??
+        decoration: widget.suggestionsDecoration ??
             SuggestionDecoration(
               color: Theme.of(context).colorScheme.surface,
               border: Border.all(
@@ -52,15 +86,15 @@ class SFListview<T> extends StatelessWidget {
               ],
             ),
         child: ListView.builder(
-          reverse: suggestionDirection == SuggestionDirection.up,
+          reverse: widget.suggestionDirection == SuggestionDirection.up,
           padding: EdgeInsets.zero,
-          controller: scrollController,
-          itemCount: list.length,
-          physics: list.length == 1
+          controller: _scrollController,
+          itemCount: widget.list.length,
+          physics: widget.list.length == 1
               ? NeverScrollableScrollPhysics()
               : ScrollPhysics(),
           itemBuilder: (context, index) => Builder(builder: (context) {
-            if (selected == index) {
+            if (widget.selected == index) {
               SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
                 Scrollable.ensureVisible(context,
                     alignment: 0.1, duration: Duration(milliseconds: 300));
@@ -68,42 +102,44 @@ class SFListview<T> extends StatelessWidget {
             }
             return TextFieldTapRegion(
                 onTapOutside: (x) {
-                  onTapOutside!(x);
+                  widget.onTapOutside!(x);
                 },
                 child: Material(
-                  color: suggestionsDecoration == null
+                  color: widget.suggestionsDecoration == null
                       ? Theme.of(context).colorScheme.surface
                       : Colors.transparent,
                   child: InkWell(
-                    hoverColor: suggestionsDecoration?.hoverColor ??
+                    hoverColor: widget.suggestionsDecoration?.hoverColor ??
                         Theme.of(context).hoverColor,
-                    onTap: () => onSuggestionTapped(list[index]),
+                    onTap: () => widget.onSuggestionTapped(widget.list[index]),
                     child: Container(
-                      key: list[index].key,
+                      key: widget.list[index].key,
                       width: double.infinity,
-                      decoration: suggestionItemDecoration?.copyWith(
-                            color: selected == index
-                                ? suggestionsDecoration?.selectionColor ??
+                      decoration: widget.suggestionItemDecoration?.copyWith(
+                            color: widget.selected == index
+                                ? widget.suggestionsDecoration
+                                        ?.selectionColor ??
                                     Theme.of(context).highlightColor
                                 : null,
-                            border: suggestionItemDecoration?.border ??
+                            border: widget.suggestionItemDecoration?.border ??
                                 Border(
                                   bottom: BorderSide(
-                                    color: marginColor ??
+                                    color: widget.marginColor ??
                                         onSurfaceColor.withOpacity(0.1),
                                   ),
                                 ),
                           ) ??
                           BoxDecoration(
-                            color: selected == index
-                                ? suggestionsDecoration?.selectionColor ??
+                            color: widget.selected == index
+                                ? widget.suggestionsDecoration
+                                        ?.selectionColor ??
                                     Theme.of(context).highlightColor
                                 : null,
-                            border: index == list.length - 1
+                            border: index == widget.list.length - 1
                                 ? null
                                 : Border(
                                     bottom: BorderSide(
-                                      color: marginColor ??
+                                      color: widget.marginColor ??
                                           onSurfaceColor.withOpacity(0.1),
                                     ),
                                   ),
@@ -112,10 +148,10 @@ class SFListview<T> extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: list[index].child ??
+                            child: widget.list[index].child ??
                                 Text(
-                                  list[index].searchKey,
-                                  style: suggestionStyle,
+                                  widget.list[index].searchKey,
+                                  style: widget.suggestionStyle,
                                 ),
                           )),
                     ),

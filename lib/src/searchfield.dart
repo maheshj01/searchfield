@@ -424,17 +424,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
-  void listenToScrollEvents() {
-    if (widget.onScroll != null) {
-      _scrollController.addListener(() {
-        widget.onScroll!(_scrollController.position.pixels,
-            _scrollController.position.maxScrollExtent);
-      });
-    } else {
-      _scrollController.removeListener(() {});
-    }
-  }
-
   /// With SuggestionDirection.flex, the widget will automatically decide the direction of the
   /// suggestion list based on the space available in the viewport. If the suggestions have enough
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
@@ -473,7 +462,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _scrollController = ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
-    listenToScrollEvents();
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -576,9 +564,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           .indexWhere((element) => element == widget.initialValue);
     }
 
-    if (oldWidget.onScroll != widget.onScroll) {
-      listenToScrollEvents();
-    }
     super.didUpdateWidget(oldWidget);
   }
 
@@ -661,9 +646,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   behavior: ScrollConfiguration.of(context)
                       .copyWith(scrollbars: false),
                   child: SFListview<T>(
+                    suggestionStyle: widget.suggestionStyle,
                     scrollController: _scrollController,
                     selected: selected,
                     suggestionDirection: _suggestionDirection,
+                    onScroll: widget.onScroll,
                     onTapOutside: (x) {
                       if (widget.onTapOutside != null) {
                         widget.onTapOutside!(x);
