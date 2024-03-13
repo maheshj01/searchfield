@@ -1089,6 +1089,22 @@ void main() {
     expect(outSideTap, true);
   });
 
+  testWidgets('Searchfield should respect textAlign', (widgetTester) async {
+    await widgetTester.pumpWidget(_boilerplate(
+      child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+        textAlign: TextAlign.center,
+      ),
+    ));
+    final finder = find.byType(TextField);
+    final textField = widgetTester.firstWidget<TextField>(finder);
+    expect(finder, findsOneWidget);
+    expect(textField.textAlign, TextAlign.center);
+  });
+
   testWidgets("SearchField should trigger onSaved", (widgetTester) async {
     final formKey = GlobalKey<FormState>();
     final controller = TextEditingController();

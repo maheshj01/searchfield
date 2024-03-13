@@ -281,6 +281,10 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to enable autoCorrect defaults to `true`
   final bool autoCorrect;
 
+  /// alignment of the text in the searchfield
+  /// defaults to [TextAlign.start]
+  final TextAlign textAlign;
+
   /// Defines whether to enable autofocus defaults to `false`
   final bool autofocus;
 
@@ -334,6 +338,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionState = Suggestion.expand,
     this.suggestionItemDecoration,
     this.suggestionAction,
+    this.textAlign = TextAlign.start,
     this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
     this.validator,
@@ -778,6 +783,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             child: TextFormField(
               key: key,
               enabled: widget.enabled,
+              textAlign: widget.textAlign,
               autofocus: widget.autofocus,
               autocorrect: widget.autoCorrect,
               readOnly: widget.readOnly,

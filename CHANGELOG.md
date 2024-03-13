@@ -3,6 +3,7 @@
 - Add `elevation` and `shadowColor` property to SuggestionDecoration class fixes [Issue #110](https://github.com/maheshmnj/searchfield/issues/110)
 - Customize width of suggestions using `SuggestionDecoration.width` property
 - Initial Value should be selected by default [Issue #127](https://github.com/maheshmnj/searchfield/issues/127)
+- Add `textAlign` property to SearchField [Issue #126](
 
 #### [0.9.7] - March 09, 2024
 
