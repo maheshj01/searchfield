@@ -278,7 +278,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onOutSideTap` : callback when the user taps outside the searchfield.
 - `onSaved` : An optional method to call with the final value when the form is saved via FormState.save.
-- `onScroll` : callback when the suggestion list is scrolled. It returns the current scroll position and the max scroll position.
+- `onScroll` : callback when the suggestion list is scrolled. It returns the current scroll position in pixels and the max scroll position.
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
 - `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
