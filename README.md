@@ -6,7 +6,7 @@
 [![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
-A highly customizable simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
+A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
 Think of this widget like a dropdownButton field with the following capabilities
 
@@ -297,6 +297,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `suggestionStyle`:Specifies `TextStyle` for suggestions when no child is provided.
 - `textInputAction` : An action the user has requested the text input control to perform throgh the submit button on keyboard.
 - `textCapitalization` : Configures how the platform keyboard will select an uppercase or lowercase keyboard on IOS and Android.
+- `textAlign`: specifies the alignment of the text in the searchfield. Defaults to `TextAlign.start`.
 
 ### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
 

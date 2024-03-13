@@ -296,9 +296,6 @@ void main() {
           .toList(),
       controller: controller,
       suggestionState: Suggestion.expand,
-      onSuggestionTap: (SearchFieldListItem<Country> x) {
-        print(x.searchKey);
-      },
     )));
     final listFinder = find.byType(ListView);
     final textField = find.byType(TextFormField);
@@ -1236,9 +1233,6 @@ void main() {
         suggestions: suggestions,
         controller: controller,
         suggestionState: Suggestion.expand,
-        onSuggestionTap: (SearchFieldListItem<Country> x) {
-          print(x.searchKey);
-        },
       )));
       final listFinder = find.byType(ListView);
       final textField = find.byType(TextFormField);
@@ -1269,9 +1263,6 @@ void main() {
         suggestions: suggestions,
         controller: controller,
         suggestionState: Suggestion.expand,
-        onSuggestionTap: (SearchFieldListItem<Country> x) {
-          print(x.searchKey);
-        },
       )));
 
       final listFinder = find.byType(ListView);
@@ -1290,6 +1281,37 @@ void main() {
       expect(find.text(countries[2].name), findsOneWidget);
     });
   });
+
+  // testWidgets('searched suggestions can be selected by pressing enter',
+  //     (widgetTester) async {
+  //   final controller = TextEditingController();
+  //   final suggestions = ['ABC', 'DEF', 'GHI', 'JKL']
+  //       .map(SearchFieldListItem<String>.new)
+  //       .toList();
+  //   await widgetTester.pumpWidget(_boilerplate(
+  //       child: SearchField(
+  //     key: const Key('searchfield'),
+  //     suggestions: suggestions,
+  //     controller: controller,
+  //     suggestionState: Suggestion.expand,
+  //   )));
+  //   final listFinder = find.byType(ListView);
+  //   final textField = find.byType(TextFormField);
+  //   expect(textField, findsOneWidget);
+  //   expect(listFinder, findsNothing);
+  //   await widgetTester.tap(textField);
+  //   expect(find.text('DEF'), findsNothing);
+  //   await widgetTester.enterText(textField, 'd');
+  //   await widgetTester.pumpAndSettle();
+  //   expect(listFinder, findsOneWidget);
+  //   await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+  //   await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+  //   await widgetTester.pumpAndSettle();
+  //   final target = find.text('DEF');
+  //   expect(target, findsOneWidget);
+  //   final target2 = find.text('GHI');
+  //   expect(target2, findsNothing);
+  // });
 
 // Drag is always 0 looks related to https://github.com/flutter/flutter/issues/100758
 //   testWidgets('Fire onScroll when suggestions are scrolled',

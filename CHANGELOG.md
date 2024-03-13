@@ -1,9 +1,13 @@
-#### [0.9.8] - March 09, 2024
+#### [0.9.9] - March 13, 2024
+
+- Return key would enter wrong text in searchfield Fix [Issue #126](https://github.com/maheshmnj/searchfield/issues/126)
+
+#### [0.9.8] - March 13, 2024
 
 - Add `elevation` and `shadowColor` property to SuggestionDecoration class fixes [Issue #110](https://github.com/maheshmnj/searchfield/issues/110)
 - Customize width of suggestions using `SuggestionDecoration.width` property
 - Initial Value should be selected by default [Issue #127](https://github.com/maheshmnj/searchfield/issues/127)
-- Add `textAlign` property to SearchField [Issue #126](
+- Add `textAlign` property to SearchField [Completes PR #126](https://github.com/maheshmnj/searchfield/pull/63)(
 
 #### [0.9.7] - March 09, 2024
 
