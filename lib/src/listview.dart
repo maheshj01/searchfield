@@ -5,13 +5,13 @@ import 'package:searchfield/searchfield.dart';
 class SFListview<T> extends StatelessWidget {
   final ScrollController scrollController;
   final SuggestionDirection suggestionDirection;
-  int? selected;
+  final int? selected;
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
   final SuggestionDecoration? suggestionsDecoration;
   final Function(SearchFieldListItem<T>) onSuggestionTapped;
   final BoxDecoration? suggestionItemDecoration;
-  Color? marginColor;
+  final Color? marginColor;
   final TextStyle? suggestionStyle;
   SFListview(
       {super.key,
