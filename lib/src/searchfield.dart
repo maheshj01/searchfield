@@ -477,6 +477,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             widget.initialValue!.searchKey.isEmpty) {
           suggestionStream.sink.add(null);
         } else {
+          selected = widget.suggestions
+              .indexWhere((element) => element == widget.initialValue);
           searchController!.text = widget.initialValue!.searchKey;
           suggestionStream.sink.add([widget.initialValue]);
         }
@@ -564,6 +566,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         _scrollbarDecoration = widget.scrollbarDecoration;
       }
     }
+    if (oldWidget.initialValue != widget.initialValue) {
+      selected = widget.suggestions
+          .indexWhere((element) => element == widget.initialValue);
+    }
+
     if (oldWidget.onScroll != widget.onScroll) {
       listenToScrollEvents();
     }

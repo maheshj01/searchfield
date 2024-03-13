@@ -100,6 +100,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               ),
               SearchField(
                 hint: 'Basic SearchField',
+                initialValue: SearchFieldListItem<String>('ABC'),
                 suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
                     .map(SearchFieldListItem<String>.new)
                     .toList(),
