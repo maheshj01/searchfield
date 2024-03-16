@@ -1,5 +1,3 @@
-import 'package:example/network_sample.dart';
-import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -40,7 +38,9 @@ class SearchFieldSample extends StatefulWidget {
 
 class _SearchFieldSampleState extends State<SearchFieldSample> {
   int suggestionsCount = 12;
-  final focus = FocusNode();
+  final focus1 = FocusNode();
+  final focus2 = FocusNode();
+  final focus3 = FocusNode();
 
   @override
   void initState() {
@@ -85,6 +85,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               TextFormField(
+                  focusNode: focus1,
+                  textInputAction: TextInputAction.next,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   decoration: InputDecoration(
                     labelText: 'Flutter TextFormField',
@@ -99,25 +101,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 height: 50,
               ),
               SearchField(
-                hint: 'Basic SearchField',
-                // initialValue: SearchFieldListItem<String>('ABC'),
-                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                    .map(SearchFieldListItem<String>.new)
-                    .toList(),
-                suggestionState: Suggestion.expand,
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Pagination(),
-              SizedBox(
-                height: 50,
-              ),
-              NetworkSample(),
-              SizedBox(
-                height: 50,
-              ),
-              SearchField(
+                focusNode: focus2,
                 suggestionDirection: SuggestionDirection.flex,
                 onSearchTextChanged: (query) {
                   final filter = suggestions
@@ -185,7 +169,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 ),
                 suggestionsDecoration: SuggestionDecoration(
                     // border: Border.all(color: Colors.orange),
-                    elevation: 8.0,
+                    // elevation: 8.0,
                     selectionColor: Colors.grey.shade100,
                     hoverColor: Colors.purple.shade100,
                     gradient: LinearGradient(
@@ -205,30 +189,26 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))
                     .toList(),
-                focusNode: focus,
-                suggestionState: Suggestion.expand,
+                suggestionState: Suggestion.hidden,
                 onSuggestionTap: (SearchFieldListItem<String> x) {
-                  // focus.unfocus();
+                  FocusScope.of(context).requestFocus(focus3);
                 },
               ),
               SizedBox(
                 height: 50,
               ),
-              SearchField(
-                enabled: false,
-                hint: 'Disabled SearchField',
-                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                    .map(SearchFieldListItem<String>.new)
-                    .toList(),
-                suggestionState: Suggestion.expand,
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                'Counter: $counter',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              TextFormField(
+                  focusNode: focus3,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    labelText: 'Flutter TextFormField',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.length < 4) {
+                      return 'error';
+                    }
+                    return null;
+                  }),
             ],
           ),
         ));

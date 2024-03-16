@@ -357,7 +357,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final StreamController<List<SearchFieldListItem<T>?>?> suggestionStream =
       StreamController<List<SearchFieldListItem<T>?>?>.broadcast();
   FocusNode? _searchFocus;
-  bool isSuggestionExpanded = false;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
 
@@ -400,24 +399,18 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         suggestionStream.sink.add(null);
         return;
       }
-      widget.onTap?.call();
-      if (mounted) {
-        setState(() {
-          isSuggestionExpanded = _searchFocus!.hasFocus;
-        });
-      }
-      if (isSuggestionExpanded) {
-        _overlayEntry = _createOverlay();
-        if (widget.initialValue == null) {
-          if (widget.suggestionState == Suggestion.expand) {
-            Future.delayed(Duration(milliseconds: 100), () {
-              suggestionStream.sink.add(widget.suggestions);
-            });
-          }
+      if (_searchFocus!.hasFocus) {
+        _overlayEntry ??= _createOverlay();
+        if (widget.suggestionState == Suggestion.expand) {
+          isSuggestionsShown = true;
+          Future.delayed(Duration(milliseconds: 100), () {
+            suggestionStream.sink.add(widget.suggestions);
+          });
         }
         Overlay.of(context).insert(_overlayEntry!);
       } else {
         if (_overlayEntry != null && _overlayEntry!.mounted) {
+          isSuggestionsShown = false;
           _overlayEntry?.remove();
         }
       }
@@ -498,7 +491,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void handleNextKeyPress(NextIntent intent) {
     if (selected == null) {
       // focus to next focus node
-      if (intent.isTabKey) {
+      if (intent.isTabKey && !isSuggestionsShown) {
         _searchFocus!.nextFocus();
         return;
       }
@@ -594,6 +587,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   int? selectedIndex;
+  bool isSuggestionsShown = false;
 
   /// length of the suggestions
   int length = 0;
@@ -603,7 +597,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       stream: suggestionStream.stream,
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
-        if (snapshot.data == null || !isSuggestionExpanded) {
+        if (snapshot.data == null || !_searchFocus!.hasFocus) {
+          isSuggestionsShown = false;
           return SizedBox();
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           return widget.emptyWidget;
@@ -620,6 +615,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             _totalHeight =
                 snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
+          isSuggestionsShown = true;
           return AnimatedContainer(
             duration: _suggestionDirection == SuggestionDirection.up
                 ? Duration.zero
@@ -790,16 +786,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 if (widget.onSubmit != null) widget.onSubmit!(x);
               },
               onTap: () {
-                /// only call if SuggestionState = [Suggestion.expand]
-                if (!isSuggestionExpanded &&
-                    widget.suggestionState == Suggestion.expand) {
-                  suggestionStream.sink.add(widget.suggestions);
-                  if (mounted) {
-                    setState(() {
-                      isSuggestionExpanded = true;
-                    });
-                  }
-                }
+                widget.onTap?.call();
               },
               onSaved: (x) {
                 if (widget.onSaved != null) widget.onSaved!(x);
@@ -821,7 +808,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   searchResult = widget.onSearchTextChanged!(query) ?? [];
                 } else {
                   if (query.isEmpty) {
-                    _createOverlay();
                     lastSearchResult.clear();
                     lastSearchResult.addAll(searchResult);
                     suggestionStream.sink.add(widget.suggestions);
