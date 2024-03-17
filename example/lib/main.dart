@@ -206,9 +206,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .toList(),
                 focusNode: focus,
                 suggestionState: Suggestion.expand,
-                onSuggestionTap: (SearchFieldListItem<String> x) {
-                  print(x.searchKey);
-                },
+                onSuggestionTap: (SearchFieldListItem<String> x) {},
               ),
               SizedBox(
                 height: 50,
