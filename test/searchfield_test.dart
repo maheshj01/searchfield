@@ -181,6 +181,41 @@ void main() {
     });
   });
 
+  // testWidgets('Searchfield should invoke onSuggestionTap',
+  //     (widgetTester) async {
+  //   final controller = TextEditingController();
+  //   final suggestions = ['ABC', 'DEF', 'GHI', 'JKL']
+  //       .map(SearchFieldListItem<String>.new)
+  //       .toList();
+  //   int count = 0;
+  //   String? tappedSuggestion;
+  //   await widgetTester.pumpWidget(_boilerplate(
+  //       child: SearchField(
+  //     key: const Key('searchfield'),
+  //     suggestions: suggestions,
+  //     controller: controller,
+  //     onSuggestionTap: (suggestion) {
+  //       tappedSuggestion = suggestion.searchKey;
+  //     },
+  //     suggestionState: Suggestion.expand,
+  //   )));
+  //   final listFinder = find.byType(ListView);
+  //   final textField = find.byType(TextFormField);
+  //   expect(textField, findsOneWidget);
+  //   expect(listFinder, findsNothing);
+  //   await widgetTester.tap(textField);
+  //   await widgetTester.enterText(textField, 'A');
+  //   await widgetTester.pumpAndSettle();
+  //   expect(listFinder, findsOneWidget);
+  //   final tapTarget = find.text('ABC');
+  //   await widgetTester.ensureVisible(tapTarget);
+  //   expect(tapTarget, findsOneWidget);
+  //   await widgetTester.tap(tapTarget);
+    // await widgetTester.pumpAndSettle(Duration(seconds: 2));
+    // expect(count, 1);
+  //   expect(tappedSuggestion, 'ABC');
+  // });
+
   testWidgets('searchfield should respect showEmpty parameter',
       (widgetTester) async {
     final controller = TextEditingController();

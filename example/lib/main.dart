@@ -129,7 +129,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                           SearchFieldListItem<String>(e, child: searchChild(e)))
                       .toList();
                 },
-                onTap: () {},
                 controller: searchController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
@@ -208,7 +207,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 focusNode: focus,
                 suggestionState: Suggestion.expand,
                 onSuggestionTap: (SearchFieldListItem<String> x) {
-                  // focus.unfocus();
+                  print(x.searchKey);
                 },
               ),
               SizedBox(
