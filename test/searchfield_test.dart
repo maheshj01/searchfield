@@ -311,37 +311,6 @@ void main() {
     expect(find.text(countries[0].name), findsOneWidget);
   });
 
-  // testWidgets('FocusNode should work with searchfield',
-  //     (WidgetTester tester) async {
-  //   final focus = FocusNode();
-  //   final countries = data.map((e) => Country.fromMap(e)).toList();
-  //   await tester.pumpWidget(_boilerplate(
-  //       child: SearchField(
-  //     key: const Key('searchfield'),
-  //     suggestions:
-  //         countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
-  //     focusNode: focus,
-  //     suggestionState: Suggestion.expand,
-  //     onSuggestionTap: (SearchFieldListItem<Country> x) {
-  //       focus.unfocus();
-  //     },
-  //   )));
-  //   final listFinder = find.byType(ListView);
-  //   final textField = find.byType(TextFormField);
-  //   expect(textField, findsOneWidget);
-  //   expect(listFinder, findsNothing);
-  //   await tester.tap(textField);
-  //   expect(focus.hasFocus, true);
-  //   await tester.enterText(textField, '');
-  //   await tester.pumpAndSettle();
-  //   expect(listFinder, findsOneWidget);
-  //   final tapTarget = find.text(countries[0].name);
-  //   expect(tapTarget, findsOneWidget);
-  //   await tester.tap(tapTarget);
-  //   await tester.pumpAndSettle();
-  //   expect(focus.hasFocus, false);
-  // });
-
   testWidgets('Searchfield should trigger onTap when tapped',
       (widgetTester) async {
     final controller = TextEditingController();
@@ -454,6 +423,33 @@ void main() {
     await tester.pumpAndSettle();
     expect(listView, findsWidgets);
     expect(find.text('suggestion $counter'), findsOneWidget);
+  });
+
+  testWidgets('Searchfield suggestions should respect width',
+      (widgetTester) async {
+    final controller = TextEditingController();
+    final countries = data.map(Country.fromMap).toList();
+    final width = 200.0;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+      controller: controller,
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      suggestionState: Suggestion.expand,
+      suggestionsDecoration: SuggestionDecoration(
+        width: width,
+      ),
+    )));
+
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    await widgetTester.tap(textField);
+    await widgetTester.pumpAndSettle();
+    final positioned = find.byType(Positioned);
+    expect(positioned, findsOneWidget);
+    final positionedRenderBox =
+        widgetTester.renderObject(positioned) as RenderBox;
+    expect(positionedRenderBox.size.width, equals(width));
   });
 
   group('Searchfield should respect SuggestionState: ', () {
@@ -1014,7 +1010,7 @@ void main() {
     expect(textField.textCapitalization, TextCapitalization.none);
   });
 
-  group('Test Searchfield autofocus', () {
+  group('Test Searchfield focus', () {
     testWidgets('Searchfield should not autofocus by default (hidden keyboard)',
         (widgetTester) async {
       final focus = FocusNode();
@@ -1048,6 +1044,38 @@ void main() {
       await widgetTester.pumpAndSettle();
       // keyboard should not be visible
       expect(widgetTester.testTextInput.isVisible, isTrue);
+    });
+
+    testWidgets('Searchfield should respect FocusNode',
+        (WidgetTester tester) async {
+      final focus = FocusNode();
+      final boilerPlate = _boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        focusNode: focus,
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
+      // keyboard should not be visible
+      expect(tester.testTextInput.isVisible, isFalse);
+      focus.requestFocus();
+      await tester.pumpAndSettle();
+      expect(tester.testTextInput.isVisible, isTrue);
+
+      focus.unfocus();
+      await tester.pumpAndSettle();
+      expect(tester.testTextInput.isVisible, isFalse);
+
+      focus.requestFocus();
+      await tester.pumpAndSettle();
+      expect(tester.testTextInput.isVisible, isTrue);
+
+      focus.unfocus();
+      await tester.pumpAndSettle();
+      expect(tester.testTextInput.isVisible, isFalse);
     });
   });
 
