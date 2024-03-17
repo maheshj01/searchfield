@@ -547,7 +547,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _suggestionDirection = widget.suggestionDirection;
     }
     if (oldWidget.suggestions != widget.suggestions) {
-      selected = null;
       length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
     }
