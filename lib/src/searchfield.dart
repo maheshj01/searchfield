@@ -382,7 +382,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     } else {
       _scrollbarDecoration = widget.scrollbarDecoration;
     }
-
     if (widget.focusNode != null) {
       _searchFocus = widget.focusNode;
     } else {
@@ -541,7 +540,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _suggestionDirection = widget.suggestionDirection;
     }
     if (oldWidget.suggestions != widget.suggestions) {
-      selected = null;
       length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
     }
@@ -597,11 +595,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       stream: suggestionStream.stream,
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
+        bool isEmpty = false;
         if (snapshot.data == null || !_searchFocus!.hasFocus) {
           isSuggestionsShown = false;
           return SizedBox();
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
-          return widget.emptyWidget;
+          isEmpty = true;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null
               ? widget.suggestionsDecoration!.padding.vertical
@@ -615,53 +614,57 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             _totalHeight =
                 snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
-          isSuggestionsShown = true;
-          return AnimatedContainer(
-            duration: _suggestionDirection == SuggestionDirection.up
-                ? Duration.zero
-                : Duration(milliseconds: 300),
-            height: _totalHeight,
-            alignment: Alignment.centerLeft,
-            child: RawScrollbar(
-              thumbVisibility: _scrollbarDecoration!.thumbVisibility,
-              controller: _scrollController,
-              padding: EdgeInsets.zero,
-              shape: _scrollbarDecoration!.shape,
-              fadeDuration: _scrollbarDecoration!.fadeDuration,
-              radius: _scrollbarDecoration!.radius,
-              thickness: _scrollbarDecoration!.thickness,
-              thumbColor: _scrollbarDecoration!.thumbColor,
-              minThumbLength: _scrollbarDecoration!.minThumbLength,
-              trackRadius: _scrollbarDecoration!.trackRadius,
-              trackVisibility: _scrollbarDecoration!.trackVisibility,
-              timeToFade: _scrollbarDecoration!.timeToFade,
-              pressDuration: _scrollbarDecoration!.pressDuration,
-              trackBorderColor: _scrollbarDecoration!.trackBorderColor,
-              trackColor: _scrollbarDecoration!.trackColor,
-              child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context)
-                      .copyWith(scrollbars: false),
-                  child: SFListview<T>(
-                    suggestionStyle: widget.suggestionStyle,
-                    scrollController: _scrollController,
-                    selected: selected,
-                    suggestionDirection: _suggestionDirection,
-                    onScroll: widget.onScroll,
-                    onTapOutside: (x) {
-                      if (widget.onTapOutside != null) {
-                        widget.onTapOutside!(x);
-                      }
-                      _searchFocus!.unfocus();
-                    },
-                    onSuggestionTapped: onSuggestionTapped,
-                    suggestionItemDecoration: widget.suggestionItemDecoration,
-                    suggestionsDecoration: widget.suggestionsDecoration,
-                    marginColor: widget.marginColor,
-                    list: snapshot.data! as List<SearchFieldListItem<T>>,
-                  )),
-            ),
-          );
         }
+        isSuggestionsShown = true;
+        final listView = AnimatedContainer(
+          duration: _suggestionDirection == SuggestionDirection.up
+              ? Duration.zero
+              : Duration(milliseconds: 300),
+          height: _totalHeight,
+          alignment: Alignment.centerLeft,
+          child: RawScrollbar(
+            thumbVisibility: _scrollbarDecoration!.thumbVisibility,
+            controller: _scrollController,
+            padding: EdgeInsets.zero,
+            shape: _scrollbarDecoration!.shape,
+            fadeDuration: _scrollbarDecoration!.fadeDuration,
+            radius: _scrollbarDecoration!.radius,
+            thickness: _scrollbarDecoration!.thickness,
+            thumbColor: _scrollbarDecoration!.thumbColor,
+            minThumbLength: _scrollbarDecoration!.minThumbLength,
+            trackRadius: _scrollbarDecoration!.trackRadius,
+            trackVisibility: _scrollbarDecoration!.trackVisibility,
+            timeToFade: _scrollbarDecoration!.timeToFade,
+            pressDuration: _scrollbarDecoration!.pressDuration,
+            trackBorderColor: _scrollbarDecoration!.trackBorderColor,
+            trackColor: _scrollbarDecoration!.trackColor,
+            child: ScrollConfiguration(
+                behavior:
+                    ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: SFListview<T>(
+                  suggestionStyle: widget.suggestionStyle,
+                  scrollController: _scrollController,
+                  selected: selected,
+                  suggestionDirection: _suggestionDirection,
+                  onScroll: widget.onScroll,
+                  onTapOutside: (x) {
+                    if (widget.onTapOutside != null) {
+                      widget.onTapOutside!(x);
+                    }
+                    _searchFocus!.unfocus();
+                  },
+                  onSuggestionTapped: onSuggestionTapped,
+                  suggestionItemDecoration: widget.suggestionItemDecoration,
+                  suggestionsDecoration: widget.suggestionsDecoration,
+                  marginColor: widget.marginColor,
+                  list: snapshot.data! as List<SearchFieldListItem<T>>,
+                )),
+          ),
+        );
+        return IndexedStack(
+          index: isEmpty ? 0 : 1,
+          children: [widget.emptyWidget, listView],
+        );
       },
     );
   }

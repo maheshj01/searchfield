@@ -1,16 +1,14 @@
 # [searchfield: ^0.9.9](https://pub.dev/packages/searchfield)
-
 <a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 [![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
 [![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
-A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions.
 
-Think of this widget like a dropdownButton field with the following capabilities
+![Frame 1 (2)](https://github.com/maheshmnj/searchfield/assets/31410839/d037506f-7ff8-4d43-aa8a-9326f1c2a426)
 
-Searchfield can
+A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions. Think of this widget like a dropdownButton field with the following capabilities
 
 - search 🔍 from a list of suggestions.
 - validate the input with custom validation logic.
@@ -22,7 +20,7 @@ Searchfield can
 - filter out the suggestions with a custom logic
 - visually customize the input and the suggestions
 - navigate through the suggestions using keyboard
-- Listen to scroll events of the suggestions see [example](example/lib/pagination.dart)
+- Listen to scroll events of suggestions
 
 ## Getting Started
 
@@ -130,7 +128,14 @@ SearchField(
 
  <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
 
-#### Example 3 (Validation)
+#### Example 3 Load suggestions from network with Pagination
+
+Note that this also maintains the Scroll position when new items are added to list
+see: [complete code here](example/lib/pagination.dart)
+
+![output_video-ezgif com-video-to-gif-converter](https://github.com/flutter/flutter/assets/31410839/3b153e7b-f3e4-4eb7-86ca-8eebd94abf28)
+
+#### Example 4 (Validation)
 
 ```dart
 Form(
@@ -233,17 +238,6 @@ SearchField(
     ...
 )
 ```
-
-<p float="left;padding=10px">
-  <img src ="https://user-images.githubusercontent.com/31410839/115071426-ddd74600-9f13-11eb-8401-c4055344eff2.png" width="250"/>
-  <img src = "https://user-images.githubusercontent.com/31410839/115071441-e29bfa00-9f13-11eb-8143-5e183a502df4.png" width="210"/>
-   <img width="260" alt="image" src="https://gist.github.com/assets/31410839/3fa88012-12c5-4704-8b27-847090c5e13f">
-</p>
-<p float="left;padding=10px">
-  <img src="https://user-images.githubusercontent.com/31410839/154835349-3d06376c-98ec-45ca-bede-10f9e2f69589.png" width="300"/>
- <img width="300" alt="image" src="https://github.com/maheshmnj/searchfield/assets/31410839/e109e6c4-c36a-4d58-b5b2-b6b4999924d6">
-  <img src = "https://user-images.githubusercontent.com/31410839/115071445-e3349080-9f13-11eb-8d9b-e4dc81d3e7a7.png"" width="232"/>
-</p>
 
 ### Support for Keyboard Navigation
 
