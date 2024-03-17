@@ -1,4 +1,4 @@
-#### [1.0.0] - March 16, 2024
+#### [1.0.0] - Unreleased
 
 - ListView is always kept in state to maintain scrolloffset [Issue #122](https://github.com/maheshmnj/searchfield/issues/122)
 
