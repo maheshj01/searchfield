@@ -5,8 +5,10 @@
 [ ] SuggestionDirection.up
 
 - [ ] Test that the suggestions are displayed above the textfield in reverse order
-- [ ] Arrow keys should navigate suggestions in correct order
-- [ ] emptyWidget should be displayed in the overlay
+- [x] Arrow keys should navigate suggestions in correct order
+- [x] emptyWidget should be displayed in the overlay
+
+[ ] SuggestionDirection.down
 
 <!-- Focus -->
 
