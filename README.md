@@ -131,7 +131,7 @@ SearchField(
 
 #### Example 3 Load suggestions from network with Pagination
 
-Note that this also mainatains the Scroll position when new items are added to list
+Note that this also maintains the Scroll position when new items are added to list
 see: [complete code here](example/lib/pagination.dart)
 
 ![output_video-ezgif com-video-to-gif-converter](https://github.com/flutter/flutter/assets/31410839/3b153e7b-f3e4-4eb7-86ca-8eebd94abf28)
