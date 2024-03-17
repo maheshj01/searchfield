@@ -22,7 +22,7 @@ Searchfield can
 - filter out the suggestions with a custom logic
 - visually customize the input and the suggestions
 - navigate through the suggestions using keyboard
-- Listen to scroll events of the suggestions see [example](example/lib/pagination.dart)
+- Listen to scroll events of suggestions
 
 ## Getting Started
 
@@ -127,10 +127,16 @@ SearchField(
     },
 ),
 ```
-
  <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
 
-#### Example 3 (Validation)
+#### Example 3 Load suggestions from network with Pagination
+
+Note that this also mainatains the Scroll position when new items are added to list
+see: [complete code here](example/lib/pagination.dart)
+
+![output_video-ezgif com-video-to-gif-converter](https://github.com/flutter/flutter/assets/31410839/3b153e7b-f3e4-4eb7-86ca-8eebd94abf28)
+
+#### Example 4 (Validation)
 
 ```dart
 Form(
