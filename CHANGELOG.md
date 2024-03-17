@@ -1,3 +1,7 @@
+#### [1.0.0] - March 16, 2024
+
+- ListView is always kept in state to maintain scrolloffset [Issue #122](https://github.com/maheshmnj/searchfield/issues/122)
+
 #### [0.9.9] - March 13, 2024
 
 - Incorrect search result passed to onSubmit [Issue #126](https://github.com/maheshmnj/searchfield/issues/126)
