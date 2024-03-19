@@ -481,8 +481,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (selected! > 0) {
       selected = selected! - 1;
     } else {
-      selected = null;
-      _searchFocus!.requestFocus();
+      selected = length - 1;
+      // _searchFocus!.requestFocus();
     }
     _overlayEntry!.markNeedsBuild();
   }
@@ -498,9 +498,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       _overlayEntry!.markNeedsBuild();
       return;
     }
-    if (selected! < length - 1) {
-      selected = selected! + 1;
-    }
+    selected = (selected! + 1) % length;
     _overlayEntry!.markNeedsBuild();
   }
 
