@@ -748,7 +748,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(true),
+          // LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(true),
           LogicalKeySet(LogicalKeyboardKey.tab, LogicalKeyboardKey.shiftLeft):
               const PreviousIntent(true),
           LogicalKeySet(LogicalKeyboardKey.escape): const UnFocusIntent(),
