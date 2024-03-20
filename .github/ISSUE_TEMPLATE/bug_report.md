@@ -17,6 +17,8 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
+[ ] By clicking this checkbox, I confirm I am using the latest version of the package found on [pub.dev/searchfield](https://pub.dev/packages/searchfield)
+
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
