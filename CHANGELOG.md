@@ -1,6 +1,7 @@
 #### [1.0.0] - Unreleased
 
 - ListView is always kept in state to maintain scrolloffset [Issue #122](https://github.com/maheshmnj/searchfield/issues/122)
+- Shift+Tab should respect sequence of SearchField in a form with SuggestionState.hidden [Issue #125](https://github.com/maheshmnj/searchfield/issues/125)
 
 #### [0.9.9] - March 13, 2024
 
