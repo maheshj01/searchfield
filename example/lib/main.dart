@@ -81,8 +81,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: [
               TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -222,6 +221,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               SizedBox(
                 height: 50,
               ),
+              NetworkSample(),
               Text(
                 'Counter: $counter',
                 style: Theme.of(context).textTheme.bodyLarge,
