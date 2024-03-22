@@ -599,6 +599,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           return SizedBox();
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           isEmpty = true;
+          _totalHeight = 0;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null
               ? widget.suggestionsDecoration!.padding.vertical
