@@ -70,6 +70,7 @@ class _PaginationState extends State<Pagination> {
                     SearchFieldListItem<String>(e, child: searchChild(e)))
                 .toList();
           },
+          animationDuration: Duration.zero,
           showEmpty: isLoading,
           onScroll: (offset, maxOffset) async {
             if (offset < maxOffset) return;

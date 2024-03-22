@@ -1,10 +1,10 @@
-# [searchfield: ^1.0.0](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.0.1](https://pub.dev/packages/searchfield)
+
 <a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 [![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
 [![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
-
 
 ![Frame 1 (2)](https://github.com/maheshmnj/searchfield/assets/31410839/d037506f-7ff8-4d43-aa8a-9326f1c2a426)
 
@@ -253,6 +253,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 
 ## Properties
 
+- `animationDuration`: Duration for the animation of the suggestions list.
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `autofocus`: Defines whether to enable autofocus defaults to `false`
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`

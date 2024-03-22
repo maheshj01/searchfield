@@ -85,6 +85,10 @@ extension ListContainsObject<T> on List {
 /// see [example/lib/country_search.dart]
 ///
 class SearchField<T> extends StatefulWidget {
+  /// duration of the suggestion list animation
+  final Duration animationDuration;
+
+  /// focus node for the searchfield
   final FocusNode? focusNode;
 
   /// List of suggestions for the searchfield.
@@ -305,6 +309,7 @@ class SearchField<T> extends StatefulWidget {
   SearchField({
     Key? key,
     required this.suggestions,
+    this.animationDuration = const Duration(milliseconds: 300),
     this.autoCorrect = true,
     this.autofocus = false,
     this.autovalidateMode,
@@ -472,6 +477,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void handlePreviousKeyPress(PreviousIntent intent) {
+    if (intent.scrollToTop == true) {
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+      selected = 0;
+      _overlayEntry!.markNeedsBuild();
+      return;
+    }
     if (selected == null) {
       if (intent.isTabKey) {
         _searchFocus!.previousFocus();
@@ -488,6 +499,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void handleNextKeyPress(NextIntent intent) {
+    if (intent.scrollToBottom == true) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      selected = length - 1;
+      _overlayEntry!.markNeedsBuild();
+      return;
+    }
     if (selected == null) {
       // focus to next focus node
       if (intent.isTabKey && !isSuggestionsShown) {
@@ -618,7 +635,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         final listView = AnimatedContainer(
           duration: _suggestionDirection == SuggestionDirection.up
               ? Duration.zero
-              : Duration(milliseconds: 300),
+              : widget.animationDuration,
           height: _totalHeight,
           alignment: Alignment.centerLeft,
           child: RawScrollbar(
@@ -726,6 +743,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
+  late Map<Type, Action<Intent>> actions = <Type, Action<Intent>>{
+    NextIntent: _nextAction,
+    PreviousIntent: _previousAction,
+    SelectionIntent: _selectAction,
+    UnFocusIntent: _unFocusAction,
+  };
+
   late SuggestionDirection _suggestionDirection;
   final LayerLink _layerLink = LayerLink();
 
@@ -748,6 +772,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
           // LogicalKeySet(LogicalKeyboardKey.tab): const NextIntent(true),
+          LogicalKeySet(LogicalKeyboardKey.arrowUp, LogicalKeyboardKey.altLeft):
+              const PreviousIntent(false, scrollToTop: true),
+          LogicalKeySet(
+                  LogicalKeyboardKey.arrowDown, LogicalKeyboardKey.altLeft):
+              const NextIntent(false, scrollToBottom: true),
           LogicalKeySet(LogicalKeyboardKey.tab, LogicalKeyboardKey.shiftLeft):
               const PreviousIntent(true),
           LogicalKeySet(LogicalKeyboardKey.escape): const UnFocusIntent(),
@@ -759,12 +788,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           ),
         },
         child: Actions(
-          actions: <Type, Action<Intent>>{
-            NextIntent: _nextAction,
-            PreviousIntent: _previousAction,
-            SelectionIntent: _selectAction,
-            UnFocusIntent: _unFocusAction,
-          },
+          actions: actions,
           child: CompositedTransformTarget(
             link: _layerLink,
             child: TextFormField(

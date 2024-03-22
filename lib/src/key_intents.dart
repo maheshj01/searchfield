@@ -8,13 +8,15 @@ class KCallbackAction<T extends Intent> extends CallbackAction<T> {
 
 class NextIntent extends Intent {
   final bool isTabKey;
-  const NextIntent(this.isTabKey);
+  final bool? scrollToBottom;
+  const NextIntent(this.isTabKey, {this.scrollToBottom = false});
 }
 
 // action to move to the next suggestion
 class PreviousIntent extends Intent {
   final bool isTabKey;
-  const PreviousIntent(this.isTabKey);
+  final bool? scrollToTop;
+  const PreviousIntent(this.isTabKey, {this.scrollToTop = false});
 }
 
 // action to select the suggestion
