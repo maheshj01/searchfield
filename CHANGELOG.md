@@ -1,3 +1,8 @@
+#### [1.0.1] -  March 22, 2024
+- emptyWidget was incorrectly displayed [Fix Issue #132](https://github.com/maheshmnj/searchfield/issues/132)
+- adds animationDuration to customize the list animation duration
+- Scroll to bottom and top of list using alt+down and alt+up keys
+
 #### [1.0.0] -  March 20, 2024
 
 - ListView is always kept in state to maintain scrolloffset [Issue #122](https://github.com/maheshmnj/searchfield/issues/122)
