@@ -6,6 +6,8 @@
 [![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
+⭐️Show some ❤️ and star the repo.⭐
+
 ![Frame 1 (2)](https://github.com/maheshmnj/searchfield/assets/31410839/d037506f-7ff8-4d43-aa8a-9326f1c2a426)
 
 A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions. Think of this widget like a dropdownButton field with the following capabilities
