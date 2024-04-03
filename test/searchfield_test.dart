@@ -211,8 +211,8 @@ void main() {
   //   await widgetTester.ensureVisible(tapTarget);
   //   expect(tapTarget, findsOneWidget);
   //   await widgetTester.tap(tapTarget);
-    // await widgetTester.pumpAndSettle(Duration(seconds: 2));
-    // expect(count, 1);
+  // await widgetTester.pumpAndSettle(Duration(seconds: 2));
+  // expect(count, 1);
   //   expect(tappedSuggestion, 'ABC');
   // });
 
@@ -255,6 +255,25 @@ void main() {
     await widgetTester.enterText(textField, 'text not in list');
     await widgetTester.pumpAndSettle();
     expect(find.text('No results'), findsOneWidget);
+  });
+
+  testWidgets('Searchfield height should be set by searchBoxHeight',
+      (WidgetTester tester) async {
+    final expectedHeight = 50;
+    await tester.pumpWidget(_boilerplate(
+        child: SearchField(
+      searchBoxHeight: 50,
+      key: const Key('searchfield'),
+      suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+          .map((e) => SearchFieldListItem<String>(e))
+          .toList(),
+      suggestionState: Suggestion.expand,
+    )));
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    final baseSize = tester.getSize(textField);
+    final resultingHeight = baseSize.height;
+    expect(resultingHeight, equals(expectedHeight));
   });
 
   testWidgets(
