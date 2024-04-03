@@ -306,48 +306,52 @@ class SearchField<T> extends StatefulWidget {
   /// text capitalization defaults to [TextCapitalization.none]
   final TextCapitalization textCapitalization;
 
-  SearchField({
-    Key? key,
-    required this.suggestions,
-    this.animationDuration = const Duration(milliseconds: 300),
-    this.autoCorrect = true,
-    this.autofocus = false,
-    this.autovalidateMode,
-    this.controller,
-    this.emptyWidget = const SizedBox(),
-    this.enabled,
-    this.focusNode,
-    this.hint,
-    this.initialValue,
-    this.inputFormatters,
-    this.inputType,
-    this.itemHeight = 35.0,
-    this.marginColor,
-    this.maxSuggestionsInViewPort = 5,
-    this.readOnly = false,
-    this.onSearchTextChanged,
-    this.onSaved,
-    this.onScroll,
-    this.onTap,
-    this.onSubmit,
-    this.onTapOutside,
-    this.offset,
-    this.onSuggestionTap,
-    this.searchInputDecoration,
-    this.searchStyle,
-    this.scrollbarDecoration,
-    this.showEmpty = false,
-    this.suggestionStyle,
-    this.suggestionsDecoration,
-    this.suggestionDirection = SuggestionDirection.down,
-    this.suggestionState = Suggestion.expand,
-    this.suggestionItemDecoration,
-    this.suggestionAction,
-    this.textAlign = TextAlign.start,
-    this.textCapitalization = TextCapitalization.none,
-    this.textInputAction,
-    this.validator,
-  })  : assert(
+  /// Sets the height of the search box
+  final double? searchBoxHeight;
+
+  SearchField(
+      {Key? key,
+      required this.suggestions,
+      this.animationDuration = const Duration(milliseconds: 300),
+      this.autoCorrect = true,
+      this.autofocus = false,
+      this.autovalidateMode,
+      this.controller,
+      this.emptyWidget = const SizedBox(),
+      this.enabled,
+      this.focusNode,
+      this.hint,
+      this.initialValue,
+      this.inputFormatters,
+      this.inputType,
+      this.itemHeight = 35.0,
+      this.marginColor,
+      this.maxSuggestionsInViewPort = 5,
+      this.readOnly = false,
+      this.onSearchTextChanged,
+      this.onSaved,
+      this.onScroll,
+      this.onTap,
+      this.onSubmit,
+      this.onTapOutside,
+      this.offset,
+      this.onSuggestionTap,
+      this.searchInputDecoration,
+      this.searchStyle,
+      this.scrollbarDecoration,
+      this.showEmpty = false,
+      this.suggestionStyle,
+      this.suggestionsDecoration,
+      this.suggestionDirection = SuggestionDirection.down,
+      this.suggestionState = Suggestion.expand,
+      this.suggestionItemDecoration,
+      this.suggestionAction,
+      this.textAlign = TextAlign.start,
+      this.textCapitalization = TextCapitalization.none,
+      this.textInputAction,
+      this.validator,
+      this.searchBoxHeight})
+      : assert(
             (initialValue != null &&
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
@@ -789,68 +793,70 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         },
         child: Actions(
           actions: actions,
-          child: CompositedTransformTarget(
-            link: _layerLink,
-            child: TextFormField(
-              key: key,
-              enabled: widget.enabled,
-              textAlign: widget.textAlign,
-              autofocus: widget.autofocus,
-              autocorrect: widget.autoCorrect,
-              readOnly: widget.readOnly,
-              autovalidateMode: widget.autovalidateMode,
-              onFieldSubmitted: (x) {
-                if (selected != null) {
-                  if (lastSearchResult.isNotEmpty) {
-                    handleSelectKeyPress(
-                        SelectionIntent(lastSearchResult[selected!]));
-                  } else {
-                    handleSelectKeyPress(
-                        SelectionIntent(widget.suggestions[selected!]));
-                  }
-                }
-                if (widget.onSubmit != null) widget.onSubmit!(x);
-              },
-              onTap: () {
-                widget.onTap?.call();
-              },
-              onSaved: (x) {
-                if (widget.onSaved != null) widget.onSaved!(x);
-              },
-              inputFormatters: widget.inputFormatters,
-              controller: searchController,
-              focusNode: _searchFocus,
-              validator: widget.validator,
-              style: widget.searchStyle,
-              textInputAction: widget.textInputAction,
-              textCapitalization: widget.textCapitalization,
-              keyboardType: widget.inputType,
-              decoration: widget.searchInputDecoration
-                      ?.copyWith(hintText: widget.hint) ??
-                  InputDecoration(hintText: widget.hint),
-              onChanged: (query) {
-                var searchResult = <SearchFieldListItem<T>>[];
-                if (widget.onSearchTextChanged != null) {
-                  searchResult = widget.onSearchTextChanged!(query) ?? [];
-                } else {
-                  if (query.isEmpty) {
-                    lastSearchResult.clear();
-                    lastSearchResult.addAll(searchResult);
-                    suggestionStream.sink.add(widget.suggestions);
-                    return;
-                  }
-                  for (final suggestion in widget.suggestions) {
-                    if (suggestion.searchKey
-                        .toLowerCase()
-                        .contains(query.toLowerCase())) {
-                      searchResult.add(suggestion);
+          child: SizedBox(
+            child: CompositedTransformTarget(
+              link: _layerLink,
+              child: TextFormField(
+                key: key,
+                enabled: widget.enabled,
+                textAlign: widget.textAlign,
+                autofocus: widget.autofocus,
+                autocorrect: widget.autoCorrect,
+                readOnly: widget.readOnly,
+                autovalidateMode: widget.autovalidateMode,
+                onFieldSubmitted: (x) {
+                  if (selected != null) {
+                    if (lastSearchResult.isNotEmpty) {
+                      handleSelectKeyPress(
+                          SelectionIntent(lastSearchResult[selected!]));
+                    } else {
+                      handleSelectKeyPress(
+                          SelectionIntent(widget.suggestions[selected!]));
                     }
                   }
-                }
-                lastSearchResult.clear();
-                lastSearchResult.addAll(searchResult);
-                suggestionStream.sink.add(searchResult);
-              },
+                  if (widget.onSubmit != null) widget.onSubmit!(x);
+                },
+                onTap: () {
+                  widget.onTap?.call();
+                },
+                onSaved: (x) {
+                  if (widget.onSaved != null) widget.onSaved!(x);
+                },
+                inputFormatters: widget.inputFormatters,
+                controller: searchController,
+                focusNode: _searchFocus,
+                validator: widget.validator,
+                style: widget.searchStyle,
+                textInputAction: widget.textInputAction,
+                textCapitalization: widget.textCapitalization,
+                keyboardType: widget.inputType,
+                decoration: widget.searchInputDecoration
+                        ?.copyWith(hintText: widget.hint) ??
+                    InputDecoration(hintText: widget.hint),
+                onChanged: (query) {
+                  var searchResult = <SearchFieldListItem<T>>[];
+                  if (widget.onSearchTextChanged != null) {
+                    searchResult = widget.onSearchTextChanged!(query) ?? [];
+                  } else {
+                    if (query.isEmpty) {
+                      lastSearchResult.clear();
+                      lastSearchResult.addAll(searchResult);
+                      suggestionStream.sink.add(widget.suggestions);
+                      return;
+                    }
+                    for (final suggestion in widget.suggestions) {
+                      if (suggestion.searchKey
+                          .toLowerCase()
+                          .contains(query.toLowerCase())) {
+                        searchResult.add(suggestion);
+                      }
+                    }
+                  }
+                  lastSearchResult.clear();
+                  lastSearchResult.addAll(searchResult);
+                  suggestionStream.sink.add(searchResult);
+                },
+              ),
             ),
           ),
         ));
