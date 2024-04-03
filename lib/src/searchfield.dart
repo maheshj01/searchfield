@@ -794,6 +794,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         child: Actions(
           actions: actions,
           child: SizedBox(
+            height: widget.searchBoxHeight,
             child: CompositedTransformTarget(
               link: _layerLink,
               child: TextFormField(
