@@ -105,7 +105,6 @@ class _NetworkSampleState extends State<NetworkSample> {
                 style: BorderStyle.solid,
               ),
             ),
-            fillColor: Colors.white,
             filled: true,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,

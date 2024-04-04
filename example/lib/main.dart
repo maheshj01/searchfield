@@ -175,8 +175,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                       style: BorderStyle.solid,
                     ),
                   ),
-                  fillColor: Colors.white,
-                  filled: true,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                   ),

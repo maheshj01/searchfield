@@ -121,7 +121,6 @@ class _PaginationState extends State<Pagination> {
               ),
             ),
             fillColor: Colors.white,
-            filled: true,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20,
             ),
