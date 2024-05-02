@@ -94,7 +94,6 @@ void main() {
       expect(listFinder, findsOneWidget);
     });
 
-    // Todo this test is failing on last line
     testWidgets('searchfield should show tapped suggestion',
         (WidgetTester tester) async {
       final controller = TextEditingController();
@@ -181,6 +180,32 @@ void main() {
     });
   });
 
+  // testWidgets('onSubmit should not set value in input on empty results',
+  //     (WidgetTester tester) async {
+  //   final controller = TextEditingController();
+  //   final emptyWidget = const Text('No results');
+  //   await tester.pumpWidget(_boilerplate(
+  //       child: SearchField(
+  //     key: const Key('searchfield'),
+  //     suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+  //         .map(SearchFieldListItem<String>.new)
+  //         .toList(),
+  //     emptyWidget: emptyWidget,
+  //     controller: controller,
+  //     suggestionState: Suggestion.expand,
+  //   )));
+  //   final listFinder = find.byType(ListView);
+  //   final textField = find.byType(TextFormField);
+  //   expect(textField, findsOneWidget);
+  //   expect(listFinder, findsNothing);
+  //   await tester.tap(textField);
+  //   await tester.enterText(textField, 'not present');
+  //   await tester.pumpAndSettle();
+  //   expect(find.text('No results'), findsOneWidget);
+  //   await tester.testTextInput.receiveAction(TextInputAction.done);
+  //   await tester.pumpAndSettle();
+  //   expect(controller.text, 'not present');
+  // });
   // testWidgets('Searchfield should invoke onSuggestionTap',
   //     (widgetTester) async {
   //   final controller = TextEditingController();
@@ -211,8 +236,8 @@ void main() {
   //   await widgetTester.ensureVisible(tapTarget);
   //   expect(tapTarget, findsOneWidget);
   //   await widgetTester.tap(tapTarget);
-    // await widgetTester.pumpAndSettle(Duration(seconds: 2));
-    // expect(count, 1);
+  // await widgetTester.pumpAndSettle(Duration(seconds: 2));
+  // expect(count, 1);
   //   expect(tappedSuggestion, 'ABC');
   // });
 

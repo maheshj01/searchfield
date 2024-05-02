@@ -631,6 +631,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 snapshot.data!.length * widget.itemHeight + paddingHeight;
           }
         }
+        if (isEmpty) {
+          selected = null;
+        }
         isSuggestionsShown = true;
         final listView = AnimatedContainer(
           duration: _suggestionDirection == SuggestionDirection.up

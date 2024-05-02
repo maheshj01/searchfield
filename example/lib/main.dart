@@ -47,13 +47,25 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
     suggestions = [
       'United States',
       'Germany',
-      'Washington',
-      'Paris',
-      'Jakarta',
+      'Canada',
+      'United Kingdom',
+      'France',
+      'Italy',
+      'Spain',
       'Australia',
       'India',
-      'Czech Republic',
-      'Lorem Ipsum',
+      'China',
+      'Japan',
+      'Brazil',
+      'South Africa',
+      'Mexico',
+      'Argentina',
+      'Russia',
+      'Indonesia',
+      'Turkey',
+      'Saudi Arabia',
+      'Nigeria',
+      'Egypt',
     ];
     super.initState();
   }
@@ -128,6 +140,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                           SearchFieldListItem<String>(e, child: searchChild(e)))
                       .toList();
                 },
+                initialValue: SearchFieldListItem<String>('United States'),
                 controller: searchController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
