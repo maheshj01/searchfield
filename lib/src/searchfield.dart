@@ -524,7 +524,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void handleSelectKeyPress(SelectionIntent<T> intent) {
     if (selected == null) return;
     _searchFocus!.unfocus();
-    onSuggestionTapped(intent.selectedItem);
+    if (intent.selectedItem != null) {
+      onSuggestionTapped(intent.selectedItem!);
+    } else {
+      onSuggestionTapped(widget.suggestions[selected!]);
+    }
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
@@ -786,9 +790,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(false),
           LogicalKeySet(LogicalKeyboardKey.arrowUp):
               const PreviousIntent(false),
-          LogicalKeySet(LogicalKeyboardKey.enter): SelectionIntent<T>(
-            widget.initialValue ?? SearchFieldListItem(''),
-          ),
+          LogicalKeySet(LogicalKeyboardKey.enter):
+              SelectionIntent<T>(widget.initialValue),
         },
         child: Actions(
           actions: actions,
