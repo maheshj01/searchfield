@@ -1,9 +1,14 @@
-#### [1.0.1] -  March 22, 2024
+#### [1.0.2] - May 23, 2024
+
+- Fix: onSuggestionTap returns empty searchKey usng keyboard [Issue #138](https://github.com/maheshmnj/searchfield/issues/138)
+
+#### [1.0.1] - March 22, 2024
+
 - emptyWidget was incorrectly displayed [Fix Issue #132](https://github.com/maheshmnj/searchfield/issues/132)
 - adds animationDuration to customize the list animation duration
 - Scroll to bottom and top of list using alt+down and alt+up keys
 
-#### [1.0.0] -  March 20, 2024
+#### [1.0.0] - March 20, 2024
 
 - ListView is always kept in state to maintain scrolloffset [Issue #122](https://github.com/maheshmnj/searchfield/issues/122)
 - Shift+Tab should respect sequence of SearchField in a form with SuggestionState.hidden [Issue #125](https://github.com/maheshmnj/searchfield/issues/125)

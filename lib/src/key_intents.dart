@@ -21,7 +21,7 @@ class PreviousIntent extends Intent {
 
 // action to select the suggestion
 class SelectionIntent<T> extends Intent {
-  final SearchFieldListItem<T> selectedItem;
+  final SearchFieldListItem<T>? selectedItem;
   const SelectionIntent(this.selectedItem);
 }
 

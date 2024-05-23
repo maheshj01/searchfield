@@ -1370,6 +1370,40 @@ void main() {
     });
   });
 
+  // testWidgets(
+  //     'Selecting suggestion with keyboard should return the searchKey in `onSuggestionTapped`',
+  //     (widgetTester) async {
+  //   final controller = TextEditingController();
+  //   final countries = data.map(Country.fromMap).toList();
+  //   final suggestions =
+  //       countries.map((e) => SearchFieldListItem<Country>(e.name)).toList();
+  //   String? searchKey;
+  //   await widgetTester.pumpWidget(_boilerplate(
+  //       child: SearchField(
+  //     key: const Key('searchfield'),
+  //     suggestions: suggestions,
+  //     controller: controller,
+  //     suggestionState: Suggestion.expand,
+  //     onSuggestionTap: (tapped) {
+  //       print(tapped.searchKey);
+  //       searchKey = tapped.searchKey;
+  //     },
+  //   )));
+
+  //   final listFinder = find.byType(ListView);
+  //   final textField = find.byType(TextFormField);
+  //   expect(textField, findsOneWidget);
+  //   expect(listFinder, findsNothing);
+  //   await widgetTester.tap(textField);
+  //   await widgetTester.enterText(textField, '');
+  //   await widgetTester.pumpAndSettle();
+  //   expect(listFinder, findsOneWidget);
+  //   await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+  //   await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+  //   await widgetTester.pumpAndSettle();
+  //   expect(searchKey, countries[0]);
+  // });
+
   // testWidgets('searched suggestions can be selected by pressing enter',
   //     (widgetTester) async {
   //   final controller = TextEditingController();
