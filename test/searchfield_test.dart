@@ -1362,9 +1362,13 @@ void main() {
       await widgetTester.pumpAndSettle();
       expect(listFinder, findsOneWidget);
       await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyUpEvent(LogicalKeyboardKey.arrowDown);
       await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyUpEvent(LogicalKeyboardKey.arrowDown);
       await simulateKeyDownEvent(LogicalKeyboardKey.arrowDown);
+      await simulateKeyUpEvent(LogicalKeyboardKey.arrowDown);
       await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+      await simulateKeyUpEvent(LogicalKeyboardKey.enter);
       await widgetTester.pumpAndSettle();
       expect(find.text(countries[2].name), findsOneWidget);
     });
