@@ -666,6 +666,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             pressDuration: _scrollbarDecoration!.pressDuration,
             trackBorderColor: _scrollbarDecoration!.trackBorderColor,
             trackColor: _scrollbarDecoration!.trackColor,
+            interactive: _scrollbarDecoration!.interactive,
+            scrollbarOrientation: _scrollbarDecoration!.orientation,
+            crossAxisMargin: _scrollbarDecoration!.crossAxisMargin!,
             child: ScrollConfiguration(
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
