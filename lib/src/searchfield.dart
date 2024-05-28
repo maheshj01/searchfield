@@ -395,14 +395,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _searchFocus!.addListener(() {
       // When focus shifts to ListView prevent suggestions from rebuilding
       // when user navigates through suggestions using keyboard
-      if (!_searchFocus!.hasFocus) {
-        _overlayEntry?.remove();
-        if (searchController!.text.isEmpty) {
-          selected = null;
-        }
-        suggestionStream.sink.add(null);
-        return;
-      }
       if (_searchFocus!.hasFocus) {
         _overlayEntry ??= _createOverlay();
         if (widget.suggestionState == Suggestion.expand) {
@@ -417,6 +409,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           isSuggestionsShown = false;
           _overlayEntry?.remove();
         }
+        if (searchController!.text.isEmpty) {
+          selected = null;
+        }
+        suggestionStream.sink.add(null);
       }
     });
   }
@@ -493,7 +489,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       selected = selected! - 1;
     } else {
       selected = length - 1;
-      // _searchFocus!.requestFocus();
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300), curve: Curves.bounceIn);
     }
     _overlayEntry!.markNeedsBuild();
   }
@@ -516,6 +513,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       return;
     }
     selected = (selected! + 1) % length;
+    if (selected == 0) {
+      _scrollController.animateTo(0.0,
+          duration: Duration(milliseconds: 300), curve: Curves.bounceIn);
+    }
     _overlayEntry!.markNeedsBuild();
   }
 
@@ -674,7 +675,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     if (widget.onTapOutside != null) {
                       widget.onTapOutside!(x);
                     }
-                    _searchFocus!.unfocus();
                   },
                   onSuggestionTapped: onSuggestionTapped,
                   suggestionItemDecoration: widget.suggestionItemDecoration,
