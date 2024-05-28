@@ -95,7 +95,6 @@ class _PageOneState extends State<PageOne> {
     });
     _searchFocus = FocusNode();
     _searchFocus.addListener(() {
-      print("suggestion in Focus ${suggestionInFocus}");
       if (!_searchFocus.hasFocus && !suggestionInFocus) {
         if (_overlayEntry != null && _overlayEntry!.mounted) {
           _overlayEntry!.remove();

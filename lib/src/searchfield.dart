@@ -375,10 +375,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (widget.focusNode == null) {
       _searchFocus!.dispose();
     }
+    removeOverlay();
+    super.dispose();
+  }
+
+  void removeOverlay() {
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       _overlayEntry?.remove();
     }
-    super.dispose();
   }
 
   void initialize() {
@@ -405,14 +409,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
         Overlay.of(context).insert(_overlayEntry!);
       } else {
-        if (_overlayEntry != null && _overlayEntry!.mounted) {
+        if (!isSuggestionInFocus) {
+          removeOverlay();
           isSuggestionsShown = false;
-          _overlayEntry?.remove();
+          if (searchController!.text.isEmpty) {
+            selected = null;
+          }
+          suggestionStream.sink.add(null);
         }
-        if (searchController!.text.isEmpty) {
-          selected = null;
-        }
-        suggestionStream.sink.add(null);
       }
     });
   }
@@ -684,9 +688,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 )),
           ),
         );
-        return IndexedStack(
-          index: isEmpty ? 0 : 1,
-          children: [widget.emptyWidget, listView],
+        return TextFieldTapRegion(
+          onTapOutside: (x) {
+            isSuggestionInFocus = false;
+            if (!_searchFocus!.hasFocus) {
+              removeOverlay();
+            }
+          },
+          onTapInside: (x) {
+            isSuggestionInFocus = true;
+          },
+          child: IndexedStack(
+            index: isEmpty ? 0 : 1,
+            children: [widget.emptyWidget, listView],
+          ),
         );
       },
     );
@@ -759,6 +774,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   late SuggestionDirection _suggestionDirection;
   final LayerLink _layerLink = LayerLink();
+
+  bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
   late double _totalHeight;
