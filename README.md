@@ -247,6 +247,12 @@ With v0.9.5 Searchfield now adds support for Keyboard navigation, you can now na
 
   <img src = "https://github.com/maheshmnj/searchfield/assets/31410839/17ed4c43-f0c3-4ba8-8fae-beedf42ae781" width="300">
 
+Shortcuts:
+
+- Up/Down Arrow keys are circular, i.e. if you reach the last item and press down, it will take you to the first item. Similarly, if you reach the first item and press up, it will take you to the last item.
+- `ctr/option + down` to scroll to last item in the list
+- `ctr/option + up` to scroll to first item in the list
+
 ### Support for Dynamic positioning of suggestions
 
 The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
