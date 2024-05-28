@@ -263,10 +263,10 @@ class SearchField<T> extends StatefulWidget {
   final void Function(String?)? onSaved;
 
   /// Callback when the suggestions are scrolled
-  /// The callback returns the current scroll position in pixels and the maximum scroll extent
+  /// The callback returns the `current scroll position` in pixels and the `maximum scroll extent`
   /// of the suggestions list. The callback can be used to implement feature like
   /// lazy loading of suggestions.
-  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart)
+  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart) to see it in action
   final void Function(double, double)? onScroll;
 
   /// Callback when the searchfield is tapped
