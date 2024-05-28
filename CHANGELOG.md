@@ -1,7 +1,8 @@
-#### [1.0.3] - Unreleased
+#### [1.0.3] - May 28, 2024
 
 - Arrow keys now properly scroll to the focused suggestion
 - Fix: Scrollbar tap hides the suggestions [Issue #137](https://github.com/maheshmnj/searchfield/issues/137)
+- Expose additional properties of `RawScrollbar` to `ScrollbarDecoration`
 
 #### [1.0.2] - May 23, 2024
 
