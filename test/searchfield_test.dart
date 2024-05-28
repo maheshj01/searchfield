@@ -1374,6 +1374,35 @@ void main() {
     });
   });
 
+  testWidgets('scrollbar should be scrollable', (widgetTester) async {
+    await widgetTester.pumpWidget(_boilerplate(
+      child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+            .map(SearchFieldListItem<String>.new)
+            .toList(),
+        suggestionState: Suggestion.expand,
+      ),
+    ));
+    final listFinder = find.byType(ListView);
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    expect(listFinder, findsNothing);
+    await widgetTester.tap(textField);
+    await widgetTester.enterText(textField, '');
+    await widgetTester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    final scrollbar = find.byType(RawScrollbar);
+    expect(scrollbar, findsOneWidget);
+    final scrollbarWidget = widgetTester.widget<RawScrollbar>(scrollbar);
+    expect(scrollbarWidget, isNotNull);
+    await widgetTester.drag(scrollbar, const Offset(0, 100.0));
+    await widgetTester.pumpAndSettle();
+    expect(listFinder, findsOneWidget);
+    //
+    // expect(scrollbarWidget.controller!.offset, 100.0);
+  });
+
   // testWidgets(
   //     'Selecting suggestion with keyboard should return the searchKey in `onSuggestionTapped`',
   //     (widgetTester) async {

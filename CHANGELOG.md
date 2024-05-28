@@ -1,3 +1,8 @@
+#### [1.0.3] - Unreleased
+
+- Arrow keys now properly scroll to the focused suggestion
+- Fix: Scrollbar tap hides the suggestions [Issue #137](https://github.com/maheshmnj/searchfield/issues/137)
+
 #### [1.0.2] - May 23, 2024
 
 - Fix: onSuggestionTap returns empty searchKey usng keyboard [Issue #138](https://github.com/maheshmnj/searchfield/issues/138)

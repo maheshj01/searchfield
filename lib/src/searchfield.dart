@@ -263,10 +263,10 @@ class SearchField<T> extends StatefulWidget {
   final void Function(String?)? onSaved;
 
   /// Callback when the suggestions are scrolled
-  /// The callback returns the current scroll position in pixels and the maximum scroll extent
+  /// The callback returns the `current scroll position` in pixels and the `maximum scroll extent`
   /// of the suggestions list. The callback can be used to implement feature like
   /// lazy loading of suggestions.
-  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart)
+  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart) to see it in action
   final void Function(double, double)? onScroll;
 
   /// Callback when the searchfield is tapped
@@ -375,10 +375,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (widget.focusNode == null) {
       _searchFocus!.dispose();
     }
+    removeOverlay();
+    super.dispose();
+  }
+
+  void removeOverlay() {
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       _overlayEntry?.remove();
     }
-    super.dispose();
   }
 
   void initialize() {
@@ -405,14 +409,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
         Overlay.of(context).insert(_overlayEntry!);
       } else {
-        if (_overlayEntry != null && _overlayEntry!.mounted) {
+        if (!isSuggestionInFocus) {
+          removeOverlay();
           isSuggestionsShown = false;
-          _overlayEntry?.remove();
+          if (searchController!.text.isEmpty) {
+            selected = null;
+          }
+          suggestionStream.sink.add(null);
         }
-        if (searchController!.text.isEmpty) {
-          selected = null;
-        }
-        suggestionStream.sink.add(null);
       }
     });
   }
@@ -662,6 +666,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             pressDuration: _scrollbarDecoration!.pressDuration,
             trackBorderColor: _scrollbarDecoration!.trackBorderColor,
             trackColor: _scrollbarDecoration!.trackColor,
+            interactive: _scrollbarDecoration!.interactive,
+            scrollbarOrientation: _scrollbarDecoration!.orientation,
+            crossAxisMargin: _scrollbarDecoration!.crossAxisMargin!,
             child: ScrollConfiguration(
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -684,9 +691,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 )),
           ),
         );
-        return IndexedStack(
-          index: isEmpty ? 0 : 1,
-          children: [widget.emptyWidget, listView],
+        return TextFieldTapRegion(
+          onTapOutside: (x) {
+            isSuggestionInFocus = false;
+            if (!_searchFocus!.hasFocus) {
+              removeOverlay();
+            }
+          },
+          onTapInside: (x) {
+            isSuggestionInFocus = true;
+          },
+          child: IndexedStack(
+            index: isEmpty ? 0 : 1,
+            children: [widget.emptyWidget, listView],
+          ),
         );
       },
     );
@@ -759,6 +777,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   late SuggestionDirection _suggestionDirection;
   final LayerLink _layerLink = LayerLink();
+
+  bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
   late double _totalHeight;

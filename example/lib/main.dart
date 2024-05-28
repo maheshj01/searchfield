@@ -157,6 +157,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 onTapOutside: (x) {
                   // focus.unfocus();
                 },
+                scrollbarDecoration: ScrollbarDecoration(
+                  thickness: 12,
+                  radius: Radius.circular(6),
+                  trackColor: Colors.grey,
+                  trackBorderColor: Colors.red,
+                  thumbColor: Colors.orange,
+                ),
                 suggestionStyle:
                     const TextStyle(fontSize: 18, color: Colors.black),
                 searchStyle: TextStyle(fontSize: 18, color: Colors.black),
