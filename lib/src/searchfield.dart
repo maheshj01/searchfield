@@ -778,7 +778,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   /// Defines if user is interacting with suggestions
   /// This is used to decide if user has focus on Searchfield
-  /// by pairing it with [_searchFocus.hasFocus]
+  /// by pairing it with `_searchFocus.hasFocus`
   bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
