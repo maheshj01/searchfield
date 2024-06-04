@@ -381,6 +381,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void removeOverlay() {
     if (_overlayEntry != null && _overlayEntry!.mounted) {
+      isSuggestionsShown = false;
       _overlayEntry?.remove();
     }
   }
@@ -409,14 +410,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
         Overlay.of(context).insert(_overlayEntry!);
       } else {
-        if (!isSuggestionInFocus) {
-          removeOverlay();
-          isSuggestionsShown = false;
-          if (searchController!.text.isEmpty) {
-            selected = null;
-          }
-          suggestionStream.sink.add(null);
+        removeOverlay();
+        if (searchController!.text.isEmpty) {
+          selected = null;
         }
+        suggestionStream.sink.add(null);
       }
     });
   }
@@ -778,6 +776,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   late SuggestionDirection _suggestionDirection;
   final LayerLink _layerLink = LayerLink();
 
+  /// Defines if user is interacting with suggestions
+  /// This is used to decide if user has focus on Searchfield
+  /// by pairing it with `_searchFocus.hasFocus`
   bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
