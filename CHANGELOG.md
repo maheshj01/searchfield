@@ -1,3 +1,7 @@
+#### [1.0.4] - Jun 03, 2024
+
+- Fix: error when dealing with multiple Overlays[Issue #143](https://github.com/maheshmnj/searchfield/issues/143)
+
 #### [1.0.3] - May 28, 2024
 
 - Arrow keys now properly scroll to the focused suggestion
