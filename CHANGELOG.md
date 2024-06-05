@@ -1,3 +1,6 @@
+#### [1.0.5] - Jun 05, 2024
+- Add Max Length and Option to disable counter for TextFormField [#Issue 145](https://github.com/maheshmnj/searchfield/issues/145)
+
 #### [1.0.4] - Jun 03, 2024
 
 - Fix: error when dealing with multiple Overlays [Issue #143](https://github.com/maheshmnj/searchfield/issues/143)
