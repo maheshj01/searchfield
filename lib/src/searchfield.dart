@@ -118,6 +118,16 @@ class SearchField<T> extends StatefulWidget {
   /// Defines whether to show the searchfield as readOnly
   final bool readOnly;
 
+  /// Defines character limit for searchfield
+  final int? maxLength;
+
+  /// Defines mechanisms for enforcing maximum length limits
+  final MaxLengthEnforcement? maxLengthEnforcement;
+
+  /// If buildCounter returns null, then no counter and no Semantics widget will
+  /// be created at all.
+  final InputCounterWidgetBuilder? buildCounter;
+
   /// Used to enable/disable this form field auto validation and update its error text.
 
   /// If AutovalidateMode.onUserInteraction, this FormField will only auto-validate after its
@@ -324,6 +334,9 @@ class SearchField<T> extends StatefulWidget {
     this.itemHeight = 35.0,
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
+    this.maxLength,
+    this.maxLengthEnforcement,
+    this.buildCounter,
     this.readOnly = false,
     this.onSearchTextChanged,
     this.onSaved,
@@ -844,6 +857,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               onSaved: (x) {
                 if (widget.onSaved != null) widget.onSaved!(x);
               },
+              maxLength: widget.maxLength,
+              maxLengthEnforcement: widget.maxLengthEnforcement,
+              buildCounter: widget.buildCounter,
               inputFormatters: widget.inputFormatters,
               controller: searchController,
               focusNode: _searchFocus,
