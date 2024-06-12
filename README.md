@@ -130,14 +130,20 @@ SearchField(
 
  <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
 
-#### Example 3 Load suggestions from network with Pagination
+#### Example 3 Custom Widgets
+
+[complete code here](example/lib/custom.dart)
+
+![demo-ezgif com-video-to-gif-converter (1)](https://github.com/maheshmnj/searchfield/assets/31410839/227b6288-15a2-489f-9d97-0ecfb04fff41)
+
+#### Example 4 Load suggestions from network with Pagination
 
 Note that this also maintains the Scroll position when new items are added to list
 see: [complete code here](example/lib/pagination.dart)
 
 ![output_video-ezgif com-video-to-gif-converter](https://github.com/flutter/flutter/assets/31410839/3b153e7b-f3e4-4eb7-86ca-8eebd94abf28)
 
-#### Example 4 (Validation)
+#### Example 5 (Validation)
 
 ```dart
 Form(

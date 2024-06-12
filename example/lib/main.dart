@@ -80,7 +80,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           child: Text(x, style: TextStyle(fontSize: 18, color: Colors.black)),
         );
     return Scaffold(
-        appBar: AppBar(title: Text('Searchfield Keyboard Support')),
+        appBar: AppBar(title: Text('Searchfield Demo')),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             setState(() {
