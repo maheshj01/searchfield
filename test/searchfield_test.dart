@@ -1361,7 +1361,7 @@ void main() {
       await widgetTester.pumpAndSettle();
       // execute search for `ang`
       final String query = 'ang';
-      var searchResult = <SearchFieldListItem<Country>>[];
+      final searchResult = <SearchFieldListItem<Country>>[];
       await widgetTester.enterText(textField, query);
       await widgetTester.pumpAndSettle();
       for (final suggestion in suggestions) {

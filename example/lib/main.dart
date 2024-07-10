@@ -1,4 +1,3 @@
-import 'package:example/country_search.dart';
 import 'package:example/network_sample.dart';
 import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +25,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: CountrySearch(
-        title: "Enter your Country",
-      ),
+      home: SearchFieldSample(),
       debugShowCheckedModeBanner: false,
     );
   }
