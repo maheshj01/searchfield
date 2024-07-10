@@ -1,3 +1,4 @@
+import 'package:example/country_search.dart';
 import 'package:example/network_sample.dart';
 import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: SearchFieldSample(),
+      home: CountrySearch(
+        title: "Enter your Country",
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -109,9 +112,12 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               SizedBox(
                 height: 50,
               ),
+              SizedBox(
+                height: 50,
+              ),
               SearchField(
                 hint: 'Basic SearchField',
-                // initialValue: SearchFieldListItem<String>('ABC'),
+                initialValue: SearchFieldListItem<String>('ABC'),
                 suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
                     .map(SearchFieldListItem<String>.new)
                     .toList(),
