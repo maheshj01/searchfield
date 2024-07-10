@@ -1,4 +1,9 @@
+#### [1.0.6] - July 10, 2024
+
+- Option was not being selected on search [Issue #136](https://github.com/maheshmnj/searchfield/issues/136)
+
 #### [1.0.5] - Jun 05, 2024
+
 - Add Max Length and Option to disable counter for TextFormField [#Issue 145](https://github.com/maheshmnj/searchfield/issues/145)
 
 #### [1.0.4] - Jun 03, 2024

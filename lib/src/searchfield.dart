@@ -893,6 +893,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 lastSearchResult.clear();
                 lastSearchResult.addAll(searchResult);
                 suggestionStream.sink.add(searchResult);
+                if (searchResult.isEmpty) {
+                  selected = null;
+                } else {
+                  selected = 0;
+                }
               },
             ),
           ),

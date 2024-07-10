@@ -1338,6 +1338,42 @@ void main() {
       expect(listFinder, findsNothing);
     });
 
+    testWidgets('First option should always be selected on Search',
+        (widgetTester) async {
+      final controller = TextEditingController();
+      final countries = data.map(Country.fromMap).toList();
+      final suggestions =
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList();
+      await widgetTester.pumpWidget(_boilerplate(
+          child: SearchField(
+        key: const Key('searchfield'),
+        suggestions: suggestions,
+        controller: controller,
+        suggestionState: Suggestion.expand,
+      )));
+
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await widgetTester.tap(textField);
+      await widgetTester.enterText(textField, '');
+      await widgetTester.pumpAndSettle();
+      // execute search for `ang`
+      final String query = 'ang';
+      final searchResult = <SearchFieldListItem<Country>>[];
+      await widgetTester.enterText(textField, query);
+      await widgetTester.pumpAndSettle();
+      for (final suggestion in suggestions) {
+        if (suggestion.searchKey.toLowerCase().contains(query.toLowerCase())) {
+          searchResult.add(suggestion);
+        }
+      }
+      await simulateKeyDownEvent(LogicalKeyboardKey.enter);
+      await widgetTester.pumpAndSettle();
+      expect(searchResult[0].searchKey, 'Angola');
+    });
+
     testWidgets(
         'pressing enter should input the selected suggestion in the searchfield',
         (widgetTester) async {
@@ -1404,28 +1440,28 @@ void main() {
   });
 
   testWidgets('Searchfield should limit the character count',
-          (widgetTester) async {
-        final controller = TextEditingController();
-        final countries = data.map(Country.fromMap).toList();
-        final maxLength = 3;
-        await widgetTester.pumpWidget(_boilerplate(
-            child: SearchField(
-              controller: controller,
-              suggestions:
-              countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
-              suggestionState: Suggestion.expand,
-              maxLength: maxLength,
-              maxLengthEnforcement: MaxLengthEnforcement.enforced,
-            )));
+      (widgetTester) async {
+    final controller = TextEditingController();
+    final countries = data.map(Country.fromMap).toList();
+    final maxLength = 3;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField(
+      controller: controller,
+      suggestions:
+          countries.map((e) => SearchFieldListItem<Country>(e.name)).toList(),
+      suggestionState: Suggestion.expand,
+      maxLength: maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+    )));
 
-        final textField = find.byType(TextFormField);
-        expect(textField, findsOneWidget);
-        await widgetTester.tap(textField);
-        await widgetTester.pumpAndSettle();
-        await widgetTester.enterText(textField, 'abc');
-        expect(find.text('abc'), findsOneWidget);
-        expect(find.text('abcd'), findsNothing);
-      });
+    final textField = find.byType(TextFormField);
+    expect(textField, findsOneWidget);
+    await widgetTester.tap(textField);
+    await widgetTester.pumpAndSettle();
+    await widgetTester.enterText(textField, 'abc');
+    expect(find.text('abc'), findsOneWidget);
+    expect(find.text('abcd'), findsNothing);
+  });
 
   // testWidgets(
   //     'Selecting suggestion with keyboard should return the searchKey in `onSuggestionTapped`',
