@@ -217,8 +217,6 @@ class SearchField<T> extends StatefulWidget {
   ///
   /// When not specified, the default value is `35.0`.
   final double itemHeight;
-  final double? maxSuggestionBoxHeight;
-  final bool dynamicHeightItem;
 
   /// Specifies the color of margin between items in suggestions list.
   ///
@@ -333,9 +331,7 @@ class SearchField<T> extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.inputType,
-    this.itemHeight = 35,
-    this.dynamicHeightItem = false,
-    this.maxSuggestionBoxHeight,
+    this.itemHeight = 35.0,
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
     this.maxLength,
@@ -369,7 +365,6 @@ class SearchField<T> extends StatefulWidget {
                     suggestions.containsObject(initialValue)) ||
                 initialValue == null,
             'Initial value should either be null or should be present in suggestions list.'),
-        // assert()
         super(key: key);
 
   @override
@@ -382,7 +377,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   FocusNode? _searchFocus;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
-  double remainingHeight = 0;
 
   @override
   void dispose() {
@@ -443,31 +437,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
   /// shown above the searchfield.
   SuggestionDirection getDirection() {
-    if (_suggestionDirection == SuggestionDirection.flex ||
-        widget.dynamicHeightItem) {
+    if (_suggestionDirection == SuggestionDirection.flex) {
       final size = MediaQuery.of(context).size;
       final textFieldRenderBox =
           key.currentContext!.findRenderObject() as RenderBox;
       final textFieldSize = textFieldRenderBox.size;
       final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      final isSpaceAvailable = size.height >
-          offset.dy +
-              textFieldSize.height +
-              (_totalHeight ?? widget.maxSuggestionBoxHeight ?? size.height / 2);
+      final isSpaceAvailable =
+          size.height > offset.dy + textFieldSize.height + _totalHeight;
       if (isSpaceAvailable) {
-        remainingHeight = MediaQuery.of(context).size.height -
-            (textFieldSize.height + offset.dy);
-        print("remain search: $remainingHeight");
-
         return SuggestionDirection.down;
       } else {
-        remainingHeight = (textFieldSize.height + offset.dy);
-        print("remain search: $remainingHeight");
-
         return SuggestionDirection.up;
       }
     }
-    // remainingHeight = MediaQuery.of(context).size.height / 2;
     return _suggestionDirection;
   }
 
@@ -648,15 +631,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
         bool isEmpty = false;
-        print("Search snap ${snapshot.data}");
         if (snapshot.data == null || !_searchFocus!.hasFocus) {
           isSuggestionsShown = false;
           return SizedBox();
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           isEmpty = true;
           _totalHeight = 0;
-        } else if (widget.dynamicHeightItem) {
-          _totalHeight = null;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null
               ? widget.suggestionsDecoration!.padding.vertical
@@ -674,7 +654,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         if (isEmpty) {
           selected = null;
         }
-        print("search total height $_totalHeight");
         isSuggestionsShown = true;
         final listView = AnimatedContainer(
           duration: _suggestionDirection == SuggestionDirection.up
@@ -705,9 +684,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
                 child: SFListview<T>(
-                  maxHeight: _totalHeight ??
-                      widget.maxSuggestionBoxHeight ??
-                      remainingHeight,
                   suggestionStyle: widget.suggestionStyle,
                   scrollController: _scrollController,
                   selected: selected,
@@ -755,14 +731,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       if (direction == SuggestionDirection.down) {
         return Offset(0, textFieldSize.height);
       } else if (direction == SuggestionDirection.up) {
-        if (widget.dynamicHeightItem) {
-          return Offset(
-              0,
-              widget.maxSuggestionBoxHeight != null
-                  ? -widget.maxSuggestionBoxHeight!
-                  : textFieldSize.height);
-        }
-
         // search results should not exceed maxSuggestionsInViewPort
         if (suggestionsCount > widget.maxSuggestionsInViewPort) {
           return Offset(
@@ -791,7 +759,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               count = snapshot.data!.length;
             }
             yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
-            print("search offset $yOffset");
             return Positioned(
               left: offset.dx,
               width: widget.suggestionsDecoration?.width ?? textFieldsize.width,
@@ -828,7 +795,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
-  double? _totalHeight;
+  late double _totalHeight;
   GlobalKey key = GlobalKey();
   late final ScrollController _scrollController;
   late final KCallbackAction<PreviousIntent> _previousAction;
@@ -838,12 +805,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final lastSearchResult = <SearchFieldListItem<T>>[];
   @override
   Widget build(BuildContext context) {
-    if (!widget.dynamicHeightItem) {
-      if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
-        _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
-      } else {
-        _totalHeight = widget.suggestions.length * widget.itemHeight;
-      }
+    if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
+      _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
+    } else {
+      _totalHeight = widget.suggestions.length * widget.itemHeight;
     }
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{
@@ -907,11 +872,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                       ?.copyWith(hintText: widget.hint) ??
                   InputDecoration(hintText: widget.hint),
               onChanged: (query) {
-                print(query);
                 var searchResult = <SearchFieldListItem<T>>[];
                 if (widget.onSearchTextChanged != null) {
                   searchResult = widget.onSearchTextChanged!(query) ?? [];
-                  print("search $searchResult");
                 } else {
                   if (query.isEmpty) {
                     lastSearchResult.clear();
@@ -928,8 +891,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   }
                 }
                 lastSearchResult.clear();
-                print("search $searchResult");
-
                 lastSearchResult.addAll(searchResult);
                 suggestionStream.sink.add(searchResult);
                 if (searchResult.isEmpty) {
