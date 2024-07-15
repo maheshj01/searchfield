@@ -216,7 +216,21 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies height for each suggestion item in the list.
   ///
   /// When not specified, the default value is `35.0`.
+  ///
+  /// If you don't want to set a fixed item height, set **[dynamicHeightItem]** to true.
   final double itemHeight;
+
+  /// (Optional) Specifies a maximum height for the suggestion box.
+  ///
+  /// This will only take into account when setting **[dynamicHeightItem]** to true (aka. opt-in to dynamic height)
+  ///
+  /// When not specified, the default value is half the screen height.
+  final double? maxSuggestionBoxHeight;
+
+  /// Set to true to opt-in to dynamic height. We don't calculate the total height for the whole box, instead, each item on the suggestion list will have their respective height.
+  ///
+  /// (Optional) Use **[maxSuggestionBoxHeight]** to set a maximum height for the suggestion box.
+  final bool dynamicHeightItem;
 
   /// Specifies the color of margin between items in suggestions list.
   ///
@@ -331,7 +345,9 @@ class SearchField<T> extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.inputType,
-    this.itemHeight = 35.0,
+    this.itemHeight = 35,
+    this.dynamicHeightItem = false,
+    this.maxSuggestionBoxHeight,
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
     this.maxLength,
@@ -377,6 +393,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   FocusNode? _searchFocus;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
+
+  // Use to calculate suggestion box height if [widget.maxSuggestionBoxHeight] is not specified
+  double remainingHeight = 0;
 
   @override
   void dispose() {
@@ -437,20 +456,34 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
   /// shown above the searchfield.
   SuggestionDirection getDirection() {
-    if (_suggestionDirection == SuggestionDirection.flex) {
+    if (_suggestionDirection == SuggestionDirection.flex ||
+        widget.dynamicHeightItem) {
       final size = MediaQuery.of(context).size;
       final textFieldRenderBox =
           key.currentContext!.findRenderObject() as RenderBox;
       final textFieldSize = textFieldRenderBox.size;
       final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      final isSpaceAvailable =
-          size.height > offset.dy + textFieldSize.height + _totalHeight;
+      final isSpaceAvailable = size.height >
+          offset.dy +
+              textFieldSize.height +
+              (_totalHeight ??
+                  widget.maxSuggestionBoxHeight ??
+                  size.height *
+                      0.6); // default value to check direction for dynamic height
       if (isSpaceAvailable) {
+        remainingHeight = MediaQuery.of(context).size.height -
+            (textFieldSize.height + offset.dy);
+        // print("remain search down: $remainingHeight");
+
         return SuggestionDirection.down;
       } else {
+        remainingHeight = (-textFieldSize.height + offset.dy);
+        // print("remain search up: $remainingHeight");
+
         return SuggestionDirection.up;
       }
     }
+    // remainingHeight = MediaQuery.of(context).size.height / 2;
     return _suggestionDirection;
   }
 
@@ -637,6 +670,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           isEmpty = true;
           _totalHeight = 0;
+        } else if (widget.dynamicHeightItem) {
+          _totalHeight = null;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null
               ? widget.suggestionsDecoration!.padding.vertical
@@ -654,6 +689,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         if (isEmpty) {
           selected = null;
         }
+        print("search total height $_totalHeight");
         isSuggestionsShown = true;
         final listView = AnimatedContainer(
           duration: _suggestionDirection == SuggestionDirection.up
@@ -684,6 +720,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
                 child: SFListview<T>(
+                  maxHeight: _totalHeight ??
+                      widget.maxSuggestionBoxHeight ??
+                      remainingHeight,
                   suggestionStyle: widget.suggestionStyle,
                   scrollController: _scrollController,
                   selected: selected,
@@ -731,6 +770,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       if (direction == SuggestionDirection.down) {
         return Offset(0, textFieldSize.height);
       } else if (direction == SuggestionDirection.up) {
+        if (widget.dynamicHeightItem) {
+          return Offset(
+              0,
+              widget.maxSuggestionBoxHeight != null
+                  ? -widget.maxSuggestionBoxHeight!
+                  : -remainingHeight);
+        }
+
         // search results should not exceed maxSuggestionsInViewPort
         if (suggestionsCount > widget.maxSuggestionsInViewPort) {
           return Offset(
@@ -795,7 +842,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   bool isSuggestionInFocus = false;
 
   /// height of suggestions overlay
-  late double _totalHeight;
+  ///
+  /// Nullable in case of dynamic height.
+  double? _totalHeight;
   GlobalKey key = GlobalKey();
   late final ScrollController _scrollController;
   late final KCallbackAction<PreviousIntent> _previousAction;
@@ -805,10 +854,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final lastSearchResult = <SearchFieldListItem<T>>[];
   @override
   Widget build(BuildContext context) {
-    if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
-      _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
-    } else {
-      _totalHeight = widget.suggestions.length * widget.itemHeight;
+    if (!widget.dynamicHeightItem) {
+      if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
+        _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
+      } else {
+        _totalHeight = widget.suggestions.length * widget.itemHeight;
+      }
     }
     return Shortcuts(
         shortcuts: <LogicalKeySet, Intent>{

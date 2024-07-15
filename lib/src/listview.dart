@@ -6,6 +6,10 @@ class SFListview<T> extends StatefulWidget {
   final ScrollController? scrollController;
   final SuggestionDirection suggestionDirection;
   final int? selected;
+
+  /// height limit for the box (dynamic height)
+  final double maxHeight;
+
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
   final SuggestionDecoration? suggestionsDecoration;
@@ -16,6 +20,7 @@ class SFListview<T> extends StatefulWidget {
   final Function(double, double)? onScroll;
   SFListview(
       {super.key,
+      required this.maxHeight,
       required this.scrollController,
       required this.selected,
       required this.list,
@@ -85,79 +90,84 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                 ),
               ],
             ),
-        child: ListView.builder(
-          reverse: widget.suggestionDirection == SuggestionDirection.up,
-          padding: EdgeInsets.zero,
-          controller: _scrollController,
-          itemCount: widget.list.length,
-          physics: widget.list.length == 1
-              ? NeverScrollableScrollPhysics()
-              : ScrollPhysics(),
-          itemBuilder: (context, index) => Builder(builder: (context) {
-            if (widget.selected == index) {
-              SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-                Scrollable.ensureVisible(context,
-                    alignment: 0.1, duration: Duration(milliseconds: 300));
-              });
-            }
-            return TextFieldTapRegion(
-                onTapOutside: (x) {
-                  widget.onTapOutside!(x);
-                },
-                child: Material(
-                  color: widget.suggestionsDecoration == null
-                      ? Theme.of(context).colorScheme.surface
-                      : Colors.transparent,
-                  child: InkWell(
-                    hoverColor: widget.suggestionsDecoration?.hoverColor ??
-                        Theme.of(context).hoverColor,
-                    onTap: () => widget.onSuggestionTapped(widget.list[index]),
-                    child: Container(
-                      key: widget.list[index].key,
-                      width: double.infinity,
-                      decoration: widget.suggestionItemDecoration?.copyWith(
-                            color: widget.selected == index
-                                ? widget.suggestionsDecoration
-                                        ?.selectionColor ??
-                                    Theme.of(context).highlightColor
-                                : null,
-                            border: widget.suggestionItemDecoration?.border ??
-                                Border(
-                                  bottom: BorderSide(
-                                    color: widget.marginColor ??
-                                        onSurfaceColor.withOpacity(0.1),
-                                  ),
-                                ),
-                          ) ??
-                          BoxDecoration(
-                            color: widget.selected == index
-                                ? widget.suggestionsDecoration
-                                        ?.selectionColor ??
-                                    Theme.of(context).highlightColor
-                                : null,
-                            border: index == widget.list.length - 1
-                                ? null
-                                : Border(
+        child: LimitedBox(
+          maxHeight: widget.maxHeight,
+          child: ListView.builder(
+            shrinkWrap: true,
+            reverse: widget.suggestionDirection == SuggestionDirection.up,
+            padding: EdgeInsets.zero,
+            controller: _scrollController,
+            itemCount: widget.list.length,
+            physics: widget.list.length == 1
+                ? NeverScrollableScrollPhysics()
+                : ScrollPhysics(),
+            itemBuilder: (context, index) => Builder(builder: (context) {
+              if (widget.selected == index) {
+                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  Scrollable.ensureVisible(context,
+                      alignment: 0.1, duration: Duration(milliseconds: 300));
+                });
+              }
+              return TextFieldTapRegion(
+                  onTapOutside: (x) {
+                    widget.onTapOutside!(x);
+                  },
+                  child: Material(
+                    color: widget.suggestionsDecoration == null
+                        ? Theme.of(context).colorScheme.surface
+                        : Colors.transparent,
+                    child: InkWell(
+                      hoverColor: widget.suggestionsDecoration?.hoverColor ??
+                          Theme.of(context).hoverColor,
+                      onTap: () =>
+                          widget.onSuggestionTapped(widget.list[index]),
+                      child: Container(
+                        key: widget.list[index].key,
+                        width: double.infinity,
+                        decoration: widget.suggestionItemDecoration?.copyWith(
+                              color: widget.selected == index
+                                  ? widget.suggestionsDecoration
+                                          ?.selectionColor ??
+                                      Theme.of(context).highlightColor
+                                  : null,
+                              border: widget.suggestionItemDecoration?.border ??
+                                  Border(
                                     bottom: BorderSide(
                                       color: widget.marginColor ??
                                           onSurfaceColor.withOpacity(0.1),
                                     ),
                                   ),
-                          ),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: widget.list[index].child ??
-                                Text(
-                                  widget.list[index].searchKey,
-                                  style: widget.suggestionStyle,
-                                ),
-                          )),
+                            ) ??
+                            BoxDecoration(
+                              color: widget.selected == index
+                                  ? widget.suggestionsDecoration
+                                          ?.selectionColor ??
+                                      Theme.of(context).highlightColor
+                                  : null,
+                              border: index == widget.list.length - 1
+                                  ? null
+                                  : Border(
+                                      bottom: BorderSide(
+                                        color: widget.marginColor ??
+                                            onSurfaceColor.withOpacity(0.1),
+                                      ),
+                                    ),
+                            ),
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: widget.list[index].child ??
+                                  Text(
+                                    widget.list[index].searchKey,
+                                    style: widget.suggestionStyle,
+                                  ),
+                            )),
+                      ),
                     ),
-                  ),
-                ));
-          }),
+                  ));
+            }),
+          ),
         ),
       ),
     );
