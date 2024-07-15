@@ -720,9 +720,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
                 child: SFListview<T>(
-                  maxHeight: _totalHeight ??
+                  maxHeight: widget.dynamicHeightItem ? _totalHeight ??
                       widget.maxSuggestionBoxHeight ??
-                      remainingHeight,
+                      remainingHeight : null,
                   suggestionStyle: widget.suggestionStyle,
                   scrollController: _scrollController,
                   selected: selected,

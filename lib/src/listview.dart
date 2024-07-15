@@ -8,7 +8,7 @@ class SFListview<T> extends StatefulWidget {
   final int? selected;
 
   /// height limit for the box (dynamic height)
-  final double maxHeight;
+  final double? maxHeight;
 
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
@@ -20,7 +20,7 @@ class SFListview<T> extends StatefulWidget {
   final Function(double, double)? onScroll;
   SFListview(
       {super.key,
-      required this.maxHeight,
+      this.maxHeight,
       required this.scrollController,
       required this.selected,
       required this.list,
@@ -91,9 +91,9 @@ class _SFListviewState<T> extends State<SFListview<T>> {
               ],
             ),
         child: LimitedBox(
-          maxHeight: widget.maxHeight,
+          maxHeight: widget.maxHeight ?? double.infinity,
           child: ListView.builder(
-            shrinkWrap: true,
+            shrinkWrap: widget.maxHeight != null,
             reverse: widget.suggestionDirection == SuggestionDirection.up,
             padding: EdgeInsets.zero,
             controller: _scrollController,
