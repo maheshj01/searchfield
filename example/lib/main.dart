@@ -1,7 +1,7 @@
 import 'package:example/custom.dart';
 import 'package:example/dynamic_height.dart';
 import 'package:example/network_sample.dart';
-import 'package:example/pagination.dart';
+// import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
