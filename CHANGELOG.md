@@ -1,8 +1,3 @@
-#### [1.0.7] - July 21, 2024
-
-- Fix: Scroll to selected Sugggestion Issue Fix: [Issue #155](https://github.com/maheshmnj/searchfield/issues/155)
-- Fix: maxSuggestionInViewport did not show correct number of suggestions.
-
 #### [1.0.6] - July 10, 2024
 
 - Option was not being selected on search [Issue #136](https://github.com/maheshmnj/searchfield/issues/136)

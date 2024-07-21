@@ -91,183 +91,163 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           },
           child: Icon(Icons.add),
         ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              children: [
-                TextFormField(
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    decoration: InputDecoration(
-                      labelText: 'Flutter TextFormField',
-                    ),
-                    validator: (value) {
-                      if (value == null || value.length < 4) {
-                        return 'error';
-                      }
-                      return null;
-                    }),
-                SizedBox(
-                  height: 50,
-                ),
-                SearchField<String>(
-                  maxSuggestionsInViewPort: 7,
-                  suggestions: suggestions
-                      .map(
-                        (e) => SearchFieldListItem<String>(
-                          e,
-                          item: e,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(e),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                SearchField(
-                  hint: 'Basic SearchField',
-                  initialValue: SearchFieldListItem<String>('ABC'),
-                  suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                      .map(SearchFieldListItem<String>.new)
-                      .toList(),
-                  suggestionState: Suggestion.expand,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Pagination(),
-                SizedBox(
-                  height: 50,
-                ),
-                NetworkSample(),
-                SizedBox(
-                  height: 50,
-                ),
-                SearchField(
-                  suggestionDirection: SuggestionDirection.flex,
-                  onSearchTextChanged: (query) {
-                    final filter = suggestions
-                        .where((element) =>
-                            element.toLowerCase().contains(query.toLowerCase()))
-                        .toList();
-                    return filter
-                        .map((e) => SearchFieldListItem<String>(e,
-                            child: searchChild(e)))
-                        .toList();
-                  },
-                  initialValue: SearchFieldListItem<String>('United States'),
-                  controller: searchController,
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            children: [
+              TextFormField(
                   autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    labelText: 'Flutter TextFormField',
+                  ),
                   validator: (value) {
-                    if (value == null || !suggestions.contains(value.trim())) {
-                      return 'Enter a valid country name';
+                    if (value == null || value.length < 4) {
+                      return 'error';
                     }
                     return null;
-                  },
-                  onSubmit: (x) {},
-                  autofocus: false,
-                  key: const Key('searchfield'),
-                  hint: 'Search by country name',
-                  itemHeight: 50,
-                  onTapOutside: (x) {
-                    // focus.unfocus();
-                  },
-                  scrollbarDecoration: ScrollbarDecoration(
-                    thickness: 12,
-                    radius: Radius.circular(6),
-                    trackColor: Colors.grey,
-                    trackBorderColor: Colors.red,
-                    thumbColor: Colors.orange,
-                  ),
-                  suggestionStyle:
-                      const TextStyle(fontSize: 18, color: Colors.black),
-                  searchStyle: TextStyle(fontSize: 18, color: Colors.black),
-                  suggestionItemDecoration: BoxDecoration(
-                    // color: Colors.grey[100],
-                    // borderRadius: BorderRadius.circular(10),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.shade200,
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  searchInputDecoration: InputDecoration(
-                    hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: const BorderSide(
-                        width: 1,
-                        color: Colors.orange,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: const BorderSide(
-                        width: 1,
-                        color: Colors.black,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                  ),
-                  suggestionsDecoration: SuggestionDecoration(
-                      // border: Border.all(color: Colors.orange),
-                      elevation: 8.0,
-                      selectionColor: Colors.grey.shade100,
-                      hoverColor: Colors.purple.shade100,
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xfffc466b),
-                          Color.fromARGB(255, 103, 128, 255)
-                        ],
-                        stops: [0.25, 0.75],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      )),
-                  suggestions: suggestions
+                  }),
+              SizedBox(
+                height: 50,
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              SearchField(
+                hint: 'Basic SearchField',
+                initialValue: SearchFieldListItem<String>('ABC'),
+                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                    .map(SearchFieldListItem<String>.new)
+                    .toList(),
+                suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              Pagination(),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
+              SizedBox(
+                height: 50,
+              ),
+              SearchField(
+                suggestionDirection: SuggestionDirection.flex,
+                onSearchTextChanged: (query) {
+                  final filter = suggestions
+                      .where((element) =>
+                          element.toLowerCase().contains(query.toLowerCase()))
+                      .toList();
+                  return filter
                       .map((e) =>
                           SearchFieldListItem<String>(e, child: searchChild(e)))
-                      .toList(),
-                  focusNode: focus,
-                  suggestionState: Suggestion.expand,
-                  onSuggestionTap: (SearchFieldListItem<String> x) {},
+                      .toList();
+                },
+                initialValue: SearchFieldListItem<String>('United States'),
+                controller: searchController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) {
+                  if (value == null || !suggestions.contains(value.trim())) {
+                    return 'Enter a valid country name';
+                  }
+                  return null;
+                },
+                onSubmit: (x) {},
+                autofocus: false,
+                key: const Key('searchfield'),
+                hint: 'Search by country name',
+                itemHeight: 50,
+                onTapOutside: (x) {
+                  // focus.unfocus();
+                },
+                scrollbarDecoration: ScrollbarDecoration(
+                  thickness: 12,
+                  radius: Radius.circular(6),
+                  trackColor: Colors.grey,
+                  trackBorderColor: Colors.red,
+                  thumbColor: Colors.orange,
                 ),
-                SizedBox(
-                  height: 50,
+                suggestionStyle:
+                    const TextStyle(fontSize: 18, color: Colors.black),
+                searchStyle: TextStyle(fontSize: 18, color: Colors.black),
+                suggestionItemDecoration: BoxDecoration(
+                  // color: Colors.grey[100],
+                  // borderRadius: BorderRadius.circular(10),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.shade200,
+                      width: 1,
+                    ),
+                  ),
                 ),
-                SearchField(
-                  enabled: false,
-                  hint: 'Disabled SearchField',
-                  suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                      .map(SearchFieldListItem<String>.new)
-                      .toList(),
-                  suggestionState: Suggestion.expand,
+                searchInputDecoration: InputDecoration(
+                  hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.orange,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: const BorderSide(
+                      width: 1,
+                      color: Colors.black,
+                      style: BorderStyle.solid,
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-                NetworkSample(),
-                Text(
-                  'Counter: $counter',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            ),
+                suggestionsDecoration: SuggestionDecoration(
+                    // border: Border.all(color: Colors.orange),
+                    elevation: 8.0,
+                    selectionColor: Colors.grey.shade100,
+                    hoverColor: Colors.purple.shade100,
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xfffc466b),
+                        Color.fromARGB(255, 103, 128, 255)
+                      ],
+                      stops: [0.25, 0.75],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )),
+                suggestions: suggestions
+                    .map((e) =>
+                        SearchFieldListItem<String>(e, child: searchChild(e)))
+                    .toList(),
+                focusNode: focus,
+                suggestionState: Suggestion.expand,
+                onSuggestionTap: (SearchFieldListItem<String> x) {},
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              SearchField(
+                enabled: false,
+                hint: 'Disabled SearchField',
+                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                    .map(SearchFieldListItem<String>.new)
+                    .toList(),
+                suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
+              Text(
+                'Counter: $counter',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
           ),
         ));
   }

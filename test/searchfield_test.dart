@@ -287,7 +287,7 @@ void main() {
       (WidgetTester tester) async {
     final controller = TextEditingController();
     final kdefaultLengthInViewPort = 5;
-    final kdefaultHeight = 51;
+    final kdefaultHeight = 35;
     final suggestionListLength = 4;
     await tester.pumpWidget(_boilerplate(
         child: SearchField(
@@ -313,11 +313,11 @@ void main() {
     expect(resultingHeight, equals(expectedHeight));
   });
   testWidgets(
-      'Searchfield Suggestions default height should not exceed 255 (51*5) when suggestions count > 5)',
+      'Searchfield Suggestions default height should not exceed 175 (35*5) when suggestions count > 5)',
       (WidgetTester tester) async {
     final controller = TextEditingController();
     final kdefaultLengthInViewPort = 5;
-    final kdefaultHeight = 51;
+    final kdefaultHeight = 35;
     await tester.pumpWidget(_boilerplate(
         child: SearchField(
       key: const Key('searchfield'),
