@@ -215,7 +215,7 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies height for each suggestion item in the list.
   ///
-  /// When not specified, the default value is `35.0`.
+  /// When not specified, the default value is `51.0`.
   final double itemHeight;
 
   /// Specifies the color of margin between items in suggestions list.
@@ -331,7 +331,7 @@ class SearchField<T> extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.inputType,
-    this.itemHeight = 35.0,
+    this.itemHeight = 51.0,
     this.marginColor,
     this.maxSuggestionsInViewPort = 5,
     this.maxLength,
@@ -500,13 +500,24 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       }
       return;
     }
+
+    // Navigate through the items
     if (selected! > 0) {
       selected = selected! - 1;
     } else {
       selected = length - 1;
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300), curve: Curves.bounceIn);
     }
+
+    // Calculate the target scroll position
+    double targetPosition =
+        (selected! - widget.maxSuggestionsInViewPort ~/ 2) * widget.itemHeight;
+    targetPosition =
+        targetPosition.clamp(0, _scrollController.position.maxScrollExtent);
+
+    // Scroll to the calculated position
+    _scrollController.animateTo(targetPosition,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+
     _overlayEntry!.markNeedsBuild();
   }
 
@@ -518,21 +529,38 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       return;
     }
     if (selected == null) {
-      // focus to next focus node
+      // Focus to next focus node
       if (intent.isTabKey && !isSuggestionsShown) {
         _searchFocus!.nextFocus();
         return;
       }
       selected = 0;
       _overlayEntry!.markNeedsBuild();
+      // Ensure the first item is visible when first selected
+      _scrollController.animateTo(0.0,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       return;
     }
     selected = (selected! + 1) % length;
-    if (selected == 0) {
-      _scrollController.animateTo(0.0,
-          duration: Duration(milliseconds: 300), curve: Curves.bounceIn);
-    }
     _overlayEntry!.markNeedsBuild();
+
+    // Calculate the scroll position to make the selected item visible
+    final currentPosition = widget.itemHeight * selected!;
+    final visibleRegionStart = _scrollController.offset;
+    final visibleRegionEnd =
+        visibleRegionStart + _scrollController.position.viewportDimension;
+
+    if (currentPosition < visibleRegionStart) {
+      _scrollController.animateTo(currentPosition,
+          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+    } else if (currentPosition + widget.itemHeight > visibleRegionEnd) {
+      _scrollController.animateTo(
+          currentPosition -
+              _scrollController.position.viewportDimension +
+              widget.itemHeight,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeOut);
+    }
   }
 
   // This is not invoked since enter key is reserved
@@ -540,11 +568,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void handleSelectKeyPress(SelectionIntent<T> intent) {
     if (selected == null) return;
     _searchFocus!.unfocus();
-    if (intent.selectedItem != null) {
-      onSuggestionTapped(intent.selectedItem!);
-    } else {
-      onSuggestionTapped(widget.suggestions[selected!]);
-    }
+    onSuggestionTapped(selected!);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
@@ -593,8 +617,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void onSuggestionTapped(SearchFieldListItem<T> item) {
+  void onSuggestionTapped(int index) {
     {
+      selected = index;
+      final item = widget.suggestions[selected!];
       searchController!.text = item.searchKey;
       searchController!.selection = TextSelection.fromPosition(
         TextPosition(
@@ -644,6 +670,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           if (snapshot.data!.length > widget.maxSuggestionsInViewPort) {
             _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort +
                 paddingHeight;
+            print(_totalHeight);
           } else if (snapshot.data!.length == 1) {
             _totalHeight = widget.itemHeight + paddingHeight;
           } else {
@@ -687,6 +714,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   suggestionStyle: widget.suggestionStyle,
                   scrollController: _scrollController,
                   selected: selected,
+                  maxSuggestionsInViewPort: widget.maxSuggestionsInViewPort,
+                  itemHeight: widget.itemHeight,
                   suggestionDirection: _suggestionDirection,
                   onScroll: widget.onScroll,
                   onTapOutside: (x) {
@@ -750,6 +779,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       final textFieldsize = textFieldRenderBox.size;
       final offset = textFieldRenderBox.localToGlobal(Offset.zero);
       var yOffset = Offset.zero;
+      _totalHeight = widget.maxSuggestionsInViewPort * widget.itemHeight;
       return StreamBuilder<List<SearchFieldListItem?>?>(
           stream: suggestionStream.stream,
           builder: (BuildContext context,
