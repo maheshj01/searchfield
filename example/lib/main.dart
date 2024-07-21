@@ -196,7 +196,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 SizedBox(
                   height: 50,
                 ),
-                // Pagination(),
+                Pagination(),
                 SizedBox(
                   height: 50,
                 ),
