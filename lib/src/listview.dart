@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:searchfield/searchfield.dart';
 
 class SFListview<T> extends StatefulWidget {
@@ -8,6 +9,7 @@ class SFListview<T> extends StatefulWidget {
 
   /// height limit for the box (dynamic height)
   final double? maxHeight;
+  final bool dynamicHeight;
 
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
@@ -34,7 +36,7 @@ class SFListview<T> extends StatefulWidget {
       this.onScroll,
       this.suggestionStyle,
       this.marginColor,
-      this.suggestionDirection = SuggestionDirection.down});
+      this.suggestionDirection = SuggestionDirection.down, required this.dynamicHeight});
 
   @override
   State<SFListview<T>> createState() => _SFListviewState<T>();
@@ -166,35 +168,34 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                 });
               }
               return TextFieldTapRegion(
-                onTapOutside: (x) {
-                  widget.onTapOutside!(x);
-                },
-                child: Material(
-                  color: widget.suggestionsDecoration == null
-                      ? Theme.of(context).colorScheme.surface
-                      : Colors.transparent,
-                  child: InkWell(
-                    hoverColor: widget.suggestionsDecoration?.hoverColor ??
-                        Theme.of(context).hoverColor,
-                    onTap: () => widget.onSuggestionTapped(index),
-                    child: Container(
-                      height: widget.itemHeight,
-                      key: widget.list[index].key,
-                      width: double.infinity,
-                      decoration: _getDecoration(index),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: widget.list[index].child ??
-                                Text(
-                                  widget.list[index].searchKey,
-                                  style: widget.suggestionStyle,
-                                ),
-                          )),
-                     
-                    ),
-                  ));
+                  onTapOutside: (x) {
+                    widget.onTapOutside!(x);
+                  },
+                  child: Material(
+                      color: widget.suggestionsDecoration == null
+                          ? Theme.of(context).colorScheme.surface
+                          : Colors.transparent,
+                      child: InkWell(
+                        hoverColor: widget.suggestionsDecoration?.hoverColor ??
+                            Theme.of(context).hoverColor,
+                        onTap: () => widget.onSuggestionTapped(index),
+                        child: Container(
+                          height: widget.dynamicHeight ? null : widget.itemHeight,
+                          key: widget.list[index].key,
+                          width: double.infinity,
+                          decoration: _getDecoration(index),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: widget.list[index].child ??
+                                    Text(
+                                      widget.list[index].searchKey,
+                                      style: widget.suggestionStyle,
+                                    ),
+                              )),
+                        ),
+                      )));
             }),
           ),
         ),
