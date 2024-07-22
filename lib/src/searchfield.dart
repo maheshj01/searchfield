@@ -44,7 +44,7 @@ class SearchFieldListItem<T> {
 
   /// Custom Object to be associated with each ListItem
   /// For Suggestions with Custom Objects, pass [item] parameter to [SearchFieldListItem]
-  /// see example in [example/lib/country_search.dart](https://github.com/maheshmnj/searchfield/tree/master/example/lib/country_search.dart)
+  /// see example in [example/lib/country_search.dart](https://github.com/maheshj01/searchfield/tree/master/example/lib/country_search.dart)
   final T? item;
 
   /// The widget to be shown in the searchField
@@ -291,7 +291,7 @@ class SearchField<T> extends StatefulWidget {
   /// The callback returns the `current scroll position` in pixels and the `maximum scroll extent`
   /// of the suggestions list. The callback can be used to implement feature like
   /// lazy loading of suggestions.
-  /// see example in [example/lib/pagination](https://github.com/maheshmnj/searchfield/blob/master/example/lib/pagination.dart) to see it in action
+  /// see example in [example/lib/pagination](https://github.com/maheshj01/searchfield/blob/master/example/lib/pagination.dart) to see it in action
   final void Function(double, double)? onScroll;
 
   /// Callback when the searchfield is tapped

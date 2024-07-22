@@ -11,7 +11,7 @@
 - [ ] I added new tests to check the change I am making, or this PR is [test-exempt].
 - [ ] All existing and new tests are passing using `flutter test`
 
-If you need help, consider pinging the maintainer @maheshmnj
+If you need help, consider pinging the maintainer @maheshj01
 
 <!-- Links -->
-[Contributor Guide]: https://github.com/maheshmnj/searchfield/blob/master/CONTRIBUTING.md
+[Contributor Guide]: https://github.com/maheshj01/searchfield/blob/master/CONTRIBUTING.md

@@ -42,5 +42,5 @@ This part is mainly applicable to the maintainer of the repository but you are w
   ```
 - ✅ Make sure the code is well formatted.
 - ✅ ensure there are no linter warnings by running `flutter analyze`
-- ✅ Tag a package release in github [related to #Issue 103](https://github.com/maheshmnj/searchfield/issues/103)
+- ✅ Tag a package release in github [related to #Issue 103](https://github.com/maheshj01/searchfield/issues/103)
 - ✅ Publish the package by running `flutter pub publish --dry-run` and `flutter pub publish`

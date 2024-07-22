@@ -1,14 +1,14 @@
 # [searchfield: ^1.0.7](https://pub.dev/packages/searchfield)
 
-<a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
+<a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
-[![codecov](https://codecov.io/gh/maheshmnj/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshmnj/searchfield)
-[![Build](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshmnj/searchfield/actions/workflows/workflow.yml)
+[![codecov](https://codecov.io/gh/maheshj01/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshj01/searchfield)
+[![Build](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 
 ⭐️Show some ❤️ and star the repo.⭐
 
-![Frame 1 (1)](https://github.com/maheshmnj/searchfield/assets/31410839/67810336-fc28-4c5d-90e0-117e202fe673)
+![Frame 1 (1)](https://github.com/maheshj01/searchfield/assets/31410839/67810336-fc28-4c5d-90e0-117e202fe673)
 
 A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions. Think of this widget like a dropdownButton field with the following capabilities
 
@@ -72,9 +72,9 @@ SearchField<Country>(
 ),
 ```
 
- <img src="https://github.com/maheshmnj/searchfield/assets/31410839/08bd594c-1593-4865-81a8-5d347077b98a" width="210"/>
+ <img src="https://github.com/maheshj01/searchfield/assets/31410839/08bd594c-1593-4865-81a8-5d347077b98a" width="210"/>
 
-#### [Example 2 (Network demo)](https://github.com/maheshmnj/searchfield/blob/master/example/lib/network_sample.dart)
+#### [Example 2 (Network demo)](https://github.com/maheshj01/searchfield/blob/master/example/lib/network_sample.dart)
 
 Ability to load suggestions from the network with a custom loading widget
 
@@ -128,13 +128,13 @@ SearchField(
 ),
 ```
 
- <img src="https://github.com/maheshmnj/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
+ <img src="https://github.com/maheshj01/searchfield/assets/31410839/f4f17c24-63c4-4ec3-9b3b-d27f5ee4575d" width="210"/>
 
 #### Example 3 Custom Widgets
 
 [complete code here](example/lib/custom.dart)
 
-![demo-ezgif com-video-to-gif-converter (1)](https://github.com/maheshmnj/searchfield/assets/31410839/227b6288-15a2-489f-9d97-0ecfb04fff41)
+![demo-ezgif com-video-to-gif-converter (1)](https://github.com/maheshj01/searchfield/assets/31410839/227b6288-15a2-489f-9d97-0ecfb04fff41)
 
 #### Example 4 Load suggestions from network with Pagination
 
@@ -251,7 +251,7 @@ SearchField(
 
 With v0.9.5 Searchfield now adds support for Keyboard navigation, you can now navigate through the suggestions using the keyboard.
 
-  <img src = "https://github.com/maheshmnj/searchfield/assets/31410839/17ed4c43-f0c3-4ba8-8fae-beedf42ae781" width="300">
+  <img src = "https://github.com/maheshj01/searchfield/assets/31410839/17ed4c43-f0c3-4ba8-8fae-beedf42ae781" width="300">
 
 Shortcuts:
 
@@ -263,7 +263,7 @@ Shortcuts:
 
 The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
 
-<img src = "https://github.com/maheshmnj/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
+<img src = "https://github.com/maheshj01/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
 
 ## Properties
 
@@ -310,7 +310,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `textCapitalization` : Configures how the platform keyboard will select an uppercase or lowercase keyboard on IOS and Android.
 - `textAlign`: specifies the alignment of the text in the searchfield. Defaults to `TextAlign.start`.
 
-### You can find all the [code samples here](https://github.com/maheshmnj/searchfield/tree/master/example)
+### You can find all the [code samples here](https://github.com/maheshj01/searchfield/tree/master/example)
 
 ### Contributing
 
