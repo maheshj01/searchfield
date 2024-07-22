@@ -1,5 +1,8 @@
+import 'package:example/custom.dart';
+import 'package:example/dynamic_height.dart';
 import 'package:example/network_sample.dart';
 import 'package:example/pagination.dart';
+// import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -41,6 +44,24 @@ class SearchFieldSample extends StatefulWidget {
 class _SearchFieldSampleState extends State<SearchFieldSample> {
   int suggestionsCount = 12;
   final focus = FocusNode();
+  final dynamicHeightSuggestion = [
+    'ABC\nABC\nABC\nABC',
+    'DEF\nABC',
+    'GHI',
+    'JKL\nABC',
+    'ABC',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+  ];
 
   @override
   void initState() {
@@ -99,6 +120,39 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             padding: const EdgeInsets.all(8.0),
             child: ListView(
               children: [
+                UserSelect(),
+                SizedBox(
+                  height: 550,
+                ),
+                DynamicHeightExample(),
+                SizedBox(
+                  height: 50,
+                ),
+                SearchField(
+                  hint: 'Basic SearchField',
+                  dynamicHeightItem: true,
+                  initialValue: SearchFieldListItem<String>('ABC'),
+                  suggestions: dynamicHeightSuggestion
+                      .map(SearchFieldListItem<String>.new)
+                      .toList(),
+                  suggestionState: Suggestion.expand,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                SearchField(
+                  hint: 'Basic SearchField',
+                  dynamicHeightItem: true,
+                  maxSuggestionBoxHeight: 300,
+                  initialValue: SearchFieldListItem<String>('ABC'),
+                  suggestions: dynamicHeightSuggestion
+                      .map(SearchFieldListItem<String>.new)
+                      .toList(),
+                  suggestionState: Suggestion.expand,
+                ),
+                SizedBox(
+                  height: 50,
+                ),
                 TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     decoration: InputDecoration(

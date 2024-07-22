@@ -1,4 +1,6 @@
-// Custom Suggestions
+// A Dynamic Height Example Suggestions
+
+import 'dart:math';
 
 import 'package:example/user_model.dart';
 import 'package:flutter/material.dart';
@@ -6,21 +8,30 @@ import 'package:searchfield/searchfield.dart';
 
 import 'user_data.dart';
 
-class UserSelect extends StatefulWidget {
-  const UserSelect({super.key});
+class DynamicHeightExample extends StatefulWidget {
+  const DynamicHeightExample({super.key});
 
   @override
-  State<UserSelect> createState() => _UserSelectState();
+  State<DynamicHeightExample> createState() => _DynamicHeightExampleState();
 }
 
-class _UserSelectState extends State<UserSelect> {
+class _DynamicHeightExampleState extends State<DynamicHeightExample> {
   final List<UserModel> users = [];
 
   @override
   void initState() {
     super.initState();
     users_data.forEach((element) {
-      users.add(UserModel.fromJson(element));
+      users.add(UserModel.fromJson({
+        ...element,
+        'name': (element['name'] as String) +
+            (Random().nextBool()
+                ? '\n' +
+                    ((element['name'] as String) +
+                        '\n' +
+                        (element['name'] as String))
+                : '')
+      }));
     });
   }
 
@@ -29,8 +40,8 @@ class _UserSelectState extends State<UserSelect> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SearchField<UserModel>(
-        maxSuggestionsInViewPort: 5,
-        itemHeight: 80,
+        dynamicHeightItem: true,
+        // maxSuggestionBoxHeight: MediaQuery.of(context).size.height * 0.8,
         hint: 'Search for users',
         suggestionsDecoration: SuggestionDecoration(
           borderRadius: BorderRadius.only(
@@ -98,4 +109,3 @@ class UserTile extends StatelessWidget {
     );
   }
 }
-

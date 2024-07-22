@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:searchfield/searchfield.dart';
 
 class SFListview<T> extends StatefulWidget {
   final ScrollController? scrollController;
   final SuggestionDirection suggestionDirection;
   final int? selected;
+
+  /// height limit for the box (dynamic height)
+  final double? maxHeight;
+  final bool dynamicHeight;
+
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
   final SuggestionDecoration? suggestionsDecoration;
@@ -17,6 +23,7 @@ class SFListview<T> extends StatefulWidget {
   final Function(double, double)? onScroll;
   SFListview(
       {super.key,
+      this.maxHeight,
       required this.scrollController,
       required this.selected,
       required this.list,
@@ -29,7 +36,7 @@ class SFListview<T> extends StatefulWidget {
       this.onScroll,
       this.suggestionStyle,
       this.marginColor,
-      this.suggestionDirection = SuggestionDirection.down});
+      this.suggestionDirection = SuggestionDirection.down, required this.dynamicHeight});
 
   @override
   State<SFListview<T>> createState() => _SFListviewState<T>();
@@ -142,46 +149,55 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                 ),
               ],
             ),
-        child: ListView.builder(
-          reverse: widget.suggestionDirection == SuggestionDirection.up,
-          padding: EdgeInsets.zero,
-          controller: _scrollController,
-          itemCount: widget.list.length,
-          physics: widget.list.length == 1
-              ? NeverScrollableScrollPhysics()
-              : ScrollPhysics(),
-          itemBuilder: (context, index) => Builder(builder: (context) {
-            return TextFieldTapRegion(
-                onTapOutside: (x) {
-                  widget.onTapOutside!(x);
-                },
-                child: Material(
-                  color: widget.suggestionsDecoration == null
-                      ? Theme.of(context).colorScheme.surface
-                      : Colors.transparent,
-                  child: InkWell(
-                    hoverColor: widget.suggestionsDecoration?.hoverColor ??
-                        Theme.of(context).hoverColor,
-                    onTap: () => widget.onSuggestionTapped(index),
-                    child: Container(
-                      height: widget.itemHeight,
-                      key: widget.list[index].key,
-                      width: double.infinity,
-                      decoration: _getDecoration(index),
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: widget.list[index].child ??
-                                Text(
-                                  widget.list[index].searchKey,
-                                  style: widget.suggestionStyle,
-                                ),
-                          )),
-                    ),
-                  ),
-                ));
-          }),
+        child: LimitedBox(
+          maxHeight: widget.maxHeight ?? double.infinity,
+          child: ListView.builder(
+            shrinkWrap: widget.maxHeight != null,
+            reverse: widget.suggestionDirection == SuggestionDirection.up,
+            padding: EdgeInsets.zero,
+            controller: _scrollController,
+            itemCount: widget.list.length,
+            physics: widget.list.length == 1
+                ? NeverScrollableScrollPhysics()
+                : ScrollPhysics(),
+            itemBuilder: (context, index) => Builder(builder: (context) {
+              if (widget.selected == index) {
+                SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+                  Scrollable.ensureVisible(context,
+                      alignment: 0.1, duration: Duration(milliseconds: 300));
+                });
+              }
+              return TextFieldTapRegion(
+                  onTapOutside: (x) {
+                    widget.onTapOutside!(x);
+                  },
+                  child: Material(
+                      color: widget.suggestionsDecoration == null
+                          ? Theme.of(context).colorScheme.surface
+                          : Colors.transparent,
+                      child: InkWell(
+                        hoverColor: widget.suggestionsDecoration?.hoverColor ??
+                            Theme.of(context).hoverColor,
+                        onTap: () => widget.onSuggestionTapped(index),
+                        child: Container(
+                          height: widget.dynamicHeight ? null : widget.itemHeight,
+                          key: widget.list[index].key,
+                          width: double.infinity,
+                          decoration: _getDecoration(index),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: widget.list[index].child ??
+                                    Text(
+                                      widget.list[index].searchKey,
+                                      style: widget.suggestionStyle,
+                                    ),
+                              )),
+                        ),
+                      )));
+            }),
+          ),
         ),
       ),
     );
