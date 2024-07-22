@@ -1,4 +1,4 @@
-# [searchfield: ^1.0.6](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.0.7](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshmnj/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -281,7 +281,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `inputType`: Keyboard Type for SearchField
 - `inputFormatters`: Input Formatter for SearchField
-- `itemHeight` : height of each suggestion Item, (defaults to 35.0).
+- `itemHeight` : height of each suggestion Item, (defaults to 51.0).
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
