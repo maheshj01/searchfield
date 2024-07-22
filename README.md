@@ -273,6 +273,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
+- `dynamicHeightItem`: Set to true to opt-in to dynamic height, defaults to false (`itemHeight : 51`)
 - `emptyWidget`: Custom Widget to show when search returns empty Results or when `showEmpty` is true. (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
@@ -283,6 +284,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 51.0).
 - `marginColor` : Color for the margin between the suggestions.
+- `maxSuggestionBoxHeight`: Specifies a maximum height for the suggestion box when `dynamicHeightItem` is set to `true`.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onOutSideTap` : callback when the user taps outside the searchfield.
@@ -313,3 +315,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 ### Contributing
 
 You are welcome to contribute to this package, to contribute please read the [contributing guidelines](CONTRIBUTING.md).
+
+### Contributors
+
+Thanks to all the contributors who have helped in improving this package.

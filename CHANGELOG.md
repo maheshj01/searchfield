@@ -1,7 +1,8 @@
-#### [1.0.7] - July 21, 2024
+#### [1.0.7] - July 22, 2024
 
 - Fix: Scroll to selected Sugggestion Issue Fix: [Issue #155](https://github.com/maheshmnj/searchfield/issues/155)
 - Fix: maxSuggestionInViewport did not show correct number of suggestions.
+- Add Support for dynamic height of suggestionItem [Issue #67](https://github.com/maheshj01/searchfield/issues/67)
 
 #### [1.0.6] - July 10, 2024
 
