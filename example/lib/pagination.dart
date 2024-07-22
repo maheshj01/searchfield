@@ -1,3 +1,5 @@
+import 'package:example/user_data.dart';
+import 'package:example/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -11,12 +13,13 @@ class Pagination extends StatefulWidget {
 class _PaginationState extends State<Pagination> {
   final focus = FocusNode();
 
-  Future<List<String>> getPaginatedSuggestions({int pageLength = 5}) async {
+  Future<List<UserModel>> getPaginatedSuggestions({int pageLength = 5}) async {
     await Future.delayed(const Duration(seconds: 2));
     int total = suggestions.length;
+
     return List.generate(pageLength, (index) {
       total++;
-      return 'Item $total';
+      return UserModel.fromJson(users_data[total % users_data.length]);
     });
   }
 
@@ -24,7 +27,7 @@ class _PaginationState extends State<Pagination> {
   static const surfaceBlue = Color(0xffd3e8fb);
   static const skyBlue = Color(0xfff3ddec);
 
-  var suggestions = <String>[];
+  var suggestions = <UserModel>[];
 
   static const gradient = LinearGradient(
     colors: [surfaceBlue, surfaceGreen, skyBlue],
@@ -54,22 +57,23 @@ class _PaginationState extends State<Pagination> {
 
   @override
   Widget build(BuildContext context) {
-    Widget searchChild(x) => Padding(
+    Widget searchChild(UserModel user) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-          child: Text(x, style: TextStyle(fontSize: 20, color: Colors.black)),
+          child: Text(user.name,
+              style: TextStyle(fontSize: 16, color: Colors.black)),
         );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SearchField(
+        SearchField<UserModel>(
           onSearchTextChanged: (query) {
             final filter = suggestions
-                .where((element) =>
-                    element.toLowerCase().contains(query.toLowerCase()))
+                .where((user) =>
+                    user.name.toLowerCase().contains(query.toLowerCase()))
                 .toList();
             return filter
-                .map((e) =>
-                    SearchFieldListItem<String>(e, child: searchChild(e)))
+                .map((e) => SearchFieldListItem<UserModel>(e.name,
+                    child: searchChild(e)))
                 .toList();
           },
           animationDuration: Duration.zero,
@@ -130,11 +134,12 @@ class _PaginationState extends State<Pagination> {
           ),
           suggestionsDecoration: suggestionDecoration,
           suggestions: suggestions
-              .map((e) => SearchFieldListItem<String>(e, child: searchChild(e)))
+              .map((e) =>
+                  SearchFieldListItem<UserModel>(e.name, child: searchChild(e)))
               .toList(),
           focusNode: focus,
           suggestionState: Suggestion.expand,
-          onSuggestionTap: (SearchFieldListItem<String> x) {
+          onSuggestionTap: (SearchFieldListItem<UserModel> x) {
             focus.unfocus();
           },
         ),
