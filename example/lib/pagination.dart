@@ -44,9 +44,11 @@ class _PaginationState extends State<Pagination> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final result = await getPaginatedSuggestions();
-      setState(() {
-        suggestions.addAll(result);
-      });
+      if (mounted) {
+        setState(() {
+          suggestions.addAll(result);
+        });
+      }
     });
   }
 
@@ -92,7 +94,7 @@ class _PaginationState extends State<Pagination> {
           },
           emptyWidget: Container(
               decoration: suggestionDecoration,
-              height: 250, // item*maxItems
+              height: 200, // item*maxItems
               child: const Center(
                   child: CircularProgressIndicator(
                 color: Colors.black,
@@ -100,6 +102,7 @@ class _PaginationState extends State<Pagination> {
           key: const Key('searchfield'),
           hint: 'Load Paginated suggestions from network',
           itemHeight: 50,
+          maxSuggestionsInViewPort: 4,
           scrollbarDecoration: ScrollbarDecoration(),
           onTapOutside: (x) {},
           suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),

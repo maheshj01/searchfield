@@ -122,23 +122,11 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               children: [
                 UserSelect(),
                 SizedBox(
-                  height: 550,
+                  height: 20,
                 ),
                 DynamicHeightExample(),
                 SizedBox(
-                  height: 50,
-                ),
-                SearchField(
-                  hint: 'Basic SearchField',
-                  dynamicHeightItem: true,
-                  initialValue: SearchFieldListItem<String>('ABC'),
-                  suggestions: dynamicHeightSuggestion
-                      .map(SearchFieldListItem<String>.new)
-                      .toList(),
-                  suggestionState: Suggestion.expand,
-                ),
-                SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 SearchField(
                   hint: 'Basic SearchField',
@@ -151,7 +139,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   suggestionState: Suggestion.expand,
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 TextFormField(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -164,35 +152,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                       }
                       return null;
                     }),
-                SizedBox(
-                  height: 50,
-                ),
-                SearchField<String>(
-                  maxSuggestionsInViewPort: 7,
-                  suggestions: suggestions
-                      .map(
-                        (e) => SearchFieldListItem<String>(
-                          e,
-                          item: e,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(e),
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                SearchField(
-                  hint: 'Basic SearchField',
-                  initialValue: SearchFieldListItem<String>('ABC'),
-                  suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                      .map(SearchFieldListItem<String>.new)
-                      .toList(),
-                  suggestionState: Suggestion.expand,
-                ),
                 SizedBox(
                   height: 50,
                 ),

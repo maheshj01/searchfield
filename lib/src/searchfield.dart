@@ -458,7 +458,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   /// suggestion list based on the space available in the viewport. If the suggestions have enough
   /// space below the searchfield, the list will be shown below the searchfield, else it will be
   /// shown above the searchfield.
-    SuggestionDirection getDirection() {
+  SuggestionDirection getDirection() {
     // Early return if not flex or dynamic height
     if (_suggestionDirection != SuggestionDirection.flex &&
         !widget.dynamicHeightItem) {

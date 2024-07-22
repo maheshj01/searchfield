@@ -14,7 +14,7 @@ A highly customizable, simple and easy to use searchfield widget. This Widget al
 
 - search 🔍 from a list of suggestions.
 - validate the input with custom validation logic.
-- position and define height of each Suggestion Item
+- Dynamic height of each suggestion item.
 - show suggestions of custom type (not just String)
 - lazy load the suggestions from Network with custom Loading widget
 - show dynamic suggestions above or below the input field
