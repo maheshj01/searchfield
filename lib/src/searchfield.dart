@@ -515,6 +515,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _scrollController = ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
+    lastSearchResult.addAll(widget.suggestions);
     initialize();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
@@ -613,7 +614,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void handleSelectKeyPress(SelectionIntent<T> intent) {
     if (selected == null) return;
     _searchFocus!.unfocus();
-    onSuggestionTapped(selected!);
+    onSuggestionTapped(intent.selectedItem!, selected!);
   }
 
   void handleUnFocusKeyPress(UnFocusIntent intent) {
@@ -646,6 +647,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.suggestions != widget.suggestions) {
       length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
+      lastSearchResult.clear();
+      lastSearchResult.addAll(widget.suggestions);
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
       if (widget.scrollbarDecoration == null) {
@@ -662,10 +665,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     super.didUpdateWidget(oldWidget);
   }
 
-  void onSuggestionTapped(int index) {
+  // This index will be different for searchResults
+  // and suggestions list, invoked by pressing enter key or tap
+  void onSuggestionTapped(SearchFieldListItem<T> item, int index) {
     {
       selected = index;
-      final item = widget.suggestions[selected!];
       searchController!.text = item.searchKey;
       searchController!.selection = TextSelection.fromPosition(
         TextPosition(
@@ -682,13 +686,19 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         }
       }
 
+      lastSearchResult.clear();
+      lastSearchResult.addAll(widget.suggestions);
       // hide the suggestions
       suggestionStream.sink.add(null);
       if (widget.onSuggestionTap != null) {
         widget.onSuggestionTap!(item);
       }
+
+      selected = widget.suggestions.indexWhere((element) => element == item);
     }
   }
+
+  void onSearchSuggestionTapped() {}
 
   int? selectedIndex;
   bool isSuggestionsShown = false;
@@ -974,7 +984,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 } else {
                   if (query.isEmpty) {
                     lastSearchResult.clear();
-                    lastSearchResult.addAll(searchResult);
+                    lastSearchResult.addAll(widget.suggestions);
                     suggestionStream.sink.add(widget.suggestions);
                     return;
                   }
@@ -988,6 +998,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 }
                 lastSearchResult.clear();
                 lastSearchResult.addAll(searchResult);
+                length = lastSearchResult.length;
                 suggestionStream.sink.add(searchResult);
                 if (searchResult.isEmpty) {
                   selected = null;
