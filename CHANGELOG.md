@@ -1,4 +1,4 @@
-#### [1.0.8] - July 22, 2024
+#### [1.0.8] - July 23, 2024
 
 - Fixed Regression: Broke basic functionality to search [hotfix #161](https://github.com/maheshj01/searchfield/pull/161)
 
