@@ -159,6 +159,24 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 SizedBox(
                   height: 50,
                 ),
+                SearchField<String>(
+                  maxSuggestionsInViewPort: 10,
+                  suggestions: suggestions
+                      .map(
+                        (e) => SearchFieldListItem<String>(
+                          e,
+                          item: e,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(e),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
                 NetworkSample(),
                 SizedBox(
                   height: 50,

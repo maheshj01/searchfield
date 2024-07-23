@@ -14,7 +14,7 @@ class SFListview<T> extends StatefulWidget {
   final Function(PointerDownEvent)? onTapOutside;
   final List<SearchFieldListItem<T>> list;
   final SuggestionDecoration? suggestionsDecoration;
-  final Function(int index) onSuggestionTapped;
+  final Function(SearchFieldListItem<T> item, int index) onSuggestionTapped;
   final BoxDecoration? suggestionItemDecoration;
   final Color? marginColor;
   final double itemHeight;
@@ -36,7 +36,8 @@ class SFListview<T> extends StatefulWidget {
       this.onScroll,
       this.suggestionStyle,
       this.marginColor,
-      this.suggestionDirection = SuggestionDirection.down, required this.dynamicHeight});
+      this.suggestionDirection = SuggestionDirection.down,
+      required this.dynamicHeight});
 
   @override
   State<SFListview<T>> createState() => _SFListviewState<T>();
@@ -178,9 +179,11 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                       child: InkWell(
                         hoverColor: widget.suggestionsDecoration?.hoverColor ??
                             Theme.of(context).hoverColor,
-                        onTap: () => widget.onSuggestionTapped(index),
+                        onTap: () => widget.onSuggestionTapped(
+                            widget.list[index], index),
                         child: Container(
-                          height: widget.dynamicHeight ? null : widget.itemHeight,
+                          height:
+                              widget.dynamicHeight ? null : widget.itemHeight,
                           key: widget.list[index].key,
                           width: double.infinity,
                           decoration: _getDecoration(index),
