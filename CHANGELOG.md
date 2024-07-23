@@ -1,3 +1,7 @@
+#### [1.0.8] - July 22, 2024
+
+- Fixed Regression: Broke basic functionality to search [hotfix #161](https://github.com/maheshj01/searchfield/pull/161)
+
 #### [1.0.7] - July 22, 2024
 
 - Fix: Scroll to selected Sugggestion Issue Fix: [Issue #155](https://github.com/maheshj01/searchfield/issues/155)
