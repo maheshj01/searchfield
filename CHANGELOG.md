@@ -1,4 +1,4 @@
-#### [1.0.8] - July 23, 2024
+#### [1.0.9] - August 05, 2024
 
 - renamed `dynamicHeightItem` to `dynamicHeight`
 - Fix exception on scroll (debug) [Issue #162](https://github.com/maheshj01/searchfield/issues/162)
