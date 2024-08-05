@@ -218,12 +218,12 @@ class SearchField<T> extends StatefulWidget {
   ///
   /// When not specified, the default value is `51.0`.
   ///
-  /// If you don't want to set a fixed item height, set **[dynamicHeightItem]** to true.
+  /// If you don't want to set a fixed item height, set **[dynamicHeight]** to true.
   final double itemHeight;
 
   /// (Optional) Specifies a maximum height for the suggestion box.
   ///
-  /// This will only take into account when setting **[dynamicHeightItem]** to true (aka. opt-in to dynamic height)
+  /// This will only take into account when setting **[dynamicHeight]** to true (aka. opt-in to dynamic height)
   ///
   /// When not specified, the default value is half the screen height.
   final double? maxSuggestionBoxHeight;
