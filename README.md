@@ -1,4 +1,4 @@
-# [searchfield: ^1.0.8](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.0.9](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -273,7 +273,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
-- `dynamicHeightItem`: Set to true to opt-in to dynamic height, defaults to false (`itemHeight : 51`)
+- `dynamicHeight`: Set to true to opt-in to dynamic height, defaults to false (`itemHeight : 51`)
 - `emptyWidget`: Custom Widget to show when search returns empty Results or when `showEmpty` is true. (defaults to `SizedBox.shrink`)
 - `enabled`: Defines whether to enable the searchfield defaults to `true`
 - `focusNode` : FocusNode to interact with the searchfield.
@@ -284,7 +284,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 51.0).
 - `marginColor` : Color for the margin between the suggestions.
-- `maxSuggestionBoxHeight`: Specifies a maximum height for the suggestion box when `dynamicHeightItem` is set to `true`.
+- `maxSuggestionBoxHeight`: Specifies a maximum height for the suggestion box when `dynamicHeight` is set to `true`.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
 - `offset` : suggestion List offset from the searchfield, The top left corner of the searchfield is the origin (0,0).
 - `onOutSideTap` : callback when the user taps outside the searchfield.

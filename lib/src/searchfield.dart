@@ -231,7 +231,7 @@ class SearchField<T> extends StatefulWidget {
   /// Set to true to opt-in to dynamic height. We don't calculate the total height for the whole box, instead, each item on the suggestion list will have their respective height.
   ///
   /// (Optional) Use **[maxSuggestionBoxHeight]** to set a maximum height for the suggestion box.
-  final bool dynamicHeightItem;
+  final bool dynamicHeight;
 
   /// Specifies the color of margin between items in suggestions list.
   ///
@@ -346,7 +346,7 @@ class SearchField<T> extends StatefulWidget {
     this.initialValue,
     this.inputFormatters,
     this.inputType,
-    this.dynamicHeightItem = false,
+    this.dynamicHeight = false,
     this.maxSuggestionBoxHeight,
     this.itemHeight = 51.0,
     this.marginColor,
@@ -461,7 +461,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   SuggestionDirection getDirection() {
     // Early return if not flex or dynamic height
     if (_suggestionDirection != SuggestionDirection.flex &&
-        !widget.dynamicHeightItem) {
+        !widget.dynamicHeight) {
       return _suggestionDirection;
     }
     final MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -718,7 +718,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else if (snapshot.data!.isEmpty || widget.showEmpty) {
           isEmpty = true;
           _totalHeight = 0;
-        } else if (widget.dynamicHeightItem) {
+        } else if (widget.dynamicHeight) {
           _totalHeight = null;
         } else {
           final paddingHeight = widget.suggestionsDecoration != null
@@ -769,8 +769,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                 behavior:
                     ScrollConfiguration.of(context).copyWith(scrollbars: false),
                 child: SFListview<T>(
-                  dynamicHeight: widget.dynamicHeightItem,
-                  maxHeight: widget.dynamicHeightItem
+                  dynamicHeight: widget.dynamicHeight,
+                  maxHeight: widget.dynamicHeight
                       ? _totalHeight ??
                           widget.maxSuggestionBoxHeight ??
                           remainingHeight
@@ -824,7 +824,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       if (direction == SuggestionDirection.down) {
         return Offset(0, textFieldSize.height);
       } else if (direction == SuggestionDirection.up) {
-        if (widget.dynamicHeightItem) {
+        if (widget.dynamicHeight) {
           return Offset(
               0,
               widget.maxSuggestionBoxHeight != null
@@ -909,7 +909,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   final lastSearchResult = <SearchFieldListItem<T>>[];
   @override
   Widget build(BuildContext context) {
-    if (!widget.dynamicHeightItem) {
+    if (!widget.dynamicHeight) {
       if (widget.suggestions.length > widget.maxSuggestionsInViewPort) {
         _totalHeight = widget.itemHeight * widget.maxSuggestionsInViewPort;
       } else {

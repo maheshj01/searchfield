@@ -40,7 +40,7 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SearchField<UserModel>(
-        dynamicHeightItem: true,
+        dynamicHeight: true,
         // maxSuggestionBoxHeight: MediaQuery.of(context).size.height * 0.8,
         hint: 'Search for users dynamic height',
         suggestionsDecoration: SuggestionDecoration(
