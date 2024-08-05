@@ -130,7 +130,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 ),
                 SearchField(
                   hint: 'Basic SearchField',
-                  dynamicHeightItem: true,
+                  dynamicHeight: true,
                   maxSuggestionBoxHeight: 300,
                   initialValue: SearchFieldListItem<String>('ABC'),
                   suggestions: dynamicHeightSuggestion
