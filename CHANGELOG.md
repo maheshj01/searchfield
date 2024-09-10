@@ -1,3 +1,7 @@
+#### [1.1.1] - September 10, 2024
+
+- Add `prefixIcon` and `suffixIcon` to `SearchInputDecoration`
+
 #### [1.1.0] - September 10, 2024
 
 - Adds new properties to style the search input using `SearchInputDecoration`: `cursorColor`, `cursorWidth`, `cursorHeight`, `keyboardAppearance`, `cursorRadius`, `cursorOpacityAnimates`

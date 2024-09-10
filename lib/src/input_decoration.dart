@@ -71,6 +71,8 @@ class SearchInputDecoration extends InputDecoration {
     this.cursorRadius,
     this.keyboardAppearance,
     super.border,
+    super.prefixIcon,
+    super.suffixIcon,
     super.enabledBorder,
     super.focusedBorder,
     super.errorBorder,
