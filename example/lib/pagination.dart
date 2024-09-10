@@ -110,7 +110,7 @@ class _PaginationState extends State<Pagination> {
           scrollbarDecoration: ScrollbarDecoration(),
           onTapOutside: (x) {},
           suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),
-          searchInputDecoration: InputDecoration(
+          searchInputDecoration: SearchInputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: const BorderSide(

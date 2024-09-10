@@ -1042,7 +1042,9 @@ void main() {
               color: Colors.transparent, style: BorderStyle.solid, width: 1.0)),
       suggestions:
           ['ABC', 'DEF', 'def'].map(SearchFieldListItem<String>.new).toList(),
-      textCapitalization: TextCapitalization.characters,
+      searchInputDecoration: SearchInputDecoration(
+        textCapitalization: TextCapitalization.characters,
+      ),
     )));
     final finder = find.byType(TextField);
     final textField = tester.firstWidget<TextField>(finder);

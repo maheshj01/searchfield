@@ -115,17 +115,17 @@ class _DemoAppState extends State<DemoApp> {
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
                 hint: 'SearchField Example 2',
-                searchStyle: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black.withOpacity(0.8),
-                ),
                 validator: (x) {
                   if (!_statesOfIndia.contains(x) || x!.isEmpty) {
                     return 'Please Enter a valid State';
                   }
                   return null;
                 },
-                searchInputDecoration: InputDecoration(
+                searchInputDecoration: SearchInputDecoration(
+                  searchStyle: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black.withOpacity(0.8),
+                  ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.black.withOpacity(0.8),
@@ -178,7 +178,7 @@ class _DemoAppState extends State<DemoApp> {
                       color: Colors.transparent,
                       style: BorderStyle.solid,
                       width: 1.0)),
-              searchInputDecoration: InputDecoration(
+              searchInputDecoration: SearchInputDecoration(
                 filled: true,
                 fillColor: Colors.grey.withOpacity(0.2),
                 focusedBorder: OutlineInputBorder(
@@ -242,7 +242,7 @@ class _DemoAppState extends State<DemoApp> {
               suggestions:
                   _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               suggestionState: Suggestion.hidden,
-              searchInputDecoration: InputDecoration(
+              searchInputDecoration: SearchInputDecoration(
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'SearchField',
                 border: OutlineInputBorder(),
