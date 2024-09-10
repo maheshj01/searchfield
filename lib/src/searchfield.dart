@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:searchfield/src/decoration.dart';
+import 'package:searchfield/src/input_decoration.dart';
 import 'package:searchfield/src/key_intents.dart';
 import 'package:searchfield/src/listview.dart';
 
@@ -155,9 +156,6 @@ class SearchField<T> extends StatefulWidget {
   /// When not specified, [hint] is shown instead of `initialValue`.
   final SearchFieldListItem<T>? initialValue;
 
-  /// Specifies [TextStyle] for search input.
-  final TextStyle? searchStyle;
-
   /// Specifies [TextStyle] for suggestions when no child is provided
   /// in [SearchFieldListItem].
   final TextStyle? suggestionStyle;
@@ -166,7 +164,7 @@ class SearchField<T> extends StatefulWidget {
   ///
   /// When not specified, the default value is [InputDecoration] initialized
   /// with [hint].
-  final InputDecoration? searchInputDecoration;
+  late SearchInputDecoration? searchInputDecoration;
 
   /// defaults to SuggestionState.expand
   final Suggestion suggestionState;
@@ -248,7 +246,7 @@ class SearchField<T> extends StatefulWidget {
   /// Specifies the `TextEditingController` for [SearchField].
   final TextEditingController? controller;
 
-  /// Keyboard Type for SearchField
+  /// Keyboard Type for SearchField defaults to [TextInputType.text]
   final TextInputType? inputType;
 
   /// `validator` for the [SearchField]
@@ -328,9 +326,6 @@ class SearchField<T> extends StatefulWidget {
   /// suggestion direction defaults to [SuggestionDirection.down]
   final SuggestionDirection suggestionDirection;
 
-  /// text capitalization defaults to [TextCapitalization.none]
-  final TextCapitalization textCapitalization;
-
   SearchField({
     Key? key,
     required this.suggestions,
@@ -364,7 +359,6 @@ class SearchField<T> extends StatefulWidget {
     this.offset,
     this.onSuggestionTap,
     this.searchInputDecoration,
-    this.searchStyle,
     this.scrollbarDecoration,
     this.showEmpty = false,
     this.suggestionStyle,
@@ -374,7 +368,6 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionItemDecoration,
     this.suggestionAction,
     this.textAlign = TextAlign.start,
-    this.textCapitalization = TextCapitalization.none,
     this.textInputAction,
     this.validator,
   })  : assert(
@@ -397,6 +390,17 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   // Use to calculate suggestion box height if [widget.maxSuggestionBoxHeight] is not specified
   double remainingHeight = 0;
+
+  final _defaultSearchInputDecoration = SearchInputDecoration(
+    hintText: 'Search',
+    textCapitalization: TextCapitalization.none,
+    cursorWidth: 2.0,
+    cursorColor: Colors.black,
+    cursorHeight: 20.0,
+    cursorOpacityAnimates: true,
+    keyboardAppearance: Brightness.light,
+    cursorRadius: Radius.circular(10.0),
+  );
 
   @override
   void dispose() {
@@ -422,6 +426,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   void initialize() {
+    if (widget.searchInputDecoration == null) {
+      widget.searchInputDecoration = _defaultSearchInputDecoration;
+    }
     if (widget.scrollbarDecoration == null) {
       _scrollbarDecoration = ScrollbarDecoration();
     } else {
@@ -660,6 +667,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.initialValue != widget.initialValue) {
       selected = widget.suggestions
           .indexWhere((element) => element == widget.initialValue);
+    }
+    if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
+      widget.searchInputDecoration =
+          widget.searchInputDecoration ?? _defaultSearchInputDecoration;
     }
 
     super.didUpdateWidget(oldWidget);
@@ -969,14 +980,24 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               inputFormatters: widget.inputFormatters,
               controller: searchController,
               focusNode: _searchFocus,
+              cursorErrorColor: widget.searchInputDecoration?.cursorErrorColor,
+              cursorHeight: widget.searchInputDecoration?.cursorHeight,
+              cursorWidth: widget.searchInputDecoration?.cursorWidth ?? 2.0,
+              cursorOpacityAnimates:
+                  widget.searchInputDecoration?.cursorOpacityAnimates,
+              cursorRadius: widget.searchInputDecoration?.cursorRadius,
+              keyboardAppearance:
+                  widget.searchInputDecoration?.keyboardAppearance,
               validator: widget.validator,
-              style: widget.searchStyle,
+              style: widget.searchInputDecoration?.searchStyle,
               textInputAction: widget.textInputAction,
-              textCapitalization: widget.textCapitalization,
+              textCapitalization:
+                  widget.searchInputDecoration!.textCapitalization,
               keyboardType: widget.inputType,
+              cursorColor: widget.searchInputDecoration?.cursorColor,
               decoration: widget.searchInputDecoration
                       ?.copyWith(hintText: widget.hint) ??
-                  InputDecoration(hintText: widget.hint),
+                  _defaultSearchInputDecoration,
               onChanged: (query) {
                 var searchResult = <SearchFieldListItem<T>>[];
                 if (widget.onSearchTextChanged != null) {

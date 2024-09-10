@@ -89,7 +89,7 @@ class _NetworkSampleState extends State<NetworkSample> {
           onTapOutside: (x) {},
           suggestionDirection: SuggestionDirection.up,
           suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),
-          searchInputDecoration: InputDecoration(
+          searchInputDecoration: SearchInputDecoration(
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: const BorderSide(

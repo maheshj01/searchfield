@@ -1,3 +1,32 @@
+#### [1.1.0] - September 10, 2024
+
+- Adds new properties to style the search input using `SearchInputDecoration`: `cursorColor`, `cursorWidth`, `cursorHeight`, `keyboardAppearance`, `cursorRadius`, `cursorOpacityAnimates`
+- [BREAKING] Input deocration properties are now part of `SearchInputDecoration` following are the properties moved to `SearchInputDecoration`:
+  `textCapitalization`, `searchStyle`
+
+**Before**
+
+```dart
+SearchField(
+    textCapitalization: TextCapitalization.words,
+    style: TextStyle(...)
+    ...
+)
+```
+
+**After**
+
+```dart
+SearchField(
+    searchInputDecoration: SearchInputDecoration(
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(...)
+        ...
+    )
+    ...
+),
+```
+
 #### [1.0.9] - August 05, 2024
 
 - renamed `dynamicHeightItem` to `dynamicHeight`

@@ -60,7 +60,7 @@ class _UserSelectState extends State<UserSelect> {
                 color: Colors.transparent,
                 style: BorderStyle.solid,
                 width: 1.0)),
-        searchInputDecoration: InputDecoration(
+        searchInputDecoration: SearchInputDecoration(
           filled: true,
           fillColor: Colors.grey.withOpacity(0.2),
           focusedBorder: OutlineInputBorder(
