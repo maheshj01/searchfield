@@ -1,4 +1,4 @@
-#### [1.1.1] - September 10, 2024
+#### [1.1.1] - Unreleased
 
 - Add `prefixIcon` and `suffixIcon` to `SearchInputDecoration`
 
