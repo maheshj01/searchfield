@@ -108,7 +108,7 @@ SearchField(
     itemHeight: 50,
     scrollbarDecoration: ScrollbarDecoration(),
     suggestionStyle: const TextStyle(fontSize: 24, color: Colors.white),
-    searchInputDecoration: InputDecoration(...),
+    searchInputDecoration: SearchInputDecoration(...),
     border: OutlineInputBorder(...)
     fillColor: Colors.white,
     filled: true,
@@ -165,7 +165,7 @@ Form(
       }
       return null;
     },
-    searchInputDecoration: InputDecoration(
+    searchInputDecoration: SearchInputDecoration(
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.8),
@@ -201,7 +201,7 @@ Form(
     hint: 'Search by country name',
     itemHeight: 50,
     searchInputDecoration:
-        InputDecoration(hintStyle: TextStyle(color: Colors.red)),
+        SearchInputDecoration(hintStyle: TextStyle(color: Colors.red)),
     suggestionsDecoration: SuggestionDecoration(
         padding: const EdgeInsets.all(4),
         border: Border.all(color: Colors.red),
