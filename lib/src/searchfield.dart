@@ -86,6 +86,7 @@ extension ListContainsObject<T> on List {
 /// when the searchfield is brought into focus
 /// see [example/lib/country_search.dart]
 ///
+// ignore: must_be_immutable
 class SearchField<T> extends StatefulWidget {
   /// duration of the suggestion list animation
   final Duration animationDuration;
