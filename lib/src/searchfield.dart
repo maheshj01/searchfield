@@ -660,6 +660,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       suggestionStream.sink.add(widget.suggestions);
       lastSearchResult.clear();
       lastSearchResult.addAll(widget.suggestions);
+      // if a item was already selected
+      if (selected != null) {
+        selected = widget.suggestions.indexWhere(
+            (element) => element == oldWidget.suggestions[selected!]);
+      }
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
       if (widget.scrollbarDecoration == null) {

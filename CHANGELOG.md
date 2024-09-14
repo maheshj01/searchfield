@@ -1,6 +1,8 @@
 #### [1.1.1] - Unreleased
 
 - Add `prefixIcon` and `suffixIcon` to `SearchInputDecoration`
+- Fix: [Issue #166](https://github.com/maheshj01/searchfield/issues/166)
+-
 
 #### [1.1.0] - September 10, 2024
 
