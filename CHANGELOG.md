@@ -1,6 +1,6 @@
-#### [1.1.1] - Unreleased
+#### [1.1.1] - September 14, 2024
 
-- Add `prefixIcon` and `suffixIcon` to `SearchInputDecoration`
+- Adds following properties to `SearchInputDecoration`: `suffix`, `label`, `suffixIconColor`, `prefix`, `prefixIconColor`, `prefixIcon` and `suffixIcon`;
 - Fix [Issue #166](https://github.com/maheshj01/searchfield/issues/166): select suggestion with keyboard throws null error
 - Fix [Issue: 168](https://github.com/maheshj01/searchfield/issues/168): update selected item when the suggestions change
 
