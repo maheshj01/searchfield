@@ -516,8 +516,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _previousAction =
         KCallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
     _nextAction = KCallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
-    _selectAction =
-        KCallbackAction<SelectionIntent<T>>(onInvoke: handleSelectKeyPress);
+    _selectAction = KCallbackAction<SelectionIntent<T>>(onInvoke: (x) {
+      if (selected != null) {
+        handleSelectKeyPress(SelectionIntent(lastSearchResult[selected!]));
+      }
+    });
     _unFocusAction =
         KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
     _scrollController = ScrollController();
@@ -620,7 +623,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   // This is not invoked since enter key is reserved
   // for onSubmitted callback of the textfield
   void handleSelectKeyPress(SelectionIntent<T> intent) {
-    if (selected == null) return;
+    if (selected == null ||
+        selected! >= lastSearchResult.length ||
+        selected! < 0) return;
     _searchFocus!.unfocus();
     onSuggestionTapped(intent.selectedItem!, selected!);
   }
@@ -657,6 +662,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       suggestionStream.sink.add(widget.suggestions);
       lastSearchResult.clear();
       lastSearchResult.addAll(widget.suggestions);
+      // if a item was already selected
+      if (selected != null) {
+        selected = widget.suggestions.indexWhere(
+            (element) => element == oldWidget.suggestions[selected!]);
+      }
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
       if (widget.scrollbarDecoration == null) {
