@@ -517,7 +517,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         KCallbackAction<PreviousIntent>(onInvoke: handlePreviousKeyPress);
     _nextAction = KCallbackAction<NextIntent>(onInvoke: handleNextKeyPress);
     _selectAction = KCallbackAction<SelectionIntent<T>>(onInvoke: (x) {
-      handleSelectKeyPress(SelectionIntent(lastSearchResult[selected!]));
+      if (selected != null) {
+        handleSelectKeyPress(SelectionIntent(lastSearchResult[selected!]));
+      }
     });
     _unFocusAction =
         KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
