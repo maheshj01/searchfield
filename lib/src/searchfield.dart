@@ -663,7 +663,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       lastSearchResult.clear();
       lastSearchResult.addAll(widget.suggestions);
       // if a item was already selected
-      if (selected != null) {
+      if (selected != null && selected! >= 0) {
         selected = widget.suggestions.indexWhere(
             (element) => element == oldWidget.suggestions[selected!]);
       }
@@ -976,8 +976,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     handleSelectKeyPress(
                         SelectionIntent(widget.suggestions[selected!]));
                   }
+                } else {
+                  // onSuggestiontap will fire anyways
+                  if (widget.onSubmit != null) widget.onSubmit!(x);
                 }
-                if (widget.onSubmit != null) widget.onSubmit!(x);
               },
               onTap: () {
                 widget.onTap?.call();
