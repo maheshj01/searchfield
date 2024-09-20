@@ -1,3 +1,8 @@
+#### [1.1.2] - September 20, 2024
+- add a `SearchInputDecoration.copyWith` constructor [Issue #175](https://github.com/maheshj01/searchfield/issues/175)
+- Fix [Issue #174](https://github.com/maheshj01/searchfield/issues/174) Exception: RangeError (index): Index out of range: index must not be negative: -1
+- Fix [Issue #165](https://github.com/maheshj01/searchfield/issues/165) Trigger onSubmit when a option is not selected.
+
 #### [1.1.1] - September 14, 2024
 
 - Adds following properties to `SearchInputDecoration`: `suffix`, `label`, `suffixIconColor`, `prefix`, `prefixIconColor`, `prefixIcon` and `suffixIcon`;
