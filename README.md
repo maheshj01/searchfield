@@ -6,7 +6,7 @@
 [![Build](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 <a href="https://github.com/sponsors/maheshj01/" target="_blank">
-  <img src="https://img.shields.io/badge/Sponsor-maheshj01-orange" alt="Sponsor @maheshj01" />
+  <img src="https://img.shields.io/badge/Sponsor-Searchfield-orange" alt="Sponsor @maheshj01" />
 </a>
 
 ⭐️Show some ❤️ and star the repo.⭐
