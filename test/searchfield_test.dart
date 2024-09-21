@@ -1563,10 +1563,9 @@ void main() {
 //   });
   testWidgets('SearchInputdecoration values can be set', (widgetTester) async {
     final suggestions = List.generate(500, (index) => index.toString())
-        .map((e) => SearchFieldListItem<String>(e))
+        .map(SearchFieldListItem<String>.new)
         .toList();
 
-    double scrollOffset = 0.0;
     await widgetTester.pumpWidget(_boilerplate(
         child: SearchField<String>(
       key: const Key('searchfield'),
@@ -1617,10 +1616,6 @@ void main() {
         suffix: Container(),
       ),
       suggestionState: Suggestion.expand,
-      onScroll: (offset, maxOffset) {
-        print(offset);
-        scrollOffset = offset;
-      },
     )));
 
     // Find the SearchField widget
