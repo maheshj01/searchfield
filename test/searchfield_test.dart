@@ -1561,4 +1561,120 @@ void main() {
 //     await widgetTester.pumpAndSettle(Duration(seconds: 1));
 //     expect(scrollOffset, 100.0);
 //   });
+  testWidgets('SearchInputdecoration values can be set', (widgetTester) async {
+    final suggestions = List.generate(500, (index) => index.toString())
+        .map((e) => SearchFieldListItem<String>(e))
+        .toList();
+
+    double scrollOffset = 0.0;
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField<String>(
+      key: const Key('searchfield'),
+      suggestions: suggestions,
+      searchInputDecoration: SearchInputDecoration(
+        hintText: 'Search',
+        labelText: 'Search',
+        prefixIcon: Icon(Icons.search),
+        suffixIcon: Icon(Icons.close),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        contentPadding: EdgeInsets.all(10),
+        counterText: 'Counter',
+        counterStyle: TextStyle(color: Colors.red),
+        counter: Container(),
+        errorMaxLines: 2,
+        errorStyle: TextStyle(color: Colors.red),
+        fillColor: Colors.red,
+        filled: true,
+        focusColor: Colors.red,
+        hoverColor: Colors.red,
+        labelStyle: TextStyle(color: Colors.red),
+        alignLabelWithHint: true,
+        constraints: BoxConstraints(
+          minHeight: 100,
+          maxHeight: 100,
+        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        isCollapsed: true,
+        isDense: true,
+        prefix: Container(),
+        suffix: Container(),
+      ),
+      suggestionState: Suggestion.expand,
+      onScroll: (offset, maxOffset) {
+        print(offset);
+        scrollOffset = offset;
+      },
+    )));
+
+    // Find the SearchField widget
+    final searchFieldFinder = find.byKey(const Key('searchfield'));
+    expect(searchFieldFinder, findsOneWidget);
+
+    // Find the TextField within SearchField
+    final textFieldFinder = find.descendant(
+      of: searchFieldFinder,
+      matching: find.byType(TextField),
+    );
+    expect(textFieldFinder, findsOneWidget);
+
+    // Get the InputDecoration from the TextField
+    final TextField textField = widgetTester.widget<TextField>(textFieldFinder);
+    final InputDecoration? decoration = textField.decoration;
+
+    // Verify InputDecoration properties
+    expect(decoration, isNotNull);
+    expect(decoration!.hintText, 'Search');
+    expect(decoration.labelText, 'Search');
+    expect(decoration.prefixIcon, isA<Icon>());
+    expect(decoration.suffixIcon, isA<Icon>());
+    expect(decoration.border, isA<OutlineInputBorder>());
+    expect(decoration.focusedBorder, isA<OutlineInputBorder>());
+    expect(decoration.enabledBorder, isA<OutlineInputBorder>());
+    expect(decoration.errorBorder, isA<OutlineInputBorder>());
+    expect(decoration.focusedErrorBorder, isA<OutlineInputBorder>());
+    expect(decoration.disabledBorder, isA<OutlineInputBorder>());
+    expect(decoration.contentPadding, EdgeInsets.all(10));
+    expect(decoration.counterText, 'Counter');
+    expect(decoration.counterStyle, isA<TextStyle>());
+    expect(decoration.counterStyle!.color, Colors.red);
+    expect(decoration.counter, isA<Container>());
+    expect(decoration.errorMaxLines, 2);
+    expect(decoration.errorStyle, isA<TextStyle>());
+    expect(decoration.errorStyle!.color, Colors.red);
+    expect(decoration.fillColor, Colors.red);
+    expect(decoration.filled, true);
+    expect(decoration.focusColor, Colors.red);
+    expect(decoration.hoverColor, Colors.red);
+    expect(decoration.labelStyle, isA<TextStyle>());
+    expect(decoration.labelStyle!.color, Colors.red);
+    expect(decoration.alignLabelWithHint, true);
+    expect(decoration.constraints, isA<BoxConstraints>());
+    expect(decoration.constraints!.minHeight, 100);
+    expect(decoration.constraints!.maxHeight, 100);
+    expect(decoration.floatingLabelBehavior, FloatingLabelBehavior.never);
+    expect(decoration.isCollapsed, true);
+    expect(decoration.isDense, true);
+    expect(decoration.prefix, isA<Container>());
+    expect(decoration.suffix, isA<Container>());
+    // You can add more specific tests for border radius if needed
+    final OutlineInputBorder border = decoration.border as OutlineInputBorder;
+    expect(border.borderRadius, BorderRadius.circular(10));
+  });
 }
