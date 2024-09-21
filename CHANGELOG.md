@@ -1,3 +1,6 @@
+#### [1.1.3] - September 20, 2024
+- Fix SearchInputDecoration does not take any values [Issue #176](https://github.com/maheshj01/searchfield/issues/176)
+
 #### [1.1.2] - September 20, 2024
 - add a `SearchInputDecoration.copyWith` constructor [Issue #175](https://github.com/maheshj01/searchfield/issues/175)
 - Fix [Issue #174](https://github.com/maheshj01/searchfield/issues/174) Exception: RangeError (index): Index out of range: index must not be negative: -1
