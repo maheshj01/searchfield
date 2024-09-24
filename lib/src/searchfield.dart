@@ -598,11 +598,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       return;
     }
-    if(length > 0){
     selected = (selected! + 1) % length;
-    }else{
-      selected = null;
-    }
     _overlayEntry!.markNeedsBuild();
 
     // Calculate the scroll position to make the selected item visible
