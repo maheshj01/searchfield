@@ -1,6 +1,6 @@
 #### [1.1.4] - September 24, 2024
 
-- Add new properties to `SearchInputDecoration` : `prefixIconConstraints`, `hintMaxLines`, `floatingLabelStyle`, `errorText`, `error`, `hintTextDirection`, `hintFadeDuration`, `helper`
+- Add new properties to `SearchInputDecoration` : `prefixIconConstraints`, `hintMaxLines`, `floatingLabelStyle`, `errorText`, `error`, `hintTextDirection`, `hintFadeDuration`, `helper`, `suffixIconConstraints`
 
 #### [1.1.3] - September 20, 2024
 
