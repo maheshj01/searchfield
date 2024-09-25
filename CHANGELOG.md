@@ -1,3 +1,7 @@
+#### [1.1.5] - September 25, 2024
+
+- remove custom assertions for `SearchInputDecoration` properties
+
 #### [1.1.4] - September 24, 2024
 
 - Add new properties to `SearchInputDecoration` : `prefixIconConstraints`, `hintMaxLines`, `floatingLabelStyle`, `errorText`, `error`, `hintTextDirection`, `hintFadeDuration`, `helper`, `suffixIconConstraints`
