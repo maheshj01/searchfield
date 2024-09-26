@@ -1,3 +1,6 @@
+#### [1.1.6] - September 25, 2024
+- Fix: new properties were missing in CopyWith Constructor [Issue: 177 comment](https://github.com/maheshj01/searchfield/issues/177#issuecomment-2376401417)
+
 #### [1.1.5] - September 25, 2024
 
 - remove custom assertions for `SearchInputDecoration` properties
