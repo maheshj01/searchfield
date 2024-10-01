@@ -58,6 +58,8 @@ class SearchInputDecoration extends InputDecoration {
   ///
   final Brightness? keyboardAppearance;
 
+  
+
   final Key? key;
   SearchInputDecoration({
     this.key,
@@ -122,6 +124,7 @@ class SearchInputDecoration extends InputDecoration {
     super.errorMaxLines,
     super.errorStyle,
     super.suffixIconConstraints,
+    super.maintainHintHeight,
   });
   
   @override
@@ -189,6 +192,7 @@ class SearchInputDecoration extends InputDecoration {
     BoxConstraints? suffixIconConstraints,
     TextStyle? suffixStyle,
     String? suffixText,
+    bool? maintainHintHeight,
   }) {
     return SearchInputDecoration(
       cursorErrorColor: cursorErrorColor ?? this.cursorErrorColor,
@@ -243,6 +247,8 @@ class SearchInputDecoration extends InputDecoration {
       suffixIconColor: suffixIconColor ?? this.suffixIconColor,
       suffixStyle: suffixStyle ?? this.suffixStyle,
       suffixText: suffixText ?? this.suffixText,
+      maintainHintHeight:
+          maintainHintHeight ?? this.maintainHintHeight,
     );
   }
 }
