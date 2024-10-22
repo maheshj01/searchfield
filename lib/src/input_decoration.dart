@@ -123,7 +123,7 @@ class SearchInputDecoration extends InputDecoration {
     super.errorStyle,
     super.suffixIconConstraints,
   });
-  
+
   @override
   SearchInputDecoration copyWith({
     Key? key,
@@ -191,6 +191,20 @@ class SearchInputDecoration extends InputDecoration {
     String? suffixText,
   }) {
     return SearchInputDecoration(
+      cursorColor: cursorColor ?? this.cursorColor,
+      textCapitalization: textCapitalization ?? this.textCapitalization,
+      searchStyle: searchStyle ?? this.searchStyle,
+      prefixIconConstraints:
+          prefixIconConstraints ?? this.prefixIconConstraints,
+      suffixIconConstraints:
+          suffixIconConstraints ?? this.suffixIconConstraints,
+      hintMaxLines: hintMaxLines ?? this.hintMaxLines,
+      floatingLabelStyle: floatingLabelStyle ?? this.floatingLabelStyle,
+      errorText: errorText ?? this.errorText,
+      error: error ?? this.error,
+      hintTextDirection: hintTextDirection ?? this.hintTextDirection,
+      hintFadeDuration: hintFadeDuration ?? this.hintFadeDuration,
+      helper: helper ?? this.helper,
       cursorErrorColor: cursorErrorColor ?? this.cursorErrorColor,
       cursorHeight: cursorHeight ?? this.cursorHeight,
       cursorWidth: cursorWidth ?? this.cursorWidth,
