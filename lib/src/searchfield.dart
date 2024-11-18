@@ -313,6 +313,13 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to [TextAlign.start]
   final TextAlign textAlign;
 
+  ///   Creates a [FormField] that contains a [TextField].
+  ///
+  // When a [controller] is specified, [initialValue] must be null (the default). If [controller] is null, then a [TextEditingController] will be constructed automatically and its text will be initialized to [initialValue] or the empty string.
+  ///
+  /// For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
+  Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
+
   /// Defines whether to enable autofocus defaults to `false`
   final bool autofocus;
 
@@ -334,6 +341,7 @@ class SearchField<T> extends StatefulWidget {
     this.autoCorrect = true,
     this.autofocus = false,
     this.autovalidateMode,
+    this.contextMenuBuilder,
     this.controller,
     this.emptyWidget = const SizedBox(),
     this.enabled,
@@ -964,6 +972,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             link: _layerLink,
             child: TextFormField(
               key: key,
+              contextMenuBuilder: widget.contextMenuBuilder,
               enabled: widget.enabled,
               textAlign: widget.textAlign,
               autofocus: widget.autofocus,
