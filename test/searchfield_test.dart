@@ -1570,6 +1570,20 @@ void main() {
     await widgetTester.pumpWidget(_boilerplate(
         child: SearchField<String>(
       key: const Key('searchfield'),
+      contextMenuBuilder: (context, suggestion) {
+        return PopupMenuButton(
+          itemBuilder: (context) {
+            return [
+              PopupMenuItem(
+                child: Text('Copy'),
+              ),
+              PopupMenuItem(
+                child: Text('Paste'),
+              ),
+            ];
+          },
+        );
+      },
       suggestions: suggestions,
       animationDuration: Duration(seconds: 1),
       autovalidateMode: AutovalidateMode.always,
@@ -1637,6 +1651,7 @@ void main() {
     expect(searchField.suggestionStyle, isA<TextStyle>());
     expect(searchField.suggestionStyle!.color, Colors.red);
     expect(searchField.suggestionDirection, SuggestionDirection.up);
+    expect(searchField.contextMenuBuilder, isNotNull);
   });
 
   testWidgets('SearchInputdecoration values can be set', (widgetTester) async {
