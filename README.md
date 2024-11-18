@@ -274,6 +274,8 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `autoCorrect`: Defines whether to enable autoCorrect defaults to `true`
 - `autofocus`: Defines whether to enable autofocus defaults to `false`
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
+- `contextmenubuilder`: Creates a [FormField] that contains a [TextField]. When a [controller] is specified, [initialValue] must be null (the default). If [controller] is null, then a [TextEditingController] will be constructed automatically and its text will be initialized to [initialValue] or the empty string.
+For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `dynamicHeight`: Set to true to opt-in to dynamic height, defaults to false (`itemHeight : 51`)

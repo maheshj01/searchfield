@@ -1,4 +1,5 @@
 #### [1.1.8] - November 18, 2024
+- Add `contextmenubuilder` property
 
 #### [1.1.7] - October 22, 2024
 - Refactor: Overlay condition too strict [Issue: 182](https://github.com/maheshj01/searchfield/issues/182)
