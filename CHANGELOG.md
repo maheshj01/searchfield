@@ -1,3 +1,6 @@
+#### [1.1.9] - November 25, 2024
+- [regression] Fix: Keyboard navigation does not work [Issue: 183](https://github.com/maheshj01/searchfield/issues/182)
+
 #### [1.1.8] - November 18, 2024
 - Add `contextmenubuilder` property
 
