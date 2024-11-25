@@ -452,7 +452,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // When focus shifts to ListView prevent suggestions from rebuilding
       // when user navigates through suggestions using keyboard
       if (_searchFocus!.hasFocus) {
-        _overlayEntry = _createOverlay();
+        _overlayEntry ??= _createOverlay();
         if (widget.suggestionState == Suggestion.expand) {
           isSuggestionsShown = true;
           Future.delayed(Duration(milliseconds: 100), () {
@@ -874,17 +874,15 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     return null;
   }
 
-  Widget? _streamBuilder;
   OverlayEntry _createOverlay() {
     return OverlayEntry(builder: (context) {
-      if (_streamBuilder != null) return _streamBuilder!;
       final textFieldRenderBox =
           key.currentContext!.findRenderObject() as RenderBox;
       final textFieldsize = textFieldRenderBox.size;
       final offset = textFieldRenderBox.localToGlobal(Offset.zero);
       var yOffset = Offset.zero;
       _totalHeight = widget.maxSuggestionsInViewPort * widget.itemHeight;
-      _streamBuilder = StreamBuilder<List<SearchFieldListItem?>?>(
+      return StreamBuilder<List<SearchFieldListItem?>?>(
           stream: suggestionStream.stream,
           builder: (BuildContext context,
               AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
@@ -910,7 +908,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               ),
             );
           });
-      return _streamBuilder!;
     });
   }
 
