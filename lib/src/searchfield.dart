@@ -145,6 +145,9 @@ class SearchField<T> extends StatefulWidget {
   /// This callback returns the text from the searchfield
   final Function(String)? onSubmit;
 
+  /// Scroll Controller for the suggestion list to manage scrolling
+  final ScrollController? scrollController;
+
   /// Hint for the [SearchField].
   final String? hint;
 
@@ -338,6 +341,7 @@ class SearchField<T> extends StatefulWidget {
     Key? key,
     required this.suggestions,
     this.animationDuration = const Duration(milliseconds: 300),
+    this.scrollController,
     this.autoCorrect = true,
     this.autofocus = false,
     this.autovalidateMode,
@@ -414,7 +418,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void dispose() {
     suggestionStream.close();
-    _scrollController.dispose();
+   widget.scrollController!=null?widget.scrollController?.dispose(): _scrollController.dispose();
     if (widget.controller == null) {
       searchController!.dispose();
     }
@@ -554,7 +558,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handlePreviousKeyPress(PreviousIntent intent) {
     if (intent.scrollToTop == true) {
-      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+     widget.scrollController!=null?widget.scrollController?.jumpTo(widget.scrollController!.position.minScrollExtent): _scrollController.jumpTo(_scrollController.position.minScrollExtent);
       selected = 0;
       _overlayEntry!.markNeedsBuild();
       return;
@@ -577,10 +581,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     double targetPosition =
         (selected! - widget.maxSuggestionsInViewPort ~/ 2) * widget.itemHeight;
     targetPosition =
-        targetPosition.clamp(0, _scrollController.position.maxScrollExtent);
+        targetPosition.clamp(0, widget.scrollController!=null?widget.scrollController!.position.maxScrollExtent:_scrollController.position.maxScrollExtent);
 
     // Scroll to the calculated position
-    _scrollController.animateTo(targetPosition,
+   widget.scrollController!=null? widget.scrollController!.animateTo(targetPosition, duration: Duration(milliseconds: 300), curve: Curves.easeInOut): _scrollController.animateTo(targetPosition,
         duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
 
     _overlayEntry!.markNeedsBuild();
@@ -588,7 +592,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handleNextKeyPress(NextIntent intent) {
     if (intent.scrollToBottom == true) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+     widget.scrollController!=null?widget.scrollController?.jumpTo(widget.scrollController!.position.maxScrollExtent): _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       selected = length - 1;
       _overlayEntry!.markNeedsBuild();
       return;
@@ -602,7 +606,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       selected = 0;
       _overlayEntry!.markNeedsBuild();
       // Ensure the first item is visible when first selected
-      _scrollController.animateTo(0.0,
+     widget.scrollController!=null? widget.scrollController!.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut): _scrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       return;
     }
@@ -611,15 +615,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
     // Calculate the scroll position to make the selected item visible
     final currentPosition = widget.itemHeight * selected!;
-    final visibleRegionStart = _scrollController.offset;
-    final visibleRegionEnd =
-        visibleRegionStart + _scrollController.position.viewportDimension;
+    final visibleRegionStart =widget.scrollController!=null?widget.scrollController!.offset: _scrollController.offset;
+    double? visibleRegionEnd;
+    if(widget.scrollController!=null){
+       visibleRegionEnd =visibleRegionStart+ widget.scrollController!.offset;
+    }else{
+       visibleRegionEnd =visibleRegionStart+ _scrollController.offset;
+    }
+    
 
     if (currentPosition < visibleRegionStart) {
-      _scrollController.animateTo(currentPosition,
+    widget.scrollController!=null? widget.scrollController!.animateTo(currentPosition, duration: Duration(milliseconds: 300), curve: Curves.easeOut):  _scrollController.animateTo(currentPosition,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else if (currentPosition + widget.itemHeight > visibleRegionEnd) {
-      _scrollController.animateTo(
+    widget.scrollController!=null?widget.scrollController!.animateTo(currentPosition - widget.scrollController!.position.viewportDimension + widget.itemHeight, duration: Duration(milliseconds: 300), curve: Curves.easeOut) :  _scrollController.animateTo(
           currentPosition -
               _scrollController.position.viewportDimension +
               widget.itemHeight,
@@ -778,7 +787,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           alignment: Alignment.centerLeft,
           child: RawScrollbar(
             thumbVisibility: _scrollbarDecoration!.thumbVisibility,
-            controller: _scrollController,
+            controller:widget.scrollController!=null? widget.scrollController: _scrollController,
             padding: EdgeInsets.zero,
             shape: _scrollbarDecoration!.shape,
             fadeDuration: _scrollbarDecoration!.fadeDuration,
@@ -806,7 +815,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                           remainingHeight
                       : null,
                   suggestionStyle: widget.suggestionStyle,
-                  scrollController: _scrollController,
+                  scrollController:widget.scrollController!=null? widget.scrollController: _scrollController,
                   selected: selected,
                   maxSuggestionsInViewPort: widget.maxSuggestionsInViewPort,
                   itemHeight: widget.itemHeight,
