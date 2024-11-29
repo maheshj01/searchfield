@@ -125,8 +125,7 @@ SearchField(
     filled: true,
     contentPadding: const EdgeInsets.symmetric(
         horizontal: 20,
-    ),
-    ),
+    )),
     suggestionsDecoration: suggestionDecoration,
     suggestions: suggestions
         .map((e) => SearchFieldListItem<String>(e, child: searchChild(e)))
@@ -176,6 +175,12 @@ Form(
       }
       return null;
     },
+    selectedValue: selectedValue,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        setState(() {
+          selectedValue = x.item;
+        });
+      },
     searchInputDecoration: SearchInputDecoration(
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
@@ -208,6 +213,12 @@ Form(
               )))
           .toList();
     },
+    selectedValue: selectedValue,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        setState(() {
+          selectedValue = x.item;
+        });
+      },
     key: const Key('searchfield'),
     hint: 'Search by country name',
     itemHeight: 50,
@@ -294,7 +305,7 @@ For documentation about the various parameters, see the [TextField] class and [T
 - `focusNode` : FocusNode to interact with the searchfield.
 - `hint` : hint for the search Input.
 - `readOnly` : Defines whether to enable the searchfield defaults to `false`
-- `initialValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
+- `selectedValue` : The initial value to be set in searchfield when its rendered, if not specified it will be empty.
 - `inputType`: Keyboard Type for SearchField
 - `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 51.0).
@@ -306,7 +317,7 @@ For documentation about the various parameters, see the [TextField] class and [T
 - `onSaved` : An optional method to call with the final value when the form is saved via FormState.save.
 - `onScroll` : callback when the suggestion list is scrolled. It returns the current scroll position in pixels and the max scroll position.
 - `onSearchTextChanged`: callback when the searchfield text changes, it returns the current text in the searchfield.
-- `onSuggestionTap` : callback when a sugestion is tapped it also returns the tapped value.
+- `onSuggestionTap` : callback when a sugestion is tapped, it returns the tapped value which can be used to set the selectedValue.
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `onTap`: callback when the searchfield is tapped or brought into focus.
 - `scrollbarDecoration`: decoration for the scrollbar.

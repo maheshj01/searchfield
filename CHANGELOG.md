@@ -29,12 +29,13 @@ SearchField(
     hint: 'Basic SearchField',
     dynamicHeight: true,
     maxSuggestionBoxHeight: 300,
+    // now the selectedValue is handled by the client
     onSuggestionTap: (SearchFieldListItem<String> item) {
         setState(() {
-        selectedValue = item;
+            selectedValue = item;
         });
     },
-    selectedValue: selectedValue,
+    selectedValue: selectedValue, // rename initialValue to selectedValue
     suggestions: dynamicHeightSuggestion
         .map(SearchFieldListItem<String>.new)
         .toList(),

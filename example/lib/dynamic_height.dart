@@ -52,7 +52,7 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
             color: Colors.grey.withOpacity(0.5),
           ),
         ),
-        // initialValue: SearchFieldListItem<UserModel>(
+        // selectedValue: SearchFieldListItem<UserModel>(
         //   users[2].name,
         //   child: Container(
         //     color: Colors.red,
