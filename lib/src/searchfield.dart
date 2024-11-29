@@ -22,7 +22,7 @@ enum SuggestionAction {
   /// shift to next focus
   next,
 
-  /// close keyboard and unfocus
+  /// close keyboard and unfocus (Default)
   unfocus,
 }
 
@@ -170,7 +170,7 @@ class SearchField<T> extends StatefulWidget {
   /// defaults to SuggestionState.expand
   final Suggestion suggestionState;
 
-  /// Specifies the [SuggestionAction] called on suggestion tap.
+  /// Specifies the [SuggestionAction] called on suggestion tap defaults to [SuggestionAction.unfocus]
   final SuggestionAction? suggestionAction;
 
   /// Specifies [SuggestionDecoration] for suggestion list. The property can be used to add [BoxShadow], [BoxBorder]
@@ -375,7 +375,7 @@ class SearchField<T> extends StatefulWidget {
     this.suggestionDirection = SuggestionDirection.down,
     this.suggestionState = Suggestion.expand,
     this.suggestionItemDecoration,
-    this.suggestionAction,
+    this.suggestionAction = SuggestionAction.unfocus,
     this.textAlign = TextAlign.start,
     this.textInputAction,
     this.validator,
@@ -598,7 +598,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       final viewportStart = _scrollController.offset;
       final viewportEnd =
           viewportStart + _scrollController.position.viewportDimension;
-    
+
       if (currentPosition < viewportStart ||
           currentPosition + widget.itemHeight > viewportEnd) {
         final targetPosition =
@@ -813,6 +813,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         );
         return TextFieldTapRegion(
           onTapOutside: (x) {
+            _searchFocus!.unfocus();
             isSuggestionInFocus = false;
             if (!_searchFocus!.hasFocus) {
               removeOverlay();
