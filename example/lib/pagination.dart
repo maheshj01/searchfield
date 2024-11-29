@@ -55,6 +55,7 @@ class _PaginationState extends State<Pagination> {
     });
   }
 
+  var selectedValue = null;
   @override
   Widget build(BuildContext context) {
     Widget searchChild(UserModel user) => Padding(
@@ -89,6 +90,7 @@ class _PaginationState extends State<Pagination> {
               isLoading = false;
             });
           },
+          selectedValue: selectedValue,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           validator: (value) {
             if (value == null || value.length < 4) {
@@ -140,7 +142,9 @@ class _PaginationState extends State<Pagination> {
           focusNode: focus,
           suggestionState: Suggestion.expand,
           onSuggestionTap: (SearchFieldListItem<UserModel> x) {
-            focus.unfocus();
+            setState(() {
+              selectedValue = x;
+            });
           },
         ),
       ],
