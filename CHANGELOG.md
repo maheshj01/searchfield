@@ -41,9 +41,12 @@ SearchField(
     suggestionState: Suggestion.expand,
 ),
 ```
+
 - Fixes: [Issue: #178](https://github.com/maheshj01/searchfield/issues/178), [Issue: #155](https://github.com/maheshj01/searchfield/issues/155)
 
 - Fixes: [Issue: #151](https://github.com/maheshj01/searchfield/issues/151) Clarifies use of SuggestionAction and now defaults to `SuggestionState.unfocus` without having to use `FocusNode` on client side.
+
+- Fixes: [Issue: #190](https://github.com/maheshj01/searchfield/issues/190) Keyboard navigation does not work after selecting a suggestion.
 
 Huge thanks to all contributors and supporters.
 Happy Thanksgiving!  🦃
