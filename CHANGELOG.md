@@ -1,3 +1,53 @@
+#### [1.2.0] - November 28, 2024
+
+- [Breaking]: Handle selected Value on Client Side [Issue: #191](https://github.com/maheshj01/searchfield/issues/191)
+
+**Before**
+
+The package sets the selectedValue automatically inside the component, which leads to issues when navigating or selecting suggestions
+```dart
+SearchField(
+    hint: 'Basic SearchField',
+    dynamicHeight: true,
+    maxSuggestionBoxHeight: 300,
+    initialValue: SearchFieldListItem<String>('ABC'),
+    suggestions: dynamicHeightSuggestion
+        .map(SearchFieldListItem<String>.new)
+        .toList(),
+    suggestionState: Suggestion.expand,
+),
+```
+
+**After**
+
+Now the client should handle te selectedValue explicitly in the client code (consumer code) by using the onSuggestionTap callback. This approach simplifies the API and provides more accurate control over the internal state of the package.
+
+```dart
+var selectedValue = SearchFieldListItem<String>('ABC');
+
+SearchField(
+    hint: 'Basic SearchField',
+    dynamicHeight: true,
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<String> item) {
+        setState(() {
+        selectedValue = item;
+        });
+    },
+    selectedValue: selectedValue,
+    suggestions: dynamicHeightSuggestion
+        .map(SearchFieldListItem<String>.new)
+        .toList(),
+    suggestionState: Suggestion.expand,
+),
+```
+- Fixes: [Issue: #178](https://github.com/maheshj01/searchfield/issues/178), [Issue: #155](https://github.com/maheshj01/searchfield/issues/155)
+
+- Fixes: [Issue: #151](https://github.com/maheshj01/searchfield/issues/151) Clarifies use of SuggestionAction and now defaults to `SuggestionState.unfocus` without having to use `FocusNode` on client side.
+
+Huge thanks to all contributors and supporters.
+Happy Thanksgiving!  🦃
+
 #### [1.1.9] - November 25, 2024
 - [regression] Fix: Keyboard navigation does not work [Issue: 183](https://github.com/maheshj01/searchfield/issues/182)
 

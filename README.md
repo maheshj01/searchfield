@@ -1,4 +1,4 @@
-# [searchfield: ^1.1.9](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.2.0](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -48,6 +48,8 @@ Use the Widget
 #### Example1
 
 ```dart
+
+var selectedValue = null;
 SearchField<Country>(
   suggestions: countries
     .map(
@@ -70,6 +72,12 @@ SearchField<Country>(
           ],
         ),
       ),
+      selectedValue: selectedValue,
+      onSuggestionTap: (SearchFieldListItem<Country> x) {
+        setState(() {
+          selectedValue = x.item;
+        });
+      },
   ),
   ).toList(),
 ),
@@ -126,7 +134,7 @@ SearchField(
     focusNode: focus,
     suggestionState: Suggestion.expand,
     onSuggestionTap: (SearchFieldListItem<String> x) {
-    focus.unfocus();
+      
     },
 ),
 ```
@@ -219,11 +227,13 @@ Form(
         .toList(),
     focusNode: focus,
     suggestionState: Suggestion.expand,
+    selectedValue: selectedValue,
     onSuggestionTap: (SearchFieldListItem<String> x) {
-      focus.unfocus();
+      setState(() {
+          selectedValue = x.item;
+        });
     },
   ),
-));
 ```
 
 <img src="https://user-images.githubusercontent.com/31410839/104081674-2ec10980-5256-11eb-9712-6b18e3e67f4a.gif" width="360"/>
