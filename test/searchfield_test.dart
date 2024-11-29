@@ -96,16 +96,24 @@ void main() {
 
     testWidgets('searchfield should show tapped suggestion',
         (WidgetTester tester) async {
-      final controller = TextEditingController();
-      await tester.pumpWidget(_boilerplate(
-          child: SearchField(
-        key: const Key('searchfield'),
-        suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-            .map(SearchFieldListItem<String>.new)
-            .toList(),
-        controller: controller,
-        suggestionState: Suggestion.expand,
-      )));
+      SearchFieldListItem<String>? selectedValue = null;
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          SearchField(
+            key: const Key('searchfield'),
+            suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                .map(SearchFieldListItem<String>.new)
+                .toList(),
+            selectedValue: selectedValue,
+            onSuggestionTap: (SearchFieldListItem<String> x) {
+              selectedValue = x;
+            },
+          ),
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
       final listFinder = find.byType(ListView);
       final textField = find.byType(TextFormField);
       expect(textField, findsOneWidget);
@@ -114,12 +122,12 @@ void main() {
       await tester.enterText(textField, '');
       await tester.pumpAndSettle();
       expect(listFinder, findsOneWidget);
-      final tapTarget = find.text('ABC');
-      await tester.ensureVisible(tapTarget);
-      expect(tapTarget, findsOneWidget);
-      await tester.tap(tapTarget);
-      await tester.pumpAndSettle(Duration(seconds: 2));
-      expect(find.text('ABC'), findsOneWidget);
+      // tap 2nd item
+      final secondItem = find.text('DEF').first;
+      expect(secondItem, findsOneWidget);
+      await tester.tap(secondItem);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.searchKey, equals('DEF'));
     });
 
     testWidgets('Searchfield should show searched suggestions',
@@ -1152,7 +1160,7 @@ void main() {
           child: Column(
         children: [
           SearchField(
-            focusNode: searchFocus, 
+            focusNode: searchFocus,
             key: const Key('searchfield'),
             suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
                 .map(SearchFieldListItem<String>.new)
@@ -1199,7 +1207,7 @@ void main() {
           child: Column(
         children: [
           SearchField(
-            focusNode: searchFocus, 
+            focusNode: searchFocus,
             suggestionAction: SuggestionAction.next,
             key: const Key('searchfield'),
             suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
