@@ -1,8 +1,0 @@
-// dart settings
-{
-    "[dart]": {
-        "editor.formatOnSave": false,
-        "editor.formatOnType": false,
-        "editor.rulers": []
-    }
-}

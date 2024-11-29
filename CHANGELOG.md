@@ -20,7 +20,7 @@ SearchField(
 
 **After**
 
-Now the client should handle te selectedValue explicitly in the client code (consumer code) by using the onSuggestionTap callback. This approach simplifies the API and provides more accurate control over the internal state of the package.
+Now the client should handle the selectedValue explicitly in the client code (consumer code) by using the onSuggestionTap callback. This approach simplifies the API and provides more accurate control over the internal state of the package.
 
 ```dart
 var selectedValue = SearchFieldListItem<String>('ABC');
