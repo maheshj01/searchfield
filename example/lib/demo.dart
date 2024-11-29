@@ -83,7 +83,7 @@ class _DemoAppState extends State<DemoApp> {
               textInputAction: TextInputAction.next,
               controller: _searchController,
               hint: 'SearchField Example 1',
-              // initialValue: SearchFieldListItem(_suggestions[2], SizedBox()),
+              // selectedValue: SearchFieldListItem(_suggestions[2], SizedBox()),
               maxSuggestionsInViewPort: 3,
               itemHeight: 45,
               onSuggestionTap: (x) {},
@@ -159,7 +159,7 @@ class _DemoAppState extends State<DemoApp> {
                   color: Colors.grey.withOpacity(0.5),
                 ),
               ),
-              initialValue: SearchFieldListItem(
+              selectedValue: SearchFieldListItem(
                 _suggestions[2],
                 child: Container(
                   color: Colors.red,

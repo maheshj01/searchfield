@@ -13,7 +13,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.light,
       ),
+      themeMode: ThemeMode.system,
       darkTheme: ThemeData(
         colorSchemeSeed: Colors.blue,
         useMaterial3: true,
@@ -95,14 +95,14 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
   var suggestions = <String>[];
   int counter = 0;
   var selected = '';
+  var selectedValue = SearchFieldListItem<String>('United States');
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x, {bool isSelected = false}) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(x,
               style: TextStyle(
-                  fontSize: 18,
-                  color: isSelected ? Colors.green : Colors.black)),
+                  fontSize: 18, color: isSelected ? Colors.green : null)),
         );
     return Scaffold(
         appBar: AppBar(title: Text('Searchfield Demo')),
@@ -122,10 +122,14 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 hint: 'Basic SearchField',
                 dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
-                initialValue: SearchFieldListItem<String>('ABC'),
-                suggestions: dynamicHeightSuggestion
-                    .map(SearchFieldListItem<String>.new)
-                    .toList(),
+                onSuggestionTap: (SearchFieldListItem<String> item) {
+                  setState(() {
+                    selectedValue = item;
+                  });
+                },
+                selectedValue: selectedValue,
+                suggestions:
+                    suggestions.map(SearchFieldListItem<String>.new).toList(),
                 suggestionState: Suggestion.expand,
               ),
               SizedBox(
@@ -152,7 +156,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SearchField<String>(
-                  maxSuggestionsInViewPort: 10,
+                  maxSuggestionsInViewPort: 11,
                   suggestionAction: SuggestionAction.unfocus,
                   searchInputDecoration: SearchInputDecoration(
                     hintText: 'Search',
@@ -161,9 +165,10 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  selectedValue: selectedValue,
                   onSuggestionTap: (SearchFieldListItem<String> item) {
                     setState(() {
-                      selected = item.searchKey;
+                      selectedValue = item;
                     });
                   },
                   suggestions: suggestions
@@ -194,7 +199,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                           SearchFieldListItem<String>(e, child: searchChild(e)))
                       .toList();
                 },
-                initialValue: SearchFieldListItem<String>('United States'),
+                selectedValue: SearchFieldListItem<String>('United States'),
                 controller: searchController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {

@@ -34,7 +34,7 @@ void main() {
                   suggestions: ['ABC', 'DEF']
                       .map<SearchFieldListItem<String>>(SearchFieldListItem.new)
                       .toList(),
-                  initialValue: SearchFieldListItem<String>('ABCD'))),
+                  selectedValue: SearchFieldListItem<String>('ABCD'))),
           throwsAssertionError);
 
       await tester.pumpWidget(_boilerplate(
@@ -62,7 +62,7 @@ void main() {
                 width: 1.0)),
         suggestions:
             ['ABC', 'DEF'].map(SearchFieldListItem<String>.new).toList(),
-        initialValue: SearchFieldListItem<String>('ABC'),
+        selectedValue: SearchFieldListItem<String>('ABC'),
       )));
       final finder = find.text('ABC');
       expect(finder, findsOneWidget);
@@ -1592,7 +1592,7 @@ void main() {
       autoCorrect: false,
       autofocus: true,
       dynamicHeight: true,
-      initialValue: SearchFieldListItem<String>('0'),
+      selectedValue: SearchFieldListItem<String>('0'),
       emptyWidget: Text("Empty"),
       marginColor: Colors.red,
       textInputAction: TextInputAction.done,
@@ -1637,7 +1637,7 @@ void main() {
     expect(searchField.animationDuration, Duration(seconds: 1));
     expect(searchField.autoCorrect, false);
     expect(searchField.dynamicHeight, true);
-    expect(searchField.initialValue, SearchFieldListItem<String>('0'));
+    expect(searchField.selectedValue, SearchFieldListItem<String>('0'));
     expect(searchField.emptyWidget, isA<Text>());
     expect(searchField.marginColor, Colors.red);
     expect(searchField.textInputAction, TextInputAction.done);
