@@ -1141,6 +1141,142 @@ void main() {
     });
   });
 
+  group('Searchfield should respect Suggestion Action', () {
+    testWidgets(
+        'Searcfield should loose focus when suggestion is selected by default',
+        (WidgetTester tester) async {
+      final inputFocus = FocusNode();
+      final searchFocus = FocusNode();
+      SearchFieldListItem<String>? selectedValue = null;
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          SearchField(
+            focusNode: searchFocus, 
+            key: const Key('searchfield'),
+            suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                .map(SearchFieldListItem<String>.new)
+                .toList(),
+            selectedValue: selectedValue,
+            onSuggestionTap: (SearchFieldListItem<String> x) {
+              selectedValue = x;
+            },
+          ),
+          TextField(
+            focusNode: inputFocus,
+          )
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      // tap 2nd item
+      final secondItem = find.text('DEF').first;
+      expect(secondItem, findsOneWidget);
+      await tester.tap(secondItem);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.searchKey, equals('DEF'));
+
+      // check if focus is switched to next field
+      expect(inputFocus.hasFocus, isFalse);
+      expect(searchFocus.hasFocus, isFalse);
+      // show suggestions
+    });
+    testWidgets(
+        'SuggestionAction.next should move focus to next field on selection',
+        (WidgetTester tester) async {
+      final inputFocus = FocusNode();
+      final searchFocus = FocusNode();
+      SearchFieldListItem<String>? selectedValue = null;
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          SearchField(
+            focusNode: searchFocus, 
+            suggestionAction: SuggestionAction.next,
+            key: const Key('searchfield'),
+            suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                .map(SearchFieldListItem<String>.new)
+                .toList(),
+            selectedValue: selectedValue,
+            onSuggestionTap: (SearchFieldListItem<String> x) {
+              selectedValue = x;
+            },
+          ),
+          TextField(
+            focusNode: inputFocus,
+          )
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      // tap 2nd item
+      final secondItem = find.text('DEF').first;
+      expect(secondItem, findsOneWidget);
+      await tester.tap(secondItem);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.searchKey, equals('DEF'));
+
+      // check if focus is switched to next field
+      expect(inputFocus.hasFocus, isTrue);
+      expect(searchFocus.hasFocus, isFalse);
+    });
+
+    testWidgets('Tap Outside should remove focus by default',
+        (WidgetTester tester) async {
+      var outSideTap = false;
+      final focus = FocusNode();
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 18.0),
+            child: SearchField(
+              focusNode: focus,
+              key: const Key('searchfield'),
+              suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                  .map(SearchFieldListItem<String>.new)
+                  .toList(),
+              onTapOutside: (x) {
+                outSideTap = true;
+              },
+              suggestionState: Suggestion.expand,
+            ),
+          ),
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      expect(focus.hasFocus, isTrue);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      await tester.tapAt(Offset.zero);
+      await tester.pumpAndSettle();
+      expect(outSideTap, true);
+      expect(focus.hasFocus, isFalse);
+    });
+  });
+
   testWidgets("Test onTapOutside", (widgetTester) async {
     bool outSideTap = false;
     await widgetTester.pumpWidget(_boilerplate(
