@@ -128,8 +128,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   ),
                 ),
                 searchInputDecoration: SearchInputDecoration(
-                  searchStyle: TextStyle(fontSize: 18, color: Colors.black),
-                  hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(
