@@ -60,17 +60,19 @@ class _SFListviewState<T> extends State<SFListview<T>> {
             if ((widget.list.length - widget.selected!) <
                 widget.maxSuggestionsInViewPort) {
               // scroll to bottom
-              _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.fastOutSlowIn);
+              _scrollController.jumpTo(
+                _scrollController.position.maxScrollExtent,
+                // duration: Duration(milliseconds: 300),
+                // curve: Curves.fastOutSlowIn
+              );
             } else {
               // scroll to keep the selected item in center of the list viewport
-              _scrollController.animateTo(
-                  (widget.selected! - widget.maxSuggestionsInViewPort / 2) *
-                      widget.itemHeight,
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.fastOutSlowIn);
+              _scrollController.jumpTo(
+                (widget.selected! - widget.maxSuggestionsInViewPort / 2) *
+                    widget.itemHeight,
+                // duration: Duration(milliseconds: 300),
+                // curve: Curves.fastOutSlowIn
+              );
             }
           }
         }
