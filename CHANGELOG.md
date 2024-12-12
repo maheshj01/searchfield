@@ -1,3 +1,6 @@
+#### [1.2.1] - December 12, 2024
+- Fix: [Issue: #195](https://github.com/maheshj01/searchfield/issues/195) Add maintain Height property to SearchInputDecoration
+
 #### [1.2.0] - November 28, 2024
 
 - [Breaking]: Handle selected Value on Client Side [Issue: #191](https://github.com/maheshj01/searchfield/issues/191)
