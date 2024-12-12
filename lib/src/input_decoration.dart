@@ -129,6 +129,7 @@ class SearchInputDecoration extends InputDecoration {
     Key? key,
     Color? cursorColor,
     Color? cursorErrorColor,
+    bool?maintainHintHeight=true,
     double? cursorHeight,
     double? cursorWidth,
     bool? cursorOpacityAnimates,
