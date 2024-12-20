@@ -83,6 +83,7 @@ class SearchInputDecoration extends InputDecoration {
     super.suffixIcon,
     super.suffix,
     super.label,
+    super.maintainHintHeight,
     super.suffixIconColor,
     super.prefix,
     super.prefixIconColor,
@@ -129,7 +130,7 @@ class SearchInputDecoration extends InputDecoration {
     Key? key,
     Color? cursorColor,
     Color? cursorErrorColor,
-    bool?maintainHintHeight,
+    bool? maintainHintHeight,
     double? cursorHeight,
     double? cursorWidth,
     bool? cursorOpacityAnimates,
@@ -192,7 +193,7 @@ class SearchInputDecoration extends InputDecoration {
     String? suffixText,
   }) {
     return SearchInputDecoration(
-      
+      maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
       cursorColor: cursorColor ?? this.cursorColor,
       textCapitalization: textCapitalization ?? this.textCapitalization,
       searchStyle: searchStyle ?? this.searchStyle,

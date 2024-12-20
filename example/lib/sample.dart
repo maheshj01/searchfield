@@ -1,4 +1,8 @@
 // import 'package:example/pagination.dart';
+import 'package:example/UserSelect.dart';
+import 'package:example/dynamic_height.dart';
+import 'package:example/network_sample.dart';
+import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -9,7 +13,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,6 +22,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.light,
       ),
+      themeMode: ThemeMode.system,
       darkTheme: ThemeData(
         colorSchemeSeed: Colors.blue,
         useMaterial3: true,
@@ -63,19 +67,42 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
       'Nigeria',
       'Egypt',
     ];
+    selected = suggestions[0];
     super.initState();
   }
 
+  int suggestionsCount = 12;
+  final focus = FocusNode();
+  final dynamicHeightSuggestion = [
+    'ABC\nABC\nABC\nABC',
+    'DEF\nABC',
+    'GHI',
+    'JKL\nABC',
+    'ABC',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    '123\n123',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+    'àkajsddddddddddddddddddddddddddddddddddddddddddddddddddđ',
+  ];
+  final TextEditingController searchController = TextEditingController();
   var suggestions = <String>[];
-  var selectedValue = null;
+  int counter = 0;
+  var selected = '';
+  var selectedValue = SearchFieldListItem<String>('United States');
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x, {bool isSelected = false}) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(x,
               style: TextStyle(
-                  fontSize: 18,
-                  color: isSelected ? Colors.green : Colors.black)),
+                  fontSize: 18, color: isSelected ? Colors.green : null)),
         );
     return Scaffold(
         appBar: AppBar(title: Text('Searchfield Demo')),
@@ -83,6 +110,83 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           padding: const EdgeInsets.all(8.0),
           child: ListView(
             children: [
+              UserSelect(),
+              SizedBox(
+                height: 20,
+              ),
+              DynamicHeightExample(),
+              SizedBox(
+                height: 20,
+              ),
+              SearchField(
+                hint: 'Basic SearchField',
+                dynamicHeight: true,
+                maxSuggestionBoxHeight: 300,
+                onSuggestionTap: (SearchFieldListItem<String> item) {
+                  setState(() {
+                    selectedValue = item;
+                  });
+                },
+                selectedValue: selectedValue,
+                suggestions:
+                    suggestions.map(SearchFieldListItem<String>.new).toList(),
+                suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  decoration: InputDecoration(
+                    labelText: 'Flutter TextFormField',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.length < 4) {
+                      return 'error';
+                    }
+                    return null;
+                  }),
+              SizedBox(
+                height: 50,
+              ),
+              Pagination(),
+              SizedBox(
+                height: 50,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SearchField<String>(
+                  maxSuggestionsInViewPort: 11,
+                  suggestionAction: SuggestionAction.unfocus,
+                  searchInputDecoration: SearchInputDecoration(
+                    hintText: 'Search',
+                    cursorColor: Colors.blue,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  selectedValue: selectedValue,
+                  onSuggestionTap: (SearchFieldListItem<String> item) {
+                    setState(() {
+                      selectedValue = item;
+                    });
+                  },
+                  suggestions: suggestions
+                      .map(
+                        (e) => SearchFieldListItem<String>(e,
+                            item: e,
+                            child: searchChild(e, isSelected: e == selected)),
+                      )
+                      .toList(),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
+              SizedBox(
+                height: 50,
+              ),
               SearchField(
                 suggestionDirection: SuggestionDirection.flex,
                 onSearchTextChanged: (query) {
@@ -95,7 +199,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                           SearchFieldListItem<String>(e, child: searchChild(e)))
                       .toList();
                 },
-                selectedValue: selectedValue,
+                selectedValue: SearchFieldListItem<String>('United States'),
+                controller: searchController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
                   if (value == null || !suggestions.contains(value.trim())) {
@@ -108,6 +213,9 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 key: const Key('searchfield'),
                 hint: 'Search by country name',
                 itemHeight: 50,
+                onTapOutside: (x) {
+                  // focus.unfocus();
+                },
                 scrollbarDecoration: ScrollbarDecoration(
                   thickness: 12,
                   radius: Radius.circular(6),
@@ -128,6 +236,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   ),
                 ),
                 searchInputDecoration: SearchInputDecoration(
+                  searchStyle: TextStyle(fontSize: 18, color: Colors.black),
+                  hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
                     borderSide: const BorderSide(
@@ -170,27 +280,28 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .map((e) =>
                         SearchFieldListItem<String>(e, child: searchChild(e)))
                     .toList(),
+                focusNode: focus,
                 suggestionState: Suggestion.expand,
-                onSuggestionTap: (SearchFieldListItem<String> x) {
-                  setState(() {
-                    selectedValue = x;
-                  });
-                },
+                onSuggestionTap: (SearchFieldListItem<String> x) {},
               ),
-              SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+              ),
               SearchField(
-                hint: 'Basic SearchField',
-                dynamicHeight: true,
-                maxSuggestionBoxHeight: 300,
-                onSuggestionTap: (SearchFieldListItem<String> item) {
-                  setState(() {
-                    selectedValue = item;
-                  });
-                },
-                selectedValue: selectedValue,
-                suggestions:
-                    suggestions.map(SearchFieldListItem<String>.new).toList(),
+                enabled: false,
+                hint: 'Disabled SearchField',
+                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                    .map(SearchFieldListItem<String>.new)
+                    .toList(),
                 suggestionState: Suggestion.expand,
+              ),
+              SizedBox(
+                height: 50,
+              ),
+              NetworkSample(),
+              Text(
+                'Counter: $counter',
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],
           ),
