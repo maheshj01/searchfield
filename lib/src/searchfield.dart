@@ -145,7 +145,7 @@ class SearchField<T> extends StatefulWidget {
   /// This callback returns the text from the searchfield
   final Function(String)? onSubmit;
 
-  /// Scroll Controller for the suggestion list to manage scrolling
+  /// Scroll Controller for the suggestion list
   final ScrollController? scrollController;
 
   /// Hint for the [SearchField].
@@ -341,8 +341,8 @@ class SearchField<T> extends StatefulWidget {
     Key? key,
     required this.suggestions,
     this.animationDuration = const Duration(milliseconds: 300),
-    this.scrollController,
     this.autoCorrect = true,
+    this.scrollController,
     this.autofocus = false,
     this.autovalidateMode,
     this.contextMenuBuilder,
@@ -418,15 +418,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void dispose() {
     suggestionStream.close();
-    widget.scrollController != null
-        ? widget.scrollController?.dispose()
-        : _scrollController.dispose();
+    _scrollController.dispose();
     if (widget.controller == null) {
       searchController!.dispose();
     }
     if (widget.focusNode == null) {
       _searchFocus!.dispose();
     }
+
     removeOverlay();
     super.dispose();
   }
@@ -542,7 +541,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
     _unFocusAction =
         KCallbackAction<UnFocusIntent>(onInvoke: handleUnFocusKeyPress);
-    _scrollController = ScrollController();
+    _scrollController = widget.scrollController ?? ScrollController();
     searchController = widget.controller ?? TextEditingController();
     _suggestionDirection = widget.suggestionDirection;
     filteredResult.addAll(widget.suggestions);
@@ -565,11 +564,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handlePreviousKeyPress(PreviousIntent intent) {
     if (intent.scrollToTop == true) {
-      widget.scrollController != null
-          ? widget.scrollController
-              ?.jumpTo(widget.scrollController!.position.minScrollExtent)
-          : _scrollController
-              .jumpTo(_scrollController.position.minScrollExtent);
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
       highlightIndex = 0;
       _overlayEntry!.markNeedsBuild();
       return;
@@ -587,29 +582,19 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     double targetPosition =
         (highlightIndex - widget.maxSuggestionsInViewPort ~/ 2) *
             widget.itemHeight;
-    targetPosition = targetPosition.clamp(
-        0,
-        widget.scrollController != null
-            ? widget.scrollController!.position.maxScrollExtent
-            : _scrollController.position.maxScrollExtent);
+    targetPosition =
+        targetPosition.clamp(0, _scrollController.position.maxScrollExtent);
 
     // Scroll to the calculated position
-    widget.scrollController != null
-        ? widget.scrollController!.animateTo(targetPosition,
-            duration: Duration(milliseconds: 300), curve: Curves.easeInOut)
-        : _scrollController.animateTo(targetPosition,
-            duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+    _scrollController.animateTo(targetPosition,
+        duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
 
     _overlayEntry!.markNeedsBuild();
   }
 
   void handleNextKeyPress(NextIntent intent) {
     if (intent.scrollToBottom == true) {
-      widget.scrollController != null
-          ? widget.scrollController
-              ?.jumpTo(widget.scrollController!.position.maxScrollExtent)
-          : _scrollController
-              .jumpTo(_scrollController.position.maxScrollExtent);
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       highlightIndex = length - 1;
     } else {
       highlightIndex = (highlightIndex + 1) % length;
@@ -628,15 +613,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                     widget.itemHeight
                 : currentPosition;
 
-        widget.scrollController != null
-            ? widget.scrollController!.animateTo(0.0,
-                duration: Duration(milliseconds: 300), curve: Curves.easeOut)
-            : _scrollController.animateTo(
-                targetPosition.clamp(
-                    0.0, _scrollController.position.maxScrollExtent),
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
+        _scrollController.animateTo(
+          targetPosition.clamp(0.0, _scrollController.position.maxScrollExtent),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       }
     }
 
@@ -788,9 +769,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           alignment: Alignment.centerLeft,
           child: RawScrollbar(
             thumbVisibility: _scrollbarDecoration!.thumbVisibility,
-            controller: widget.scrollController != null
-                ? widget.scrollController
-                : _scrollController,
+            controller: _scrollController,
             padding: EdgeInsets.zero,
             shape: _scrollbarDecoration!.shape,
             fadeDuration: _scrollbarDecoration!.fadeDuration,
@@ -818,9 +797,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                           remainingHeight
                       : null,
                   suggestionStyle: widget.suggestionStyle,
-                  scrollController: widget.scrollController != null
-                      ? widget.scrollController
-                      : _scrollController,
+                  scrollController: _scrollController,
                   selected: highlightIndex,
                   maxSuggestionsInViewPort: widget.maxSuggestionsInViewPort,
                   itemHeight: widget.itemHeight,
