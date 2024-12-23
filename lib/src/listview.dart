@@ -111,8 +111,8 @@ class _SFListviewState<T> extends State<SFListview<T>> {
             border: widget.suggestionItemDecoration?.border ??
                 Border(
                   bottom: BorderSide(
-                    color:
-                        widget.marginColor ?? onSurfaceColor.withOpacity(0.1),
+                    color: widget.marginColor ??
+                        onSurfaceColor.withValues(alpha: 0.1),
                   ),
                 ),
           ) ??
@@ -125,8 +125,8 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                 ? null
                 : Border(
                     bottom: BorderSide(
-                      color:
-                          widget.marginColor ?? onSurfaceColor.withOpacity(0.1),
+                      color: widget.marginColor ??
+                          onSurfaceColor.withValues(alpha: 0.1),
                     ),
                   ),
           );
@@ -140,11 +140,11 @@ class _SFListviewState<T> extends State<SFListview<T>> {
             SuggestionDecoration(
               color: Theme.of(context).colorScheme.surface,
               border: Border.all(
-                color: onSurfaceColor.withOpacity(0.1),
+                color: onSurfaceColor.withValues(alpha: 0.1),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: onSurfaceColor.withOpacity(0.1),
+                  color: onSurfaceColor.withValues(alpha: 0.1),
                   blurRadius: 8.0, // soften the shadow
                   spreadRadius: 2.0, //extend the shadow
                   offset: Offset(
