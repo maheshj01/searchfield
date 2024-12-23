@@ -49,7 +49,7 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
             bottomRight: Radius.circular(8),
           ),
           border: Border.all(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withValues(alpha: 0.5),
           ),
         ),
         // selectedValue: SearchFieldListItem<UserModel>(
@@ -73,7 +73,7 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
                 width: 1.0)),
         searchInputDecoration: SearchInputDecoration(
           filled: true,
-          fillColor: Colors.grey.withOpacity(0.2),
+          fillColor: Colors.grey.withValues(alpha: 0.2),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(
               color: Colors.white,

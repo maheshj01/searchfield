@@ -124,11 +124,11 @@ class _DemoAppState extends State<DemoApp> {
                 searchInputDecoration: SearchInputDecoration(
                   searchStyle: TextStyle(
                     fontSize: 18,
-                    color: Colors.black.withOpacity(0.8),
+                    color: Colors.black.withValues(alpha: 0.8),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.black.withOpacity(0.8),
+                      color: Colors.black.withValues(alpha: 0.8),
                     ),
                   ),
                   border: OutlineInputBorder(
@@ -156,7 +156,7 @@ class _DemoAppState extends State<DemoApp> {
                   bottomRight: Radius.circular(8),
                 ),
                 border: Border.all(
-                  color: Colors.grey.withOpacity(0.5),
+                  color: Colors.grey.withValues(alpha: 0.5),
                 ),
               ),
               selectedValue: SearchFieldListItem(
@@ -180,7 +180,7 @@ class _DemoAppState extends State<DemoApp> {
                       width: 1.0)),
               searchInputDecoration: SearchInputDecoration(
                 filled: true,
-                fillColor: Colors.grey.withOpacity(0.2),
+                fillColor: Colors.grey.withValues(alpha: 0.2),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
                     color: Colors.white,
@@ -233,7 +233,7 @@ class _DemoAppState extends State<DemoApp> {
             child: SearchField(
               scrollbarDecoration: ScrollbarDecoration(thumbVisibility: false),
               suggestionItemDecoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withValues(alpha: 0.2),
                 gradient: LinearGradient(colors: [
                   Color(0xff70e1f5),
                   Color(0xffffd194),
