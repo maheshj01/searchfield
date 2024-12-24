@@ -676,7 +676,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // highlightIndex = widget.suggestions
       //     .indexWhere((element) => element == widget.selectedValue);
 
-      //Just made removed the null check, so that I can clear the field by defining the selectedValue to null
       searchController!.text = widget.selectedValue?.searchKey ?? '';
     }
     if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
