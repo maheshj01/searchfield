@@ -186,7 +186,7 @@ class SearchField<T> extends StatefulWidget {
   ///   color: Theme.of(context).colorScheme.surface,
   ///   boxShadow: [
   ///     BoxShadow(
-  ///       color: onSurfaceColor.withOpacity(0.1),
+  ///       color: onSurfaceColor.withValues(alpha: 0.1),
   ///       blurRadius: 8.0, // soften the shadow
   ///       spreadRadius: 2.0, //extend the shadow
   ///       offset: Offset(
@@ -209,7 +209,7 @@ class SearchField<T> extends StatefulWidget {
   ///   border: Border(
   ///     bottom: BorderSide(
   ///       color: widget.marginColor ??
-  ///         onSurfaceColor.withOpacity(0.1),
+  ///         onSurfaceColor.withValues(alpha: 0.1),
   ///     ),
   ///   ),
   /// )
@@ -237,7 +237,7 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies the color of margin between items in suggestions list.
   ///
-  /// When not specified, the default value is `Theme.of(context).colorScheme.onSurface.withOpacity(0.1)`.
+  /// When not specified, the default value is `Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1)`.
   final Color? marginColor;
 
   /// Specifies the number of suggestions that can be shown in viewport.

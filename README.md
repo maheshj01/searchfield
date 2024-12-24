@@ -167,7 +167,7 @@ Form(
     hint: 'SearchField Example 2',
     searchStyle: TextStyle(
       fontSize: 18,
-      color: Colors.black.withOpacity(0.8),
+      color: Colors.black.withValues(alpha: 0.8),
     ),
     validator: (x) {
       if (!_statesOfIndia.contains(x) || x!.isEmpty) {
@@ -184,7 +184,7 @@ Form(
     searchInputDecoration: SearchInputDecoration(
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.8),
+          color: Colors.black.withValues(alpha: 0.8),
         ),
       ),
       border: OutlineInputBorder(
