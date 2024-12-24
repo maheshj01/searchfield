@@ -132,7 +132,7 @@ class _PageOneState extends State<PageOne> {
                 decoration: InputDecoration(
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.black.withValues(alpha: 0.8),
+                      color: Colors.black.withValues(alpha: 0.2),
                     ),
                   ),
                   border: OutlineInputBorder(
