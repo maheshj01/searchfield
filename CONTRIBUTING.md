@@ -40,7 +40,9 @@ This part is mainly applicable to the maintainer of the repository but you are w
   genhtml coverage/lcov.info -o coverage/html
   open coverage/html/index.html
   ```
-- ✅ Make sure the code is well formatted.
+- ✅ Make sure the code is well formatted by running `dart format .`
 - ✅ ensure there are no linter warnings by running `flutter analyze`
 - ✅ Tag a package release in github [related to #Issue 103](https://github.com/maheshj01/searchfield/issues/103)
 - ✅ Publish the package by running `flutter pub publish --dry-run` and `flutter pub publish`
+- Update Min Flutter Sdk Constraints in pubspec.yaml, if a new flutter API is used and mention the version in the changelog.
+- ✅ Tag the release in github with the version number.

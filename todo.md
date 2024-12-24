@@ -1,3 +1,36 @@
+<!-- Change in Design -->
+
+**Before**
+
+```dart
+
+```
+
+**After**
+```dart
+var selectedValue = SearchFieldListItem<String>('ABC');
+
+SearchField(
+    hint: 'Basic SearchField',
+    dynamicHeight: true,
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<String> item) {
+        setState(() {
+        selectedValue = item;
+        });
+    },
+    selectedValue: selectedValue,
+    suggestions: dynamicHeightSuggestion
+        .map(SearchFieldListItem<String>.new)
+        .toList(),
+    suggestionState: Suggestion.expand,
+),
+```
+
+selectedValue: String: when null, the selected value is not displayed
+onSuggestionTap: Function: Invoked when a suggestion is tapped and the suggestion is selected, returns the selected value which the user must use to pass to `selectedValue` inorder to display the selected value
+
+
 [] offsets 4 tests failing
 [] Textcontroller used after dispose (on widget tree changed)
 [X] Investigate onFieldSubmitted and onSuggestionTap are conflicting
