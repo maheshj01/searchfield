@@ -1,4 +1,4 @@
-# [searchfield: ^1.2.1](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.2.2](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -321,6 +321,7 @@ For documentation about the various parameters, see the [TextField] class and [T
 - `onSubmit` : callback when the searchfield is submitted, it returns the current text in the searchfield.
 - `onTap`: callback when the searchfield is tapped or brought into focus.
 - `scrollbarDecoration`: decoration for the scrollbar.
+- `scrollController`: ScrollController to interact with the suggestions list.
 - `showEmpty`: Boolean to show/hide the emptyWidget.
 - `suggestions`**(required)** : List of SearchFieldListItem to search from.
   each `SearchFieldListItem` in the list requires a unique searchKey, which is used to search the list and an optional Widget, Custom Object to display custom widget and to associate a object with the suggestion list.

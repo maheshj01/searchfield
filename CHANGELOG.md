@@ -1,6 +1,7 @@
 ### [1.2.2] - TO BE RELEASED
+
 - Fix: [Issue: #197](https://github.com/maheshj01/searchfield/pull/197) Remove Null Checker
-- 
+- Add ScrollController to control the scroll of suggestions [PR: #199](https://github.com/maheshj01/searchfield/pull/199)
 
 
 #### [1.2.1] - December 12, 2024
