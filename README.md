@@ -13,9 +13,9 @@
 
 ![Frame 1 (1)](https://github.com/maheshj01/searchfield/assets/31410839/67810336-fc28-4c5d-90e0-117e202fe673)
 
-A highly customizable, simple and easy to use searchfield widget. This Widget allows you to search and select a suggestion from list of suggestions. Think of this widget like a dropdownButton field with the following capabilities
+A highly customizable, simple and easy to use AutoComplete widget for your Flutter app. This widget allows you to
 
-- search 🔍 from a list of suggestions.
+- search 🔍  and select from a list of suggestions
 - validate the input with custom validation logic.
 - Dynamic height of each suggestion item.
 - show suggestions of custom type (not just String)
@@ -24,7 +24,7 @@ A highly customizable, simple and easy to use searchfield widget. This Widget al
 - define max number of items visible in the viewport 📱
 - filter out the suggestions with a custom logic
 - visually customize the input and the suggestions
-- navigate through the suggestions using keyboard
+- navigate through the suggestions using keyboard for Desktop 🖥  ️
 - Listen to scroll events of suggestions
 
 ## Getting Started
