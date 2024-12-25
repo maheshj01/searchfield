@@ -2,7 +2,7 @@
 
 - Fix: [Issue: #197](https://github.com/maheshj01/searchfield/pull/197) Remove Null Checker
 - Add ScrollController to control the scroll of suggestions [PR: #199](https://github.com/maheshj01/searchfield/pull/199)
-
+- Fix: For SuggestionDirection.up arrow key would highlight in reverse.
 
 #### [1.2.1] - December 12, 2024
 - Fix: [Issue: #195](https://github.com/maheshj01/searchfield/issues/195) Add maintain Height property to SearchInputDecoration
