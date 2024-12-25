@@ -568,13 +568,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handlePreviousKeyPress(PreviousIntent intent) {
     if (intent.scrollToTop == true) {
-      if (_suggestionDirection == SuggestionDirection.up) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        highlightIndex = length - 1;
-      } else {
-        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
-        highlightIndex = 0;
-      }
+      _scrollToTop();
       _overlayEntry!.markNeedsBuild();
       return;
     }
@@ -586,11 +580,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
 
     // Navigate through the items
-    if (_suggestionDirection == SuggestionDirection.up) {
-      highlightIndex = (highlightIndex + 1) % length;
-    } else {
-      highlightIndex = (highlightIndex - 1) % length;
-    }
+    _navigatePrevious();
     // Calculate the target scroll position
     double targetPosition =
         (highlightIndex - widget.maxSuggestionsInViewPort ~/ 2) *
@@ -611,20 +601,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   // direction up: highlightIndex = (highlightIndex - 1) % length;
   void handleNextKeyPress(NextIntent intent) {
     if (intent.scrollToBottom == true) {
-      if (_suggestionDirection == SuggestionDirection.up) {
-        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
-        highlightIndex = 0;
-      } else {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        highlightIndex = length - 1;
-      }
+      _scrollToBottom();
     } else {
-      if (_suggestionDirection == SuggestionDirection.up) {
-        highlightIndex = (highlightIndex - 1) % length;
-      } else {
-        highlightIndex = (highlightIndex + 1) % length;
-      }
-
+      _navigateNext();
       final currentPosition = widget.itemHeight * highlightIndex;
       // keep highlighted item in the viewport
       final viewportStart = _scrollController.offset;
@@ -647,8 +626,43 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         );
       }
     }
-
     _overlayEntry?.markNeedsBuild();
+  }
+
+  void _navigatePrevious() {
+    if (_suggestionDirection == SuggestionDirection.up) {
+      highlightIndex = (highlightIndex + 1) % length;
+    } else {
+      highlightIndex = (highlightIndex - 1) % length;
+    }
+  }
+
+  void _navigateNext() {
+    if (_suggestionDirection == SuggestionDirection.up) {
+      highlightIndex = (highlightIndex - 1) % length;
+    } else {
+      highlightIndex = (highlightIndex + 1) % length;
+    }
+  }
+
+  void _scrollToTop() {
+    if (_suggestionDirection == SuggestionDirection.up) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      highlightIndex = length - 1;
+    } else {
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+      highlightIndex = 0;
+    }
+  }
+
+  void _scrollToBottom() {
+    if (_suggestionDirection == SuggestionDirection.up) {
+      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+      highlightIndex = 0;
+    } else {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      highlightIndex = length - 1;
+    }
   }
 
   // This is not invoked since enter key is reserved
