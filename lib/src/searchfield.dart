@@ -471,7 +471,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         Overlay.of(context).insert(_overlayEntry!);
       } else {
         removeOverlay();
-        highlightIndex = -1;
+        if (_suggestionDirection == SuggestionDirection.up) {
+          highlightIndex = length;
+        } else {
+          highlightIndex = -1;
+        }
         suggestionStream.sink.add(null);
       }
     });
@@ -564,8 +568,13 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   void handlePreviousKeyPress(PreviousIntent intent) {
     if (intent.scrollToTop == true) {
-      _scrollController.jumpTo(_scrollController.position.minScrollExtent);
-      highlightIndex = 0;
+      if (_suggestionDirection == SuggestionDirection.up) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        highlightIndex = length - 1;
+      } else {
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+        highlightIndex = 0;
+      }
       _overlayEntry!.markNeedsBuild();
       return;
     }
@@ -577,7 +586,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
 
     // Navigate through the items
-    highlightIndex = (highlightIndex - 1) % length;
+    if (_suggestionDirection == SuggestionDirection.up) {
+      highlightIndex = (highlightIndex + 1) % length;
+    } else {
+      highlightIndex = (highlightIndex - 1) % length;
+    }
     // Calculate the target scroll position
     double targetPosition =
         (highlightIndex - widget.maxSuggestionsInViewPort ~/ 2) *
@@ -592,12 +605,26 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _overlayEntry!.markNeedsBuild();
   }
 
+  // for directionUp list is reversed so pressing up key will scroll to bottom
+  // and vice versa
+  // direction down: highlightIndex = (highlightIndex + 1) % length;
+  // direction up: highlightIndex = (highlightIndex - 1) % length;
   void handleNextKeyPress(NextIntent intent) {
     if (intent.scrollToBottom == true) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-      highlightIndex = length - 1;
+      if (_suggestionDirection == SuggestionDirection.up) {
+        _scrollController.jumpTo(_scrollController.position.minScrollExtent);
+        highlightIndex = 0;
+      } else {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        highlightIndex = length - 1;
+      }
     } else {
-      highlightIndex = (highlightIndex + 1) % length;
+      if (_suggestionDirection == SuggestionDirection.up) {
+        highlightIndex = (highlightIndex - 1) % length;
+      } else {
+        highlightIndex = (highlightIndex + 1) % length;
+      }
+
       final currentPosition = widget.itemHeight * highlightIndex;
       // keep highlighted item in the viewport
       final viewportStart = _scrollController.offset;
