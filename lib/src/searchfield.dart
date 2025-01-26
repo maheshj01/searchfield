@@ -1028,7 +1028,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             link: _layerLink,
             child: TextFormField(
               key: key,
-              contextMenuBuilder: widget.contextMenuBuilder,
+              contextMenuBuilder: (context, state) {
+                if (widget.contextMenuBuilder != null) {
+                  return widget.contextMenuBuilder!(context, state);
+                } else {
+                  return AdaptiveTextSelectionToolbar.editableText(
+                      editableTextState: state);
+                }
+              },
               enabled: widget.enabled,
               textAlign: widget.textAlign,
               autofocus: widget.autofocus,

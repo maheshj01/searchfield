@@ -15,7 +15,6 @@ class _CountrySearchState extends State<CountrySearch> {
   @override
   void dispose() {
     _searchController.dispose();
-    focus.dispose();
     super.dispose();
   }
 
@@ -29,7 +28,6 @@ class _CountrySearchState extends State<CountrySearch> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final focus = FocusNode();
   List<Country> countries = [];
   Country _selectedCountry = Country.init();
 
@@ -59,7 +57,6 @@ class _CountrySearchState extends State<CountrySearch> {
                   child: Form(
                     key: _formKey,
                     child: SearchField(
-                      focusNode: focus,
                       suggestions: countries
                           .map((country) =>
                               SearchFieldListItem(country.name, item: country))
@@ -83,8 +80,8 @@ class _CountrySearchState extends State<CountrySearch> {
                         setState(() {
                           _selectedCountry = x.item!;
                         });
+                        print("selected:${x.item}");
                         _formKey.currentState!.validate();
-                        focus.unfocus();
                       },
                     ),
                   ),

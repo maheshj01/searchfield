@@ -1,3 +1,6 @@
+### [1.2.3] - January 26, 2025
+- Fix: [Issue: #204](https://github.com/maheshj01/searchfield/issues/204) Interactive text editable menu was not being displayed.
+
 ### [1.2.2] - December 24, 2024
 
 - Fix: [Issue: #197](https://github.com/maheshj01/searchfield/pull/197) Remove Null Checker
