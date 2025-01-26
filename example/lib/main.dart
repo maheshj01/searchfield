@@ -1,5 +1,4 @@
 // import 'package:example/pagination.dart';
-import 'package:example/country_search.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         brightness: Brightness.dark,
       ),
-      home: CountrySearch(title: 'SearchField Demo'),
+      home: SearchFieldSample(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -108,100 +107,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .toList(),
                 suggestionState: Suggestion.expand,
               ),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Basic TextField',
-                ),
-              ),
-              OverlayInput(),
             ],
           ),
         ));
-  }
-}
-
-class OverlayInput extends StatefulWidget {
-  OverlayInput({Key? key}) : super(key: key);
-  @override
-  State<OverlayInput> createState() => _OverlayInputState();
-}
-
-class _OverlayInputState extends State<OverlayInput> {
-  final ScrollController _scrollController = ScrollController();
-
-  Widget _list() {
-    return Container(
-      height: 5 * 40,
-      child: Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.zero,
-              itemCount: 20,
-              itemBuilder: (context, index) => ListTile(
-                    title: Text('item $index'),
-                  ))),
-    );
-  }
-
-  final LayerLink _layerLink = LayerLink();
-
-  OverlayEntry _createOverlay() {
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-    return OverlayEntry(
-        builder: (context) => Positioned(
-              left: offset.dx,
-              width: size.width,
-              child: CompositedTransformFollower(
-                  offset: Offset(0, 50),
-                  link: _layerLink,
-                  child: Material(color: Colors.red, child: _list())),
-            ));
-  }
-
-  late OverlayEntry _overlayEntry;
-  final _searchFocusNode = FocusNode();
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _overlayEntry = _createOverlay();
-    });
-
-    _searchFocusNode.addListener(() {
-      if (!_searchFocusNode.hasFocus) {
-        _overlayEntry.remove();
-      }
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CompositedTransformTarget(
-      link: _layerLink,
-      child: TextFormField(
-        focusNode: _searchFocusNode,
-        onTapOutside: (x) {
-          _overlayEntry.remove();
-        },
-        decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.black,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.red),
-          ),
-        ),
-        onTap: () {
-          Overlay.of(context).insert(_overlayEntry);
-        },
-        onChanged: (query) {},
-      ),
-    );
   }
 }

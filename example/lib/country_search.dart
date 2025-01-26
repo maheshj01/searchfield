@@ -80,7 +80,6 @@ class _CountrySearchState extends State<CountrySearch> {
                         setState(() {
                           _selectedCountry = x.item!;
                         });
-                        print("selected:${x.item}");
                         _formKey.currentState!.validate();
                       },
                     ),
