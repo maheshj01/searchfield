@@ -93,7 +93,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   setState(() {
                     selectedValue = item;
                   });
-                  print(item.item);
                 },
                 selectedValue: selectedValue,
                 suggestions: suggestions
