@@ -708,7 +708,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // if a item was already selected
       if (highlightIndex >= 0) {
         highlightIndex = widget.suggestions.indexWhere(
-            (element) => element == oldWidget.suggestions[highlightIndex]);
+            (element) => element == oldWidget.suggestions[highlightIndex-1]);
       }
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
