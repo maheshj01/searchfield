@@ -708,7 +708,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // if a item was already selected
       if (highlightIndex >= 0) {
         highlightIndex = widget.suggestions.indexWhere(
-            (element) => element == oldWidget.suggestions[highlightIndex-1]);
+            (element) => element == oldWidget.suggestions[highlightIndex - 1]);
       }
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {
@@ -721,7 +721,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.selectedValue != widget.selectedValue) {
       // highlightIndex = widget.suggestions
       //     .indexWhere((element) => element == widget.selectedValue);
-
       searchController!.text = widget.selectedValue?.searchKey ?? '';
     }
     if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
@@ -752,6 +751,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       filteredResult.addAll(widget.suggestions);
       // hide the suggestions
       suggestionStream.sink.add(null);
+      searchController!.text = item.searchKey;
       if (widget.onSuggestionTap != null) {
         widget.onSuggestionTap!(item);
       }
