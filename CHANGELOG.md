@@ -1,3 +1,6 @@
+### [1.2.4] - January 28, 2025
+- Fix: [Issue: #205](https://github.com/maheshj01/searchfield/issues/205) Index out of bound on SuggestionDirection.up
+
 ### [1.2.3] - January 26, 2025
 
 - Fix: [Issue: #204](https://github.com/maheshj01/searchfield/issues/204) Interactive text editable menu was not being displayed.
