@@ -841,30 +841,23 @@ void main() {
         (WidgetTester tester) async {
       SearchFieldListItem<String>? selectedValue = null;
       final boilerPlate = _boilerplate(
-          child: Column(
-        children: [
-          /// When suggestionDirection is suggestionDirection.up, it opens above the text field
-          /// Added multiple text widgets to make sure, the suggestion has space to get rendered
-          Text('text 1'),
-          Text('text 2'),
-          Text('text 3'),
-          Text('text 4'),
-          Text('text 5'),
-          Text('text 6'),
-          Text('text 7'),
-          SearchField(
-            suggestionDirection: SuggestionDirection.up,
-            key: const Key('searchfield'),
-            suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                .map(SearchFieldListItem<String>.new)
-                .toList(),
-            selectedValue: selectedValue,
-            onSuggestionTap: (SearchFieldListItem<String> x) {
-              selectedValue = x;
-            },
-          ),
-        ],
-      ));
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SearchField(
+              suggestionDirection: SuggestionDirection.up,
+              key: const Key('searchfield'),
+              suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                  .map(SearchFieldListItem<String>.new)
+                  .toList(),
+              selectedValue: selectedValue,
+              onSuggestionTap: (SearchFieldListItem<String> x) {
+                selectedValue = x;
+              },
+            ),
+          ],
+        ),
+      );
       await tester.pumpWidget(boilerPlate);
       await tester.pumpAndSettle();
       final listFinder = find.byType(ListView);
@@ -883,7 +876,9 @@ void main() {
       await tester.tap(secondItem);
       await tester.pumpAndSettle();
       expect(selectedValue!.searchKey, equals('DEF'));
-      expect((textField.evaluate().first.widget as TextFormField).controller?.text, 'DEF');
+      expect(
+          (textField.evaluate().first.widget as TextFormField).controller?.text,
+          'DEF');
     });
 
     testWidgets(
