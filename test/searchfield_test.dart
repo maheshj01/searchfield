@@ -837,6 +837,56 @@ void main() {
 
   group('Suggestions should respect suggestionDirection', () {
     testWidgets(
+        'you should be able to select a suggestion with SuggestionDirection.up',
+        (WidgetTester tester) async {
+      SearchFieldListItem<String>? selectedValue = null;
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          /// When suggestionDirection is suggestionDirection.up, it opens above the text field
+          /// Added multiple text widgets to make sure, the suggestion has space to get rendered
+          Text('text 1'),
+          Text('text 2'),
+          Text('text 3'),
+          Text('text 4'),
+          Text('text 5'),
+          Text('text 6'),
+          Text('text 7'),
+          SearchField(
+            suggestionDirection: SuggestionDirection.up,
+            key: const Key('searchfield'),
+            suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                .map(SearchFieldListItem<String>.new)
+                .toList(),
+            selectedValue: selectedValue,
+            onSuggestionTap: (SearchFieldListItem<String> x) {
+              selectedValue = x;
+            },
+          ),
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      // tap 2nd item
+      await tester.ensureVisible(find.text('DEF'));
+      final secondItem = find.text('DEF').first;
+      expect(secondItem, findsOneWidget);
+      await tester.ensureVisible(find.text('DEF'));
+      await tester.tap(secondItem);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.searchKey, equals('DEF'));
+      expect((textField.evaluate().first.widget as TextFormField).controller?.text, 'DEF');
+    });
+
+    testWidgets(
         'suggestions should respect suggestionDirection: SuggestionDirection.up',
         (WidgetTester tester) async {
       await tester.pumpWidget(_boilerplate(
