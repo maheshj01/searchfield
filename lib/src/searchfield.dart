@@ -335,6 +335,8 @@ class SearchField<T> extends StatefulWidget {
   final ScrollbarDecoration? scrollbarDecoration;
 
   /// suggestion direction defaults to [SuggestionDirection.down]
+  /// 
+  /// If dynamicHeight is set to true, the suggestion direction will be calculated based on the available space in the viewport.
   final SuggestionDirection suggestionDirection;
 
   SearchField({

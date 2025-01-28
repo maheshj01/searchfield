@@ -63,19 +63,22 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
       'Nigeria',
       'Egypt',
     ];
+    selectedValue = SearchFieldListItem<String>(
+      'United States',
+      item: 'United States',
+    );
     super.initState();
   }
 
   var suggestions = <String>[];
-  var selectedValue = null;
+  late SearchFieldListItem<String> selectedValue;
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x, {bool isSelected = false}) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Text(x,
               style: TextStyle(
-                  fontSize: 18,
-                  color: isSelected ? Colors.green : Colors.black)),
+                  fontSize: 18, color: isSelected ? Colors.green : null)),
         );
     return Scaffold(
         appBar: AppBar(title: Text('Searchfield Demo')),
@@ -87,7 +90,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             children: [
               SearchField(
                 hint: 'Basic SearchField',
-                dynamicHeight: true,
+                // dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
                 onSuggestionTap: (SearchFieldListItem<String> item) {
                   setState(() {
@@ -95,15 +98,18 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   });
                 },
                 selectedValue: selectedValue,
-                suggestions: suggestions
-                    .map(
-                      (x) => SearchFieldListItem<String>(
-                        x,
-                        item: x,
-                        child: searchChild(x),
-                      ),
-                    )
-                    .toList(),
+                suggestions: suggestions.map(
+                  (x) {
+                    final t = SearchFieldListItem<String>(
+                      x,
+                      item: x,
+                      child: searchChild(x,
+                          isSelected: selectedValue.searchKey == x),
+                    );
+
+                    return t;
+                  },
+                ).toList(),
                 suggestionState: Suggestion.expand,
               ),
             ],
