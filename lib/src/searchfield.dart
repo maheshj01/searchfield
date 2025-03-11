@@ -435,9 +435,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   void removeOverlay() {
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       isSuggestionsShown = false;
-      if (_overlayEntry != null) {
-        _overlayEntry?.remove();
-      }
+      _overlayEntry?.remove();
+      _overlayEntry = null;
     }
   }
 
