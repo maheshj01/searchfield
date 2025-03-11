@@ -1,23 +1,22 @@
+### [1.2.5] - January 28, 2025
+- set overlay to null after unmount [PR #209](https://github.com/maheshj01/searchfield/pull/209/)
+
 ### [1.2.4] - January 28, 2025
 - Fix: [Issue: #205](https://github.com/maheshj01/searchfield/issues/205) Index out of bound on SuggestionDirection.up
 
 ### [1.2.3] - January 26, 2025
-
 - Fix: [Issue: #204](https://github.com/maheshj01/searchfield/issues/204) Interactive text editable menu was not being displayed.
 
 ### [1.2.2] - December 24, 2024
-
 - Fix: [Issue: #197](https://github.com/maheshj01/searchfield/pull/197) Remove Null Checker
 - Add ScrollController to control the scroll of suggestions [PR: #199](https://github.com/maheshj01/searchfield/pull/199)
 - Fix: For SuggestionDirection.up arrow key would highlight in reverse.
 
 #### [1.2.1] - December 12, 2024
-
 - Fix: [Issue: #195](https://github.com/maheshj01/searchfield/issues/195) Add maintain Height property to SearchInputDecoration
  *Note: To use Searchfield 1.2.1 you would need flutter 3.27.0 or greater*
 
 #### [1.2.0] - November 28, 2024
-
 - [Breaking]: Handle selected Value on Client Side [Issue: #191](https://github.com/maheshj01/searchfield/issues/191)
 
 **Before**
