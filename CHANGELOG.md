@@ -1,4 +1,4 @@
-### [1.2.5] - January 28, 2025
+### [1.2.5] - Mar 11, 2025
 - set overlay to null after unmount [PR #209](https://github.com/maheshj01/searchfield/pull/209/)
 
 ### [1.2.4] - January 28, 2025
