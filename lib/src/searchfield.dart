@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:searchfield/src/decoration.dart';
@@ -701,7 +702,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (_suggestionDirection != oldWidget.suggestionDirection) {
       _suggestionDirection = widget.suggestionDirection;
     }
-    if (oldWidget.suggestions != widget.suggestions) {
+    if (!listEquals(oldWidget.suggestions, widget.suggestions)) {
       length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
       filteredResult.clear();
@@ -709,7 +710,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // if a item was already selected
       if (highlightIndex >= 0) {
         highlightIndex = widget.suggestions.indexWhere(
-            (element) => element == oldWidget.suggestions[highlightIndex - 1]);
+            (element) => element == oldWidget.suggestions[highlightIndex]);
       }
     }
     if (oldWidget.scrollbarDecoration != widget.scrollbarDecoration) {

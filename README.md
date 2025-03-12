@@ -1,4 +1,4 @@
-# [searchfield: ^1.2.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.2.6](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -6,7 +6,7 @@
 [![Build](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
 <a href="https://github.com/sponsors/maheshj01/" target="_blank">
-  <img src="https://img.shields.io/badge/Sponsor-Searchfield-orange" alt="Sponsor @maheshj01" />
+<img src="https://img.shields.io/badge/Sponsor-Searchfield-orange" alt="Sponsor @maheshj01" />
 </a>
 
 ⭐️Show some ❤️ and star the repo.⭐
@@ -15,7 +15,7 @@
 
 A highly customizable, simple and easy to use AutoComplete widget for your Flutter app. This widget allows you to
 
-- search 🔍  and select from a list of suggestions
+- search 🔍 and select from a list of suggestions
 - validate the input with custom validation logic.
 - Dynamic height of each suggestion item.
 - show suggestions of custom type (not just String)
@@ -24,7 +24,7 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - define max number of items visible in the viewport 📱
 - filter out the suggestions with a custom logic
 - visually customize the input and the suggestions
-- navigate through the suggestions using keyboard for Desktop 🖥  ️
+- navigate through the suggestions using keyboard for Desktop 🖥 ️
 - Listen to scroll events of suggestions
 
 ## Getting Started
@@ -133,7 +133,7 @@ SearchField(
     focusNode: focus,
     suggestionState: Suggestion.expand,
     onSuggestionTap: (SearchFieldListItem<String> x) {
-      
+
     },
 ),
 ```
@@ -296,7 +296,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `autofocus`: Defines whether to enable autofocus defaults to `false`
 - `autoValidateMode`: Used to enable/disable this form field auto validation and update its error text.defaults to `AutoValidateMode.disabled`
 - `contextmenubuilder`: Creates a [FormField] that contains a [TextField]. When a [controller] is specified, [initialValue] must be null (the default). If [controller] is null, then a [TextEditingController] will be constructed automatically and its text will be initialized to [initialValue] or the empty string.
-For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
+  For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
 - `controller`: TextEditing Controller to interact with the searchfield.
 - `comparator` property to filter out the suggestions with a custom logic (Comparator is deprecated Use `onSearchTextChanged` instead).
 - `dynamicHeight`: Set to true to opt-in to dynamic height, defaults to false (`itemHeight : 51`)
@@ -350,4 +350,3 @@ Thanks to all the contributors who have helped in improving this package.
 ### Support
 
 If you like this package, consider supporting it by Sponsorship or Donation through [github sponsors here](https://github.com/sponsors/maheshj01/)
-
