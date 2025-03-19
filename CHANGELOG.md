@@ -1,3 +1,8 @@
+### [1.3.0-dev.1] - Mar 19, 2025
+
+- Deprecate `maintainHintHeight` in favour of `maintainHintSize` property of `SearchInputDecoration`
+- Add `hint` property to `SearchInputDecoration`
+
 ### [1.2.6] - Mar 11, 2025
 
 - Fix Range Error on First Suggestion Tap [Issue #210](https://github.com/maheshj01/searchfield/issues/210)
