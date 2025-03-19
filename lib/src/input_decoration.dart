@@ -83,7 +83,13 @@ class SearchInputDecoration extends InputDecoration {
     super.suffixIcon,
     super.suffix,
     super.label,
+    @Deprecated(
+      'Use maintainHintSize instead. '
+      'This will maintain both hint height and hint width. '
+      'This feature was deprecated after v1.26.0',
+    )
     super.maintainHintHeight,
+    super.maintainHintSize,
     super.suffixIconColor,
     super.prefix,
     super.prefixIconColor,
@@ -94,6 +100,7 @@ class SearchInputDecoration extends InputDecoration {
     super.disabledBorder,
     super.contentPadding,
     super.hintText,
+    super.hint,
     super.hintStyle,
     super.labelText,
     super.labelStyle,
@@ -161,6 +168,7 @@ class SearchInputDecoration extends InputDecoration {
     InputBorder? focusedBorder,
     InputBorder? focusedErrorBorder,
     Widget? helper,
+    Widget? hint,
     int? helperMaxLines,
     TextStyle? helperStyle,
     String? helperText,
@@ -191,9 +199,11 @@ class SearchInputDecoration extends InputDecoration {
     BoxConstraints? suffixIconConstraints,
     TextStyle? suffixStyle,
     String? suffixText,
+    bool? maintainHintSize,
   }) {
     return SearchInputDecoration(
       maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
+      maintainHintSize: maintainHintSize ?? this.maintainHintSize,
       cursorColor: cursorColor ?? this.cursorColor,
       textCapitalization: textCapitalization ?? this.textCapitalization,
       searchStyle: searchStyle ?? this.searchStyle,
@@ -206,6 +216,7 @@ class SearchInputDecoration extends InputDecoration {
       errorText: errorText ?? this.errorText,
       error: error ?? this.error,
       hintTextDirection: hintTextDirection ?? this.hintTextDirection,
+      hint: hint ?? this.hint,
       hintFadeDuration: hintFadeDuration ?? this.hintFadeDuration,
       helper: helper ?? this.helper,
       cursorErrorColor: cursorErrorColor ?? this.cursorErrorColor,
