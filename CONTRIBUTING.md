@@ -46,3 +46,16 @@ This part is mainly applicable to the maintainer of the repository but you are w
 - ✅ Publish the package by running `flutter pub publish --dry-run` and `flutter pub publish`
 - Update Min Flutter Sdk Constraints in pubspec.yaml, if a new flutter API is used and mention the version in the changelog.
 - ✅ Tag the release in github with the version number.
+
+
+#### Versioning
+
+This project follows [Semantic Versioning](https://semver.org/). The version X.Y.Z indicates: 
+ 
+  - X is the major version (backward-incompatible),
+  - Y is the minor version (backward-compatible), and
+  - Z is the patch version (backward-compatible bug fix).
+
+  This package has two versions:
+  - Stable version: Compatible with the latest stable version of Flutter.
+  - Pre-release version: Compatible with the latest master/beta version of Flutter generally used for testing purposes.
