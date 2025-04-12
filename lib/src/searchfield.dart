@@ -114,7 +114,7 @@ class SearchField<T> extends StatefulWidget {
   /// shown as suggestions.
   /// If the callback is not specified, the searchfield will show suggestions which contains the
   /// search text.
-  final List<SearchFieldListItem<T>>? Function(String)? onSearchTextChanged;
+  final FutureOr<List<SearchFieldListItem<T>>>? Function(String)? onSearchTextChanged;
 
   /// Defines whether to enable the searchfield defaults to `true`
   final bool? enabled;
@@ -947,10 +947,10 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     });
   }
 
-  void _onSearchChanged(String query) {
+  FutureOr<void> _onSearchChanged(String query) async {
     filteredResult.clear();
     if (widget.onSearchTextChanged != null) {
-      filteredResult = widget.onSearchTextChanged!(query) ?? [];
+      filteredResult = await widget.onSearchTextChanged!(query) ?? [];
     } else {
       if (query.isEmpty) {
         filteredResult.addAll(widget.suggestions);

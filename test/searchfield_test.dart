@@ -1843,6 +1843,42 @@ void main() {
     expect(searchField.contextMenuBuilder, isNotNull);
   });
 
+  testWidgets("onSearchTextChanged should allow Future", (widgetTester) async {
+    final suggestions = List.generate(100, (index) => index.toString())
+        .map(SearchFieldListItem<String>.new)
+        .toList();
+
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField<String>(
+      key: const Key('searchfield'),
+      suggestions: suggestions,
+      onSearchTextChanged: (query) async {
+        return Future.delayed(Duration(seconds: 1), () {
+          return suggestions
+              .where((element) => element.searchKey.contains(query))
+              .toList();
+        });
+      },
+      suggestionState: Suggestion.expand,
+    )));
+
+    await widgetTester.pumpAndSettle(const Duration(seconds: 5));
+    final searchFieldFinder = find.byKey(const Key('searchfield'));
+    expect(searchFieldFinder, findsOneWidget);
+
+    // search for '55'
+    final textFieldFinder = find.descendant(
+      of: searchFieldFinder,
+      matching: find.byType(TextField),
+    );
+    expect(textFieldFinder, findsOneWidget);
+    expect(find.text('55'), findsNothing);
+    await widgetTester.enterText(textFieldFinder, '55');
+    await widgetTester.pumpAndSettle(const Duration(seconds: 1));
+    expect(find.text('55'), findsOneWidget);
+    expect(find.text('0'), findsNothing);
+  });
+
   testWidgets('SearchInputdecoration values can be set', (widgetTester) async {
     final suggestions = List.generate(500, (index) => index.toString())
         .map(SearchFieldListItem<String>.new)

@@ -97,6 +97,17 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     selectedValue = item;
                   });
                 },
+                onSearchTextChanged: (query) async {
+                  await Future.delayed(Duration(seconds: 3));
+                  final filter = suggestions
+                      .where((element) =>
+                          element.toLowerCase().contains(query.toLowerCase()))
+                      .toList();
+                  return filter
+                      .map((e) =>
+                          SearchFieldListItem<String>(e, child: searchChild(e)))
+                      .toList();
+                },
                 selectedValue: selectedValue,
                 suggestions: suggestions.map(
                   (x) {
