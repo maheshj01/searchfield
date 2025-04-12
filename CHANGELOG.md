@@ -1,6 +1,7 @@
 ### [1.2.7] - Apr 12, 2025
 
-- allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
+- Allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
+- Dynamic height is broken when the suggestion direction is up [Issue #216](https://github.com/maheshj01/searchfield/issues/216)
 
 ### [1.2.6] - Mar 11, 2025
 
