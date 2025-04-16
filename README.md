@@ -2,6 +2,9 @@
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/searchfield/versions/1.3.0-dev.3" target="_blank">
+<img src="https://img.shields.io/badge/pub-Prerelease--1.3.0--dev.3-blue" alt="Prerelease" />
+</a>
 [![codecov](https://codecov.io/gh/maheshj01/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshj01/searchfield)
 [![Build](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
