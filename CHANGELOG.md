@@ -1,11 +1,16 @@
+### [1.3.0-dev.3] - Apr 16, 2025
+
+- Allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
+- Dynamic height is broken when the suggestion direction is up [Issue #216](https://github.com/maheshj01/searchfield/issues/216)
+
 ### [1.3.0-dev.2] - Apr 12, 2025
+
 - allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
 
 ### [1.3.0-dev.1] - Mar 19, 2025
 
 - Deprecate `maintainHintHeight` in favour of `maintainHintSize` property of `SearchInputDecoration`
 - Add `hint` property to `SearchInputDecoration`
-
 
 ### [1.2.6] - Mar 11, 2025
 

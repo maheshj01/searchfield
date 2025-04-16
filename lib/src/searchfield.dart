@@ -336,7 +336,7 @@ class SearchField<T> extends StatefulWidget {
   final ScrollbarDecoration? scrollbarDecoration;
 
   /// suggestion direction defaults to [SuggestionDirection.down]
-  /// 
+  ///
   /// If dynamicHeight is set to true, the suggestion direction will be calculated based on the available space in the viewport.
   final SuggestionDirection suggestionDirection;
 
@@ -403,9 +403,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   FocusNode? _searchFocus;
   TextEditingController? searchController;
   ScrollbarDecoration? _scrollbarDecoration;
-
-  // Use to calculate suggestion box height if [widget.maxSuggestionBoxHeight] is not specified
-  double remainingHeight = 0;
 
   final _defaultSearchInputDecoration = SearchInputDecoration(
     hintText: 'Search',
@@ -493,32 +490,24 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         !widget.dynamicHeight) {
       return _suggestionDirection;
     }
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final Size screenSize = mediaQuery.size;
-    final EdgeInsets padding = mediaQuery.padding;
-    final RenderBox textFieldRenderBox =
-        key.currentContext!.findRenderObject() as RenderBox;
-    final Size textFieldSize = textFieldRenderBox.size;
-    final Offset textFieldOffset =
-        textFieldRenderBox.localToGlobal(Offset.zero);
-    final double suggestionsHeight = _getSuggestionsHeight(screenSize);
-    final double spaceBelow = screenSize.height -
-        textFieldOffset.dy -
-        textFieldSize.height -
-        padding.bottom;
-    final double spaceAbove = textFieldOffset.dy - padding.top;
-    if (spaceBelow >= suggestionsHeight) {
-      remainingHeight = spaceBelow;
-      return SuggestionDirection.down;
-    } else if (spaceAbove >= suggestionsHeight) {
-      remainingHeight = spaceAbove;
-      return SuggestionDirection.up;
+    if (_suggestionDirection == SuggestionDirection.flex) {
+      final screenSize = MediaQuery.of(context).size;
+      final double suggestionsHeight = _getSuggestionsHeight(screenSize);
+      final double spaceBelow = searchFieldDimensions.bottom!;
+      final double spaceAbove = searchFieldDimensions.top!;
+      if (spaceBelow - suggestionsHeight > 20.0) {
+        return SuggestionDirection.down;
+      } else if (spaceAbove >= suggestionsHeight) {
+        return SuggestionDirection.up;
+      } else {
+        /// If there's not enough space in either direction, choose the direction with more space
+        /// This is very unlikely to happen, but just in case
+        return spaceBelow > spaceAbove
+            ? SuggestionDirection.down
+            : SuggestionDirection.up;
+      }
     } else {
-      // If there's not enough space in either direction, choose the direction with more space
-      remainingHeight = max(spaceBelow, spaceAbove);
-      return spaceBelow > spaceAbove
-          ? SuggestionDirection.down
-          : SuggestionDirection.up;
+      return _suggestionDirection;
     }
   }
 
@@ -564,6 +553,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           searchController!.text = widget.selectedValue!.searchKey;
           suggestionStream.sink.add([widget.selectedValue]);
         }
+        _calculateDimensions();
       }
     });
   }
@@ -681,6 +671,24 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     _overlayEntry!.markNeedsBuild();
   }
 
+  var searchFieldDimensions = SearchFieldDimensions();
+
+  void _calculateDimensions() {
+    final MediaQueryData mediaQuery = MediaQuery.of(context);
+    final RenderBox textFieldRenderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final textFieldsize = textFieldRenderBox.size;
+    // offset denotes the position of the searchfield in the screen
+    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+    searchFieldDimensions = SearchFieldDimensions(
+      offset: offset,
+      height: textFieldsize.height,
+      width: textFieldsize.width,
+      bottom: mediaQuery.size.height - offset.dy - textFieldsize.height,
+      top: offset.dy,
+    );
+  }
+
   @override
   void didChangeDependencies() {
     // update overlay dimensions on mediaQuery change
@@ -701,6 +709,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     }
     if (_suggestionDirection != oldWidget.suggestionDirection) {
       _suggestionDirection = widget.suggestionDirection;
+      _calculateDimensions();
     }
     if (!listEquals(oldWidget.suggestions, widget.suggestions)) {
       length = widget.suggestions.length;
@@ -838,7 +847,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                   maxHeight: widget.dynamicHeight
                       ? _totalHeight ??
                           widget.maxSuggestionBoxHeight ??
-                          remainingHeight
+                          searchFieldDimensions.bottom!
                       : null,
                   suggestionStyle: widget.suggestionStyle,
                   scrollController: _scrollController,
@@ -880,22 +889,25 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     );
   }
 
-  /// Decides whether to show the suggestions
+  /// Decides the position of the suggestion list relative to the searchfield
+  ///
   /// on top or bottom of Searchfield
-  /// User can have more control by manually specifying the offset
-  Offset? getYOffset(
-      Offset textFieldOffset, Size textFieldSize, int suggestionsCount) {
+  /// if SuggestionDirection.down is selected, the suggestion list will be shown below the searchfield with an offset of height of the searchfield
+  /// if SuggestionDirection.up is selected, the suggestion list will be shown above the searchfield with an offset of SuggestionBoxHeight
+  /// if dynamicHeight is set to true then maxSuggestionBoxHeight is null
+  Offset? getYOffset(int suggestionsCount) {
     final direction = getDirection();
     if (mounted) {
       if (direction == SuggestionDirection.down) {
-        return Offset(0, textFieldSize.height);
+        return Offset(0, searchFieldDimensions.height ?? 48.0);
       } else if (direction == SuggestionDirection.up) {
         if (widget.dynamicHeight) {
-          return Offset(
-              0,
-              widget.maxSuggestionBoxHeight != null
-                  ? -widget.maxSuggestionBoxHeight!
-                  : -remainingHeight);
+          // min of maxSuggestionBoxHeight and searchFieldDimensions.bottom
+          final expectedBoxHeight = widget.itemHeight * suggestionsCount;
+          // we are assuming the box will be atleast 300px large if maxSuggestionBoxHeight is not specified
+          final yOffset =
+              min(expectedBoxHeight, widget.maxSuggestionBoxHeight ?? 300);
+          return Offset(0, -yOffset);
         }
 
         // search results should not exceed maxSuggestionsInViewPort
@@ -912,12 +924,12 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
 
   OverlayEntry _createOverlay() {
     return OverlayEntry(builder: (context) {
-      final textFieldRenderBox =
-          key.currentContext!.findRenderObject() as RenderBox;
-      final textFieldsize = textFieldRenderBox.size;
-      final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      var yOffset = Offset.zero;
       _totalHeight = widget.maxSuggestionsInViewPort * widget.itemHeight;
+      //   final textFieldRenderBox =
+      //     key.currentContext!.findRenderObject() as RenderBox;
+      // final textFieldsize = textFieldRenderBox.size;
+      // final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+      // var yOffset = Offset.zero;
       return StreamBuilder<List<SearchFieldListItem?>?>(
           stream: suggestionStream.stream,
           builder: (BuildContext context,
@@ -926,10 +938,14 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             if (snapshot.data != null) {
               count = snapshot.data!.length;
             }
-            yOffset = getYOffset(offset, textFieldsize, count) ?? Offset.zero;
+            var yOffset = Offset.zero;
+            if (widget.offset == null) {
+              yOffset = getYOffset(count) ?? Offset.zero;
+            }
             return Positioned(
-              left: offset.dx,
-              width: widget.suggestionsDecoration?.width ?? textFieldsize.width,
+              left: searchFieldDimensions.offset!.dx,
+              width: widget.suggestionsDecoration?.width ??
+                  searchFieldDimensions.width,
               child: CompositedTransformFollower(
                 offset: widget.offset ?? yOffset,
                 link: _layerLink,
@@ -1092,5 +1108,48 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
             ),
           ),
         ));
+  }
+}
+
+class SearchFieldDimensions {
+  /// height of the searchfield
+  final double? height;
+
+  /// width of the searchfield
+  final double? width;
+
+  /// offset of the searchfield
+  final Offset? offset;
+
+  /// Space Above the searchfield
+  final double? top;
+
+  /// Space Below the searchfield
+  ///
+  final double? bottom;
+
+  SearchFieldDimensions({
+    this.height,
+    this.width,
+    this.offset,
+    this.top,
+    this.bottom,
+  });
+
+  // copyWith
+  SearchFieldDimensions copyWith({
+    double? height,
+    double? width,
+    Offset? offset,
+    double? top,
+    double? bottom,
+  }) {
+    return SearchFieldDimensions(
+      height: height ?? this.height,
+      width: width ?? this.width,
+      offset: offset ?? this.offset,
+      top: top ?? this.top,
+      bottom: bottom ?? this.bottom,
+    );
   }
 }
