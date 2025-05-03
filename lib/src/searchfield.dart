@@ -250,6 +250,9 @@ class SearchField<T> extends StatefulWidget {
   final int maxSuggestionsInViewPort;
 
   /// Specifies the `TextEditingController` for [SearchField].
+  /// The client is responsible for creating and disposing of the controller.
+  /// If a controller is not specified, a new one will be created 
+  /// and disposed of internally.
   final TextEditingController? controller;
 
   /// Keyboard Type for SearchField defaults to [TextInputType.text]
@@ -733,7 +736,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.selectedValue != widget.selectedValue) {
       // highlightIndex = widget.suggestions
       //     .indexWhere((element) => element == widget.selectedValue);
-      searchController!.text = widget.selectedValue?.searchKey ?? '';
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        searchController?.text = widget.selectedValue?.searchKey ?? '';
+      });
     }
     if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
       widget.searchInputDecoration =
