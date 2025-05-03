@@ -425,10 +425,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (widget.controller == null) {
       searchController!.dispose();
     }
-    if (widget.focusNode == null) {
-      _searchFocus!.dispose();
-    }
-
+    _searchFocus?.removeListener(() {});
+    _searchFocus?.dispose();
     removeOverlay();
     super.dispose();
   }

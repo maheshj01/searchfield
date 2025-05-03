@@ -1,3 +1,7 @@
+### [1.3.0-dev.5] - May 03, 2025
+
+- Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
+
 ### [1.3.0-dev.4] - May 03, 2025
 
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
