@@ -2,6 +2,7 @@
 
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
 - Fix [Issue: #224](https://github.com/maheshj01/searchfield/issues/224) calling setState in listener caused setState exception
+- Add VisualDensity Parameter to SearchInputDecoration
 
 ### [1.3.0-dev.3] - Apr 16, 2025
 

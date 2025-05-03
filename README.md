@@ -1,4 +1,4 @@
-# [searchfield: ^1.3.0-dev.3](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.3.0-dev.4](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -31,10 +31,11 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 
 ### Installation
 
-- Add the dependency
+- Add the dependency to your `pubspec.yaml` file
 
 ```yaml
-flutter pub add searchfield
+dependencies:
+  searchfield: ^1.3.0-dev.4
 ```
 
 - Import the package
