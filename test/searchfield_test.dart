@@ -839,12 +839,15 @@ void main() {
     testWidgets(
         'you should be able to select a suggestion with SuggestionDirection.up',
         (WidgetTester tester) async {
+      final controller = TextEditingController();
       SearchFieldListItem<String>? selectedValue = null;
-      final boilerPlate = _boilerplate(
-        child: Column(
+      final boilerPlate =
+          _boilerplate(child: StatefulBuilder(builder: (context, setState) {
+        return Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             SearchField(
+              controller: controller,
               suggestionDirection: SuggestionDirection.up,
               key: const Key('searchfield'),
               suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
@@ -852,12 +855,14 @@ void main() {
                   .toList(),
               selectedValue: selectedValue,
               onSuggestionTap: (SearchFieldListItem<String> x) {
-                selectedValue = x;
+                setState(() {
+                  selectedValue = x;
+                });
               },
             ),
           ],
-        ),
-      );
+        );
+      }));
       await tester.pumpWidget(boilerPlate);
       await tester.pumpAndSettle();
       final listFinder = find.byType(ListView);
@@ -876,9 +881,7 @@ void main() {
       await tester.tap(secondItem);
       await tester.pumpAndSettle();
       expect(selectedValue!.searchKey, equals('DEF'));
-      expect(
-          (textField.evaluate().first.widget as TextFormField).controller?.text,
-          'DEF');
+      expect(controller.text, equals('DEF'));
     });
 
     testWidgets(

@@ -250,6 +250,9 @@ class SearchField<T> extends StatefulWidget {
   final int maxSuggestionsInViewPort;
 
   /// Specifies the `TextEditingController` for [SearchField].
+  /// The client is responsible for creating and disposing of the controller.
+  /// If a controller is not specified, a new one will be created 
+  /// and disposed of internally.
   final TextEditingController? controller;
 
   /// Keyboard Type for SearchField defaults to [TextInputType.text]
@@ -706,6 +709,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
+      if (oldWidget.controller == null) {
+        searchController!.dispose();
+      }
       searchController = widget.controller ?? TextEditingController();
     }
     if (_suggestionDirection != oldWidget.suggestionDirection) {
@@ -763,7 +769,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       filteredResult.addAll(widget.suggestions);
       // hide the suggestions
       suggestionStream.sink.add(null);
-      searchController!.text = item.searchKey;
       if (widget.onSuggestionTap != null) {
         widget.onSuggestionTap!(item);
       }
