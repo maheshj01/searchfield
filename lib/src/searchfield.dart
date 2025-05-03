@@ -709,6 +709,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void didUpdateWidget(covariant SearchField<T> oldWidget) {
     if (oldWidget.controller != widget.controller) {
+      if (oldWidget.controller == null) {
+        searchController!.dispose();
+      }
       searchController = widget.controller ?? TextEditingController();
     }
     if (_suggestionDirection != oldWidget.suggestionDirection) {
@@ -768,7 +771,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       filteredResult.addAll(widget.suggestions);
       // hide the suggestions
       suggestionStream.sink.add(null);
-      searchController!.text = item.searchKey;
       if (widget.onSuggestionTap != null) {
         widget.onSuggestionTap!(item);
       }
