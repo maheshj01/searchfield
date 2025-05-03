@@ -1916,6 +1916,7 @@ void main() {
       // prefix: Container(),
       // counter: Container(),
       // suffix: Container(),
+      visualDensity: VisualDensity.adaptivePlatformDensity,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -2031,6 +2032,7 @@ void main() {
         searchInputDecoration.floatingLabelBehavior);
     expect(decoration.isCollapsed, searchInputDecoration.isCollapsed);
     expect(decoration.isDense, searchInputDecoration.isDense);
+    expect(decoration.visualDensity, searchInputDecoration.visualDensity);
     // expect(decoration.prefix, isA<Container>());
     // expect(decoration.suffix, isA<Container>());
     expect(textField.cursorColor, searchInputDecoration.cursorColor);
