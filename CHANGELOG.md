@@ -2,6 +2,7 @@
 
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
 - Fix [Issue: #224](https://github.com/maheshj01/searchfield/issues/224) calling setState in listener caused setState exception
+- Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
 
 ### [1.2.7] - Apr 16, 2025
 
