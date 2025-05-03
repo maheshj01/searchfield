@@ -738,7 +738,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (oldWidget.selectedValue != widget.selectedValue) {
       // highlightIndex = widget.suggestions
       //     .indexWhere((element) => element == widget.selectedValue);
-      searchController!.text = widget.selectedValue?.searchKey ?? '';
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        searchController?.text = widget.selectedValue?.searchKey ?? '';
+      });
     }
     if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
       widget.searchInputDecoration =
