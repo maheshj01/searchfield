@@ -251,7 +251,7 @@ class SearchField<T> extends StatefulWidget {
 
   /// Specifies the `TextEditingController` for [SearchField].
   /// The client is responsible for creating and disposing of the controller.
-  /// If a controller is not specified, a new one will be created 
+  /// If a controller is not specified, a new one will be created
   /// and disposed of internally.
   final TextEditingController? controller;
 
@@ -678,24 +678,42 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   var searchFieldDimensions = SearchFieldDimensions();
 
   void _calculateDimensions() {
-    final MediaQueryData mediaQuery = MediaQuery.of(context);
-    final RenderBox textFieldRenderBox =
-        key.currentContext!.findRenderObject() as RenderBox;
-    final textFieldsize = textFieldRenderBox.size;
-    // offset denotes the position of the searchfield in the screen
-    final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-    searchFieldDimensions = SearchFieldDimensions(
-      offset: offset,
-      height: textFieldsize.height,
-      width: textFieldsize.width,
-      bottom: mediaQuery.size.height - offset.dy - textFieldsize.height,
-      top: offset.dy,
-    );
+    if (!mounted || key.currentContext == null) {
+      return;
+    }
+
+    try {
+      final MediaQueryData mediaQuery = MediaQuery.of(context);
+      final RenderBox? textFieldRenderBox =
+          key.currentContext!.findRenderObject() as RenderBox?;
+
+      if (textFieldRenderBox == null || !textFieldRenderBox.hasSize) {
+        return;
+      }
+
+      final textFieldsize = textFieldRenderBox.size;
+      final offset = textFieldRenderBox.localToGlobal(Offset.zero);
+
+      searchFieldDimensions = SearchFieldDimensions(
+        offset: offset,
+        height: textFieldsize.height,
+        width: textFieldsize.width,
+        bottom: mediaQuery.size.height - offset.dy - textFieldsize.height,
+        top: offset.dy,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Error calculating SearchField dimensions: $e');
+      }
+    }
   }
 
   @override
   void didChangeDependencies() {
     // update overlay dimensions on mediaQuery change
+    if (mounted) {
+      _calculateDimensions();
+    }
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (mounted) {

@@ -2045,4 +2045,44 @@ void main() {
     final OutlineInputBorder border = decoration.border as OutlineInputBorder;
     expect(border.borderRadius, BorderRadius.circular(10));
   });
+
+  testWidgets('Suggestion Overlay width matches input', (widgetTester) async {
+    final suggestions = List.generate(100, (index) => index.toString())
+        .map(SearchFieldListItem<String>.new)
+        .toList();
+    widgetTester.platformDispatcher.views.first.physicalSize =
+        const Size(800, 600); // Set the initial size of the window
+    await widgetTester.pumpWidget(_boilerplate(
+        child: Row(
+      children: [
+        Expanded(
+          child: SearchField(
+            key: const Key('searchfield'),
+            suggestions: suggestions,
+            suggestionState: Suggestion.expand,
+          ),
+        ),
+      ],
+    )));
+
+    final searchFieldFinder = find.byKey(const Key('searchfield'));
+    expect(searchFieldFinder, findsOneWidget);
+
+    // Find the TextField within SearchField
+    final textFieldFinder = find.byType(TextFormField);
+    expect(textFieldFinder, findsOneWidget);
+    final screenSize =
+        widgetTester.binding.platformDispatcher.views.first.physicalSize;
+    final textFieldRenderBox =
+        widgetTester.renderObject(textFieldFinder) as RenderBox;
+    // Verify that the overlay dimensions have updated
+    final logicalWidth = screenSize.width / widgetTester.view.devicePixelRatio;
+    await widgetTester.tap(textFieldFinder);
+    await widgetTester.pumpAndSettle();
+    final overlayFinder = find.byType(Overlay);
+    final overlaySize = widgetTester.getSize(overlayFinder);
+    expect(textFieldRenderBox.size.width, closeTo(logicalWidth, 0.1));
+    expect(overlayFinder, findsOneWidget);
+    expect(overlaySize.width, closeTo(logicalWidth, 0.1));
+  });
 }
