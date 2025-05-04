@@ -90,6 +90,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             children: [
               SearchField(
                 hint: 'Basic SearchField',
+                keepSearchOnSelection: true,
                 // dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
                 onSuggestionTap: (SearchFieldListItem<String> item) {
@@ -112,6 +113,11 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 ).toList(),
                 suggestionState: Suggestion.expand,
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    print("selectedValue: ${selectedValue.searchKey}");
+                  },
+                  child: Text('tap me'))
             ],
           ),
         ));

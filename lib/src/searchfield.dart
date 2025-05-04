@@ -344,6 +344,10 @@ class SearchField<T> extends StatefulWidget {
   /// If dynamicHeight is set to true, the suggestion direction will be calculated based on the available space in the viewport.
   final SuggestionDirection suggestionDirection;
 
+  /// keep search text on selection
+  /// defaults to false
+  final bool keepSearchOnSelection;
+
   SearchField({
     Key? key,
     required this.suggestions,
@@ -361,6 +365,7 @@ class SearchField<T> extends StatefulWidget {
     this.selectedValue,
     this.inputFormatters,
     this.inputType,
+    this.keepSearchOnSelection = false,
     this.dynamicHeight = false,
     this.maxSuggestionBoxHeight,
     this.itemHeight = 51.0,
@@ -756,7 +761,9 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // highlightIndex = widget.suggestions
       //     .indexWhere((element) => element == widget.selectedValue);
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        searchController?.text = widget.selectedValue?.searchKey ?? '';
+        if (widget.keepSearchOnSelection == false) {
+          searchController?.text = widget.selectedValue?.searchKey ?? '';
+        }
       });
     }
     if (oldWidget.searchInputDecoration != widget.searchInputDecoration) {
