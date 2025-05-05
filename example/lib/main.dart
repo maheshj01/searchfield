@@ -94,20 +94,25 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 },
                 onSearchTextChanged: (searchText) {
                   if (searchText.isEmpty) {
-                    return [...cities];
+                    return cities;
                   }
                   // filter the list of cities by the search text
                   final filter = List<SearchFieldListItem<City>>.from(cities)
-                      .where((city) =>
-                          city.item!.name
-                              .toLowerCase()
-                              .contains(searchText.toLowerCase()) ||
-                          city.item!.zip.toString().contains(searchText))
-                      .toList();
+                      .where((city) {
+                    return city.item!.name
+                            .toLowerCase()
+                            .contains(searchText.toLowerCase()) ||
+                        city.item!.zip.toString().contains(searchText);
+                  }).toList();
                   return filter;
                 },
                 selectedValue: selectedValue,
-                suggestions: cities,
+                suggestions: cities
+                    .map((e) => e.copyWith(
+                          child: searchChild(e.item!.name,
+                              isSelected: selectedValue == e),
+                        ))
+                    .toList(),
                 suggestionState: Suggestion.expand,
               ),
             ],

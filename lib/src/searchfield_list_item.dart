@@ -26,7 +26,20 @@ class SearchFieldListItem<T> {
   SearchFieldListItem(this.searchKey,
       {this.child, this.item, this.key, this.value = ''});
 
-  @override
+  SearchFieldListItem<T> copyWith({
+    String? searchKey,
+    T? item,
+    String? value,
+    Widget? child,
+  }) {
+    return SearchFieldListItem<T>(
+      searchKey ?? this.searchKey,
+      item: item ?? this.item,
+      value: value ?? this.value,
+      child: child ?? this.child,
+    );
+  }
+
   bool operator ==(Object other) {
     return identical(this, other) ||
         other is SearchFieldListItem &&
