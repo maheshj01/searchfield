@@ -40,38 +40,33 @@ class SearchFieldSample extends StatefulWidget {
 class _SearchFieldSampleState extends State<SearchFieldSample> {
   @override
   void initState() {
-    suggestions = [
-      'United States',
-      'Germany',
-      'Canada',
-      'United Kingdom',
-      'France',
-      'Italy',
-      'Spain',
-      'Australia',
-      'India',
-      'China',
-      'Japan',
-      'Brazil',
-      'South Africa',
-      'Mexico',
-      'Argentina',
-      'Russia',
-      'Indonesia',
-      'Turkey',
-      'Saudi Arabia',
-      'Nigeria',
-      'Egypt',
-    ];
-    selectedValue = SearchFieldListItem<String>(
-      'United States',
-      item: 'United States',
-    );
+    cities = [
+      City('New York', 10001),
+      City('Los Angeles', 90001),
+      City('Chicago', 60601),
+      City('Houston', 77001),
+      City('Phoenix', 85001),
+      City('Philadelphia', 19101),
+      City('San Antonio', 78201),
+      City('San Diego', 92101),
+      City('Dallas', 75201),
+      City('San Jose', 95101),
+    ].map(
+      (City ct) {
+        return SearchFieldListItem<City>(
+          ct.name,
+          value: ct.zip.toString(),
+          item: ct,
+          child: Text(ct.name),
+        );
+      },
+    ).toList();
+    selectedValue = cities[0];
     super.initState();
   }
 
-  var suggestions = <String>[];
-  late SearchFieldListItem<String> selectedValue;
+  var cities = <SearchFieldListItem<City>>[];
+  late SearchFieldListItem<City> selectedValue;
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x, {bool isSelected = false}) => Padding(
@@ -89,42 +84,45 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             spacing: 20,
             children: [
               SearchField(
-                hint: 'Basic SearchField',
+                hint: 'Search for a city or zip code',
                 // dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
-                onSuggestionTap: (SearchFieldListItem<String> item) {
+                onSuggestionTap: (SearchFieldListItem<City> item) {
                   setState(() {
                     selectedValue = item;
                   });
                 },
-                onSearchTextChanged: (query) async {
-                  await Future.delayed(Duration(seconds: 3));
-                  final filter = suggestions
-                      .where((element) =>
-                          element.toLowerCase().contains(query.toLowerCase()))
-                      .toList();
-                  return filter
-                      .map((e) =>
-                          SearchFieldListItem<String>(e, child: searchChild(e)))
-                      .toList();
+                onSearchTextChanged: (searchText) {
+                  if (searchText.isEmpty) {
+                    return cities;
+                  }
+                  // filter the list of cities by the search text
+                  final filter = List<SearchFieldListItem<City>>.from(cities)
+                      .where((city) {
+                    return city.item!.name
+                            .toLowerCase()
+                            .contains(searchText.toLowerCase()) ||
+                        city.item!.zip.toString().contains(searchText);
+                  }).toList();
+                  return filter;
                 },
                 selectedValue: selectedValue,
-                suggestions: suggestions.map(
-                  (x) {
-                    final t = SearchFieldListItem<String>(
-                      x,
-                      item: x,
-                      child: searchChild(x,
-                          isSelected: selectedValue.searchKey == x),
-                    );
-
-                    return t;
-                  },
-                ).toList(),
+                suggestions: cities
+                    .map((e) => e.copyWith(
+                          child: searchChild(e.item!.name,
+                              isSelected: selectedValue == e),
+                        ))
+                    .toList(),
                 suggestionState: Suggestion.expand,
               ),
             ],
           ),
         ));
   }
+}
+
+class City {
+  String name;
+  int zip;
+  City(this.name, this.zip);
 }

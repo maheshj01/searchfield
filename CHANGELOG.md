@@ -1,3 +1,8 @@
+### [1.3.0-dev.6] - May 03, 2025
+
+- Fix [Issue: #212](https://github.com/maheshj01/searchfield/issues/212) add new parameter `keepSearchOnSelection`
+- Fix [Issue: #228](https://github.com/maheshj01/searchfield/issues/212) add value parameter to searchfield list item
+
 ### [1.3.0-dev.5] - May 03, 2025
 
 - Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
@@ -7,6 +12,7 @@
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
 - Fix [Issue: #224](https://github.com/maheshj01/searchfield/issues/224) calling setState in listener caused setState exception
 - Add VisualDensity Parameter to SearchInputDecoration
+- Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
 
 ### [1.3.0-dev.3] - Apr 16, 2025
 

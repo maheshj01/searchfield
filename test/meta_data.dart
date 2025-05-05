@@ -10,6 +10,12 @@
  * Copyright 2022 - 2022 Widget Media Labs
  */
 
+class City {
+  String name;
+  int zip;
+  City(this.name, this.zip);
+}
+
 class Country {
   final String name;
   final int population;

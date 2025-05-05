@@ -1,7 +1,10 @@
-# [searchfield: ^1.3.0-dev.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.3.0-dev.6](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
+<a href="https://pub.dev/packages/searchfield/versions/1.3.0-dev.3" target="_blank">
+<img src="https://img.shields.io/badge/pub-Prerelease--1.3.0--dev.3-blue" alt="Prerelease" />
+</a>
 [![codecov](https://codecov.io/gh/maheshj01/searchfield/graph/badge.svg?token=QHK8TGC23V)](https://codecov.io/gh/maheshj01/searchfield)
 [![Build](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml/badge.svg)](https://github.com/maheshj01/searchfield/actions/workflows/workflow.yml)
 <a href="https://opensource.org/licenses/MIT" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/license-MIT-purple.svg" alt="MIT License Badge"></a>
@@ -18,7 +21,8 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - search 🔍 and select from a list of suggestions
 - validate the input with custom validation logic.
 - Dynamic height of each suggestion item.
-- show suggestions of custom type (not just String)
+- show suggestions as a custom widget
+- Map a custom value to the suggestion list item. 
 - lazy load the suggestions from Network with custom Loading widget
 - show dynamic suggestions above or below the input field
 - define max number of items visible in the viewport 📱
@@ -310,6 +314,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `inputType`: Keyboard Type for SearchField
 - `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 51.0).
+- `keepSearchOnSelection`: Boolean to keep the search text in the searchfield when a suggestion is selected. Defaults to `false`.
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionBoxHeight`: Specifies a maximum height for the suggestion box when `dynamicHeight` is set to `true`.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.
