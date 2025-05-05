@@ -8,7 +8,7 @@ import 'package:searchfield/src/decoration.dart';
 import 'package:searchfield/src/input_decoration.dart';
 import 'package:searchfield/src/key_intents.dart';
 import 'package:searchfield/src/listview.dart';
-import 'package:searchfield/src/searchfieldlistItem.dart';
+import 'package:searchfield/src/searchfield_list_item.dart';
 
 enum Suggestion {
   /// shows suggestions when searchfield is brought into focus
