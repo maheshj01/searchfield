@@ -129,6 +129,78 @@ void main() {
       await tester.pumpAndSettle();
       expect(selectedValue!.searchKey, equals('DEF'));
     });
+    testWidgets('searchfield should enter tapped value in the input',
+        (WidgetTester tester) async {
+      SearchFieldListItem<City>? selectedValue = null;
+      final cities = [
+        City('New York', 10001),
+        City('Los Angeles', 90001),
+        City('Chicago', 60601),
+        City('Houston', 77001),
+        City('Phoenix', 85001),
+        City('Philadelphia', 19101),
+        City('San Antonio', 78201),
+        City('San Diego', 92101),
+        City('Dallas', 75201),
+        City('San Jose', 95101),
+      ].map(
+        (City ct) {
+          return SearchFieldListItem<City>(
+            ct.name,
+            value: ct.zip.toString(),
+            item: ct,
+            child: Text(ct.name),
+          );
+        },
+      ).toList();
+      final boilerPlate = _boilerplate(
+          child: Column(
+        children: [
+          SearchField<City>(
+            hint: 'Search for a city or zip code',
+            // dynamicHeight: true,
+            maxSuggestionBoxHeight: 300,
+            onSuggestionTap: (SearchFieldListItem<City> item) {
+              selectedValue = item;
+            },
+            maxSuggestionsInViewPort: 10,
+            onSearchTextChanged: (searchText) {
+              if (searchText.isEmpty) {
+                return [...cities];
+              }
+              // filter the list of cities by the search text
+              final filter = List<SearchFieldListItem<City>>.from(cities)
+                  .where((city) =>
+                      city.item!.name
+                          .toLowerCase()
+                          .contains(searchText.toLowerCase()) ||
+                      city.item!.zip.toString().contains(searchText))
+                  .toList();
+              return filter;
+            },
+            selectedValue: selectedValue,
+            suggestions: cities,
+            suggestionState: Suggestion.expand,
+          ),
+        ],
+      ));
+      await tester.pumpWidget(boilerPlate);
+      await tester.pumpAndSettle();
+      final listFinder = find.byType(ListView);
+      final textField = find.byType(TextFormField);
+      expect(textField, findsOneWidget);
+      expect(listFinder, findsNothing);
+      await tester.tap(textField);
+      await tester.enterText(textField, '');
+      await tester.pumpAndSettle();
+      expect(listFinder, findsOneWidget);
+      // tap 7th item
+      final secondItem = find.text('San Antonio').first;
+      expect(secondItem, findsOneWidget);
+      await tester.tap(secondItem);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.value, equals('78201'));
+    });
 
     testWidgets('Searchfield should show searched suggestions',
         (WidgetTester tester) async {
