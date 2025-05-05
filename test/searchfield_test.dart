@@ -132,7 +132,7 @@ void main() {
     testWidgets('searchfield should enter tapped value in the input',
         (WidgetTester tester) async {
       SearchFieldListItem<City>? selectedValue = null;
-      var cities = [
+      final cities = [
         City('New York', 10001),
         City('Los Angeles', 90001),
         City('Chicago', 60601),
