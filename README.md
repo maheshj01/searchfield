@@ -1,4 +1,4 @@
-# [searchfield: ^1.2.8](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.2.9](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -21,7 +21,8 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - search 🔍 and select from a list of suggestions
 - validate the input with custom validation logic.
 - Dynamic height of each suggestion item.
-- show suggestions of custom type (not just String)
+- show suggestions as a custom widget
+- Map a custom value to the suggestion list item. 
 - lazy load the suggestions from Network with custom Loading widget
 - show dynamic suggestions above or below the input field
 - define max number of items visible in the viewport 📱
@@ -312,6 +313,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 - `inputType`: Keyboard Type for SearchField
 - `inputFormatters`: Input Formatter for SearchField
 - `itemHeight` : height of each suggestion Item, (defaults to 51.0).
+- `keepSearchOnSelection`: Boolean to keep the search text in the searchfield when a suggestion is selected. Defaults to `false`.
 - `marginColor` : Color for the margin between the suggestions.
 - `maxSuggestionBoxHeight`: Specifies a maximum height for the suggestion box when `dynamicHeight` is set to `true`.
 - `maxSuggestionsInViewPort` : The max number of suggestions that can be shown in a viewport.

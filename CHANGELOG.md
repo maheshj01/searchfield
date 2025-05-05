@@ -1,3 +1,8 @@
+### [1.2.9] - May 05, 2025
+
+- Fix [Issue: #212](https://github.com/maheshj01/searchfield/issues/212) add new parameter `keepSearchOnSelection`
+- Fix [Issue: #228](https://github.com/maheshj01/searchfield/issues/212) add value parameter to searchfield list item
+
 ### [1.2.8] - May 03, 2025
 
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
