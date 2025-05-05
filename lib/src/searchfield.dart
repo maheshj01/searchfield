@@ -8,6 +8,7 @@ import 'package:searchfield/src/decoration.dart';
 import 'package:searchfield/src/input_decoration.dart';
 import 'package:searchfield/src/key_intents.dart';
 import 'package:searchfield/src/listview.dart';
+import 'package:searchfield/src/searchfieldlistItem.dart';
 
 enum Suggestion {
   /// shows suggestions when searchfield is brought into focus
@@ -36,51 +37,6 @@ enum SuggestionDirection {
 
   /// suggestions will be shown based on the available space
   flex
-}
-
-class SearchFieldListItem<T> {
-  Key? key;
-
-  /// the text based on which the search happens
-  final String searchKey;
-
-  /// Custom Object to be associated with each ListItem
-  /// For Suggestions with Custom Objects, pass [item] parameter to [SearchFieldListItem]
-  /// see example in [example/lib/country_search.dart](https://github.com/maheshj01/searchfield/tree/master/example/lib/country_search.dart)
-  final T? item;
-
-  /// The widget to be shown in the searchField
-  /// if not specified, Text widget with default styling will be used
-  final Widget? child;
-
-  /// The widget to be shown in the suggestion list
-  /// if not specified, Text widget with default styling will be used
-  /// to show a custom widget, use [child] instead
-  /// see example in [example/lib/country_search.dart]()
-  SearchFieldListItem(this.searchKey, {this.child, this.item, this.key});
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is SearchFieldListItem &&
-            runtimeType == other.runtimeType &&
-            searchKey == other.searchKey;
-  }
-
-  @override
-  int get hashCode => searchKey.hashCode;
-}
-
-/// extension to check if a Object is present in List<Object>
-extension ListContainsObject<T> on List {
-  bool containsObject(T object) {
-    for (var item in this) {
-      if (object == item) {
-        return true;
-      }
-    }
-    return false;
-  }
 }
 
 /// A widget that displays a searchfield and a list of suggestions
@@ -557,12 +513,20 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         } else {
           highlightIndex = widget.suggestions
               .indexWhere((element) => element == widget.selectedValue);
-          searchController!.text = widget.selectedValue!.searchKey;
+          updateInput(widget.selectedValue);
           suggestionStream.sink.add([widget.selectedValue]);
         }
         _calculateDimensions();
       }
     });
+  }
+
+  void updateInput(SearchFieldListItem<T>? item) {
+    if (item != null && item.value!.isNotEmpty) {
+      searchController!.text = item.value!;
+    } else {
+      searchController!.text = item!.searchKey;
+    }
   }
 
   void handlePreviousKeyPress(PreviousIntent intent) {
@@ -762,7 +726,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       //     .indexWhere((element) => element == widget.selectedValue);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (widget.keepSearchOnSelection == false) {
-          searchController?.text = widget.selectedValue?.searchKey ?? '';
+          updateInput(widget.selectedValue);
         }
       });
     }
@@ -995,23 +959,21 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   }
 
   FutureOr<void> _onSearchChanged(String query) async {
-    filteredResult.clear();
+    late final List<SearchFieldListItem<T>> results;
+
     if (widget.onSearchTextChanged != null) {
-      filteredResult = await widget.onSearchTextChanged!(query) ?? [];
+      results = await widget.onSearchTextChanged!(query) ?? const [];
     } else {
       if (query.isEmpty) {
-        filteredResult.addAll(widget.suggestions);
+        results = List<SearchFieldListItem<T>>.from(widget.suggestions);
       } else {
-        filteredResult.addAll(
-          widget.suggestions.where(
-            (suggestion) => suggestion.searchKey
-                .toLowerCase()
-                .contains(query.toLowerCase()),
-          ),
-        );
+        results = widget.suggestions
+            .where(
+                (s) => s.searchKey.toLowerCase().contains(query.toLowerCase()))
+            .toList();
       }
     }
-
+    filteredResult = results;
     suggestionStream.sink.add(filteredResult);
     highlightIndex = filteredResult.isEmpty ? -1 : 0;
     length = filteredResult.length;
