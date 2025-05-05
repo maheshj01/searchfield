@@ -2085,4 +2085,6 @@ void main() {
     expect(overlayFinder, findsOneWidget);
     expect(overlaySize.width, closeTo(logicalWidth, 0.1));
   });
+
+  // todo: add test for `keepSearchOnSelection`
 }
