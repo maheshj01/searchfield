@@ -41,16 +41,27 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
   @override
   void initState() {
     cities = [
-      City('New York', 10001),
-      City('Los Angeles', 90001),
-      City('Chicago', 60601),
-      City('Houston', 77001),
-      City('Phoenix', 85001),
-      City('Philadelphia', 19101),
-      City('San Antonio', 78201),
-      City('San Diego', 92101),
-      City('Dallas', 75201),
-      City('San Jose', 95101),
+      City('New York', '10001'),
+      City('Los Angeles', '90001'),
+      City('Chicago', '60601'),
+      City('Houston', '77001'),
+      City('Phoenix', '85001'),
+      City('Philadelphia', '19101'),
+      City('San Antonio', '78201'),
+      City('San Diego', '92101'),
+      City('Dallas', '75201'),
+      City('San Jose', '95101'),
+      City('Austin', '73301'),
+      City('Jacksonville', '32099'),
+      City('Fort Worth', '76101'),
+      City('Columbus', '43201'),
+      City('Charlotte', '28201'),
+      City('San Francisco', '94101'),
+      City('Indianapolis', '46201'),
+      City('Seattle', '98101'),
+      City('Denver', '80201'),
+      City('Washington', '20001'),
+      City('Boston', '02101'),
     ].map(
       (City ct) {
         return SearchFieldListItem<City>(
@@ -61,7 +72,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         );
       },
     ).toList();
-    selectedValue = cities[0];
     super.initState();
   }
 
@@ -72,7 +82,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         trailing: Text('#${city.zip}'),
       );
   var cities = <SearchFieldListItem<City>>[];
-  late SearchFieldListItem<City> selectedValue;
+  SearchFieldListItem<City>? selectedValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,13 +90,20 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             spacing: 20,
             children: [
-              TextField(),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Enter username',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                ),
+              ),
               SearchField(
                 suggestionsDecoration: SuggestionDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
                 ),
                 hint: 'Search for a city or zip code',
                 maxSuggestionBoxHeight: 300,
@@ -95,6 +112,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     selectedValue = item;
                   });
                 },
+                searchInputDecoration: SearchInputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  suffix: Icon(Icons.expand_more),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                ),
                 onSearchTextChanged: (searchText) {
                   if (searchText.isEmpty) {
                     return cities
@@ -129,6 +153,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
 
 class City {
   String name;
-  int zip;
+  String zip;
   City(this.name, this.zip);
 }
