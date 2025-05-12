@@ -22,7 +22,7 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - validate the input with custom validation logic.
 - Dynamic height of each suggestion item.
 - show suggestions as a custom widget
-- Map a custom value to the suggestion list item. 
+- Map a custom value to the suggestion list item.
 - lazy load the suggestions from Network with custom Loading widget
 - show dynamic suggestions above or below the input field
 - define max number of items visible in the viewport 📱
@@ -30,6 +30,8 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - visually customize the input and the suggestions
 - navigate through the suggestions using keyboard for Desktop 🖥 ️
 - Listen to scroll events of suggestions
+
+<img src="https://github.com/user-attachments/assets/8c811723-8871-4529-8336-b983d9187856" width="300"/>
 
 ## Getting Started
 
@@ -47,47 +49,156 @@ flutter pub add searchfield
 import 'package:searchfield/searchfield.dart';
 ```
 
-Use the Widget
+Use the Widget in three steps
 
-#### Example1
+see [complete code here](example/lib/main.dart)
+
+### Step 1: Initialize your suggestions of any Type
 
 ```dart
+  late List<SearchFieldListItem<City>> cities;
+  SearchFieldListItem<City>? selectedValue;
 
-var selectedValue = null;
-SearchField<Country>(
-  suggestions: countries
-    .map(
-    (e) => SearchFieldListItem<Country>(
-      e.name,
-      item: e,
-      // Use child to show Custom Widgets in the suggestions
-      // defaults to Text widget
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(e.flag),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(e.name),
-          ],
-        ),
-      ),
-      selectedValue: selectedValue,
-      onSuggestionTap: (SearchFieldListItem<Country> x) {
-        setState(() {
-          selectedValue = x.item;
-        });
-      },
-  ),
-  ).toList(),
-),
+  @override
+  void initState() {
+    cities = [
+      City('New York', '10001'),
+      City('Los Angeles', '90001'),
+      ...
+    ]
+    super.initState();
+  }
 ```
 
- <img src="https://github.com/maheshj01/searchfield/assets/31410839/08bd594c-1593-4865-81a8-5d347077b98a" width="210"/>
+### Step 2: Map the suggestions to SearchFieldListItem
+
+see [SearchFieldListItem](#searchfieldlistitem) to know more about the properties
+
+```dart
+ @override
+  void initState() {
+    cities = [
+      City('New York', '10001'),
+      City('Los Angeles', '90001'),
+      ...
+    ].map(
+      (City ct) {
+        return SearchFieldListItem<City>(
+          // search will be performed on this value
+          ct.name,
+          // value to set in input on click, defaults to searchKey (optional)
+          value: ct.zip.toString(),
+          // custom object to pass in the suggestion list (optional)
+          item: ct,
+          // custom widget to show in the suggestion list (optional)
+          child: searchChild(ct, isSelected: false),
+        );
+      },
+    ).toList();
+    super.initState();
+  }
+```
+
+### Step 3 Add SearchField to your widget tree
+
+```dart
+ SearchField(
+    hint: 'Search for a city or zip code',
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<City> item) {
+      setState(() {
+        selectedValue = item;
+      });
+    },
+    onSearchTextChanged: (searchText) {
+      if (searchText.isEmpty) {
+        return cities
+      }
+      // filter the list with your custom search logic
+      final filter = List<SearchFieldListItem<City>>.from(cities)
+          .where((city) {
+        return city.item!.name
+                .toLowerCase()
+                .contains(searchText.toLowerCase()) ||
+            city.item!.zip.toString().contains(searchText);
+      }).toList();
+      return filter;
+    },
+    selectedValue: selectedValue,
+    suggestions: cities,
+    suggestionState: Suggestion.expand,
+  ),
+```
+
+### Customizing the Search Input
+
+```dart
+ SearchField(
+    hint: 'Search for a city or zip code',
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<City> item) {
+      setState(() {
+        selectedValue = item;
+      });
+    },
+    selectedValue: selectedValue,
+    ...
+    /// customize the search input with wide range of properties
+    /// through SearchInputDecoration
+    searchInputDecoration: SearchInputDecoration(
+      prefixIcon: Icon(Icons.search),
+      suffix: Icon(Icons.expand_more),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      ...
+    ),
+  ),
+```
+
+### Customizing the Suggestions List
+
+```dart
+ SearchField(
+    hint: 'Search for a city or zip code',
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<City> item) {
+      setState(() {
+        selectedValue = item;
+      });
+    },
+    selectedValue: selectedValue,
+    ...
+    /// customize the decoration of the suggestions list
+    suggestionsDecoration: SuggestionDecoration(
+      border: Border.all(color: Colors.grey),
+      hoverColor: Colors.grey.shade200,
+      borderRadius: BorderRadius.all(Radius.circular(2)),
+    ),
+  ),
+```
+
+### Customizing the Suggestions Item
+
+```dart
+ SearchField(
+    hint: 'Search for a city or zip code',
+    maxSuggestionBoxHeight: 300,
+    onSuggestionTap: (SearchFieldListItem<City> item) {
+      setState(() {
+        selectedValue = item;
+      });
+    },
+    selectedValue: selectedValue,
+    ...
+    /// customizes the decoration of each suggestion item
+    suggestionItemDecoration: SuggestionDecoration(
+      padding: EdgeInsets.all(8),
+      borderRadius: BorderRadius.all(Radius.circular(2)),
+      color: Colors.grey.shade200,
+    ),
+  ),
+```
 
 #### [Example 2 (Network demo)](https://github.com/maheshj01/searchfield/blob/master/example/lib/network_sample.dart)
 
@@ -292,6 +403,14 @@ Shortcuts:
 The position of suggestions is dynamic based on the space available for the suggestions to expand within the viewport.
 
 <img src = "https://github.com/maheshj01/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
+
+### SearchFieldListItem
+`SearchFieldListItem` is a generic class that is used to create the suggestions list. It takes a `searchKey` and an optional `value` and `item` which can be used to pass a custom object to the suggestion list.
+
+- `searchKey` required: The key to search the list, this is the value that will be used to search the list.
+- `value` optional: The value to set in the input on click, defaults to searchKey.
+- `item` optional: The custom object to pass in the suggestion list, this can be used to pass a custom object to the suggestion list.
+- `child` optional: The custom widget to show in the suggestion list, this can be used to pass a custom widget to the suggestion list.
 
 ## Properties
 

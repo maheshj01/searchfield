@@ -19,9 +19,13 @@ class SearchFieldListItem<T> {
   /// if not specified, Text widget with default styling will be used
   final Widget? child;
 
-  /// The widget to be shown in the suggestion list
-  /// if not specified, Text widget with default styling will be used
-  /// to show a custom widget, use [child] instead
+  /// The widget to be shown in the suggestion list.
+  /// if not specified, Text widget with default styling will be used.
+  /// `searchKey` is used to show the text in the suggestion list.
+  /// `value` is used to set the value in the searchField when the suggestion is selected
+  /// if not specified, the `searchKey` will be used.
+  /// `item` (optional) is used to pass the custom object to the widget
+  /// to show a custom widget, use `child` instead
   /// see example in [example/lib/country_search.dart]()
   SearchFieldListItem(this.searchKey,
       {this.child, this.item, this.key, this.value = ''});
