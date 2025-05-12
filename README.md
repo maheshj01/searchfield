@@ -99,7 +99,7 @@ see [SearchFieldListItem](#searchfieldlistitem) to know more about the propertie
   }
 ```
 
-### Step 3 Add SearchField to your widget tree
+### Step 3: Add SearchField to your widget tree
 
 ```dart
  SearchField(
@@ -130,7 +130,7 @@ see [SearchFieldListItem](#searchfieldlistitem) to know more about the propertie
   ),
 ```
 
-### Customizing the Search Input
+## Customizing the Search Input
 
 ```dart
  SearchField(
@@ -156,7 +156,7 @@ see [SearchFieldListItem](#searchfieldlistitem) to know more about the propertie
   ),
 ```
 
-### Customizing the Suggestions List
+## Customizing the Suggestions List
 
 ```dart
  SearchField(
@@ -178,7 +178,7 @@ see [SearchFieldListItem](#searchfieldlistitem) to know more about the propertie
   ),
 ```
 
-### Customizing the Suggestions Item
+## Customizing the Suggestions Item
 
 ```dart
  SearchField(
