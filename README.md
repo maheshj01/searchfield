@@ -407,9 +407,9 @@ The position of suggestions is dynamic based on the space available for the sugg
 ### SearchFieldListItem
 `SearchFieldListItem` is a generic class that is used to create the suggestions list. It takes a `searchKey` and an optional `value` and `item` which can be used to pass a custom object to the suggestion list.
 
-- `searchKey` required: The key to search the list, this is the value that will be used to search the list.
-- `value` optional: The value to set in the input on click, defaults to searchKey.
-- `item` optional: The custom object to pass in the suggestion list, this can be used to pass a custom object to the suggestion list.
+- `searchKey` required: This value is used to search the list, and will be shown in the suggestions list and also shown in input field when a suggestion is selected.
+- `value` optional: The value to set in the input on suggestion click,if not specified searchKey will be used
+- `item` optional: The custom object to pass in the suggestion list, this can be used to show a value different from the searchKey in the suggestion list.
 - `child` optional: The custom widget to show in the suggestion list, this can be used to pass a custom widget to the suggestion list.
 
 ## Properties
