@@ -57,7 +57,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
           ct.name,
           value: ct.zip.toString(),
           item: ct,
-          child: Text(ct.name),
+          child: searchChild(ct, isSelected: false),
         );
       },
     ).toList();
@@ -65,16 +65,16 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
     super.initState();
   }
 
+  Widget searchChild(City city, {bool isSelected = false}) => ListTile(
+        contentPadding: EdgeInsets.all(0),
+        title: Text(city.name,
+            style: TextStyle(color: isSelected ? Colors.green : null)),
+        trailing: Text('#${city.zip}'),
+      );
   var cities = <SearchFieldListItem<City>>[];
   late SearchFieldListItem<City> selectedValue;
   @override
   Widget build(BuildContext context) {
-    Widget searchChild(x, {bool isSelected = false}) => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: Text(x,
-              style: TextStyle(
-                  fontSize: 18, color: isSelected ? Colors.green : null)),
-        );
     return Scaffold(
         appBar: AppBar(title: Text('Searchfield Demo')),
         body: Padding(
@@ -83,9 +83,12 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 20,
             children: [
+              TextField(),
               SearchField(
+                suggestionsDecoration: SuggestionDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
                 hint: 'Search for a city or zip code',
-                // dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
                 onSuggestionTap: (SearchFieldListItem<City> item) {
                   setState(() {
@@ -94,7 +97,11 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 },
                 onSearchTextChanged: (searchText) {
                   if (searchText.isEmpty) {
-                    return cities;
+                    return cities
+                        .map((e) => e.copyWith(
+                            child: searchChild(e.item!,
+                                isSelected: e == selectedValue)))
+                        .toList();
                   }
                   // filter the list of cities by the search text
                   final filter = List<SearchFieldListItem<City>>.from(cities)
@@ -109,9 +116,8 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 selectedValue: selectedValue,
                 suggestions: cities
                     .map((e) => e.copyWith(
-                          child: searchChild(e.item!.name,
-                              isSelected: selectedValue == e),
-                        ))
+                        child: searchChild(e.item!,
+                            isSelected: e == selectedValue)))
                     .toList(),
                 suggestionState: Suggestion.expand,
               ),
