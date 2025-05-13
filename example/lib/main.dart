@@ -115,6 +115,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     .toList(),
                 suggestionState: Suggestion.expand,
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedValue = null;
+                    });
+                  },
+                  child: Text('clear input'))
             ],
           ),
         ));

@@ -525,7 +525,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (item != null && item.value!.isNotEmpty) {
       searchController!.text = item.value!;
     } else {
-      searchController!.text = item!.searchKey;
+      searchController!.text = item?.searchKey ?? '';
     }
   }
 
