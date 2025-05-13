@@ -101,59 +101,51 @@ class _SFListviewState<T> extends State<SFListview<T>> {
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     BoxDecoration _getDecoration(int index) {
-      return widget.suggestionItemDecoration?.copyWith(
-            color: widget.selected == index
-                ? widget.suggestionsDecoration?.selectionColor ??
-                    Theme.of(context).highlightColor
-                : null,
-            border: widget.suggestionItemDecoration?.border ??
-                Border(
+      final isSelected = widget.selected == index;
+      final selectionColor = widget.suggestionsDecoration?.selectionColor ??
+          Theme.of(context).highlightColor;
+
+      final base = widget.suggestionItemDecoration ?? const BoxDecoration();
+
+      final border = base.border ??
+          (index == widget.list.length - 1
+              ? null
+              : Border(
                   bottom: BorderSide(
                     color: widget.marginColor ??
-                        onSurfaceColor.withValues(alpha: 0.1),
+                        Theme.of(context).colorScheme.onSurface.withAlpha(25),
                   ),
-                ),
-          ) ??
-          BoxDecoration(
-            color: widget.selected == index
-                ? widget.suggestionsDecoration?.selectionColor ??
-                    Theme.of(context).highlightColor
-                : null,
-            border: index == widget.list.length - 1
-                ? null
-                : Border(
-                    bottom: BorderSide(
-                      color: widget.marginColor ??
-                          onSurfaceColor.withValues(alpha: 0.1),
-                    ),
-                  ),
-          );
+                ));
+
+      return base.copyWith(
+        color: isSelected ? selectionColor : null,
+        border: border,
+      );
     }
 
+    SuggestionDecoration kDefaultSuggestionDecoration(BuildContext context) {
+      final onSurface = Theme.of(context).colorScheme.onSurface;
+      return SuggestionDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        border: Border.all(color: onSurface.withAlpha(25)),
+        boxShadow: [
+          BoxShadow(
+            color: onSurface.withAlpha(25),
+            blurRadius: 8,
+            spreadRadius: 2,
+            offset: const Offset(2, 5),
+          ),
+        ],
+      );
+    }
+
+    final base = kDefaultSuggestionDecoration(context);
+    final decoration = base.merge(widget.suggestionsDecoration);
     return ClipRRect(
-      borderRadius: widget.suggestionsDecoration?.borderRadius ??
-          kDefaultShapeBorder.borderRadius,
+      borderRadius: decoration.borderRadius ?? kDefaultShapeBorder.borderRadius,
       child: Container(
-        decoration: widget.suggestionsDecoration ??
-            SuggestionDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: Border.all(
-                color: onSurfaceColor.withValues(alpha: 0.1),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: onSurfaceColor.withValues(alpha: 0.1),
-                  blurRadius: 8.0, // soften the shadow
-                  spreadRadius: 2.0, //extend the shadow
-                  offset: Offset(
-                    2.0,
-                    5.0,
-                  ),
-                ),
-              ],
-            ),
+        decoration: decoration,
         child: LimitedBox(
           maxHeight: widget.maxHeight ?? double.infinity,
           child: ListView.builder(
@@ -188,13 +180,10 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                           widget.onTapOutside!(x);
                         },
                         child: Material(
-                            color: widget.suggestionsDecoration == null
-                                ? Theme.of(context).colorScheme.surface
-                                : Colors.transparent,
+                            color: decoration.color,
                             child: InkWell(
-                              hoverColor:
-                                  widget.suggestionsDecoration?.hoverColor ??
-                                      Theme.of(context).hoverColor,
+                              hoverColor: decoration.hoverColor ??
+                                  Theme.of(context).hoverColor,
                               onTap: () => widget.onSuggestionTapped(
                                   widget.list[index], index),
                               child: Container(
@@ -207,7 +196,7 @@ class _SFListviewState<T> extends State<SFListview<T>> {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: decoration.itemPadding,
                                       child: widget.list[index].child ??
                                           Text(
                                             widget.list[index].searchKey,

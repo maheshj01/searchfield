@@ -98,6 +98,9 @@ class ScrollbarDecoration {
 }
 
 class SuggestionDecoration extends BoxDecoration {
+  /// padding around the suggestion item
+  final EdgeInsetsGeometry itemPadding;
+
   /// padding around the suggestion list
   @override
   final EdgeInsetsGeometry padding;
@@ -120,8 +123,9 @@ class SuggestionDecoration extends BoxDecoration {
 
   SuggestionDecoration({
     this.padding = EdgeInsets.zero,
+    this.itemPadding = const EdgeInsets.symmetric(horizontal: 8),
     Color? color,
-    Border? border,
+    BoxBorder? border,
     BorderRadiusGeometry? borderRadius,
     List<BoxShadow>? boxShadow,
     Gradient? gradient,
@@ -130,14 +134,56 @@ class SuggestionDecoration extends BoxDecoration {
     this.hoverColor,
     this.shadowColor,
     this.selectionColor,
-    BoxShape shape = BoxShape.rectangle,
+    BoxShape? shape = BoxShape.rectangle,
   }) : super(
             color: color,
             border: border,
             borderRadius: borderRadius,
             boxShadow: boxShadow,
             gradient: gradient,
-            shape: shape);
+            shape: shape ?? BoxShape.rectangle);
+
+  SuggestionDecoration merge(SuggestionDecoration? other) {
+    if (other == null) return SuggestionDecoration();
+    return SuggestionDecoration(
+      color: other.color,
+      border: other.border,
+      borderRadius: other.borderRadius,
+      boxShadow: other.boxShadow,
+      gradient: other.gradient,
+      padding: other.padding,
+      itemPadding: other.itemPadding,
+      width: other.width,
+      elevation: other.elevation,
+      hoverColor: other.hoverColor,
+      shadowColor: other.shadowColor,
+      selectionColor: other.selectionColor,
+    );
+  }
+
+  @override
+  SuggestionDecoration copyWith(
+          {BlendMode? backgroundBlendMode,
+          BoxBorder? border,
+          BorderRadiusGeometry? borderRadius,
+          List<BoxShadow>? boxShadow,
+          Color? color,
+          Gradient? gradient,
+          DecorationImage? image,
+          BoxShape? shape}) =>
+      SuggestionDecoration(
+        color: color ?? color,
+        border: border ?? border,
+        boxShadow: boxShadow ?? boxShadow,
+        borderRadius: borderRadius ?? borderRadius,
+        hoverColor: hoverColor ?? hoverColor,
+        gradient: gradient ?? gradient,
+        shape: shape ?? shape,
+        selectionColor: selectionColor ?? selectionColor,
+        elevation: elevation ?? elevation,
+        shadowColor: shadowColor ?? shadowColor,
+        width: width ?? width,
+      );
 }
 
 const kDefaultShapeBorder = RoundedRectangleBorder(

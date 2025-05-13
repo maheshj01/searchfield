@@ -2165,6 +2165,56 @@ void main() {
     expect(border.borderRadius, BorderRadius.circular(10));
   });
 
+  testWidgets('SuggestionDecoration values can be set', (widgetTester) async {
+    final suggestions = List.generate(100, (index) => index.toString())
+        .map(SearchFieldListItem<String>.new)
+        .toList();
+
+    final suggestionDecoration = SuggestionDecoration(
+      hoverColor: Colors.red,
+      boxShadow: [
+        BoxShadow(
+          color: Colors.red,
+          blurRadius: 10,
+          spreadRadius: 5,
+          offset: Offset(0, 0),
+        ),
+      ],
+      color: Colors.blue,
+      selectionColor: Colors.green,
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: Colors.red),
+      elevation: 10,
+      shadowColor: Colors.red,
+      padding: EdgeInsets.all(10),
+      itemPadding: EdgeInsets.all(10),
+    );
+
+    await widgetTester.pumpWidget(_boilerplate(
+        child: SearchField<String>(
+      key: const Key('searchfield'),
+      suggestions: suggestions,
+      suggestionsDecoration: suggestionDecoration,
+      suggestionState: Suggestion.expand,
+    )));
+
+    // Find the SearchField widget
+    final searchFieldFinder = find.byKey(const Key('searchfield'));
+    expect(searchFieldFinder, findsOneWidget);
+
+    // Find the TextField within SearchField
+    final textFieldFinder = find.descendant(
+      of: searchFieldFinder,
+      matching: find.byType(TextField),
+    );
+    expect(textFieldFinder, findsOneWidget);
+
+    // Get the InputDecoration from the TextField
+    final TextField textField = widgetTester.widget<TextField>(textFieldFinder);
+    final InputDecoration? decoration = textField.decoration;
+    expect(decoration, isNotNull);
+  });
+
   testWidgets('Suggestion Overlay width matches input', (widgetTester) async {
     final suggestions = List.generate(100, (index) => index.toString())
         .map(SearchFieldListItem<String>.new)
