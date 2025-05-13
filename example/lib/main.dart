@@ -66,7 +66,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
   }
 
   var cities = <SearchFieldListItem<City>>[];
-  late SearchFieldListItem<City> selectedValue;
+  late SearchFieldListItem<City>? selectedValue;
   @override
   Widget build(BuildContext context) {
     Widget searchChild(x, {bool isSelected = false}) => Padding(
