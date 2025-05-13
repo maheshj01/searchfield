@@ -70,6 +70,53 @@ void main() {
       expect(finder2, findsNothing);
     });
 
+    testWidgets('SearchField allows setting selectedValue to null',
+        (WidgetTester tester) async {
+      SearchFieldListItem<String>? selectedValue;
+
+      await tester.pumpWidget(
+        _boilerplate(
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  SearchField<String>(
+                    suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
+                        .map(SearchFieldListItem<String>.new)
+                        .toList(),
+                    selectedValue: selectedValue,
+                    onSuggestionTap: (item) => setState(() {
+                      selectedValue = item;
+                    }),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => setState(() {
+                      selectedValue = null;
+                    }),
+                    child: const Text('reset'),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      );
+
+      final field = find.byType(TextFormField);
+      await tester.tap(field);
+      await tester.enterText(field, '');
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('DEF').first);
+      await tester.pumpAndSettle();
+      expect(selectedValue!.searchKey, 'DEF');
+
+      await tester.tap(find.byType(ElevatedButton));
+      await tester.pump();
+
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets(
         'Searchfield should show suggestions when `resizeToAvoidBottomInset` false',
         (WidgetTester tester) async {
