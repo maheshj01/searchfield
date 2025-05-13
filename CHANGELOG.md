@@ -1,3 +1,7 @@
+### [1.3.0] - May 13, 2025
+
+- Fix [Issue: #233](https://github.com/maheshj01/searchfield/issues/233) Null exception when setting selectedValue to null
+
 ### [1.2.9] - May 05, 2025
 
 - Fix [Issue: #212](https://github.com/maheshj01/searchfield/issues/212) add new parameter `keepSearchOnSelection`
