@@ -1,5 +1,6 @@
 ### [1.4.0-dev.1] - May 13, 2025
 
+- Fix [Issue: #232](https://github.com/maheshj01/searchfield/issues/232) add item padding and refactor decoration
 - Fix [Issue: #233](https://github.com/maheshj01/searchfield/issues/233) Null exception when setting selectedValue to null
 
 ### [1.3.0-dev.6] - May 03, 2025
