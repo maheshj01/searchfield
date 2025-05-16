@@ -1,3 +1,7 @@
+### [1.4.0-dev.2] - May 16, 2025
+
+- Fix [Issue: #231](https://github.com/maheshj01/searchfield/issues/232) Overlay rebuild on window resize was slow
+
 ### [1.4.0-dev.1] - May 13, 2025
 
 - Fix [Issue: #232](https://github.com/maheshj01/searchfield/issues/232) add item padding and refactor decoration
