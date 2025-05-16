@@ -678,9 +678,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   @override
   void didChangeDependencies() {
     // update overlay dimensions on mediaQuery change
-    if (mounted) {
-      _calculateDimensions();
-    }
     if (_overlayEntry != null && _overlayEntry!.mounted) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (mounted) {
@@ -925,36 +922,45 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       // final textFieldsize = textFieldRenderBox.size;
       // final offset = textFieldRenderBox.localToGlobal(Offset.zero);
       // var yOffset = Offset.zero;
-      return StreamBuilder<List<SearchFieldListItem?>?>(
-          stream: suggestionStream.stream,
-          builder: (BuildContext context,
-              AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
-            late var count = widget.maxSuggestionsInViewPort;
-            if (snapshot.data != null) {
-              count = snapshot.data!.length;
-            }
-            var yOffset = Offset.zero;
-            if (widget.offset == null) {
-              yOffset = getYOffset(count) ?? Offset.zero;
-            }
-            return Positioned(
-              left: searchFieldDimensions.offset!.dx,
-              width: widget.suggestionsDecoration?.width ??
-                  searchFieldDimensions.width,
-              child: CompositedTransformFollower(
-                offset: widget.offset ?? yOffset,
-                link: _layerLink,
-                child: Material(
-                  borderRadius: widget.suggestionsDecoration?.borderRadius ??
-                      BorderRadius.zero,
-                  shadowColor: widget.suggestionsDecoration?.shadowColor,
-                  elevation: widget.suggestionsDecoration?.elevation ??
-                      kDefaultElevation,
-                  child: _suggestionsBuilder(),
-                ),
-              ),
-            );
-          });
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        _calculateDimensions();
+        return StreamBuilder<List<SearchFieldListItem?>?>(
+            stream: suggestionStream.stream,
+            builder: (BuildContext context,
+                AsyncSnapshot<List<SearchFieldListItem?>?> snapshot) {
+              late var count = widget.maxSuggestionsInViewPort;
+              if (snapshot.data != null) {
+                count = snapshot.data!.length;
+              }
+              var yOffset = Offset.zero;
+              if (widget.offset == null) {
+                yOffset = getYOffset(count) ?? Offset.zero;
+              }
+              return Stack(
+                children: [
+                  Positioned(
+                    left: searchFieldDimensions.offset!.dx,
+                    width: widget.suggestionsDecoration?.width ??
+                        searchFieldDimensions.width,
+                    child: CompositedTransformFollower(
+                      offset: widget.offset ?? yOffset,
+                      link: _layerLink,
+                      child: Material(
+                        borderRadius:
+                            widget.suggestionsDecoration?.borderRadius ??
+                                BorderRadius.zero,
+                        shadowColor: widget.suggestionsDecoration?.shadowColor,
+                        elevation: widget.suggestionsDecoration?.elevation ??
+                            kDefaultElevation,
+                        child: _suggestionsBuilder(),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            });
+      });
     });
   }
 
