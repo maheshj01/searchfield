@@ -917,11 +917,6 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   OverlayEntry _createOverlay() {
     return OverlayEntry(builder: (context) {
       _totalHeight = widget.maxSuggestionsInViewPort * widget.itemHeight;
-      //   final textFieldRenderBox =
-      //     key.currentContext!.findRenderObject() as RenderBox;
-      // final textFieldsize = textFieldRenderBox.size;
-      // final offset = textFieldRenderBox.localToGlobal(Offset.zero);
-      // var yOffset = Offset.zero;
       return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         _calculateDimensions();
