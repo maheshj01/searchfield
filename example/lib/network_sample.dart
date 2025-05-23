@@ -83,13 +83,13 @@ class _NetworkSampleState extends State<NetworkSample> {
                 color: Colors.white,
               ))),
           key: const Key('searchfield'),
-          hint: 'Load suggestions from network',
           itemHeight: 50,
           scrollbarDecoration: ScrollbarDecoration(),
           onTapOutside: (x) {},
           suggestionDirection: SuggestionDirection.up,
           suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),
           searchInputDecoration: SearchInputDecoration(
+            hintText: 'Load suggestions from network',
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: const BorderSide(

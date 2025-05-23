@@ -42,7 +42,6 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
       child: SearchField<UserModel>(
         dynamicHeight: true,
         // maxSuggestionBoxHeight: MediaQuery.of(context).size.height * 0.8,
-        hint: 'Search for users dynamic height',
         suggestionsDecoration: SuggestionDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(8.0),
@@ -73,6 +72,7 @@ class _DynamicHeightExampleState extends State<DynamicHeightExample> {
                 width: 1.0)),
         searchInputDecoration: SearchInputDecoration(
           filled: true,
+          hintText: 'Search for users dynamic height',
           fillColor: Colors.grey.withValues(alpha: 0.2),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(

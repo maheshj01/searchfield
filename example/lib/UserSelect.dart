@@ -31,7 +31,6 @@ class _UserSelectState extends State<UserSelect> {
       child: SearchField<UserModel>(
         maxSuggestionsInViewPort: 5,
         itemHeight: 80,
-        hint: 'Search for users',
         suggestionsDecoration: SuggestionDecoration(
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(8.0),
@@ -61,6 +60,7 @@ class _UserSelectState extends State<UserSelect> {
                 style: BorderStyle.solid,
                 width: 1.0)),
         searchInputDecoration: SearchInputDecoration(
+          hintText: 'Search for users',
           filled: true,
           fillColor: Colors.grey.withValues(alpha: 0.2),
           focusedBorder: OutlineInputBorder(

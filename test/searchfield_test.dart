@@ -204,7 +204,9 @@ void main() {
           child: Column(
         children: [
           SearchField<City>(
-            hint: 'Search for a city or zip code',
+            searchInputDecoration: SearchInputDecoration(
+              hintText: 'Search for a city or zip code',
+            ),
             // dynamicHeight: true,
             maxSuggestionBoxHeight: 300,
             onSuggestionTap: (SearchFieldListItem<City> item) {
@@ -1917,7 +1919,9 @@ void main() {
         print(tapped.searchKey);
       },
       inputType: TextInputType.text,
-      hint: 'Search',
+      searchInputDecoration: SearchInputDecoration(
+        hintText: 'Search',
+      ),
       itemHeight: 51,
       maxSuggestionBoxHeight: 100,
       showEmpty: false,

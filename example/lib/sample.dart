@@ -119,7 +119,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 height: 20,
               ),
               SearchField(
-                hint: 'Basic SearchField',
                 dynamicHeight: true,
                 maxSuggestionBoxHeight: 300,
                 onSuggestionTap: (SearchFieldListItem<String> item) {
@@ -127,6 +126,9 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                     selectedValue = item;
                   });
                 },
+                searchInputDecoration: SearchInputDecoration(
+                  hintText: 'Basic SearchField',
+                ),
                 selectedValue: selectedValue,
                 suggestions:
                     suggestions.map(SearchFieldListItem<String>.new).toList(),
@@ -211,7 +213,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 onSubmit: (x) {},
                 autofocus: false,
                 key: const Key('searchfield'),
-                hint: 'Search by country name',
                 itemHeight: 50,
                 onTapOutside: (x) {
                   // focus.unfocus();
@@ -237,6 +238,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                 ),
                 searchInputDecoration: SearchInputDecoration(
                   searchStyle: TextStyle(fontSize: 18, color: Colors.black),
+                  hintText: 'Search by country name',
                   hintStyle: TextStyle(fontSize: 18, color: Colors.grey),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(24),
@@ -289,11 +291,13 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
               ),
               SearchField(
                 enabled: false,
-                hint: 'Disabled SearchField',
                 suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
                     .map(SearchFieldListItem<String>.new)
                     .toList(),
                 suggestionState: Suggestion.expand,
+                searchInputDecoration: SearchInputDecoration(
+                  hintText: 'Disabled SearchField',
+                ),
               ),
               SizedBox(
                 height: 50,

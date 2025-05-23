@@ -63,10 +63,10 @@ class _CountrySearchState extends State<CountrySearch> {
                           .toList(),
                       suggestionState: Suggestion.hidden,
                       controller: _searchController,
-                      hint: 'Search by country name',
                       maxSuggestionsInViewPort: 4,
                       itemHeight: 45,
                       searchInputDecoration: SearchInputDecoration(
+                        hintText: 'Search by country name',
                         textCapitalization: TextCapitalization.words,
                       ),
                       validator: (x) {

@@ -106,13 +106,13 @@ class _PaginationState extends State<Pagination> {
                 color: Colors.black,
               ))),
           key: const Key('searchfield'),
-          hint: 'Load Paginated suggestions from network',
           itemHeight: 50,
           maxSuggestionsInViewPort: 4,
           scrollbarDecoration: ScrollbarDecoration(),
           onTapOutside: (x) {},
           suggestionStyle: const TextStyle(fontSize: 20, color: Colors.black),
           searchInputDecoration: SearchInputDecoration(
+            hintText: 'Load Paginated suggestions from network',
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(24),
               borderSide: const BorderSide(

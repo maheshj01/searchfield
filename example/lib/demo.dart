@@ -82,7 +82,9 @@ class _DemoAppState extends State<DemoApp> {
                   _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               textInputAction: TextInputAction.next,
               controller: _searchController,
-              hint: 'SearchField Example 1',
+              searchInputDecoration: SearchInputDecoration(
+                hintText: 'SearchField Example 1',
+              ),
               // selectedValue: SearchFieldListItem(_suggestions[2], SizedBox()),
               maxSuggestionsInViewPort: 3,
               itemHeight: 45,
@@ -114,7 +116,6 @@ class _DemoAppState extends State<DemoApp> {
                 onSaved: (x) {},
                 suggestionState: Suggestion.expand,
                 textInputAction: TextInputAction.next,
-                hint: 'SearchField Example 2',
                 validator: (x) {
                   if (!_statesOfIndia.contains(x) || x!.isEmpty) {
                     return 'Please Enter a valid State';
@@ -122,6 +123,7 @@ class _DemoAppState extends State<DemoApp> {
                   return null;
                 },
                 searchInputDecoration: SearchInputDecoration(
+                  hintText: 'SearchField Example 2',
                   searchStyle: TextStyle(
                     fontSize: 18,
                     color: Colors.black.withValues(alpha: 0.8),
@@ -149,7 +151,6 @@ class _DemoAppState extends State<DemoApp> {
             child: SearchField(
               maxSuggestionsInViewPort: 5,
               itemHeight: 40,
-              hint: 'SearchField Example 3',
               suggestionsDecoration: SuggestionDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(8.0),
@@ -180,6 +181,7 @@ class _DemoAppState extends State<DemoApp> {
                       width: 1.0)),
               searchInputDecoration: SearchInputDecoration(
                 filled: true,
+                hintText: 'SearchField Example 3',
                 fillColor: Colors.grey.withValues(alpha: 0.2),
                 focusedBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
@@ -243,11 +245,11 @@ class _DemoAppState extends State<DemoApp> {
                   _suggestions.map((e) => SearchFieldListItem(e)).toList(),
               suggestionState: Suggestion.hidden,
               searchInputDecoration: SearchInputDecoration(
+                hintText: 'SearchField example 4',
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 labelText: 'SearchField',
                 border: OutlineInputBorder(),
               ),
-              hint: 'SearchField example 4',
               maxSuggestionsInViewPort: 6,
               suggestionDirection: SuggestionDirection.up,
               itemHeight: 45,
