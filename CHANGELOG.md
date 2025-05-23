@@ -1,3 +1,8 @@
+### [1.3.2] - May 23, 2025
+
+- Add SearchInputDecoration.hint and SearchInputDecoration.maintainHintSize (Supports Flutter 3.32)
+- hint is deprecated, Use SearchInputDecoration.hintText instead.
+
 ### [1.3.1] - May 16, 2025
 
 - Fix [Issue: #231](https://github.com/maheshj01/searchfield/issues/232) Overlay rebuild on window resize was slow
@@ -12,16 +17,30 @@
 - Fix [Issue: #212](https://github.com/maheshj01/searchfield/issues/212) add new parameter `keepSearchOnSelection`
 - Fix [Issue: #228](https://github.com/maheshj01/searchfield/issues/212) add value parameter to searchfield list item
 
-### [1.2.8] - May 03, 2025
+### [1.3.0-dev.5] - May 03, 2025
+
+- Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
+
+### [1.3.0-dev.4] - May 03, 2025
 
 - Fix [Issue: #222](https://github.com/maheshj01/searchfield/issues/222) Suggestion overlay dimensions not updated on resize
 - Fix [Issue: #224](https://github.com/maheshj01/searchfield/issues/224) calling setState in listener caused setState exception
+- Add VisualDensity Parameter to SearchInputDecoration
 - Fix [Issue: #218](https://github.com/maheshj01/searchfield/issues/218) FocusNode listener is not removed
 
-### [1.2.7] - Apr 16, 2025
+### [1.3.0-dev.3] - Apr 16, 2025
 
 - Allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
 - Dynamic height is broken when the suggestion direction is up [Issue #216](https://github.com/maheshj01/searchfield/issues/216)
+
+### [1.3.0-dev.2] - Apr 12, 2025
+
+- allow onSearchTextChanged to serve Future [Issue #215](https://github.com/maheshj01/searchfield/issues/215)
+
+### [1.3.0-dev.1] - Mar 19, 2025
+
+- Deprecate `maintainHintHeight` in favour of `maintainHintSize` property of `SearchInputDecoration`
+- Add `hint` property to `SearchInputDecoration`
 
 ### [1.2.6] - Mar 11, 2025
 
