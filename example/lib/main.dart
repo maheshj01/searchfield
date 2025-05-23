@@ -1,6 +1,4 @@
-import 'package:example/UserSelect.dart';
-import 'package:example/network_sample.dart';
-import 'package:example/pagination.dart';
+// import 'package:example/pagination.dart';
 import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
@@ -40,121 +38,121 @@ class SearchFieldSample extends StatefulWidget {
 }
 
 class _SearchFieldSampleState extends State<SearchFieldSample> {
-  int suggestionsCount = 12;
-  final focus = FocusNode();
-
   @override
   void initState() {
-    suggestions = [
-      'United States',
-      'Germany',
-      'Canada',
-      'United Kingdom',
-      'France',
-      'Italy',
-      'Spain',
-      'Australia',
-      'India',
-      'China',
-      'Japan',
-      'Brazil',
-      'South Africa',
-      'Mexico',
-      'Argentina',
-      'Russia',
-      'Indonesia',
-      'Turkey',
-      'Saudi Arabia',
-      'Nigeria',
-      'Egypt',
-    ];
+    cities = [
+      City('New York', '10001'),
+      City('Los Angeles', '90001'),
+      City('Chicago', '60601'),
+      City('Houston', '77001'),
+      City('Phoenix', '85001'),
+      City('Philadelphia', '19101'),
+      City('San Antonio', '78201'),
+      City('San Diego', '92101'),
+      City('Dallas', '75201'),
+      City('San Jose', '95101'),
+      City('Austin', '73301'),
+      City('Jacksonville', '32099'),
+      City('Fort Worth', '76101'),
+      City('Columbus', '43201'),
+      City('Charlotte', '28201'),
+      City('San Francisco', '94101'),
+      City('Indianapolis', '46201'),
+      City('Seattle', '98101'),
+      City('Denver', '80201'),
+      City('Washington', '20001'),
+      City('Boston', '02101'),
+    ].map(
+      (City ct) {
+        return SearchFieldListItem<City>(
+          ct.name,
+          value: ct.zip.toString(),
+          item: ct,
+          child: searchChild(ct, isSelected: false),
+        );
+      },
+    ).toList();
     super.initState();
   }
 
-  final TextEditingController searchController = TextEditingController();
-  var suggestions = <String>[];
-  int counter = 0;
+  Widget searchChild(City city, {bool isSelected = false}) => ListTile(
+        contentPadding: EdgeInsets.all(0),
+        title: Text(city.name,
+            style: TextStyle(color: isSelected ? Colors.green : null)),
+        trailing: Text('#${city.zip}'),
+      );
+  var cities = <SearchFieldListItem<City>>[];
+  SearchFieldListItem<City>? selectedValue;
   @override
   Widget build(BuildContext context) {
-    Widget searchChild(x) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 12),
-          child: Text(x, style: TextStyle(fontSize: 18, color: Colors.black)),
-        );
     return Scaffold(
         appBar: AppBar(title: Text('Searchfield Demo')),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              suggestionsCount++;
-              counter++;
-              suggestions.add('suggestion $suggestionsCount');
-            });
-          },
-          child: Icon(Icons.add),
-        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 20,
             children: [
-              UserSelect(),
-              SizedBox(
-                height: 550,
-              ),
-              TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: InputDecoration(
-                    labelText: 'Flutter TextFormField',
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Enter username',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
-                  validator: (value) {
-                    if (value == null || value.length < 4) {
-                      return 'error';
-                    }
-                    return null;
-                  }),
-              SizedBox(
-                height: 50,
-              ),
-              UserSelect(),
-              SizedBox(
-                height: 50,
+                ),
               ),
               SearchField(
-                hint: 'Basic SearchField',
-                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                    .map(SearchFieldListItem<String>.new)
+                suggestionsDecoration: SuggestionDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(2)),
+                  itemPadding: EdgeInsets.symmetric(horizontal: 16),
+                ),
+                hint: 'Search for a city or zip code',
+                maxSuggestionBoxHeight: 300,
+                onSuggestionTap: (SearchFieldListItem<City> item) {
+                  setState(() {
+                    selectedValue = item;
+                  });
+                },
+                searchInputDecoration: SearchInputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  suffix: Icon(Icons.expand_more),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                ),
+                onSearchTextChanged: (searchText) {
+                  if (searchText.isEmpty) {
+                    return cities
+                        .map((e) => e.copyWith(
+                            child: searchChild(e.item!,
+                                isSelected: e == selectedValue)))
+                        .toList();
+                  }
+                  // filter the list of cities by the search text
+                  final filter = List<SearchFieldListItem<City>>.from(cities)
+                      .where((city) {
+                    return city.item!.name
+                            .toLowerCase()
+                            .contains(searchText.toLowerCase()) ||
+                        city.item!.zip.toString().contains(searchText);
+                  }).toList();
+                  return filter;
+                },
+                selectedValue: selectedValue,
+                suggestions: cities
+                    .map((e) => e.copyWith(
+                        child: searchChild(e.item!,
+                            isSelected: e == selectedValue)))
                     .toList(),
                 suggestionState: Suggestion.expand,
               ),
-              SizedBox(
-                height: 50,
-              ),
-              Pagination(),
-              SizedBox(
-                height: 50,
-              ),
-              NetworkSample(),
-              SizedBox(
-                height: 50,
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              SearchField(
-                enabled: false,
-                hint: 'Disabled SearchField',
-                suggestions: ['ABC', 'DEF', 'GHI', 'JKL']
-                    .map(SearchFieldListItem<String>.new)
-                    .toList(),
-                suggestionState: Suggestion.expand,
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              // NetworkSample(),
-              Text(
-                'Counter: $counter',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      selectedValue = null;
+                    });
+                  },
+                  child: Text('clear input'))
             ],
           ),
         ));

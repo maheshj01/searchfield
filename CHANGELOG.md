@@ -1,3 +1,7 @@
+### [1.4.0-dev.3] - May 23, 2025
+
+- Remove SearchInputDecoration.visualDensity
+
 ### [1.4.0-dev.2] - May 16, 2025
 
 - Fix [Issue: #231](https://github.com/maheshj01/searchfield/issues/232) Overlay rebuild on window resize was slow
