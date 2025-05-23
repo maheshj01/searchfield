@@ -2035,7 +2035,6 @@ void main() {
       // prefix: Container(),
       // counter: Container(),
       // suffix: Container(),
-      visualDensity: VisualDensity.adaptivePlatformDensity,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
       ),
