@@ -1,6 +1,7 @@
 ### [1.4.0-dev.3] - May 23, 2025
 
 - Remove SearchInputDecoration.visualDensity (Supports Flutter 3.32)
+- hint is deprecated, Use SearchInputDecoration.hintText instead.
 
 ### [1.4.0-dev.2] - May 16, 2025
 

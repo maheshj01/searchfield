@@ -317,6 +317,9 @@ class SearchField<T> extends StatefulWidget {
     this.emptyWidget = const SizedBox(),
     this.enabled,
     this.focusNode,
+    @Deprecated(
+      'Use SearchInputDecoration.hintText instead.',
+    )
     this.hint,
     this.selectedValue,
     this.inputFormatters,

@@ -1,5 +1,7 @@
 # [searchfield: ^1.4.0-dev.3](https://pub.dev/packages/searchfield)
 
+> This is a prerelease version of the package compatible with the latest flutter master
+
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
 <a href="https://pub.dev/packages/searchfield/versions/1.3.0-dev.3" target="_blank">
