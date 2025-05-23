@@ -415,32 +415,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     } else {
       _searchFocus = FocusNode();
     }
-    _searchFocus!.addListener(() {
-      // When focus shifts to ListView prevent suggestions from rebuilding
-      // when user navigates through suggestions using keyboard
-      if (_searchFocus!.hasFocus) {
-        if (searchController!.text.isNotEmpty) {
-          highlightIndex = widget.suggestions
-              .indexWhere((element) => element == widget.selectedValue);
-        }
-        _overlayEntry ??= _createOverlay();
-        if (widget.suggestionState == Suggestion.expand) {
-          isSuggestionsShown = true;
-          Future.delayed(Duration(milliseconds: 100), () {
-            suggestionStream.sink.add(widget.suggestions);
-          });
-        }
-        Overlay.of(context).insert(_overlayEntry!);
-      } else {
-        removeOverlay();
-        if (_suggestionDirection == SuggestionDirection.up) {
-          highlightIndex = length;
-        } else {
-          highlightIndex = -1;
-        }
-        suggestionStream.sink.add(null);
-      }
-    });
+    _searchFocus?.addListener(_handleFocusChange);
   }
 
   /// With SuggestionDirection.flex, the widget will automatically decide the direction of the
@@ -471,6 +446,33 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       }
     } else {
       return _suggestionDirection;
+    }
+  }
+
+  void _handleFocusChange() {
+    // When focus shifts to ListView prevent suggestions from rebuilding
+    // when user navigates through suggestions using keyboard
+    if (_searchFocus!.hasFocus) {
+      if (searchController!.text.isNotEmpty) {
+        highlightIndex = widget.suggestions
+            .indexWhere((element) => element == widget.selectedValue);
+      }
+      _overlayEntry ??= _createOverlay();
+      if (widget.suggestionState == Suggestion.expand) {
+        isSuggestionsShown = true;
+        Future.delayed(Duration(milliseconds: 100), () {
+          suggestionStream.sink.add(widget.suggestions);
+        });
+      }
+      Overlay.of(context).insert(_overlayEntry!);
+    } else {
+      removeOverlay();
+      if (_suggestionDirection == SuggestionDirection.up) {
+        highlightIndex = length;
+      } else {
+        highlightIndex = -1;
+      }
+      suggestionStream.sink.add(null);
     }
   }
 
