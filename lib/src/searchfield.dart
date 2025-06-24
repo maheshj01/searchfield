@@ -708,7 +708,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
     if (!listEquals(oldWidget.suggestions, widget.suggestions)) {
       length = widget.suggestions.length;
       suggestionStream.sink.add(widget.suggestions);
-      filteredResult.clear();
+      filteredResult = [];
       filteredResult.addAll(widget.suggestions);
       // if a item was already selected
       if (highlightIndex >= 0) {
