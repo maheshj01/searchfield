@@ -701,7 +701,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       }
       searchController = widget.controller ?? TextEditingController();
     }
-    if (_suggestionDirection != oldWidget.suggestionDirection) {
+    if (widget.suggestionDirection != oldWidget.suggestionDirection) {
       _suggestionDirection = widget.suggestionDirection;
       _calculateDimensions();
     }

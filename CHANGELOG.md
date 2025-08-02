@@ -1,3 +1,7 @@
+### [1.3.3] - Aug 02, 2025
+
+- Fix: SuggestionDirection.flexible was not updating direction on widget update
+
 ### [1.3.2] - May 23, 2025
 
 - Add SearchInputDecoration.hint and SearchInputDecoration.maintainHintSize (Supports Flutter 3.32)
