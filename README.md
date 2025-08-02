@@ -1,4 +1,4 @@
-# [searchfield: ^1.4.0-dev.3](https://pub.dev/packages/searchfield)
+# [searchfield: ^1.4.0-dev.4](https://pub.dev/packages/searchfield)
 
 > This is a prerelease version of the package compatible with the latest flutter master
 
