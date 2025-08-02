@@ -1958,7 +1958,7 @@ void main() {
     expect(searchField.textInputAction, TextInputAction.done);
     expect(searchField.offset, Offset(50, 51));
     expect(searchField.inputType, TextInputType.text);
-    expect(searchField.hint, 'Search');
+    expect(searchField.searchInputDecoration!.hintText, 'Search');
     expect(searchField.itemHeight, 51);
     expect(searchField.maxSuggestionBoxHeight, 100);
     expect(searchField.showEmpty, false);

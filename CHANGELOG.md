@@ -1,3 +1,7 @@
+### [1.4.0-dev.4] - Aug 02, 2025
+
+- Fix: SuggestionDirection.flexible was not updating direction on widget update
+
 ### [1.4.0-dev.3] - May 23, 2025
 
 - Remove SearchInputDecoration.visualDensity (Supports Flutter 3.32)
