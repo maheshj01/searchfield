@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class SearchInputDecoration extends InputDecoration {
   /// text capitalization defaults to [TextCapitalization.none]
@@ -200,6 +201,8 @@ class SearchInputDecoration extends InputDecoration {
     TextStyle? suffixStyle,
     String? suffixText,
     bool? maintainHintSize,
+    VisualDensity? visualDensity,
+    SemanticsService? semanticsService,
   }) {
     return SearchInputDecoration(
       maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
