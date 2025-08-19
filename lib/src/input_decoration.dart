@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 class SearchInputDecoration extends InputDecoration {
   /// text capitalization defaults to [TextCapitalization.none]
@@ -130,6 +131,7 @@ class SearchInputDecoration extends InputDecoration {
     super.errorMaxLines,
     super.errorStyle,
     super.suffixIconConstraints,
+    super.visualDensity,
   });
 
   @override
@@ -200,8 +202,11 @@ class SearchInputDecoration extends InputDecoration {
     TextStyle? suffixStyle,
     String? suffixText,
     bool? maintainHintSize,
+    VisualDensity? visualDensity,
+    SemanticsService? semanticsService,
   }) {
     return SearchInputDecoration(
+      key: key ?? this.key,
       maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
       maintainHintSize: maintainHintSize ?? this.maintainHintSize,
       cursorColor: cursorColor ?? this.cursorColor,
@@ -271,6 +276,7 @@ class SearchInputDecoration extends InputDecoration {
       suffixIconColor: suffixIconColor ?? this.suffixIconColor,
       suffixStyle: suffixStyle ?? this.suffixStyle,
       suffixText: suffixText ?? this.suffixText,
+      visualDensity: visualDensity ?? this.visualDensity,
     );
   }
 }
