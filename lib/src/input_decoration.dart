@@ -89,7 +89,6 @@ class SearchInputDecoration extends InputDecoration {
       'This feature was deprecated after v1.26.0',
     )
     super.maintainHintHeight,
-    super.maintainHintSize,
     super.suffixIconColor,
     super.prefix,
     super.prefixIconColor,
@@ -100,7 +99,6 @@ class SearchInputDecoration extends InputDecoration {
     super.disabledBorder,
     super.contentPadding,
     super.hintText,
-    super.hint,
     super.hintStyle,
     super.labelText,
     super.labelStyle,
@@ -202,28 +200,22 @@ class SearchInputDecoration extends InputDecoration {
     bool? maintainHintSize,
   }) {
     return SearchInputDecoration(
-      maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
-      maintainHintSize: maintainHintSize ?? this.maintainHintSize,
       cursorColor: cursorColor ?? this.cursorColor,
       textCapitalization: textCapitalization ?? this.textCapitalization,
       searchStyle: searchStyle ?? this.searchStyle,
-      prefixIconConstraints:
-          prefixIconConstraints ?? this.prefixIconConstraints,
-      suffixIconConstraints:
-          suffixIconConstraints ?? this.suffixIconConstraints,
+      prefixIconConstraints: prefixIconConstraints ?? this.prefixIconConstraints,
+      suffixIconConstraints: suffixIconConstraints ?? this.suffixIconConstraints,
       hintMaxLines: hintMaxLines ?? this.hintMaxLines,
       floatingLabelStyle: floatingLabelStyle ?? this.floatingLabelStyle,
       errorText: errorText ?? this.errorText,
       error: error ?? this.error,
       hintTextDirection: hintTextDirection ?? this.hintTextDirection,
-      hint: hint ?? this.hint,
       hintFadeDuration: hintFadeDuration ?? this.hintFadeDuration,
       helper: helper ?? this.helper,
       cursorErrorColor: cursorErrorColor ?? this.cursorErrorColor,
       cursorHeight: cursorHeight ?? this.cursorHeight,
       cursorWidth: cursorWidth ?? this.cursorWidth,
-      cursorOpacityAnimates:
-          cursorOpacityAnimates ?? this.cursorOpacityAnimates,
+      cursorOpacityAnimates: cursorOpacityAnimates ?? this.cursorOpacityAnimates,
       cursorRadius: cursorRadius ?? this.cursorRadius,
       keyboardAppearance: keyboardAppearance ?? this.keyboardAppearance,
       alignLabelWithHint: alignLabelWithHint ?? this.alignLabelWithHint,
@@ -240,10 +232,8 @@ class SearchInputDecoration extends InputDecoration {
       errorStyle: errorStyle ?? this.errorStyle,
       fillColor: fillColor ?? this.fillColor,
       filled: filled ?? this.filled,
-      floatingLabelAlignment:
-          floatingLabelAlignment ?? this.floatingLabelAlignment,
-      floatingLabelBehavior:
-          floatingLabelBehavior ?? this.floatingLabelBehavior,
+      floatingLabelAlignment: floatingLabelAlignment ?? this.floatingLabelAlignment,
+      floatingLabelBehavior: floatingLabelBehavior ?? this.floatingLabelBehavior,
       focusColor: focusColor ?? this.focusColor,
       focusedBorder: focusedBorder ?? this.focusedBorder,
       focusedErrorBorder: focusedErrorBorder ?? this.focusedErrorBorder,
