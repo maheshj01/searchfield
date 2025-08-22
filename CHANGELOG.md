@@ -1,3 +1,7 @@
+### [1.3.4] - Aug 21, 2025
+
+- Fix: [Issue: #248](https://github.com/maheshj01/searchfield/issues/248) Add semanticsService to SearchInputDecoration
+
 ### [1.3.3] - Aug 02, 2025
 
 - Fix: SuggestionDirection.flexible was not updating direction on widget update
