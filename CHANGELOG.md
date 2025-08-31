@@ -1,3 +1,7 @@
+### [1.3.5] - Aug 31, 2025
+
+- Fix: [Issue: #192](https://github.com/maheshj01/searchfield/issues/192) Exception: RangeError (index): Invalid value: Only valid value is 0: 1
+
 ### [1.3.4] - Aug 21, 2025
 
 - Fix: [Issue: #248](https://github.com/maheshj01/searchfield/issues/248) Add semanticsService to SearchInputDecoration
