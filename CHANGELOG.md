@@ -1,3 +1,9 @@
+### [1.4.0-dev.4] - Nov 01, 2025
+
+- Fix: [Issue: #192](https://github.com/maheshj01/searchfield/issues/192) Exception: RangeError (index): Invalid value: Only valid value is 0: 1
+- Fix: [Issue: #248](https://github.com/maheshj01/searchfield/issues/248) Add semanticsService to SearchInputDecoration
+- Fix exceptions when using multiple instances of SearchFields
+
 ### [1.4.0-dev.4] - Aug 02, 2025
 
 - Fix: SuggestionDirection.flexible was not updating direction on widget update

@@ -52,7 +52,7 @@ class _NetworkSampleState extends State<NetworkSample> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SearchField(
-          onSearchTextChanged: (query){
+          onSearchTextChanged: (query) {
             final filter = suggestions
                 .where((element) =>
                     element.toLowerCase().contains(query.toLowerCase()))

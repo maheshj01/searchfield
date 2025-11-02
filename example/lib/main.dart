@@ -106,7 +106,6 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   borderRadius: BorderRadius.all(Radius.circular(2)),
                   itemPadding: EdgeInsets.symmetric(horizontal: 16),
                 ),
-                hint: 'Search for a city or zip code',
                 maxSuggestionBoxHeight: 300,
                 onSuggestionTap: (SearchFieldListItem<City> item) {
                   setState(() {
@@ -119,6 +118,7 @@ class _SearchFieldSampleState extends State<SearchFieldSample> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
+                  hintText: 'Search for a city or zip code',
                 ),
                 onSearchTextChanged: (searchText) {
                   if (searchText.isEmpty) {
