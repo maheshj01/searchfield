@@ -52,6 +52,14 @@ class _UserSelectState extends State<UserSelect> {
         //     ),
         //   ),
         // ),
+        emptyWidget: Container(
+          height: 80 * 5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          alignment: Alignment.center,
+          child: Text('No users found'),
+        ),
         suggestionItemDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             shape: BoxShape.rectangle,
