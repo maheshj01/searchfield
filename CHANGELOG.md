@@ -1,3 +1,8 @@
+### [1.4.0] - Nov 01, 2025
+
+- Fix exceptions when using multiple instances of SearchField
+- Fix: FocusNode was not being disposed
+
 ### [1.3.5] - Aug 31, 2025
 
 - Fix: [Issue: #192](https://github.com/maheshj01/searchfield/issues/192) Exception: RangeError (index): Invalid value: Only valid value is 0: 1
