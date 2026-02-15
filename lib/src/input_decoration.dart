@@ -91,6 +91,7 @@ class SearchInputDecoration extends InputDecoration {
     )
     super.maintainHintHeight,
     super.maintainHintSize,
+    super.maintainLabelSize,
     super.suffixIconColor,
     super.prefix,
     super.prefixIconColor,
@@ -188,6 +189,8 @@ class SearchInputDecoration extends InputDecoration {
     TextStyle? labelStyle,
     String? labelText,
     bool? maintainHintHeight,
+    bool? maintainHintSize,
+    bool? maintainLabelSize,
     Widget? prefix,
     Widget? prefixIcon,
     Color? prefixIconColor,
@@ -201,7 +204,6 @@ class SearchInputDecoration extends InputDecoration {
     BoxConstraints? suffixIconConstraints,
     TextStyle? suffixStyle,
     String? suffixText,
-    bool? maintainHintSize,
     VisualDensity? visualDensity,
     SemanticsService? semanticsService,
   }) {
@@ -209,6 +211,7 @@ class SearchInputDecoration extends InputDecoration {
       key: key ?? this.key,
       maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
       maintainHintSize: maintainHintSize ?? this.maintainHintSize,
+      maintainLabelSize: maintainLabelSize ?? this.maintainLabelSize,
       cursorColor: cursorColor ?? this.cursorColor,
       textCapitalization: textCapitalization ?? this.textCapitalization,
       searchStyle: searchStyle ?? this.searchStyle,
