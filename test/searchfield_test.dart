@@ -2093,6 +2093,7 @@ void main() {
         maxHeight: 100,
       ),
       semanticCounterText: 'Counter',
+      maintainLabelSize: true,
     );
 
     await widgetTester.pumpWidget(_boilerplate(
@@ -2164,6 +2165,8 @@ void main() {
     expect(textField.cursorOpacityAnimates,
         searchInputDecoration.cursorOpacityAnimates);
     expect(textField.cursorErrorColor, searchInputDecoration.cursorErrorColor);
+    expect(
+        decoration.maintainLabelSize, searchInputDecoration.maintainLabelSize);
 
     // You can add more specific tests for border radius if needed
     final OutlineInputBorder border = decoration.border as OutlineInputBorder;
