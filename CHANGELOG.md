@@ -1,3 +1,16 @@
+### [1.4.0] - Nov 01, 2025
+
+- Fix exceptions when using multiple instances of SearchField
+- Fix: FocusNode was not being disposed
+
+### [1.3.5] - Aug 31, 2025
+
+- Fix: [Issue: #192](https://github.com/maheshj01/searchfield/issues/192) Exception: RangeError (index): Invalid value: Only valid value is 0: 1
+
+### [1.3.4] - Aug 21, 2025
+
+- Fix: [Issue: #248](https://github.com/maheshj01/searchfield/issues/248) Add semanticsService to SearchInputDecoration
+
 ### [1.3.3] - Aug 02, 2025
 
 - Fix: SuggestionDirection.flexible was not updating direction on widget update
