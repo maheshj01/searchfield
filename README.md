@@ -1,4 +1,4 @@
-# [searchfield: ^1.4.0](https://pub.dev/packages/searchfield)
+# [searchfield: ^2.0.0](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -405,6 +405,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 <img src = "https://github.com/maheshj01/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
 
 ### SearchFieldListItem
+
 `SearchFieldListItem` is a generic class that is used to create the suggestions list. It takes a `searchKey` and an optional `value` and `item` which can be used to pass a custom object to the suggestion list.
 
 - `searchKey` required: This value is used to search the list, and will be shown in the suggestions list and also shown in input field when a suggestion is selected.

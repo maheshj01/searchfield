@@ -1,6 +1,6 @@
 name: searchfield
 description: A highly customizable, simple and easy to use AutoComplete widget for your Flutter app
-version: 1.4.0
+version: 2.0.0
 homepage: https://github.com/maheshj01/searchfield
 repository: https://github.com/maheshj01/searchfield
 issue_tracker: https://github.com/maheshj01/searchfield/issues
@@ -8,7 +8,7 @@ funding:
   - https://github.com/sponsors/maheshj01/
 environment:
   sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.27.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:

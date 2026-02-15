@@ -1,3 +1,7 @@
+### [2.0.0] - Feb 15, 2026
+
+- [BREAKING] Fix: [Issue: #256](https://github.com/maheshj01/searchfield/issues/256) Add maintainLabelSize to SearchInputDecoration (Requires Flutter 3.41.0 or greater)
+
 ### [1.4.0] - Nov 01, 2025
 
 - Fix exceptions when using multiple instances of SearchField
