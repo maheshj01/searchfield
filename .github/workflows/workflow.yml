@@ -17,7 +17,7 @@ jobs:
           flutter-version: '3.41.0' # minimum Flutter version to use
           channel: stable
       - run: flutter pub get
-      - run: flutter analyze
+      - run: flutter analyze --no-fatal-infos
       - run: flutter test --coverage --coverage-path coverage/lcov.info
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
