@@ -2019,6 +2019,7 @@ void main() {
       suffixText: 'Suffix',
       counterText: 'Counter',
       iconColor: Colors.red,
+      enabled: true,
       cursorColor: Colors.red,
       suffixIconColor: Colors.red,
       prefixIconColor: Colors.red,
@@ -2156,6 +2157,7 @@ void main() {
     expect(decoration.isCollapsed, searchInputDecoration.isCollapsed);
     expect(decoration.isDense, searchInputDecoration.isDense);
     expect(decoration.visualDensity, searchInputDecoration.visualDensity);
+    expect(decoration.enabled, searchInputDecoration.enabled);
     // expect(decoration.prefix, isA<Container>());
     // expect(decoration.suffix, isA<Container>());
     expect(textField.cursorColor, searchInputDecoration.cursorColor);

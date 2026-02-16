@@ -132,7 +132,8 @@ class SearchInputDecoration extends InputDecoration {
       super.errorStyle,
       super.suffixIconConstraints,
       super.visualDensity,
-      super.maintainLabelSize});
+      super.maintainLabelSize,
+      super.enabled});
 
   @override
   SearchInputDecoration copyWith({
@@ -210,6 +211,7 @@ class SearchInputDecoration extends InputDecoration {
       maintainHintHeight: maintainHintHeight ?? this.maintainHintHeight,
       maintainHintSize: maintainHintSize ?? this.maintainHintSize,
       cursorColor: cursorColor ?? this.cursorColor,
+      enabled: enabled ?? this.enabled,
       textCapitalization: textCapitalization ?? this.textCapitalization,
       searchStyle: searchStyle ?? this.searchStyle,
       prefixIconConstraints:
