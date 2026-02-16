@@ -2019,6 +2019,7 @@ void main() {
       suffixText: 'Suffix',
       counterText: 'Counter',
       iconColor: Colors.red,
+      enabled: true,
       cursorColor: Colors.red,
       suffixIconColor: Colors.red,
       prefixIconColor: Colors.red,
@@ -2093,6 +2094,7 @@ void main() {
         maxHeight: 100,
       ),
       semanticCounterText: 'Counter',
+      maintainLabelSize: true,
     );
 
     await widgetTester.pumpWidget(_boilerplate(
@@ -2155,6 +2157,7 @@ void main() {
     expect(decoration.isCollapsed, searchInputDecoration.isCollapsed);
     expect(decoration.isDense, searchInputDecoration.isDense);
     expect(decoration.visualDensity, searchInputDecoration.visualDensity);
+    expect(decoration.enabled, searchInputDecoration.enabled);
     // expect(decoration.prefix, isA<Container>());
     // expect(decoration.suffix, isA<Container>());
     expect(textField.cursorColor, searchInputDecoration.cursorColor);
@@ -2164,6 +2167,8 @@ void main() {
     expect(textField.cursorOpacityAnimates,
         searchInputDecoration.cursorOpacityAnimates);
     expect(textField.cursorErrorColor, searchInputDecoration.cursorErrorColor);
+    expect(
+        decoration.maintainLabelSize, searchInputDecoration.maintainLabelSize);
 
     // You can add more specific tests for border radius if needed
     final OutlineInputBorder border = decoration.border as OutlineInputBorder;

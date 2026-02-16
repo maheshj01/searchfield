@@ -1,4 +1,8 @@
-### [1.4.0-dev.4] - Nov 01, 2025
+### [2.0.1-dev.1] - Feb 15, 2026
+
+- [BREAKING] Fix: [Issue: #256](https://github.com/maheshj01/searchfield/issues/256) Add `maintainLabelSize` and `enabled` to SearchInputDecoration (Requires Flutter 3.41.0 or greater)
+
+### [1.4.0-dev.5] - Nov 01, 2025
 
 - Fix: [Issue: #192](https://github.com/maheshj01/searchfield/issues/192) Exception: RangeError (index): Invalid value: Only valid value is 0: 1
 - Fix: [Issue: #248](https://github.com/maheshj01/searchfield/issues/248) Add semanticsService to SearchInputDecoration

@@ -1,6 +1,6 @@
-# [searchfield: ^1.4.0-dev.5](https://pub.dev/packages/searchfield)
+# [searchfield: ^2.0.1-dev.1](https://pub.dev/packages/searchfield)
 
-> This is a prerelease version of the package compatible with the latest flutter master
+> This is a prerelease version of the package compatible with the latest flutter master channel. For stable version, please see [searchfield](https://pub.dev/packages/searchfield)
 
 <a href="https://github.com/maheshj01/searchfield" rel="noopener" target="_blank"><img src="https://img.shields.io/badge/platform-flutter-ff69b4.svg" alt="Flutter Platform Badge"></a>
 <a href="https://pub.dev/packages/searchfield"><img src="https://img.shields.io/pub/v/searchfield.svg" alt="Pub"></a>
@@ -42,7 +42,7 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - Add the dependency
 
 ```yaml
-flutter pub add searchfield
+searchfield: ^2.0.1-dev.1
 ```
 
 - Import the package
@@ -407,6 +407,7 @@ The position of suggestions is dynamic based on the space available for the sugg
 <img src = "https://github.com/maheshj01/searchfield/assets/31410839/19501d66-44d5-40b8-a4cf-b47920c791a3" width="400">
 
 ### SearchFieldListItem
+
 `SearchFieldListItem` is a generic class that is used to create the suggestions list. It takes a `searchKey` and an optional `value` and `item` which can be used to pass a custom object to the suggestion list.
 
 - `searchKey` required: This value is used to search the list, and will be shown in the suggestions list and also shown in input field when a suggestion is selected.
