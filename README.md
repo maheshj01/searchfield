@@ -1,4 +1,4 @@
-# [searchfield: ^2.0.0-dev.1](https://pub.dev/packages/searchfield)
+# [searchfield: ^2.0.1-dev.1](https://pub.dev/packages/searchfield)
 
 > This is a prerelease version of the package compatible with the latest flutter master channel. For stable version, please see [searchfield](https://pub.dev/packages/searchfield)
 
@@ -42,7 +42,7 @@ A highly customizable, simple and easy to use AutoComplete widget for your Flutt
 - Add the dependency
 
 ```yaml
-flutter pub add searchfield
+searchfield: ^2.0.1-dev.1
 ```
 
 - Import the package
