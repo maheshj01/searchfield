@@ -1969,6 +1969,45 @@ void main() {
     expect(searchField.contextMenuBuilder, isNotNull);
   });
 
+  group('Default context menu', () {
+    Future<Widget> buildDefaultMenu(WidgetTester tester,
+        {required bool supportsSystemMenu}) async {
+      await tester.pumpWidget(MediaQuery(
+        data: MediaQueryData(
+            supportsShowingSystemContextMenu: supportsSystemMenu),
+        child: MaterialApp(
+          home: Material(
+            child: SearchField<String>(
+              suggestions: ['ABC', 'DEF']
+                  .map<SearchFieldListItem<String>>(SearchFieldListItem.new)
+                  .toList(),
+            ),
+          ),
+        ),
+      ));
+      final textField = tester.widget<TextField>(find.byType(TextField));
+      final state = tester.state<EditableTextState>(find.byType(EditableText));
+      return textField.contextMenuBuilder!(state.context, state);
+    }
+
+    testWidgets('uses the system context menu where supported',
+        (tester) async {
+      expect(await buildDefaultMenu(tester, supportsSystemMenu: true),
+          isA<SystemContextMenu>());
+    }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+    testWidgets('uses the Flutter toolbar when the system menu is unsupported',
+        (tester) async {
+      expect(await buildDefaultMenu(tester, supportsSystemMenu: false),
+          isA<AdaptiveTextSelectionToolbar>());
+    }, variant: TargetPlatformVariant.only(TargetPlatform.iOS));
+
+    testWidgets('uses the Flutter toolbar on other platforms', (tester) async {
+      expect(await buildDefaultMenu(tester, supportsSystemMenu: true),
+          isA<AdaptiveTextSelectionToolbar>());
+    }, variant: TargetPlatformVariant.only(TargetPlatform.android));
+  });
+
   testWidgets("onSearchTextChanged should allow Future", (widgetTester) async {
     final suggestions = List.generate(100, (index) => index.toString())
         .map(SearchFieldListItem<String>.new)
