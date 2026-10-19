@@ -282,6 +282,9 @@ class SearchField<T> extends StatefulWidget {
   // When a [controller] is specified, [initialValue] must be null (the default). If [controller] is null, then a [TextEditingController] will be constructed automatically and its text will be initialized to [initialValue] or the empty string.
   ///
   /// For documentation about the various parameters, see the [TextField] class and [TextField.new], the constructor.
+  ///
+  /// Defaults to the same menu as [TextField]: [SystemContextMenu] where
+  /// supported (iOS 16+), otherwise [AdaptiveTextSelectionToolbar].
   Widget Function(BuildContext, EditableTextState)? contextMenuBuilder;
 
   /// Defines whether to enable autofocus defaults to `false`
@@ -1114,6 +1117,11 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
               contextMenuBuilder: (context, state) {
                 if (widget.contextMenuBuilder != null) {
                   return widget.contextMenuBuilder!(context, state);
+                } else if (SystemContextMenu.isSupportedByField(state)) {
+                  // Same default as [TextField]: the native iOS menu's Paste
+                  // doesn't trigger the iOS paste permission prompt.
+                  return SystemContextMenu.editableText(
+                      editableTextState: state);
                 } else {
                   return AdaptiveTextSelectionToolbar.editableText(
                       editableTextState: state);
